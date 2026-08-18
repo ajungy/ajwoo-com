@@ -1,0 +1,898 @@
+[
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2014/07/1.png",
+  "w": 1778,
+  "h": 1000,
+  "fmt": "png",
+  "bytes": 69370,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2014/07/2.png",
+  "w": 1778,
+  "h": 1000,
+  "fmt": "png",
+  "bytes": 50528,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2014/07/IMG_8519B7BC7D82-1.png",
+  "w": 1778,
+  "h": 1000,
+  "fmt": "png",
+  "bytes": 71278,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2015/07/aa.png",
+  "w": 1075,
+  "h": 574,
+  "fmt": "png",
+  "bytes": 43630,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/01/10b97b32239665.567559135509d.gif",
+  "w": 600,
+  "h": 579,
+  "fmt": "gif",
+  "bytes": 1141566,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/01/22.gif",
+  "w": 570,
+  "h": 570,
+  "fmt": "gif",
+  "bytes": 4690935,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/01/22222222222.jpg",
+  "w": 3840,
+  "h": 2160,
+  "fmt": "jpeg",
+  "bytes": 297604,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/01/2a26cd33396421.56d7d894658f5.png",
+  "w": 3492,
+  "h": 4974,
+  "fmt": "png",
+  "bytes": 633682,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/01/33.gif",
+  "w": 570,
+  "h": 570,
+  "fmt": "gif",
+  "bytes": 13715928,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/01/Future-of-AR-06-1.png",
+  "w": 1920,
+  "h": 898,
+  "fmt": "png",
+  "bytes": 19151,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/01/Picture.png",
+  "w": 1838,
+  "h": 935,
+  "fmt": "png",
+  "bytes": 219777,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/01/Screen-Shot-2018-06-16-at-4.22.45-PM.png",
+  "w": 3360,
+  "h": 1611,
+  "fmt": "png",
+  "bytes": 1222330,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/01/Untitlesd-2-04.png",
+  "w": 1920,
+  "h": 847,
+  "fmt": "png",
+  "bytes": 9651,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/01/aaa-02.png",
+  "w": 1920,
+  "h": 2184,
+  "fmt": "png",
+  "bytes": 953831,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/01/c7bf9633396421.56d7c3916a612.png",
+  "w": 1110,
+  "h": 603,
+  "fmt": "png",
+  "bytes": 13931,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/01/cccd0d33396421.56d7c39169f67.png",
+  "w": 905,
+  "h": 520,
+  "fmt": "png",
+  "bytes": 9712,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/01/chairloopicon.gif",
+  "w": 960,
+  "h": 540,
+  "fmt": "gif",
+  "bytes": 11007934,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/01/coin_1.png",
+  "w": 1920,
+  "h": 1080,
+  "fmt": "png",
+  "bytes": 654018,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/01/e7bfa333396421.56d7d894650b2.png",
+  "w": 3473,
+  "h": 4972,
+  "fmt": "png",
+  "bytes": 1405315,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/01/emojify-01.png",
+  "w": 1920,
+  "h": 5781,
+  "fmt": "png",
+  "bytes": 1288217,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/01/emojify-02.png",
+  "w": 1920,
+  "h": 3305,
+  "fmt": "png",
+  "bytes": 303921,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/01/hologlass.png",
+  "w": 1926,
+  "h": 9369,
+  "fmt": "png",
+  "bytes": 1363543,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/01/onechatl.png",
+  "w": 2205,
+  "h": 5112,
+  "fmt": "png",
+  "bytes": 446099,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/01/seesing-ai.png",
+  "w": 1987,
+  "h": 642,
+  "fmt": "png",
+  "bytes": 344509,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/01/sg.png",
+  "w": 1828,
+  "h": 734,
+  "fmt": "png",
+  "bytes": 21224,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/01/ten-borders-01-1.png",
+  "w": 1920,
+  "h": 2773,
+  "fmt": "png",
+  "bytes": 753139,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/01/ten-borders-2.png",
+  "w": 2448,
+  "h": 1286,
+  "fmt": "png",
+  "bytes": 52742,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/01/untitled.42_2-copy.jpg",
+  "w": 4499,
+  "h": 3342,
+  "fmt": "jpeg",
+  "bytes": 4126941,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/01/whitea.png",
+  "w": 570,
+  "h": 570,
+  "fmt": "png",
+  "bytes": 29342,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/06/19619688_1379492322098727_659505103_o.jpg",
+  "w": 1920,
+  "h": 1440,
+  "fmt": "jpeg",
+  "bytes": 286555,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/06/19650136_1379492855432007_1868628096_o-1.jpg",
+  "w": 1920,
+  "h": 1440,
+  "fmt": "jpeg",
+  "bytes": 612535,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/06/19650396_1379490358765590_836124176_o-1.png",
+  "w": 1080,
+  "h": 178,
+  "fmt": "png",
+  "bytes": 103697,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/06/19650396_1379490358765590_836124176_o.png",
+  "w": 1080,
+  "h": 1080,
+  "fmt": "png",
+  "bytes": 1272342,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/06/IMG_3878.jpg",
+  "w": 3839,
+  "h": 2797,
+  "fmt": "jpeg",
+  "bytes": 3408479,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/06/IMG_3884.jpg",
+  "w": 4841,
+  "h": 3220,
+  "fmt": "jpeg",
+  "bytes": 4888375,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/06/IMG_4104.jpg",
+  "w": 2244,
+  "h": 545,
+  "fmt": "jpeg",
+  "bytes": 397660,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/06/IMG_4107.jpg",
+  "w": 5184,
+  "h": 3456,
+  "fmt": "jpeg",
+  "bytes": 5883330,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/06/IMG_4114.jpg",
+  "w": 5184,
+  "h": 3456,
+  "fmt": "jpeg",
+  "bytes": 5847598,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/06/aaa-copy.jpg",
+  "w": 1396,
+  "h": 1906,
+  "fmt": "jpeg",
+  "bytes": 355668,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/06/aaa.jpg",
+  "w": 1832,
+  "h": 916,
+  "fmt": "jpeg",
+  "bytes": 417670,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/06/telescopefron.jpg",
+  "w": 1443,
+  "h": 1444,
+  "fmt": "jpeg",
+  "bytes": 732146,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/07/20186991_1397148543666438_1553485314_o.jpg",
+  "w": 1820,
+  "h": 1271,
+  "fmt": "jpeg",
+  "bytes": 392738,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/07/20205568_1397148520333107_1470007983_o-1.jpg",
+  "w": 1737,
+  "h": 1284,
+  "fmt": "jpeg",
+  "bytes": 369919,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/07/20205645_1397148523666440_354054058_o.jpg",
+  "w": 1080,
+  "h": 1080,
+  "fmt": "jpeg",
+  "bytes": 263598,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/07/20216333_1397168966997729_1992974993_o.jpg",
+  "w": 2022,
+  "h": 857,
+  "fmt": "jpeg",
+  "bytes": 213517,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/07/20216458_1397148566999769_1585143206_o.jpg",
+  "w": 2048,
+  "h": 1536,
+  "fmt": "jpeg",
+  "bytes": 403231,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/07/20216741_1397152833666009_781567314_o.jpg",
+  "w": 2048,
+  "h": 1536,
+  "fmt": "jpeg",
+  "bytes": 586835,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/07/20216768_1397148553666437_1983934829_o.jpg",
+  "w": 2048,
+  "h": 1536,
+  "fmt": "jpeg",
+  "bytes": 455354,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/08/20170629_181040.jpg",
+  "w": 1944,
+  "h": 858,
+  "fmt": "jpeg",
+  "bytes": 416820,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/08/20170629_181107.jpg",
+  "w": 1944,
+  "h": 1458,
+  "fmt": "jpeg",
+  "bytes": 846462,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/08/20170701_142047.jpg",
+  "w": 1795,
+  "h": 1346,
+  "fmt": "jpeg",
+  "bytes": 670200,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/08/20170701_143009.jpg",
+  "w": 1827,
+  "h": 1370,
+  "fmt": "jpeg",
+  "bytes": 747111,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/08/20170702_201101.jpg",
+  "w": 1827,
+  "h": 1370,
+  "fmt": "jpeg",
+  "bytes": 644940,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/08/20170703_135524.jpg",
+  "w": 1370,
+  "h": 1370,
+  "fmt": "jpeg",
+  "bytes": 576197,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/08/20170703_142816.jpg",
+  "w": 1560,
+  "h": 1249,
+  "fmt": "jpeg",
+  "bytes": 733165,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/08/20170703_195615.jpg",
+  "w": 1827,
+  "h": 1370,
+  "fmt": "jpeg",
+  "bytes": 435969,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/08/20170704_163455.jpg",
+  "w": 1094,
+  "h": 1458,
+  "fmt": "jpeg",
+  "bytes": 796122,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/08/20170707_123007.jpg",
+  "w": 1639,
+  "h": 1334,
+  "fmt": "jpeg",
+  "bytes": 806672,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/08/20170707_123007front.jpg",
+  "w": 1334,
+  "h": 1334,
+  "fmt": "jpeg",
+  "bytes": 682126,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/08/20170714_155651.jpg",
+  "w": 1734,
+  "h": 1240,
+  "fmt": "jpeg",
+  "bytes": 699365,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/08/20170718_170130.jpg",
+  "w": 1030,
+  "h": 1374,
+  "fmt": "jpeg",
+  "bytes": 404081,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/08/20170725_161239.jpg",
+  "w": 1615,
+  "h": 1210,
+  "fmt": "jpeg",
+  "bytes": 524255,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/08/20170725_161521.jpg",
+  "w": 1032,
+  "h": 815,
+  "fmt": "jpeg",
+  "bytes": 219032,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/08/22.jpg",
+  "w": 1352,
+  "h": 1352,
+  "fmt": "jpeg",
+  "bytes": 544626,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/08/55.jpg",
+  "w": 1827,
+  "h": 449,
+  "fmt": "jpeg",
+  "bytes": 318494,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/08/IMG_20170623_232342_244-2.jpg",
+  "w": 1079,
+  "h": 1080,
+  "fmt": "jpeg",
+  "bytes": 426811,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/08/IMG_20170623_232342_244.jpg",
+  "w": 1080,
+  "h": 1350,
+  "fmt": "jpeg",
+  "bytes": 389666,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/08/IMG_3986.jpg",
+  "w": 2000,
+  "h": 1333,
+  "fmt": "jpeg",
+  "bytes": 965922,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/08/IMG_3995.jpg",
+  "w": 2000,
+  "h": 1472,
+  "fmt": "jpeg",
+  "bytes": 514410,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/08/aaas.jpg",
+  "w": 970,
+  "h": 216,
+  "fmt": "jpeg",
+  "bytes": 83360,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/09/20170610_122608.jpg",
+  "w": 2237,
+  "h": 1678,
+  "fmt": "jpeg",
+  "bytes": 989936,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/09/20170731_124830.jpg",
+  "w": 2237,
+  "h": 390,
+  "fmt": "jpeg",
+  "bytes": 311172,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/09/20170731_144729.jpg",
+  "w": 2205,
+  "h": 1654,
+  "fmt": "jpeg",
+  "bytes": 1005306,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/09/20170801_112309-1.jpg",
+  "w": 2181,
+  "h": 1636,
+  "fmt": "jpeg",
+  "bytes": 1251104,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/09/20170801_152452.jpg",
+  "w": 2237,
+  "h": 1678,
+  "fmt": "jpeg",
+  "bytes": 1031579,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/09/20170801_152508.jpg",
+  "w": 2106,
+  "h": 1678,
+  "fmt": "jpeg",
+  "bytes": 1070656,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/09/20170801_164752.jpg",
+  "w": 2238,
+  "h": 1678,
+  "fmt": "jpeg",
+  "bytes": 681717,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/09/a.jpg",
+  "w": 2237,
+  "h": 1678,
+  "fmt": "jpeg",
+  "bytes": 658452,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/09/asas.jpg",
+  "w": 1636,
+  "h": 1636,
+  "fmt": "jpeg",
+  "bytes": 979086,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/10/20170722_150235.jpg",
+  "w": 1417,
+  "h": 937,
+  "fmt": "jpeg",
+  "bytes": 432743,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/10/20170722_151938.jpg",
+  "w": 1934,
+  "h": 703,
+  "fmt": "jpeg",
+  "bytes": 450308,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/10/20170722_152158.jpg",
+  "w": 1662,
+  "h": 1247,
+  "fmt": "jpeg",
+  "bytes": 628606,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/10/20170723_133221.jpg",
+  "w": 1947,
+  "h": 1460,
+  "fmt": "jpeg",
+  "bytes": 704217,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/10/20170723_133230.jpg",
+  "w": 1919,
+  "h": 1439,
+  "fmt": "jpeg",
+  "bytes": 801516,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/10/20170723_1439390.jpg",
+  "w": 1947,
+  "h": 1460,
+  "fmt": "jpeg",
+  "bytes": 738612,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/10/20170723_144432.jpg",
+  "w": 1520,
+  "h": 1146,
+  "fmt": "jpeg",
+  "bytes": 611523,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2017/10/as.jpg",
+  "w": 1146,
+  "h": 1146,
+  "fmt": "jpeg",
+  "bytes": 608426,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2019/02/20160731_140045-2.jpg",
+  "w": 4032,
+  "h": 1187,
+  "fmt": "jpeg",
+  "bytes": 1038193,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2019/02/20170825_165625-1.jpg",
+  "w": 4032,
+  "h": 3024,
+  "fmt": "jpeg",
+  "bytes": 2346487,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2019/02/20171120_120129.jpg",
+  "w": 2056,
+  "h": 1542,
+  "fmt": "jpeg",
+  "bytes": 667067,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2019/02/20180617_140458.jpg",
+  "w": 4032,
+  "h": 3024,
+  "fmt": "jpeg",
+  "bytes": 1664889,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2019/02/IMG_0019.jpg",
+  "w": 1156,
+  "h": 889,
+  "fmt": "jpeg",
+  "bytes": 254249,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2019/02/IMG_0027.jpg",
+  "w": 1149,
+  "h": 596,
+  "fmt": "jpeg",
+  "bytes": 100825,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2019/02/Screen-Shot-2019-02-08-at-9.08.25-PM.png",
+  "w": 2014,
+  "h": 1122,
+  "fmt": "png",
+  "bytes": 287601,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2019/02/Screen-Shot-2019-02-08-at-9.12.54-PM.png",
+  "w": 1980,
+  "h": 896,
+  "fmt": "png",
+  "bytes": 395134,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2019/02/Screen-Shot-2019-02-08-at-9.13.43-PM.png",
+  "w": 2020,
+  "h": 902,
+  "fmt": "png",
+  "bytes": 689899,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2019/02/Screen-Shot-2019-02-08-at-9.33.33-PM.png",
+  "w": 2132,
+  "h": 1190,
+  "fmt": "png",
+  "bytes": 391254,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2019/02/a.jpg",
+  "w": 2056,
+  "h": 1154,
+  "fmt": "jpeg",
+  "bytes": 486978,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2019/02/asdc.png",
+  "w": 2000,
+  "h": 714,
+  "fmt": "png",
+  "bytes": 753891,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2019/02/bbb.jpg",
+  "w": 1620,
+  "h": 903,
+  "fmt": "jpeg",
+  "bytes": 311327,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2019/02/ezgif-2-16a9f28470d2.gif",
+  "w": 600,
+  "h": 338,
+  "fmt": "gif",
+  "bytes": 5012670,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2019/02/van.png",
+  "w": 1538,
+  "h": 875,
+  "fmt": "png",
+  "bytes": 13951,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2019/09/SalesAssistHeroImage.jpg",
+  "w": 2500,
+  "h": 1079,
+  "fmt": "jpeg",
+  "bytes": 327561,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2020/07/SBX20190610-Starbucks-Tryer-Lab-Featured-Image.jpg",
+  "w": 1440,
+  "h": 700,
+  "fmt": "jpeg",
+  "bytes": 736960,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2020/10/Screen-Shot-2020-10-01-at-9.15.46-PM.png",
+  "w": 1127,
+  "h": 435,
+  "fmt": "png",
+  "bytes": 200609,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2022/04/Frame-io-Adobe-copy.jpg",
+  "w": 1600,
+  "h": 394,
+  "fmt": "jpeg",
+  "bytes": 137553,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2024/01/IMG_3666.jpg",
+  "w": 2394,
+  "h": 1796,
+  "fmt": "jpeg",
+  "bytes": 292170,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2024/01/IMG_5024.jpg",
+  "w": 1348,
+  "h": 1101,
+  "fmt": "jpeg",
+  "bytes": 252762,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2024/01/IMG_5191.jpg",
+  "w": 2394,
+  "h": 1796,
+  "fmt": "jpeg",
+  "bytes": 1039155,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2024/01/your-name.png",
+  "w": 1941,
+  "h": 544,
+  "fmt": "png",
+  "bytes": 654486,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2024/07/obj-add-2.png",
+  "w": 3946,
+  "h": 1027,
+  "fmt": "png",
+  "bytes": 883576,
+  "code": 200
+ },
+ {
+  "url": "https://ajwoo.com/wp-content/uploads/2025/08/Original-bw-long-scaled.png",
+  "w": 2560,
+  "h": 1328,
+  "fmt": "png",
+  "bytes": 381029,
+  "code": 200
+ }
+]

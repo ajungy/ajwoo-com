@@ -1,0 +1,348 @@
+[
+ {
+  "kind": "design",
+  "slug": "704",
+  "title": "GenAI in Premiere Pro",
+  "category": "Video / AI",
+  "tile": "/wp-content/uploads/2024/07/obj-add-2.png",
+  "tile_w": 3946,
+  "tile_h": 1027,
+  "tile_src": "UPGRADED from project image",
+  "gallery": [
+   "/wp-content/uploads/2024/07/obj-add-2.png"
+  ]
+ },
+ {
+  "kind": "design",
+  "slug": "pr-ae-frame",
+  "title": "Pr Ae Frame",
+  "category": "Video / Cloud",
+  "tile": "/wp-content/uploads/2022/04/1.png",
+  "tile_w": 1433,
+  "tile_h": 1432,
+  "tile_src": "existing tile OK",
+  "gallery": [
+   "/wp-content/uploads/2022/04/Frame-io-Adobe-copy.jpg"
+  ]
+ },
+ {
+  "kind": "design",
+  "slug": "layout",
+  "title": "Layout",
+  "category": "HoloLens",
+  "tile": "/wp-content/uploads/2019/02/asdc.png",
+  "tile_w": 2000,
+  "tile_h": 714,
+  "tile_src": "UPGRADED from project image",
+  "gallery": [
+   "/wp-content/uploads/2019/02/asdc.png",
+   "/wp-content/uploads/2019/02/van.png"
+  ]
+ },
+ {
+  "kind": "design",
+  "slug": "product-visualize",
+  "title": "Product Visualize",
+  "category": "AR / CRM",
+  "tile": "/wp-content/uploads/2017/01/SalesAssistHeroImage5.png",
+  "tile_w": 1433,
+  "tile_h": 1432,
+  "tile_src": "existing tile OK",
+  "gallery": [
+   "/wp-content/uploads/2019/09/SalesAssistHeroImage.jpg"
+  ]
+ },
+ {
+  "kind": "design",
+  "slug": "dynamics-365-customer-voice",
+  "title": "Dynamics 365 Customer Voice",
+  "category": "Forms / CRM",
+  "tile": "/wp-content/uploads/2020/10/customervoice.png",
+  "tile_w": 800,
+  "tile_h": 800,
+  "tile_src": "no better source",
+  "gallery": [
+   "/wp-content/uploads/2020/10/Screen-Shot-2020-10-01-at-9.15.46-PM.png"
+  ]
+ },
+ {
+  "kind": "design",
+  "slug": "seeing-ai",
+  "title": "Seeing AI",
+  "category": "AI",
+  "tile": "/wp-content/uploads/2017/01/seesing-ai.png",
+  "tile_w": 1987,
+  "tile_h": 642,
+  "tile_src": "UPGRADED from project image",
+  "gallery": [
+   "/wp-content/uploads/2017/01/seesing-ai.png"
+  ]
+ },
+ {
+  "kind": "design",
+  "slug": "netmarble",
+  "title": "Netmarble",
+  "category": "Branding / UX",
+  "tile": "/wp-content/uploads/2015/07/netmarble-570.png",
+  "tile_w": 570,
+  "tile_h": 570,
+  "tile_src": "no better source",
+  "gallery": [
+   "/wp-content/uploads/2015/07/aa.png"
+  ]
+ },
+ {
+  "kind": "design",
+  "slug": "starbucks-technology",
+  "title": "Starbucks Technology",
+  "category": "User Research / iPad",
+  "tile": "/wp-content/uploads/2014/07/2.png",
+  "tile_w": 1778,
+  "tile_h": 1000,
+  "tile_src": "UPGRADED from project image",
+  "gallery": [
+   "/wp-content/uploads/2020/07/SBX20190610-Starbucks-Tryer-Lab-Featured-Image.jpg",
+   "/wp-content/uploads/2014/07/2.png"
+  ]
+ },
+ {
+  "kind": "design",
+  "slug": "wrap-and-charge",
+  "title": "Wrap and Charge",
+  "category": "Industrial Design",
+  "tile": "/wp-content/uploads/2019/02/Screen-Shot-2019-02-08-at-9.33.33-PM.png",
+  "tile_w": 2132,
+  "tile_h": 1190,
+  "tile_src": "UPGRADED from project image",
+  "gallery": [
+   "/wp-content/uploads/2019/02/bbb.jpg",
+   "/wp-content/uploads/2019/02/Screen-Shot-2019-02-08-at-9.08.25-PM.png",
+   "/wp-content/uploads/2019/02/Screen-Shot-2019-02-08-at-9.13.43-PM.png",
+   "/wp-content/uploads/2019/02/Screen-Shot-2019-02-08-at-9.12.54-PM.png",
+   "/wp-content/uploads/2019/02/Screen-Shot-2019-02-08-at-9.33.33-PM.png"
+  ]
+ },
+ {
+  "kind": "design",
+  "slug": "coin-lock",
+  "title": "Coin Lock",
+  "category": "Industrial Design",
+  "tile": "/wp-content/uploads/2017/01/untitled.42_2-copy.jpg",
+  "tile_w": 4499,
+  "tile_h": 3342,
+  "tile_src": "UPGRADED from project image",
+  "gallery": [
+   "/wp-content/uploads/2017/01/22222222222.jpg",
+   "/wp-content/uploads/2017/01/sg.png",
+   "/wp-content/uploads/2017/01/Untitlesd-2-04.png",
+   "/wp-content/uploads/2017/01/aaa-02.png",
+   "/wp-content/uploads/2017/01/untitled.42_2-copy.jpg"
+  ]
+ },
+ {
+  "kind": "design",
+  "slug": "10-borders",
+  "title": "10 Borders",
+  "category": "Poster",
+  "tile": "/wp-content/uploads/2017/01/ten-borders-2.png",
+  "tile_w": 2448,
+  "tile_h": 1286,
+  "tile_src": "UPGRADED from project image",
+  "gallery": [
+   "/wp-content/uploads/2017/01/ten-borders-2.png"
+  ]
+ },
+ {
+  "kind": "design",
+  "slug": "paintsound",
+  "title": "Paint Sound",
+  "category": "Hololens",
+  "tile": "/wp-content/uploads/2000/01/hololens.jpg",
+  "tile_w": 1754,
+  "tile_h": 1754,
+  "tile_src": "existing tile OK",
+  "gallery": [
+   "/wp-content/uploads/2017/01/Screen-Shot-2018-06-16-at-4.22.45-PM.png"
+  ]
+ },
+ {
+  "kind": "coffee",
+  "slug": "3-coffee-shops-in-tokyo",
+  "title": "3 Coffee Shops in Tokyo",
+  "category": "Japan",
+  "tile": "/wp-content/uploads/2024/01/IMG_5191.jpg",
+  "tile_w": 2394,
+  "tile_h": 1796,
+  "tile_src": "UPGRADED from project image",
+  "gallery": [
+   "/wp-content/uploads/2024/01/your-name.png",
+   "/wp-content/uploads/2024/01/IMG_5191.jpg",
+   "/wp-content/uploads/2024/01/IMG_5024.jpg",
+   "/wp-content/uploads/2024/01/IMG_3666.jpg"
+  ]
+ },
+ {
+  "kind": "coffee",
+  "slug": "5-coffee-shops-in-seattle",
+  "title": "5 Coffee Shops in Seattle",
+  "category": "USA",
+  "tile": "/wp-content/uploads/2019/02/20180617_140458.jpg",
+  "tile_w": 4032,
+  "tile_h": 3024,
+  "tile_src": "UPGRADED from project image",
+  "gallery": [
+   "/wp-content/uploads/2019/02/20160731_140045-2.jpg",
+   "/wp-content/uploads/2019/02/20171120_120129.jpg",
+   "/wp-content/uploads/2019/02/20170825_165625-1.jpg",
+   "/wp-content/uploads/2019/02/a.jpg",
+   "/wp-content/uploads/2019/02/IMG_0027.jpg",
+   "/wp-content/uploads/2019/02/20180617_140458.jpg",
+   "/wp-content/uploads/2019/02/IMG_0019.jpg"
+  ]
+ },
+ {
+  "kind": "coffee",
+  "slug": "3-coffee-shops-amsterdam",
+  "title": "3 coffee shops in Amsterdam",
+  "category": "Netherlands",
+  "tile": "/wp-content/uploads/2017/10/as.jpg",
+  "tile_w": 1146,
+  "tile_h": 1146,
+  "tile_src": "existing tile OK",
+  "gallery": [
+   "/wp-content/uploads/2017/10/20170722_151938.jpg",
+   "/wp-content/uploads/2017/10/20170723_133230.jpg",
+   "/wp-content/uploads/2017/10/20170723_133221.jpg",
+   "/wp-content/uploads/2017/10/20170723_144432.jpg",
+   "/wp-content/uploads/2017/10/20170723_1439390.jpg",
+   "/wp-content/uploads/2017/10/20170722_150235.jpg",
+   "/wp-content/uploads/2017/10/20170722_152158.jpg"
+  ]
+ },
+ {
+  "kind": "coffee",
+  "slug": "best-coffee-shops-new-york-city",
+  "title": "5 Coffee Shops in NYC",
+  "category": "USA",
+  "tile": "/wp-content/uploads/2017/09/asas.jpg",
+  "tile_w": 1636,
+  "tile_h": 1636,
+  "tile_src": "existing tile OK",
+  "gallery": [
+   "/wp-content/uploads/2017/09/20170731_124830.jpg",
+   "/wp-content/uploads/2017/09/20170801_112309-1.jpg",
+   "/wp-content/uploads/2017/09/20170731_144729.jpg",
+   "/wp-content/uploads/2017/09/20170801_152508.jpg",
+   "/wp-content/uploads/2017/09/20170801_152452.jpg",
+   "/wp-content/uploads/2017/09/20170801_164752.jpg",
+   "/wp-content/uploads/2017/09/20170610_122608.jpg",
+   "/wp-content/uploads/2017/09/a.jpg"
+  ]
+ },
+ {
+  "kind": "coffee",
+  "slug": "5-in-milan",
+  "title": "5 cafes in Milan",
+  "category": "Italy",
+  "tile": "/wp-content/uploads/2017/08/22.jpg",
+  "tile_w": 1352,
+  "tile_h": 1352,
+  "tile_src": "existing tile OK",
+  "gallery": [
+   "/wp-content/uploads/2017/08/55.jpg",
+   "/wp-content/uploads/2017/08/20170703_135524.jpg",
+   "/wp-content/uploads/2017/08/20170701_142047.jpg",
+   "/wp-content/uploads/2017/08/20170701_143009.jpg",
+   "/wp-content/uploads/2017/08/20170702_201101.jpg",
+   "/wp-content/uploads/2017/08/20170703_195615.jpg",
+   "/wp-content/uploads/2017/08/20170703_142816.jpg"
+  ]
+ },
+ {
+  "kind": "coffee",
+  "slug": "top-3-fancy-cafes-paris",
+  "title": "Top 3 Fancy Cafes in Paris",
+  "category": "France",
+  "tile": "/wp-content/uploads/2017/08/IMG_20170623_232342_244-2.jpg",
+  "tile_w": 1079,
+  "tile_h": 1080,
+  "tile_src": "no better source",
+  "gallery": [
+   "/wp-content/uploads/2017/08/aaas.jpg",
+   "/wp-content/uploads/2017/08/IMG_20170623_232342_244.jpg",
+   "/wp-content/uploads/2017/08/20170718_170130.jpg",
+   "/wp-content/uploads/2017/08/20170704_163455.jpg"
+  ]
+ },
+ {
+  "kind": "coffee",
+  "slug": "top-5-coffee-shop-paris",
+  "title": "Top 5 Coffee Shop in Paris",
+  "category": "France",
+  "tile": "/wp-content/uploads/2017/08/20170707_123007front.jpg",
+  "tile_w": 1334,
+  "tile_h": 1334,
+  "tile_src": "existing tile OK",
+  "gallery": [
+   "/wp-content/uploads/2017/08/20170629_181040.jpg",
+   "/wp-content/uploads/2017/08/20170714_155651.jpg",
+   "/wp-content/uploads/2017/08/20170707_123007.jpg",
+   "/wp-content/uploads/2017/08/IMG_3986.jpg",
+   "/wp-content/uploads/2017/08/IMG_3995.jpg",
+   "/wp-content/uploads/2017/08/20170725_161239.jpg",
+   "/wp-content/uploads/2017/08/20170725_161521.jpg",
+   "/wp-content/uploads/2017/08/20170629_181107.jpg"
+  ]
+ },
+ {
+  "kind": "coffee",
+  "slug": "top-5-coffee-shops-in-london",
+  "title": "Top 5 Coffee Shops in London",
+  "category": "UK",
+  "tile": "/wp-content/uploads/2017/07/20216768_1397148553666437_1983934829_o.jpg",
+  "tile_w": 2048,
+  "tile_h": 1536,
+  "tile_src": "UPGRADED from project image",
+  "gallery": [
+   "/wp-content/uploads/2017/07/20216333_1397168966997729_1992974993_o.jpg",
+   "/wp-content/uploads/2017/07/20216768_1397148553666437_1983934829_o.jpg",
+   "/wp-content/uploads/2017/07/20205568_1397148520333107_1470007983_o-1.jpg",
+   "/wp-content/uploads/2017/07/20216741_1397152833666009_781567314_o.jpg",
+   "/wp-content/uploads/2017/07/20216458_1397148566999769_1585143206_o.jpg",
+   "/wp-content/uploads/2017/07/20186991_1397148543666438_1553485314_o.jpg"
+  ]
+ },
+ {
+  "kind": "coffee",
+  "slug": "blue-olive",
+  "title": "Blue Olive",
+  "category": "Paris",
+  "tile": "/wp-content/uploads/2017/06/IMG_3884.jpg",
+  "tile_w": 4841,
+  "tile_h": 3220,
+  "tile_src": "UPGRADED from project image",
+  "gallery": [
+   "/wp-content/uploads/2017/06/IMG_3878.jpg",
+   "/wp-content/uploads/2017/06/aaa-copy.jpg",
+   "/wp-content/uploads/2017/06/19619688_1379492322098727_659505103_o.jpg",
+   "/wp-content/uploads/2017/06/IMG_3884.jpg",
+   "/wp-content/uploads/2017/06/19650136_1379492855432007_1868628096_o-1.jpg"
+  ]
+ },
+ {
+  "kind": "coffee",
+  "slug": "telescope",
+  "title": "T\u00e9lescope",
+  "category": "Paris",
+  "tile": "/wp-content/uploads/2017/06/telescopefron.jpg",
+  "tile_w": 1443,
+  "tile_h": 1444,
+  "tile_src": "existing tile OK",
+  "gallery": [
+   "/wp-content/uploads/2017/06/IMG_4104.jpg",
+   "/wp-content/uploads/2017/06/IMG_4107.jpg",
+   "/wp-content/uploads/2017/06/aaa.jpg",
+   "/wp-content/uploads/2017/06/IMG_4114.jpg"
+  ]
+ }
+]
