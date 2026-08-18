@@ -136,6 +136,8 @@ Say the word and I'll spec it. I'd rather not.
 /design    selected work
 /coffee    reviews
 /apps      gallery — free downloads and paid apps
+/work/<slug>  project detail — 22 pages (added after Phase 0; the live site
+              carries no prose on these, only image stacks)
 ```
 
 **Chrome, identical on every page** (Principle 3, 17, and the app-shell spec):
@@ -417,14 +419,14 @@ Each phase ends in a stop. I show work and wait.
 
 | # | Phase | Deliverable | Status |
 |---|---|---|---|
-| 1 | **This document** | Job, stack, IA, extensions, payment options | **← you are here. Stop.** |
-| 2 | Asset inventory | Read-only crawl of ajwoo.com + /coffee/ + /design/. Table: source URL, type, dimensions, role, keep/re-shoot/cut + one line of reasoning. Flags low-res and upscaled assets, and argues against the WP builder strings and the snow script. | |
-| 3 | Figma design system | `search_design_system` results as a table (component, variants, which screen needs it); `get_variable_defs` reconciled against `tokens.css` with disagreements escalated, never silently resolved; existing Code Connect map; per-screen component list with rejections logged. Falls back to `tokens.json` + `components.md` and says so plainly if no published minimal library exists. | |
-| 4 | Foundation | `git init`, Next.js + TS + Tailwind v3.4 + preset, `tokens.css`, self-hosted font, app shell, nav, home affordance, focus states, `.env.example`, **`DEPLOY.md` starts here**. Static. No motion. | |
-| 5 | `/design` and `/coffee` | Content migrated off WordPress, assets re-encoded, zero `wp-content` references. | |
-| 6 | `/apps` | Cards, grouping by user intent with outcome-named groups, price visible at rest, empty state, guarded purchase action, payment adapter stubbed against D2. | |
-| 7 | Polish layer | Entrance sequence, then cursor + liquid edge. Last, deliberately — building them first would distort every layout decision underneath. | |
-| 8 | Verification | `reference/checklist.md` as a pass/fail table with every failure reported honestly. Contrast ratios as measured numbers, not estimates. Cursor frame rate as a measured number. Written confirmation that nothing was deployed, pushed, or published, and that `DEPLOY.md` is current. | |
+| 1 | **This document** | Job, stack, IA, extensions, payment options | **Done** |
+| 2 | Asset inventory | Read-only crawl of ajwoo.com + /coffee/ + /design/. Table: source URL, type, dimensions, role, keep/re-shoot/cut + one line of reasoning. Flags low-res and upscaled assets, and argues against the WP builder strings and the snow script. | **Done** — `PHASE-0-INVENTORY.md` |
+| 3 | Figma design system | `search_design_system` results as a table (component, variants, which screen needs it); `get_variable_defs` reconciled against `tokens.css` with disagreements escalated, never silently resolved; existing Code Connect map; per-screen component list with rejections logged. Falls back to `tokens.json` + `components.md` and says so plainly if no published minimal library exists. | **Blocked** — discovery tools are file-scoped and need a `fileKey`. Fallback applied; nothing fabricated. |
+| 4 | Foundation | `git init`, Next.js + TS + Tailwind v3.4 + preset, `tokens.css`, self-hosted font, app shell, nav, home affordance, focus states, `.env.example`, **`DEPLOY.md` starts here**. Static. No motion. | **Done** |
+| 5 | `/design` and `/coffee` | Content migrated off WordPress, assets re-encoded, zero `wp-content` references. | **Done** — plus 22 `/work/<slug>` detail pages |
+| 6 | `/apps` | Cards, grouping by user intent with outcome-named groups, price visible at rest, empty state, guarded purchase action, payment adapter stubbed against D2. | **Done** — renders its empty state; no app data exists |
+| 7 | Polish layer | Entrance sequence, then cursor + liquid edge. Last, deliberately — building them first would distort every layout decision underneath. | **Done** |
+| 8 | Verification | `reference/checklist.md` as a pass/fail table with every failure reported honestly. Contrast ratios as measured numbers, not estimates. Cursor frame rate as a measured number. Written confirmation that nothing was deployed, pushed, or published, and that `DEPLOY.md` is current. | **Done** — `VERIFICATION.md`; 2 failures + 6 gaps reported |
 
 Figma round-trip (§4b) runs at the end of whichever phase creates or meaningfully
 modifies a component, and **asks before writing to any Figma file.**
@@ -461,7 +463,11 @@ modifies a component, and **asks before writing to any Figma file.**
 | **D2** | Payment provider + subscription vs. one-time unlock | Phase 6 | I'll ask again rather than guess — this one has no safe default |
 | **D3** | Entrance animates the type (my pick) or a rule drawing across | Phase 7 | Type |
 | **D4** | Typeface: Plus Jakarta alone (my recommendation) or a pairing | Phase 4 | Plus Jakarta alone |
-| **D5** | `git init` locally, or leave untracked | Phase 4 | `git init`, no remote |
+| **D5** | `git init` locally, or leave untracked | Phase 4 | `git init`, no remote — **applied** |
+| **D6** | The 9 orphaned `/work/` pages (+3 password-protected): retire with redirects, or restore? | Phase 5 | Excluded from the build; still live on WordPress |
+| **D7** | Calendly books **30** min but the old copy said 20. Change the event, or keep the label "Book 30 minutes"? | Phase 4 | Label follows the link: "Book 30 minutes" |
+| **D8** | Re-export the grid tiles from originals? | Phase 5 | **Resolved in build** — 11 of 22 tiles regenerated from high-res project images; 3 have no better source (Dynamics 365 800px, Netmarble 570px, Fancy Cafes Paris 1079px) |
+| **D9** | The 3 animated grid GIFs | Phase 5 | Replaced with static high-res stills; no video re-encode yet |
 
 ---
 

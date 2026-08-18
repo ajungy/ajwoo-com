@@ -29,7 +29,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     // No data-theme: follow the OS. A toggle changes a preference the OS
     // already knows, and compact chrome is at its density ceiling.
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: entranceScript }} />
       </head>
