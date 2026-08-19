@@ -1,42 +1,41 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import { Action } from '@/components/Action';
-import { apps, type Price } from '@/content/apps';
-import { resolveCheckout } from '@/lib/checkout';
+import { AppIconTile } from '@/components/AppIcon';
+import { PriceBadge } from '@/components/PriceBadge';
+import { apps, type App } from '@/content/apps';
 import { site } from '@/content/site';
 
 export const metadata: Metadata = { title: 'Apps' };
 
 /**
- * Cost is never disclosed behind an interaction — it renders on the card, at
- * rest, always (reference/disclosure.md). Where no price has been set yet the
- * card says so rather than implying "free".
+ * Same card contract as Design and Coffee: the whole card is the link and the
+ * name is its accessible label, so there are no competing buttons inside it.
+ * Hover raises e1 → e2 with no lift transform.
  */
-function PriceBadge({ price }: { price: Price }) {
-  const label =
-    price.kind === 'free' ? 'Free' : price.kind === 'paid' ? price.label : 'Pricing TBD';
+function AppCard({ app }: { app: App }) {
   return (
-    <span className="shrink-0 rounded-xs bg-neutral-bg px-4 py-1 text-caption font-medium text-neutral">
-      {label}
-    </span>
-  );
-}
-
-function AppCard({ app }: { app: (typeof apps)[number] }) {
-  const checkout = app.price.kind === 'paid' ? resolveCheckout(app.price.checkoutId) : null;
-  const buyable = app.price.kind === 'paid' && !!checkout;
-  return (
-    <article className="flex flex-col rounded-lg border border-line-subtle bg-raised p-8 shadow-e1">
-      <div className="flex items-start justify-between gap-6">
-        <h3 className="text-h3 text-fg">{app.name}</h3>
-        <PriceBadge price={app.price} />
+    <Link
+      href={`/apps/${app.slug}/`}
+      data-cursor-label={app.name}
+      className={
+        'group flex flex-col rounded-lg border border-line-subtle bg-raised p-8 shadow-e1 card-press ' +
+        'can-hover:hover:border-line can-hover:hover:shadow-e2'
+      }
+    >
+      <div className="flex items-start gap-6">
+        <AppIconTile name={app.icon} />
+        <div className="min-w-0 flex-1">
+          <div className="flex items-start justify-between gap-5">
+            <h3 className="text-title text-fg">{app.name}</h3>
+            <PriceBadge price={app.price} />
+          </div>
+          <p className="mt-1 text-caption text-fg-tertiary">{app.platform}</p>
+        </div>
       </div>
 
-      <p className="mt-5 text-body text-fg-secondary">{app.description}</p>
+      <p className="mt-6 text-body text-fg-secondary">{app.description}</p>
 
-      <p className="mt-6 text-caption text-fg-tertiary">{app.trigger}</p>
-
-      {/* The two claims that decide it: native, and on-device. Neutral tokens —
-          these are properties, not a success state, so they are never green. */}
       <ul className="mt-6 flex flex-wrap gap-3">
         {app.traits.map((t) => (
           <li key={t} className="rounded-xs bg-sunken px-4 py-2 text-caption text-fg-secondary">
@@ -44,25 +43,7 @@ function AppCard({ app }: { app: (typeof apps)[number] }) {
           </li>
         ))}
       </ul>
-
-      {/* Purchase is guarded (Principle 9): ≥24px from its neighbours, never
-          default-focused, and a plain navigation so it cannot double-fire. */}
-      <div className="mt-9">
-        {app.price.kind === 'free' ? (
-          <Action href={app.action.href} external variant="secondary" cursorLabel="Download">
-            {app.action.label}
-          </Action>
-        ) : buyable ? (
-          <Action href={checkout!} external variant="secondary" cursorLabel="Buy now">
-            {app.action.label}
-          </Action>
-        ) : (
-          <p className="text-caption text-fg-tertiary">
-            Not yet available to download.
-          </p>
-        )}
-      </div>
-    </article>
+    </Link>
   );
 }
 

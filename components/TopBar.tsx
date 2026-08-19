@@ -3,22 +3,31 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Action } from './Action';
+import { Logo } from './Logo';
 import { nav, site } from '@/content/site';
 
 /**
- * The app shell. Identity top-left, global cluster top-right — the same pixel
+ * The app shell. Identity top-left, global cluster top-right — same pixel
  * position on every page, every canvas class (Principle 3 / 17).
  *
- * Compact carries wordmark + CTA on the bar and the three destinations on a
- * second row, visible at rest. No hamburger: hiding three short words behind a
- * drawer costs an interaction and buys nothing.
+ * The bar is the system's ONE translucent surface: `--surface-chrome` at 72%
+ * over a 24px backdrop blur (SKILL.md §2). Page content dissolves into it as
+ * it scrolls up rather than being clipped by an opaque band. 72% is the floor
+ * at which text on top still clears 4.5:1 over arbitrary scrolling content —
+ * it is not lowered here.
+ *
+ * Current location is carried by contrast alone: the active destination sits at
+ * --text-primary, the rest at --text-secondary. Both clear AAA (7:1) against
+ * the page, so the indicator costs no reserved space and no extra line.
  *
  * Density: 5 interactive elements at compact — exactly at the budget ceiling.
  * Nothing may be added here without removing something.
  */
 export function TopBar() {
   const pathname = usePathname();
-  const isActive = (href: string) => pathname === href || pathname === href.replace(/\/$/, '');
+  const norm = (p: string) => (p.length > 1 ? p.replace(/\/$/, '') : p);
+  const isActive = (href: string) => norm(pathname) === norm(href);
+  const home = norm(pathname) === '/';
 
   const links = (
     <nav aria-label="Sections" className="flex items-center gap-6">
@@ -31,7 +40,7 @@ export function TopBar() {
           className={
             'text-label transition-colors duration-fast ease-standard ' +
             (isActive(n.href)
-              ? 'text-fg font-medium'
+              ? 'font-semibold text-fg'
               : 'text-fg-secondary can-hover:hover:text-fg')
           }
         >
@@ -42,15 +51,19 @@ export function TopBar() {
   );
 
   return (
-    <header className="sticky top-0 z-sticky bg-page">
+    <header className="chrome sticky top-0 z-sticky">
       <div className="mx-auto max-w-app px-page">
         <div className="flex h-12 items-center justify-between gap-8">
           <Link
             href="/"
+            aria-current={home ? 'page' : undefined}
             data-cursor-label="Home"
-            className="text-title font-semibold text-fg transition-colors duration-fast ease-standard can-hover:hover:text-fg-secondary"
+            className={
+              'flex items-center transition-colors duration-fast ease-standard ' +
+              (home ? 'text-fg' : 'text-fg-secondary can-hover:hover:text-fg')
+            }
           >
-            {site.name}
+            <Logo className="h-6 w-auto" />
           </Link>
 
           <div className="flex items-center gap-8">
@@ -61,8 +74,10 @@ export function TopBar() {
           </div>
         </div>
 
-        {/* Compact: destinations sit below the bar, visible at rest. */}
-        <div className="medium:hidden pb-5">{links}</div>
+        {/* Compact: destinations sit below the bar, visible at rest. No
+            hamburger — hiding three short words costs an interaction and buys
+            nothing, and compact is already at its density ceiling. */}
+        <div className="pb-5 medium:hidden">{links}</div>
       </div>
     </header>
   );

@@ -1,13 +1,15 @@
-// Generated from the Phase 0 crawl (scripts/source-manifest.json) and the
-// re-encoded asset manifest (content/images.json). Titles and categories are
-// the real ones from ajwoo.com. The detail pages carry no prose on the live
-// site, so none is invented here.
+// Generated from the Phase 0 crawl. Titles, categories, prose, images and
+// video embeds are all the real ones from ajwoo.com — nothing is invented.
 
-import images from './images.json';
+import data from './images.json';
 
-export type Project = {
-  slug: string; title: string; category: string; kind: 'design' | 'coffee';
-};
+export type Project = { slug: string; title: string; category: string; kind: 'design' | 'coffee' };
+
+export type Block =
+  | { kind: 'text'; value: string }
+  | { kind: 'image'; base: string; widths: number[]; fallbackWidth: number; width: number; height: number }
+  | { kind: 'motion'; base: string; hasWebm: boolean; width: number; height: number }
+  | { kind: 'embed'; src: string; title: string };
 
 export const projects: Project[] = [
   { slug: '704', title: 'GenAI in Premiere Pro', category: 'Video / AI', kind: 'design' },
@@ -36,12 +38,14 @@ export const projects: Project[] = [
 
 export const designProjects = projects.filter((p) => p.kind === 'design');
 export const coffeeProjects = projects.filter((p) => p.kind === 'coffee');
-export const imageData = images as {
-  hero: { base: string; widths: number[]; width: number; height: number } | null;
-  projects: Record<string, {
-    tile: { base: string; width: number; height: number } | null;
-    gallery: { base: string; widths: number[]; fallbackWidth: number; width: number; height: number }[];
-  }>;
+export const getProject = (slug: string) => projects.find((p) => p.slug === slug);
+
+type Tile = { base: string; width: number; height: number };
+export const siteData = data as {
+  hero: { base: string; widths: number[]; fallbackWidth: number; width: number; height: number } | null;
+  tiles: Record<string, Tile>;
+  blocks: Record<string, Block[]>;
 };
 
-export const getProject = (slug: string) => projects.find((p) => p.slug === slug);
+export const tileFor = (slug: string): Tile | undefined => siteData.tiles[slug];
+export const blocksFor = (slug: string): Block[] => siteData.blocks[slug] ?? [];

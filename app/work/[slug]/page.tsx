@@ -1,8 +1,11 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { Action } from '@/components/Action';
-import { Picture } from '@/components/Picture';
-import { projects, getProject, imageData } from '@/content/projects';
+import { Blocks } from '@/components/Blocks';
+import { ProjectCard } from '@/components/ProjectCard';
+import {
+  projects, getProject, blocksFor, designProjects, coffeeProjects,
+} from '@/content/projects';
 
 export function generateStaticParams() {
   return projects.map((p) => ({ slug: p.slug }));
@@ -16,35 +19,51 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
 export default function WorkPage({ params }: { params: { slug: string } }) {
   const project = getProject(params.slug);
   if (!project) notFound();
-  const gallery = imageData.projects[project.slug]?.gallery ?? [];
-  const backHref = project.kind === 'coffee' ? '/coffee/' : '/design/';
+
+  const all = blocksFor(project.slug);
+  // The first line of several posts is the title again. The <h1> already says
+  // it, so repeating it is a second hierarchy for the same thing.
+  const blocks =
+    all[0]?.kind === 'text' && all[0].value.trim().toLowerCase() === project.title.trim().toLowerCase()
+      ? all.slice(1)
+      : all;
+  const isCoffee = project.kind === 'coffee';
+  const backHref = isCoffee ? '/coffee/' : '/design/';
+  const backLabel = isCoffee ? 'Coffee' : 'Design';
+
+  // No dead ends: every project offers the next one (Principle 7).
+  const siblings = (isCoffee ? coffeeProjects : designProjects).filter((p) => p.slug !== project.slug);
+  const next = siblings.slice(0, 3);
 
   return (
-    <div className="mx-auto max-w-content px-page">
-      {/* A way back, at the top-left of the content area — not the browser's. */}
+    // Same container and page padding as the top bar, so the content lines up
+    // with the wordmark on the left and the CTA on the right.
+    <div className="mx-auto max-w-app px-page">
       <div className="pt-9">
         <Action href={backHref} variant="tertiary" cursorLabel="Go back">
-          ← {project.kind === 'coffee' ? 'Coffee' : 'Design'}
+          ← {backLabel}
         </Action>
       </div>
 
-      <header className="pt-8 pb-9">
+      <header className="pt-8 pb-12">
         <h1 className="text-h1 text-fg">{project.title}</h1>
-        <p className="mt-4 text-body text-fg-secondary">{project.category}</p>
+        <p className="mt-4 text-body-lg text-fg-secondary">{project.category}</p>
       </header>
 
-      <div className="space-y-8 pb-12">
-        {gallery.map((img, i) => (
-          <Picture
-            key={img.base}
-            img={img}
-            alt={`${project.title} — image ${i + 1}`}
-            priority={i === 0}
-            sizes="(min-width: 720px) 720px, 100vw"
-            className="block w-full h-auto rounded-lg border border-line-subtle"
-          />
-        ))}
-      </div>
+      <article className="pb-12">
+        <Blocks blocks={blocks} alt={project.title} />
+      </article>
+
+      {next.length > 0 && (
+        <section className="border-t border-line-subtle pt-12 pb-12">
+          <h2 className="text-h3 text-fg">More {isCoffee ? 'reviews' : 'work'}</h2>
+          <div className="mt-8 grid grid-cols-1 gap-8 medium:grid-cols-2 expanded:grid-cols-3">
+            {next.map((p) => (
+              <ProjectCard key={p.slug} project={p} />
+            ))}
+          </div>
+        </section>
+      )}
     </div>
   );
 }

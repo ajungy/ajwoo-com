@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { Picture } from './Picture';
-import { imageData, type Project } from '@/content/projects';
+import { tileFor, type Project } from '@/content/projects';
 
 /**
  * Interactive card. Hover raises e1 -> e2 and the border steps to default —
@@ -13,7 +13,7 @@ import { imageData, type Project } from '@/content/projects';
  * label invisible to half of all sessions (Principle 5).
  */
 export function ProjectCard({ project, priority = false }: { project: Project; priority?: boolean }) {
-  const tile = imageData.projects[project.slug]?.tile;
+  const tile = tileFor(project.slug);
   return (
     <Link
       href={`/work/${project.slug}/`}

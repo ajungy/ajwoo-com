@@ -17,6 +17,8 @@ export type Price =
 
 export type App = {
   slug: string;
+  /** Key into components/AppIcon.tsx. Placeholder marks until real artwork. */
+  icon: string;
   name: string;
   /** What it does FOR THE USER, in one line. Not a feature list. */
   description: string;
@@ -29,11 +31,14 @@ export type App = {
   price: Price;
   /** Outcome-naming verb phrase. Never "Go" or "Click". */
   action: { label: string; href: string };
+  /** Longer copy for the app's own page. */
+  detail: string[];
 };
 
 export const apps: App[] = [
   {
     slug: 'capture',
+    icon: 'capture',
     name: 'Capture',
     description: 'Records what happened on your screen and hands back a cut version, already edited.',
     trigger: 'Records, then edits itself',
@@ -41,9 +46,14 @@ export const apps: App[] = [
     traits: ['Native macOS app', 'Runs fully on-device'],
     price: { kind: 'tbd' },
     action: { label: 'Get Capture', href: '#' },
+    detail: [
+      'Capture records a region or a whole window, then does the edit you were going to do anyway: trims the dead air at both ends, drops the frames where nothing changed, and hands you a file that is ready to send.',
+      'Recording and editing both happen on your Mac. No upload step, no account, no link that expires.',
+    ],
   },
   {
     slug: 'dictate',
+    icon: 'dictate',
     name: 'Dictate',
     description: 'Turns speech into text anywhere you can type, without sending your voice to a server.',
     trigger: 'Double-tap Command to start talking',
@@ -51,9 +61,14 @@ export const apps: App[] = [
     traits: ['Native macOS app', 'Runs fully on-device'],
     price: { kind: 'tbd' },
     action: { label: 'Get Dictate', href: '#' },
+    detail: [
+      'Dictate puts speech into whatever already has your cursor — a document, a terminal, a message box. There is no window to switch to and nothing to paste.',
+      'The speech model runs on your Mac. Your voice is never uploaded, so it works on a plane and it keeps working if this site disappears.',
+    ],
   },
   {
     slug: 'narrate',
+    icon: 'narrate',
     name: 'Narrate',
     description: 'Reads any text you select out loud, so you can take in a long page without reading it.',
     trigger: 'Select text, press once to listen',
@@ -61,6 +76,10 @@ export const apps: App[] = [
     traits: ['Native macOS app', 'Runs fully on-device'],
     price: { kind: 'tbd' },
     action: { label: 'Get Narrate', href: '#' },
+    detail: [
+      'Narrate reads the text you have selected, anywhere in macOS, with one key. Useful for long articles, for proofreading your own writing, and for resting your eyes.',
+      'Synthesis happens locally, so there is no per-character billing and nothing you read leaves the machine.',
+    ],
   },
 ];
 

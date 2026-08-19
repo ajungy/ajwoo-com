@@ -1,7 +1,8 @@
 import { Action } from '@/components/Action';
+import { Cursor } from '@/components/Cursor';
 import { Picture } from '@/components/Picture';
 import { ProjectCard } from '@/components/ProjectCard';
-import { designProjects, coffeeProjects, imageData } from '@/content/projects';
+import { designProjects, coffeeProjects, siteData } from '@/content/projects';
 import { site, education, clients, featured, social } from '@/content/site';
 
 /**
@@ -15,6 +16,8 @@ export default function Home() {
   const evidence = [...designProjects.slice(0, 2), coffeeProjects[0]];
   return (
     <div className="mx-auto max-w-app px-page">
+      {/* The water cursor lives on the landing page only. */}
+      <Cursor />
       {/* Identity. The single most important element, and the only thing on this
           site that ever animates. */}
       <section className="pt-12 pb-9">
@@ -32,10 +35,10 @@ export default function Home() {
         </div>
       </section>
 
-      {imageData.hero && (
+      {siteData.hero && (
         <section className="pb-12">
           <Picture
-            img={imageData.hero}
+            img={siteData.hero}
             alt="Alex Woo"
             priority
             sizes="(min-width: 1200px) 1200px, 100vw"

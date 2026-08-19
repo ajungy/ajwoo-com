@@ -1,1008 +1,4 @@
 {
- "projects": {
-  "704": {
-   "tile": {
-    "base": "tile-704",
-    "width": 1140,
-    "height": 1140
-   },
-   "gallery": [
-    {
-     "base": "img-704-obj-add-2",
-     "widths": [
-      770,
-      1540
-     ],
-     "fallbackWidth": 1540,
-     "width": 1540,
-     "height": 401
-    }
-   ]
-  },
-  "pr-ae-frame": {
-   "tile": {
-    "base": "tile-pr-ae-frame",
-    "width": 1140,
-    "height": 1140
-   },
-   "gallery": [
-    {
-     "base": "img-pr-ae-frame-frame-io-adobe-copy",
-     "widths": [
-      770,
-      1540
-     ],
-     "fallbackWidth": 1540,
-     "width": 1540,
-     "height": 379
-    }
-   ]
-  },
-  "layout": {
-   "tile": {
-    "base": "tile-layout",
-    "width": 1140,
-    "height": 1140
-   },
-   "gallery": [
-    {
-     "base": "img-layout-asdc",
-     "widths": [
-      770,
-      1540
-     ],
-     "fallbackWidth": 1540,
-     "width": 1540,
-     "height": 550
-    },
-    {
-     "base": "img-layout-van",
-     "widths": [
-      770
-     ],
-     "fallbackWidth": 770,
-     "width": 770,
-     "height": 438
-    }
-   ]
-  },
-  "product-visualize": {
-   "tile": {
-    "base": "tile-product-visualize",
-    "width": 1140,
-    "height": 1140
-   },
-   "gallery": [
-    {
-     "base": "img-product-visualize-salesassistheroimage",
-     "widths": [
-      770,
-      1540
-     ],
-     "fallbackWidth": 1540,
-     "width": 1540,
-     "height": 665
-    }
-   ]
-  },
-  "dynamics-365-customer-voice": {
-   "tile": {
-    "base": "tile-dynamics-365-customer-voice",
-    "width": 1140,
-    "height": 1140
-   },
-   "gallery": [
-    {
-     "base": "img-dynamics-365-customer-voice-screen-shot-2020-10-01-at-9-15-46-pm",
-     "widths": [
-      770
-     ],
-     "fallbackWidth": 770,
-     "width": 770,
-     "height": 297
-    }
-   ]
-  },
-  "seeing-ai": {
-   "tile": {
-    "base": "tile-seeing-ai",
-    "width": 1140,
-    "height": 1140
-   },
-   "gallery": [
-    {
-     "base": "img-seeing-ai-seesing-ai",
-     "widths": [
-      770,
-      1540
-     ],
-     "fallbackWidth": 1540,
-     "width": 1540,
-     "height": 498
-    }
-   ]
-  },
-  "netmarble": {
-   "tile": {
-    "base": "tile-netmarble",
-    "width": 1140,
-    "height": 1140
-   },
-   "gallery": [
-    {
-     "base": "img-netmarble-aa",
-     "widths": [
-      770
-     ],
-     "fallbackWidth": 770,
-     "width": 770,
-     "height": 411
-    }
-   ]
-  },
-  "starbucks-technology": {
-   "tile": {
-    "base": "tile-starbucks-technology",
-    "width": 1140,
-    "height": 1140
-   },
-   "gallery": [
-    {
-     "base": "img-starbucks-technology-sbx20190610-starbucks-tryer-lab-featured-image",
-     "widths": [
-      770
-     ],
-     "fallbackWidth": 770,
-     "width": 770,
-     "height": 374
-    },
-    {
-     "base": "img-starbucks-technology-2",
-     "widths": [
-      770,
-      1540
-     ],
-     "fallbackWidth": 1540,
-     "width": 1540,
-     "height": 866
-    }
-   ]
-  },
-  "wrap-and-charge": {
-   "tile": {
-    "base": "tile-wrap-and-charge",
-    "width": 1140,
-    "height": 1140
-   },
-   "gallery": [
-    {
-     "base": "img-wrap-and-charge-bbb",
-     "widths": [
-      770,
-      1540
-     ],
-     "fallbackWidth": 1540,
-     "width": 1540,
-     "height": 858
-    },
-    {
-     "base": "img-wrap-and-charge-screen-shot-2019-02-08-at-9-08-25-pm",
-     "widths": [
-      770,
-      1540
-     ],
-     "fallbackWidth": 1540,
-     "width": 1540,
-     "height": 858
-    },
-    {
-     "base": "img-wrap-and-charge-screen-shot-2019-02-08-at-9-13-43-pm",
-     "widths": [
-      770,
-      1540
-     ],
-     "fallbackWidth": 1540,
-     "width": 1540,
-     "height": 688
-    },
-    {
-     "base": "img-wrap-and-charge-screen-shot-2019-02-08-at-9-12-54-pm",
-     "widths": [
-      770,
-      1540
-     ],
-     "fallbackWidth": 1540,
-     "width": 1540,
-     "height": 697
-    },
-    {
-     "base": "img-wrap-and-charge-screen-shot-2019-02-08-at-9-33-33-pm",
-     "widths": [
-      770,
-      1540
-     ],
-     "fallbackWidth": 1540,
-     "width": 1540,
-     "height": 860
-    }
-   ]
-  },
-  "coin-lock": {
-   "tile": {
-    "base": "tile-coin-lock",
-    "width": 1140,
-    "height": 1140
-   },
-   "gallery": [
-    {
-     "base": "img-coin-lock-22222222222",
-     "widths": [
-      770,
-      1540
-     ],
-     "fallbackWidth": 1540,
-     "width": 1540,
-     "height": 866
-    },
-    {
-     "base": "img-coin-lock-sg",
-     "widths": [
-      770,
-      1540
-     ],
-     "fallbackWidth": 1540,
-     "width": 1540,
-     "height": 618
-    },
-    {
-     "base": "img-coin-lock-untitlesd-2-04",
-     "widths": [
-      770,
-      1540
-     ],
-     "fallbackWidth": 1540,
-     "width": 1540,
-     "height": 679
-    },
-    {
-     "base": "img-coin-lock-aaa-02",
-     "widths": [
-      770,
-      1540
-     ],
-     "fallbackWidth": 1540,
-     "width": 1540,
-     "height": 1752
-    },
-    {
-     "base": "img-coin-lock-untitled-42-2-copy",
-     "widths": [
-      770,
-      1540
-     ],
-     "fallbackWidth": 1540,
-     "width": 1540,
-     "height": 1144
-    }
-   ]
-  },
-  "10-borders": {
-   "tile": {
-    "base": "tile-10-borders",
-    "width": 1140,
-    "height": 1140
-   },
-   "gallery": [
-    {
-     "base": "img-10-borders-ten-borders-2",
-     "widths": [
-      770,
-      1540
-     ],
-     "fallbackWidth": 1540,
-     "width": 1540,
-     "height": 809
-    }
-   ]
-  },
-  "paintsound": {
-   "tile": {
-    "base": "tile-paintsound",
-    "width": 1140,
-    "height": 1140
-   },
-   "gallery": [
-    {
-     "base": "img-paintsound-screen-shot-2018-06-16-at-4-22-45-pm",
-     "widths": [
-      770,
-      1540
-     ],
-     "fallbackWidth": 1540,
-     "width": 1540,
-     "height": 738
-    }
-   ]
-  },
-  "3-coffee-shops-in-tokyo": {
-   "tile": {
-    "base": "tile-3-coffee-shops-in-tokyo",
-    "width": 1140,
-    "height": 1140
-   },
-   "gallery": [
-    {
-     "base": "img-3-coffee-shops-in-tokyo-your-name",
-     "widths": [
-      770,
-      1540
-     ],
-     "fallbackWidth": 1540,
-     "width": 1540,
-     "height": 432
-    },
-    {
-     "base": "img-3-coffee-shops-in-tokyo-img-5191",
-     "widths": [
-      770,
-      1540
-     ],
-     "fallbackWidth": 1540,
-     "width": 1540,
-     "height": 1155
-    },
-    {
-     "base": "img-3-coffee-shops-in-tokyo-img-5024",
-     "widths": [
-      770
-     ],
-     "fallbackWidth": 770,
-     "width": 770,
-     "height": 629
-    },
-    {
-     "base": "img-3-coffee-shops-in-tokyo-img-3666",
-     "widths": [
-      770,
-      1540
-     ],
-     "fallbackWidth": 1540,
-     "width": 1540,
-     "height": 1155
-    }
-   ]
-  },
-  "5-coffee-shops-in-seattle": {
-   "tile": {
-    "base": "tile-5-coffee-shops-in-seattle",
-    "width": 1140,
-    "height": 1140
-   },
-   "gallery": [
-    {
-     "base": "img-5-coffee-shops-in-seattle-20160731-140045-2",
-     "widths": [
-      770,
-      1540
-     ],
-     "fallbackWidth": 1540,
-     "width": 1540,
-     "height": 453
-    },
-    {
-     "base": "img-5-coffee-shops-in-seattle-20171120-120129",
-     "widths": [
-      770,
-      1540
-     ],
-     "fallbackWidth": 1540,
-     "width": 1540,
-     "height": 1155
-    },
-    {
-     "base": "img-5-coffee-shops-in-seattle-20170825-165625-1",
-     "widths": [
-      770,
-      1540
-     ],
-     "fallbackWidth": 1540,
-     "width": 1540,
-     "height": 1155
-    },
-    {
-     "base": "img-5-coffee-shops-in-seattle-a",
-     "widths": [
-      770,
-      1540
-     ],
-     "fallbackWidth": 1540,
-     "width": 1540,
-     "height": 864
-    },
-    {
-     "base": "img-5-coffee-shops-in-seattle-img-0027",
-     "widths": [
-      770
-     ],
-     "fallbackWidth": 770,
-     "width": 770,
-     "height": 399
-    },
-    {
-     "base": "img-5-coffee-shops-in-seattle-20180617-140458",
-     "widths": [
-      770,
-      1540
-     ],
-     "fallbackWidth": 1540,
-     "width": 1540,
-     "height": 1155
-    },
-    {
-     "base": "img-5-coffee-shops-in-seattle-img-0019",
-     "widths": [
-      770
-     ],
-     "fallbackWidth": 770,
-     "width": 770,
-     "height": 592
-    }
-   ]
-  },
-  "3-coffee-shops-amsterdam": {
-   "tile": {
-    "base": "tile-3-coffee-shops-amsterdam",
-    "width": 1140,
-    "height": 1140
-   },
-   "gallery": [
-    {
-     "base": "img-3-coffee-shops-amsterdam-20170722-151938",
-     "widths": [
-      770,
-      1540
-     ],
-     "fallbackWidth": 1540,
-     "width": 1540,
-     "height": 560
-    },
-    {
-     "base": "img-3-coffee-shops-amsterdam-20170723-133230",
-     "widths": [
-      770,
-      1540
-     ],
-     "fallbackWidth": 1540,
-     "width": 1540,
-     "height": 1155
-    },
-    {
-     "base": "img-3-coffee-shops-amsterdam-20170723-133221",
-     "widths": [
-      770,
-      1540
-     ],
-     "fallbackWidth": 1540,
-     "width": 1540,
-     "height": 1155
-    },
-    {
-     "base": "img-3-coffee-shops-amsterdam-20170723-144432",
-     "widths": [
-      770
-     ],
-     "fallbackWidth": 770,
-     "width": 770,
-     "height": 581
-    },
-    {
-     "base": "img-3-coffee-shops-amsterdam-20170723-1439390",
-     "widths": [
-      770,
-      1540
-     ],
-     "fallbackWidth": 1540,
-     "width": 1540,
-     "height": 1155
-    },
-    {
-     "base": "img-3-coffee-shops-amsterdam-20170722-150235",
-     "widths": [
-      770
-     ],
-     "fallbackWidth": 770,
-     "width": 770,
-     "height": 509
-    },
-    {
-     "base": "img-3-coffee-shops-amsterdam-20170722-152158",
-     "widths": [
-      770,
-      1540
-     ],
-     "fallbackWidth": 1540,
-     "width": 1540,
-     "height": 1155
-    }
-   ]
-  },
-  "best-coffee-shops-new-york-city": {
-   "tile": {
-    "base": "tile-best-coffee-shops-new-york-city",
-    "width": 1140,
-    "height": 1140
-   },
-   "gallery": [
-    {
-     "base": "img-best-coffee-shops-new-york-city-20170731-124830",
-     "widths": [
-      770,
-      1540
-     ],
-     "fallbackWidth": 1540,
-     "width": 1540,
-     "height": 268
-    },
-    {
-     "base": "img-best-coffee-shops-new-york-city-20170801-112309-1",
-     "widths": [
-      770,
-      1540
-     ],
-     "fallbackWidth": 1540,
-     "width": 1540,
-     "height": 1155
-    },
-    {
-     "base": "img-best-coffee-shops-new-york-city-20170731-144729",
-     "widths": [
-      770,
-      1540
-     ],
-     "fallbackWidth": 1540,
-     "width": 1540,
-     "height": 1155
-    },
-    {
-     "base": "img-best-coffee-shops-new-york-city-20170801-152508",
-     "widths": [
-      770,
-      1540
-     ],
-     "fallbackWidth": 1540,
-     "width": 1540,
-     "height": 1227
-    },
-    {
-     "base": "img-best-coffee-shops-new-york-city-20170801-152452",
-     "widths": [
-      770,
-      1540
-     ],
-     "fallbackWidth": 1540,
-     "width": 1540,
-     "height": 1155
-    },
-    {
-     "base": "img-best-coffee-shops-new-york-city-20170801-164752",
-     "widths": [
-      770,
-      1540
-     ],
-     "fallbackWidth": 1540,
-     "width": 1540,
-     "height": 1155
-    },
-    {
-     "base": "img-best-coffee-shops-new-york-city-20170610-122608",
-     "widths": [
-      770,
-      1540
-     ],
-     "fallbackWidth": 1540,
-     "width": 1540,
-     "height": 1155
-    },
-    {
-     "base": "img-best-coffee-shops-new-york-city-a",
-     "widths": [
-      770,
-      1540
-     ],
-     "fallbackWidth": 1540,
-     "width": 1540,
-     "height": 1155
-    }
-   ]
-  },
-  "5-in-milan": {
-   "tile": {
-    "base": "tile-5-in-milan",
-    "width": 1140,
-    "height": 1140
-   },
-   "gallery": [
-    {
-     "base": "img-5-in-milan-55",
-     "widths": [
-      770,
-      1540
-     ],
-     "fallbackWidth": 1540,
-     "width": 1540,
-     "height": 378
-    },
-    {
-     "base": "img-5-in-milan-20170703-135524",
-     "widths": [
-      770
-     ],
-     "fallbackWidth": 770,
-     "width": 770,
-     "height": 770
-    },
-    {
-     "base": "img-5-in-milan-20170701-142047",
-     "widths": [
-      770,
-      1540
-     ],
-     "fallbackWidth": 1540,
-     "width": 1540,
-     "height": 1155
-    },
-    {
-     "base": "img-5-in-milan-20170701-143009",
-     "widths": [
-      770,
-      1540
-     ],
-     "fallbackWidth": 1540,
-     "width": 1540,
-     "height": 1155
-    },
-    {
-     "base": "img-5-in-milan-20170702-201101",
-     "widths": [
-      770,
-      1540
-     ],
-     "fallbackWidth": 1540,
-     "width": 1540,
-     "height": 1155
-    },
-    {
-     "base": "img-5-in-milan-20170703-195615",
-     "widths": [
-      770,
-      1540
-     ],
-     "fallbackWidth": 1540,
-     "width": 1540,
-     "height": 1155
-    },
-    {
-     "base": "img-5-in-milan-20170703-142816",
-     "widths": [
-      770,
-      1540
-     ],
-     "fallbackWidth": 1540,
-     "width": 1540,
-     "height": 1233
-    }
-   ]
-  },
-  "top-3-fancy-cafes-paris": {
-   "tile": {
-    "base": "tile-top-3-fancy-cafes-paris",
-    "width": 1140,
-    "height": 1140
-   },
-   "gallery": [
-    {
-     "base": "img-top-3-fancy-cafes-paris-aaas",
-     "widths": [
-      770
-     ],
-     "fallbackWidth": 770,
-     "width": 770,
-     "height": 171
-    },
-    {
-     "base": "img-top-3-fancy-cafes-paris-img-20170623-232342-244",
-     "widths": [
-      770
-     ],
-     "fallbackWidth": 770,
-     "width": 770,
-     "height": 963
-    },
-    {
-     "base": "img-top-3-fancy-cafes-paris-20170718-170130",
-     "widths": [
-      770
-     ],
-     "fallbackWidth": 770,
-     "width": 770,
-     "height": 1027
-    },
-    {
-     "base": "img-top-3-fancy-cafes-paris-20170704-163455",
-     "widths": [
-      770
-     ],
-     "fallbackWidth": 770,
-     "width": 770,
-     "height": 1026
-    }
-   ]
-  },
-  "top-5-coffee-shop-paris": {
-   "tile": {
-    "base": "tile-top-5-coffee-shop-paris",
-    "width": 1140,
-    "height": 1140
-   },
-   "gallery": [
-    {
-     "base": "img-top-5-coffee-shop-paris-20170629-181040",
-     "widths": [
-      770,
-      1540
-     ],
-     "fallbackWidth": 1540,
-     "width": 1540,
-     "height": 680
-    },
-    {
-     "base": "img-top-5-coffee-shop-paris-20170714-155651",
-     "widths": [
-      770,
-      1540
-     ],
-     "fallbackWidth": 1540,
-     "width": 1540,
-     "height": 1101
-    },
-    {
-     "base": "img-top-5-coffee-shop-paris-20170707-123007",
-     "widths": [
-      770,
-      1540
-     ],
-     "fallbackWidth": 1540,
-     "width": 1540,
-     "height": 1253
-    },
-    {
-     "base": "img-top-5-coffee-shop-paris-img-3986",
-     "widths": [
-      770,
-      1540
-     ],
-     "fallbackWidth": 1540,
-     "width": 1540,
-     "height": 1026
-    },
-    {
-     "base": "img-top-5-coffee-shop-paris-img-3995",
-     "widths": [
-      770,
-      1540
-     ],
-     "fallbackWidth": 1540,
-     "width": 1540,
-     "height": 1133
-    },
-    {
-     "base": "img-top-5-coffee-shop-paris-20170725-161239",
-     "widths": [
-      770,
-      1540
-     ],
-     "fallbackWidth": 1540,
-     "width": 1540,
-     "height": 1154
-    },
-    {
-     "base": "img-top-5-coffee-shop-paris-20170725-161521",
-     "widths": [
-      770
-     ],
-     "fallbackWidth": 770,
-     "width": 770,
-     "height": 608
-    },
-    {
-     "base": "img-top-5-coffee-shop-paris-20170629-181107",
-     "widths": [
-      770,
-      1540
-     ],
-     "fallbackWidth": 1540,
-     "width": 1540,
-     "height": 1155
-    }
-   ]
-  },
-  "top-5-coffee-shops-in-london": {
-   "tile": {
-    "base": "tile-top-5-coffee-shops-in-london",
-    "width": 1140,
-    "height": 1140
-   },
-   "gallery": [
-    {
-     "base": "img-top-5-coffee-shops-in-london-20216333-1397168966997729-1992974993-o",
-     "widths": [
-      770,
-      1540
-     ],
-     "fallbackWidth": 1540,
-     "width": 1540,
-     "height": 653
-    },
-    {
-     "base": "img-top-5-coffee-shops-in-london-20216768-1397148553666437-1983934829-o",
-     "widths": [
-      770,
-      1540
-     ],
-     "fallbackWidth": 1540,
-     "width": 1540,
-     "height": 1155
-    },
-    {
-     "base": "img-top-5-coffee-shops-in-london-20205568-1397148520333107-1470007983-o-1",
-     "widths": [
-      770,
-      1540
-     ],
-     "fallbackWidth": 1540,
-     "width": 1540,
-     "height": 1138
-    },
-    {
-     "base": "img-top-5-coffee-shops-in-london-20216741-1397152833666009-781567314-o",
-     "widths": [
-      770,
-      1540
-     ],
-     "fallbackWidth": 1540,
-     "width": 1540,
-     "height": 1155
-    },
-    {
-     "base": "img-top-5-coffee-shops-in-london-20216458-1397148566999769-1585143206-o",
-     "widths": [
-      770,
-      1540
-     ],
-     "fallbackWidth": 1540,
-     "width": 1540,
-     "height": 1155
-    },
-    {
-     "base": "img-top-5-coffee-shops-in-london-20186991-1397148543666438-1553485314-o",
-     "widths": [
-      770,
-      1540
-     ],
-     "fallbackWidth": 1540,
-     "width": 1540,
-     "height": 1075
-    }
-   ]
-  },
-  "blue-olive": {
-   "tile": {
-    "base": "tile-blue-olive",
-    "width": 1140,
-    "height": 1140
-   },
-   "gallery": [
-    {
-     "base": "img-blue-olive-img-3878",
-     "widths": [
-      770,
-      1540
-     ],
-     "fallbackWidth": 1540,
-     "width": 1540,
-     "height": 1122
-    },
-    {
-     "base": "img-blue-olive-aaa-copy",
-     "widths": [
-      770
-     ],
-     "fallbackWidth": 770,
-     "width": 770,
-     "height": 1051
-    },
-    {
-     "base": "img-blue-olive-19619688-1379492322098727-659505103-o",
-     "widths": [
-      770,
-      1540
-     ],
-     "fallbackWidth": 1540,
-     "width": 1540,
-     "height": 1155
-    },
-    {
-     "base": "img-blue-olive-img-3884",
-     "widths": [
-      770,
-      1540
-     ],
-     "fallbackWidth": 1540,
-     "width": 1540,
-     "height": 1024
-    },
-    {
-     "base": "img-blue-olive-19650136-1379492855432007-1868628096-o-1",
-     "widths": [
-      770,
-      1540
-     ],
-     "fallbackWidth": 1540,
-     "width": 1540,
-     "height": 1155
-    }
-   ]
-  },
-  "telescope": {
-   "tile": {
-    "base": "tile-telescope",
-    "width": 1140,
-    "height": 1140
-   },
-   "gallery": [
-    {
-     "base": "img-telescope-img-4104",
-     "widths": [
-      770,
-      1540
-     ],
-     "fallbackWidth": 1540,
-     "width": 1540,
-     "height": 374
-    },
-    {
-     "base": "img-telescope-img-4107",
-     "widths": [
-      770,
-      1540
-     ],
-     "fallbackWidth": 1540,
-     "width": 1540,
-     "height": 1027
-    },
-    {
-     "base": "img-telescope-aaa",
-     "widths": [
-      770,
-      1540
-     ],
-     "fallbackWidth": 1540,
-     "width": 1540,
-     "height": 770
-    },
-    {
-     "base": "img-telescope-img-4114",
-     "widths": [
-      770,
-      1540
-     ],
-     "fallbackWidth": 1540,
-     "width": 1540,
-     "height": 1027
-    }
-   ]
-  }
- },
  "hero": {
   "base": "hero",
   "widths": [
@@ -1010,7 +6,2531 @@
    1540,
    2200
   ],
+  "fallbackWidth": 1540,
   "width": 1540,
   "height": 799
+ },
+ "tiles": {
+  "704": {
+   "base": "tile-704",
+   "width": 1140,
+   "height": 1140
+  },
+  "pr-ae-frame": {
+   "base": "tile-pr-ae-frame",
+   "width": 1140,
+   "height": 1140
+  },
+  "layout": {
+   "base": "tile-layout",
+   "width": 1140,
+   "height": 1140
+  },
+  "product-visualize": {
+   "base": "tile-product-visualize",
+   "width": 1140,
+   "height": 1140
+  },
+  "dynamics-365-customer-voice": {
+   "base": "tile-dynamics-365-customer-voice",
+   "width": 1140,
+   "height": 1140
+  },
+  "seeing-ai": {
+   "base": "tile-seeing-ai",
+   "width": 1140,
+   "height": 1140
+  },
+  "netmarble": {
+   "base": "tile-netmarble",
+   "width": 1140,
+   "height": 1140
+  },
+  "starbucks-technology": {
+   "base": "tile-starbucks-technology",
+   "width": 1140,
+   "height": 1140
+  },
+  "wrap-and-charge": {
+   "base": "tile-wrap-and-charge",
+   "width": 1140,
+   "height": 1140
+  },
+  "coin-lock": {
+   "base": "tile-coin-lock",
+   "width": 1140,
+   "height": 1140
+  },
+  "10-borders": {
+   "base": "tile-10-borders",
+   "width": 1140,
+   "height": 1140
+  },
+  "paintsound": {
+   "base": "tile-paintsound",
+   "width": 1140,
+   "height": 1140
+  },
+  "3-coffee-shops-in-tokyo": {
+   "base": "tile-3-coffee-shops-in-tokyo",
+   "width": 1140,
+   "height": 1140
+  },
+  "5-coffee-shops-in-seattle": {
+   "base": "tile-5-coffee-shops-in-seattle",
+   "width": 1140,
+   "height": 1140
+  },
+  "3-coffee-shops-amsterdam": {
+   "base": "tile-3-coffee-shops-amsterdam",
+   "width": 1140,
+   "height": 1140
+  },
+  "best-coffee-shops-new-york-city": {
+   "base": "tile-best-coffee-shops-new-york-city",
+   "width": 1140,
+   "height": 1140
+  },
+  "5-in-milan": {
+   "base": "tile-5-in-milan",
+   "width": 1140,
+   "height": 1140
+  },
+  "top-3-fancy-cafes-paris": {
+   "base": "tile-top-3-fancy-cafes-paris",
+   "width": 1140,
+   "height": 1140
+  },
+  "top-5-coffee-shop-paris": {
+   "base": "tile-top-5-coffee-shop-paris",
+   "width": 1140,
+   "height": 1140
+  },
+  "top-5-coffee-shops-in-london": {
+   "base": "tile-top-5-coffee-shops-in-london",
+   "width": 1140,
+   "height": 1140
+  },
+  "blue-olive": {
+   "base": "tile-blue-olive",
+   "width": 1140,
+   "height": 1140
+  },
+  "telescope": {
+   "base": "tile-telescope",
+   "width": 1140,
+   "height": 1140
+  }
+ },
+ "media": {},
+ "blocks": {
+  "704": [
+   {
+    "kind": "image",
+    "base": "img-704-obj-add-2",
+    "widths": [
+     770,
+     1540
+    ],
+    "fallbackWidth": 1540,
+    "width": 1540,
+    "height": 401
+   },
+   {
+    "kind": "text",
+    "value": "Gen AI in Premiere Pro - 2024"
+   },
+   {
+    "kind": "text",
+    "value": "\"The Premiere Pro team has been deeply engaged with the professional video community over the past year to understand how generative AI can solve real problems in their work.\""
+   },
+   {
+    "kind": "text",
+    "value": "\"Generative Extend"
+   },
+   {
+    "kind": "text",
+    "value": "Need a few more frames? No problem. The Generative Extend tool can be used to make shots a little bit longer by generating entirely new frames at the beginning or end of a clip. Use the extra media to fine tune edits, hold on a shot for an extra beat, or add a few frames to cover a transition. Just click and drag for the perfect edit."
+   },
+   {
+    "kind": "text",
+    "value": "Object Addition and Object Removal"
+   },
+   {
+    "kind": "text",
+    "value": "New AI-based smart masking and tracking tools make it easier and faster than ever to select moving objects over time. Combined with the Object Addition and Object Removal tools, editors can now replace moving objects in a shot, remove unwanted items like boom mics or stray coffee cups, or quickly add set dressings such as a painting or a photorealistic flower vase on a desk."
+   },
+   {
+    "kind": "text",
+    "value": "Generative B-Roll"
+   },
+   {
+    "kind": "text",
+    "value": "Spend less time hunting for b-roll shots in stock footage and use simple text prompts to generate video clips that are just right for your story. Now you can create a shot that illustrates a difficult-to-shoot or fantastical concept, generate b-roll that’s hard to source, or craft placeholders to assist with planning and pacing.\""
+   },
+   {
+    "kind": "text",
+    "value": "Responsibility: UX, UI, Rapid Exploration, Design Vision, Discovery, High level production"
+   },
+   {
+    "kind": "text",
+    "value": "Credits: Premiere Pro Design Team, Brand Team, Marketing Team, and more"
+   },
+   {
+    "kind": "text",
+    "value": "Featured: Forbes, The Verge, ZDNET, Yahoo News, IndieWire"
+   },
+   {
+    "kind": "embed",
+    "src": "https://www.youtube.com/embed/6de4akFiNYM",
+    "title": "Generative AI in Premiere Pro powered by Adobe Firefly | Adobe Video"
+   },
+   {
+    "kind": "embed",
+    "src": "https://www.youtube.com/embed/T72C17jVx44",
+    "title": "Breaking Down Generative AI in Premiere Pro | Adobe Video x @filmriot"
+   }
+  ],
+  "10-borders": [
+   {
+    "kind": "image",
+    "base": "img-10-borders-ten-borders-2",
+    "widths": [
+     770,
+     1540
+    ],
+    "fallbackWidth": 1540,
+    "width": 1540,
+    "height": 809
+   },
+   {
+    "kind": "image",
+    "base": "img-10-borders-ten-borders-01-1",
+    "widths": [
+     770,
+     1540
+    ],
+    "fallbackWidth": 1540,
+    "width": 1540,
+    "height": 2224
+   }
+  ],
+  "3-coffee-shops-amsterdam": [
+   {
+    "kind": "text",
+    "value": "3 coffee shops in Amsterdam"
+   },
+   {
+    "kind": "text",
+    "value": "I was visiting the Amsterdam and here are my favorite picks 🙂"
+   },
+   {
+    "kind": "text",
+    "value": "1. Bocca Coffee"
+   },
+   {
+    "kind": "text",
+    "value": "2. Back to Black"
+   },
+   {
+    "kind": "text",
+    "value": "3. King Kong"
+   },
+   {
+    "kind": "image",
+    "base": "img-3-coffee-shops-amsterdam-20170722-151938",
+    "widths": [
+     770,
+     1540
+    ],
+    "fallbackWidth": 1540,
+    "width": 1540,
+    "height": 560
+   },
+   {
+    "kind": "text",
+    "value": "1. Bocca Coffee"
+   },
+   {
+    "kind": "text",
+    "value": "Bocca Coffee has one of the best-tasting espressos in the world. Not only they have multiple different types of roasts, but also provide high-quality beans which you can taste the notes clearly."
+   },
+   {
+    "kind": "text",
+    "value": "Experience 4/5"
+   },
+   {
+    "kind": "text",
+    "value": "Taste 4.5/5"
+   },
+   {
+    "kind": "text",
+    "value": "Environment 4/5"
+   },
+   {
+    "kind": "text",
+    "value": "Price $$$$$"
+   },
+   {
+    "kind": "image",
+    "base": "img-3-coffee-shops-amsterdam-20170723-133230",
+    "widths": [
+     770,
+     1540
+    ],
+    "fallbackWidth": 1540,
+    "width": 1540,
+    "height": 1155
+   },
+   {
+    "kind": "image",
+    "base": "img-3-coffee-shops-amsterdam-20170723-133221",
+    "widths": [
+     770,
+     1540
+    ],
+    "fallbackWidth": 1540,
+    "width": 1540,
+    "height": 1155
+   },
+   {
+    "kind": "text",
+    "value": "2. Back to Black"
+   },
+   {
+    "kind": "text",
+    "value": "When I first walked into this café, I fell in love with the cozy and home-like vibe. This coffee shop will connect people who you have never met before. The owner of this shop raises a cat which perfectly fits the atmosphere."
+   },
+   {
+    "kind": "text",
+    "value": "Experience 5/5"
+   },
+   {
+    "kind": "text",
+    "value": "Taste 3.5/5"
+   },
+   {
+    "kind": "text",
+    "value": "Environment 4/5"
+   },
+   {
+    "kind": "text",
+    "value": "Price $$$$$"
+   },
+   {
+    "kind": "image",
+    "base": "img-3-coffee-shops-amsterdam-20170723-144432",
+    "widths": [
+     770
+    ],
+    "fallbackWidth": 770,
+    "width": 770,
+    "height": 581
+   },
+   {
+    "kind": "image",
+    "base": "img-3-coffee-shops-amsterdam-20170723-1439390",
+    "widths": [
+     770,
+     1540
+    ],
+    "fallbackWidth": 1540,
+    "width": 1540,
+    "height": 1155
+   },
+   {
+    "kind": "text",
+    "value": "3. King Kong"
+   },
+   {
+    "kind": "text",
+    "value": "One of my good friends recommended this coffee shop to me. King Kong is actually in Rotterdam and this place is also a hostel but it is hard to resist the overall experience of enjoying a cup of coffee here."
+   },
+   {
+    "kind": "text",
+    "value": "Experience 4/5"
+   },
+   {
+    "kind": "text",
+    "value": "Taste 4/5"
+   },
+   {
+    "kind": "text",
+    "value": "Environment 4/5"
+   },
+   {
+    "kind": "text",
+    "value": "Price $$$$$"
+   },
+   {
+    "kind": "image",
+    "base": "img-3-coffee-shops-amsterdam-20170722-150235",
+    "widths": [
+     770
+    ],
+    "fallbackWidth": 770,
+    "width": 770,
+    "height": 509
+   },
+   {
+    "kind": "image",
+    "base": "img-3-coffee-shops-amsterdam-20170722-152158",
+    "widths": [
+     770,
+     1540
+    ],
+    "fallbackWidth": 1540,
+    "width": 1540,
+    "height": 1155
+   },
+   {
+    "kind": "text",
+    "value": "© 2015 ALEX J. WOO"
+   }
+  ],
+  "3-coffee-shops-in-tokyo": [
+   {
+    "kind": "text",
+    "value": "3 coffee shops in Tokyo"
+   },
+   {
+    "kind": "text",
+    "value": "I have visited Tokyo multiple times and am always impressed with the coffee quality and experience. I want to highlight the fantastic service I have experienced in every unique coffee shop I visited in Tokyo. Here are my top 3 favorite coffee shops in Tokyo!"
+   },
+   {
+    "kind": "text",
+    "value": "1. Supreme Coffee"
+   },
+   {
+    "kind": "text",
+    "value": "2. Latte Art Mania"
+   },
+   {
+    "kind": "text",
+    "value": "3. Uniqlo Coffee"
+   },
+   {
+    "kind": "text",
+    "value": "The photo below is another cafe I visited in Toyko from one of my favorite animated movies 'Your Name'."
+   },
+   {
+    "kind": "image",
+    "base": "img-3-coffee-shops-in-tokyo-your-name",
+    "widths": [
+     770,
+     1540
+    ],
+    "fallbackWidth": 1540,
+    "width": 1540,
+    "height": 432
+   },
+   {
+    "kind": "text",
+    "value": "1. Supreme Coffee"
+   },
+   {
+    "kind": "text",
+    "value": "Fun fact: I was a big fan of the Supreme clothing brand and discovered this coffee shop because of that. The funny thing is that Supreme Coffee was founded in 1993 before the Supreme clothing brand, which was founded in 1994. Anyways, the coffee shop is cute, cozy, and tasty!"
+   },
+   {
+    "kind": "text",
+    "value": "Experience 4/5"
+   },
+   {
+    "kind": "text",
+    "value": "Taste 4/5"
+   },
+   {
+    "kind": "text",
+    "value": "Environment 4/5"
+   },
+   {
+    "kind": "text",
+    "value": "Price $$$$$"
+   },
+   {
+    "kind": "image",
+    "base": "img-3-coffee-shops-in-tokyo-img-5191",
+    "widths": [
+     770,
+     1540
+    ],
+    "fallbackWidth": 1540,
+    "width": 1540,
+    "height": 1155
+   },
+   {
+    "kind": "text",
+    "value": "2. Latte Art Mania"
+   },
+   {
+    "kind": "text",
+    "value": "The special thing about this coffee shop is that a latte art championship winner owns it. The latte art is truly memorable, and they have unique coffee options from espresso, matcha, and kuromitsu hojicha. The coffee shop focuses on black interior design; even some drinks and desserts are black."
+   },
+   {
+    "kind": "text",
+    "value": "*Also, this coffee shop is well known for having distractedly handsome baristas and handsome service. 😉"
+   },
+   {
+    "kind": "text",
+    "value": "Experience 5/5"
+   },
+   {
+    "kind": "text",
+    "value": "Taste 4.5/5"
+   },
+   {
+    "kind": "text",
+    "value": "Environment 4/5"
+   },
+   {
+    "kind": "text",
+    "value": "$$$$$"
+   },
+   {
+    "kind": "image",
+    "base": "img-3-coffee-shops-in-tokyo-img-5024",
+    "widths": [
+     770
+    ],
+    "fallbackWidth": 770,
+    "width": 770,
+    "height": 629
+   },
+   {
+    "kind": "text",
+    "value": "3. Uniqlo Coffee"
+   },
+   {
+    "kind": "text",
+    "value": "Uniqlo is one of my favorite clothing brands, thanks to its affordability, comfort, and simplicity. I visited the signature store in Ginza, Tokyo, and, by surprise, found a coffee shop on the top floor of the 12-floor Uniqlo building (all 12 floors are for Uniqlo). Its coffee is very affordable, and the coffee shop design well illustrates the simplicity of the clothing brand."
+   },
+   {
+    "kind": "text",
+    "value": "Experience 4/5"
+   },
+   {
+    "kind": "text",
+    "value": "Taste 2/5"
+   },
+   {
+    "kind": "text",
+    "value": "Environment 4/5"
+   },
+   {
+    "kind": "text",
+    "value": "$$$$$"
+   },
+   {
+    "kind": "image",
+    "base": "img-3-coffee-shops-in-tokyo-img-3666",
+    "widths": [
+     770,
+     1540
+    ],
+    "fallbackWidth": 1540,
+    "width": 1540,
+    "height": 1155
+   },
+   {
+    "kind": "text",
+    "value": "© 2015 ALEX J. WOO"
+   }
+  ],
+  "5-coffee-shops-in-seattle": [
+   {
+    "kind": "text",
+    "value": "5 coffee shops in Seattle"
+   },
+   {
+    "kind": "text",
+    "value": "I have been living in Seattle since 2017. Seattle is known as one of the coffee capitols of the world and yes, the coffee here is amazing. Seattle has the highest coffee consumption in the US. Here are my top 5 favorite coffee shops in Seattle!"
+   },
+   {
+    "kind": "text",
+    "value": "1. Union Coffee"
+   },
+   {
+    "kind": "text",
+    "value": "2. La Marzocco"
+   },
+   {
+    "kind": "text",
+    "value": "3. Elms Coffee"
+   },
+   {
+    "kind": "text",
+    "value": "4. Capitol Coffee Works"
+   },
+   {
+    "kind": "text",
+    "value": "5. Espresso Vivace"
+   },
+   {
+    "kind": "image",
+    "base": "img-5-coffee-shops-in-seattle-20160731-140045-2",
+    "widths": [
+     770,
+     1540
+    ],
+    "fallbackWidth": 1540,
+    "width": 1540,
+    "height": 453
+   },
+   {
+    "kind": "text",
+    "value": "1. Union Coffee"
+   },
+   {
+    "kind": "text",
+    "value": "A lot of my friends and followers ask, “what is your favorite coffee shop in Seattle.” To this, my answer is always ‘Union Coffee’ in East of Capitol Hill, Seattle. This coffee shop is minimal and simple vibe which fits my personal taste perfectly. The barista here is professional and super friendly!"
+   },
+   {
+    "kind": "text",
+    "value": "Experience 5/5"
+   },
+   {
+    "kind": "text",
+    "value": "Taste 4.5/5"
+   },
+   {
+    "kind": "text",
+    "value": "Environment 5/5"
+   },
+   {
+    "kind": "text",
+    "value": "Price $$$$$"
+   },
+   {
+    "kind": "image",
+    "base": "img-5-coffee-shops-in-seattle-20171120-120129",
+    "widths": [
+     770,
+     1540
+    ],
+    "fallbackWidth": 1540,
+    "width": 1540,
+    "height": 1155
+   },
+   {
+    "kind": "text",
+    "value": "2. La Marzocco Cafe"
+   },
+   {
+    "kind": "text",
+    "value": "La Marzocco is originally known as one of the top espresso machines historically based in Italy. This Café was a demo space to look at the espresso machine. In addition, this café is located in the KEXP radio station (90.3 FM), renown so hosting multiple music artists in Seattle radio. Sometimes you can see live performances in the coffee shop."
+   },
+   {
+    "kind": "text",
+    "value": "Experience 5/5"
+   },
+   {
+    "kind": "text",
+    "value": "Taste 4/5"
+   },
+   {
+    "kind": "text",
+    "value": "Environment 4/5"
+   },
+   {
+    "kind": "text",
+    "value": "$$$$$"
+   },
+   {
+    "kind": "image",
+    "base": "img-5-coffee-shops-in-seattle-20170825-165625-1",
+    "widths": [
+     770,
+     1540
+    ],
+    "fallbackWidth": 1540,
+    "width": 1540,
+    "height": 1155
+   },
+   {
+    "kind": "text",
+    "value": "3. Elm Coffee"
+   },
+   {
+    "kind": "text",
+    "value": "This coffee shop combines the Historic vibe of Pioneer Square and modern design. Try ‘One of Every Thing’ (photo below), I can comfortably say that you can try multiple types of good coffee with a low budget. Also, in the back of the café, you can see the coffee roaster machine in action emitting the coffee aroma."
+   },
+   {
+    "kind": "text",
+    "value": "Experience 4/5"
+   },
+   {
+    "kind": "text",
+    "value": "Taste 4/5"
+   },
+   {
+    "kind": "text",
+    "value": "Environment 4/5"
+   },
+   {
+    "kind": "text",
+    "value": "$$$$$"
+   },
+   {
+    "kind": "image",
+    "base": "img-5-coffee-shops-in-seattle-a",
+    "widths": [
+     770,
+     1540
+    ],
+    "fallbackWidth": 1540,
+    "width": 1540,
+    "height": 864
+   },
+   {
+    "kind": "image",
+    "base": "img-5-coffee-shops-in-seattle-img-0027",
+    "widths": [
+     770
+    ],
+    "fallbackWidth": 770,
+    "width": 770,
+    "height": 399
+   },
+   {
+    "kind": "text",
+    "value": "4. Capitol Coffee Works"
+   },
+   {
+    "kind": "text",
+    "value": "Capitol Coffee Works is located in the center of Capitol Hill. When you enter the shop, you can experience a friendly and inclusive environment. It is a perfect location to relax and meet friends. Also, their coffee is amazing."
+   },
+   {
+    "kind": "text",
+    "value": "Experience 4/5"
+   },
+   {
+    "kind": "text",
+    "value": "Taste 4/5"
+   },
+   {
+    "kind": "text",
+    "value": "Environment 4/5"
+   },
+   {
+    "kind": "text",
+    "value": "$$$$$"
+   },
+   {
+    "kind": "image",
+    "base": "img-5-coffee-shops-in-seattle-20180617-140458",
+    "widths": [
+     770,
+     1540
+    ],
+    "fallbackWidth": 1540,
+    "width": 1540,
+    "height": 1155
+   },
+   {
+    "kind": "text",
+    "value": "5. Espresso Vivace"
+   },
+   {
+    "kind": "text",
+    "value": "If you ask, “What coffee shop best fits Seattle?” I say, “Espresso Vivace Sidewalk Bar.” Espresso Vivace is also known for starting the latte art culture in the US. This coffee shop is just a sidewalk bar without any seats but has some of the most amazing espresso-based drinks and blends in the Capitol Hill vibe perfectly. Hope you try out their latte!"
+   },
+   {
+    "kind": "text",
+    "value": "Experience 4/5"
+   },
+   {
+    "kind": "text",
+    "value": "Taste 4/5"
+   },
+   {
+    "kind": "text",
+    "value": "Environment 4/5"
+   },
+   {
+    "kind": "text",
+    "value": "$$$$$"
+   },
+   {
+    "kind": "image",
+    "base": "img-5-coffee-shops-in-seattle-img-0019",
+    "widths": [
+     770
+    ],
+    "fallbackWidth": 770,
+    "width": 770,
+    "height": 592
+   },
+   {
+    "kind": "text",
+    "value": "© 2015 ALEX J. WOO"
+   }
+  ],
+  "5-in-milan": [
+   {
+    "kind": "text",
+    "value": "5 in Milan"
+   },
+   {
+    "kind": "text",
+    "value": "Milan is such an amazing city for coffee. It is delicate, tasty, cheap, fast, and amazing. 😉 I personally had the best experience for coffee in Europe so far. These are the 5 places I enjoyed the most in Milan so give it a visit!"
+   },
+   {
+    "kind": "text",
+    "value": "1) Giacomo Tabaccheria"
+   },
+   {
+    "kind": "text",
+    "value": "2) Pasticceria Marchesi"
+   },
+   {
+    "kind": "text",
+    "value": "3) LùBar"
+   },
+   {
+    "kind": "text",
+    "value": "4) Chocolat"
+   },
+   {
+    "kind": "text",
+    "value": "5) Mugs and co."
+   },
+   {
+    "kind": "image",
+    "base": "img-5-in-milan-55",
+    "widths": [
+     770,
+     1540
+    ],
+    "fallbackWidth": 1540,
+    "width": 1540,
+    "height": 378
+   },
+   {
+    "kind": "text",
+    "value": "1) Giacomo Tabaccheria"
+   },
+   {
+    "kind": "text",
+    "value": "Honestly, I personally think I had the best tasting cup of espresso of my life here in Giacomo Tabaccheria. Couple friends from Milan recommended this place and yes it was amazing. Also, a cup of espresso here was 1 Euro which is pretty crazy. If you get to visit this place, please let me know what kind of coffee bean they use."
+   },
+   {
+    "kind": "text",
+    "value": "Experience 4/5"
+   },
+   {
+    "kind": "text",
+    "value": "Taste 5/5"
+   },
+   {
+    "kind": "text",
+    "value": "Environment 3.5/5"
+   },
+   {
+    "kind": "text",
+    "value": "Price $$$$$"
+   },
+   {
+    "kind": "image",
+    "base": "img-5-in-milan-20170703-135524",
+    "widths": [
+     770
+    ],
+    "fallbackWidth": 770,
+    "width": 770,
+    "height": 770
+   },
+   {
+    "kind": "text",
+    "value": "2) Pasticceria Marchesi"
+   },
+   {
+    "kind": "text",
+    "value": "Pasticceria Marchesi is located in Galleria Vittorio Emanuele II which is one of the most touristic locations of Milan. They have beautiful pastries in their store and great coffee as well. One huge tip is to not seat on the dining tables for coffee. Their espresso bar prices and seat table prices are very different."
+   },
+   {
+    "kind": "text",
+    "value": "Experience 4/5"
+   },
+   {
+    "kind": "text",
+    "value": "Taste 4/5"
+   },
+   {
+    "kind": "text",
+    "value": "Environment 4/5"
+   },
+   {
+    "kind": "text",
+    "value": "Price $$$$$"
+   },
+   {
+    "kind": "image",
+    "base": "img-5-in-milan-20170701-142047",
+    "widths": [
+     770,
+     1540
+    ],
+    "fallbackWidth": 1540,
+    "width": 1540,
+    "height": 1155
+   },
+   {
+    "kind": "image",
+    "base": "img-5-in-milan-20170701-143009",
+    "widths": [
+     770,
+     1540
+    ],
+    "fallbackWidth": 1540,
+    "width": 1540,
+    "height": 1155
+   },
+   {
+    "kind": "text",
+    "value": "3) LùBar"
+   },
+   {
+    "kind": "text",
+    "value": "I got to visit this place for dinner with my friends and it was amazing! This restaurant started as a food truck in Italy but look at what they have become today! This place is a restaurant/café/bar. Even though the environment might feel fancy and expensive it is pretty affordable. Try their coffee, food, drinks and let me know how it is."
+   },
+   {
+    "kind": "text",
+    "value": "Experience 3.5/5"
+   },
+   {
+    "kind": "text",
+    "value": "Taste 4/5"
+   },
+   {
+    "kind": "text",
+    "value": "Environment 4.5/5"
+   },
+   {
+    "kind": "text",
+    "value": "Price $$$$$"
+   },
+   {
+    "kind": "image",
+    "base": "img-5-in-milan-20170702-201101",
+    "widths": [
+     770,
+     1540
+    ],
+    "fallbackWidth": 1540,
+    "width": 1540,
+    "height": 1155
+   },
+   {
+    "kind": "text",
+    "value": "4) Chocolat"
+   },
+   {
+    "kind": "text",
+    "value": "I was in this store for the best ice cream in Milan found out that they have great coffee too. Another tip for drinking coffee is coffee goes well with ice cream. They have amazing ice cream and desserts. I think 2 ice cream flavors are around 3 Euros."
+   },
+   {
+    "kind": "text",
+    "value": "Experience 3.5/5"
+   },
+   {
+    "kind": "text",
+    "value": "Taste 4.5/5"
+   },
+   {
+    "kind": "text",
+    "value": "Environment 2.5/5"
+   },
+   {
+    "kind": "text",
+    "value": "Price $$$$$"
+   },
+   {
+    "kind": "image",
+    "base": "img-5-in-milan-20170703-195615",
+    "widths": [
+     770,
+     1540
+    ],
+    "fallbackWidth": 1540,
+    "width": 1540,
+    "height": 1155
+   },
+   {
+    "kind": "text",
+    "value": "5) Mugs and co."
+   },
+   {
+    "kind": "text",
+    "value": "This place was reviewed as one the best coffee shops in Milan so I gave it a visit. I think this is a perfect place to grab some coffee and relax with your friends. Next to this café, there is a beautiful park (cover photo) so check it out."
+   },
+   {
+    "kind": "text",
+    "value": "Experience 3.5/5"
+   },
+   {
+    "kind": "text",
+    "value": "Taste 3.5/5"
+   },
+   {
+    "kind": "text",
+    "value": "Environment 4/5"
+   },
+   {
+    "kind": "text",
+    "value": "Price $$$$$"
+   },
+   {
+    "kind": "image",
+    "base": "img-5-in-milan-20170703-142816",
+    "widths": [
+     770,
+     1540
+    ],
+    "fallbackWidth": 1540,
+    "width": 1540,
+    "height": 1233
+   },
+   {
+    "kind": "text",
+    "value": "© 2015 ALEX J. WOO"
+   }
+  ],
+  "best-coffee-shops-new-york-city": [
+   {
+    "kind": "text",
+    "value": "5 coffee shops in NYC"
+   },
+   {
+    "kind": "text",
+    "value": "In NYC, it is common to see people walking with a cup of coffee in their hand. Coffee is a part of a New Yorkers daily routine. Well, here are my top favorite coffee places in NYC! 🙂"
+   },
+   {
+    "kind": "text",
+    "value": "1. Abraço"
+   },
+   {
+    "kind": "text",
+    "value": "2. Stumptown coffee roasters"
+   },
+   {
+    "kind": "text",
+    "value": "3. Birch coffee"
+   },
+   {
+    "kind": "text",
+    "value": "4. Joe and the Juice"
+   },
+   {
+    "kind": "text",
+    "value": "5. RISE"
+   },
+   {
+    "kind": "image",
+    "base": "img-best-coffee-shops-new-york-city-20170731-124830",
+    "widths": [
+     770,
+     1540
+    ],
+    "fallbackWidth": 1540,
+    "width": 1540,
+    "height": 268
+   },
+   {
+    "kind": "text",
+    "value": "1. Abraço"
+   },
+   {
+    "kind": "text",
+    "value": "If I would pick the most NYC like coffee shop with great coffee, I would pick Abraço. This place is in a semi-basement which feels like a cozy bar. The coffee and pastries are amazing. It just felt like somewhere I should go to grab my daily coffee."
+   },
+   {
+    "kind": "text",
+    "value": "Experience 4/5"
+   },
+   {
+    "kind": "text",
+    "value": "Taste 4.5/5"
+   },
+   {
+    "kind": "text",
+    "value": "Environment 4/5"
+   },
+   {
+    "kind": "text",
+    "value": "Price $$$$$"
+   },
+   {
+    "kind": "image",
+    "base": "img-best-coffee-shops-new-york-city-20170801-112309-1",
+    "widths": [
+     770,
+     1540
+    ],
+    "fallbackWidth": 1540,
+    "width": 1540,
+    "height": 1155
+   },
+   {
+    "kind": "text",
+    "value": "2. Stumptown Coffee Roasters"
+   },
+   {
+    "kind": "text",
+    "value": "A friend introduced me to this coffee shop near Madison Square Park. It has a very casual and classy vibe. They have great espresso and drafted coffee"
+   },
+   {
+    "kind": "text",
+    "value": "Experience 4/5"
+   },
+   {
+    "kind": "text",
+    "value": "Taste 4/5"
+   },
+   {
+    "kind": "text",
+    "value": "Environment 4.5/5"
+   },
+   {
+    "kind": "text",
+    "value": "Price $$$$$"
+   },
+   {
+    "kind": "image",
+    "base": "img-best-coffee-shops-new-york-city-20170731-144729",
+    "widths": [
+     770,
+     1540
+    ],
+    "fallbackWidth": 1540,
+    "width": 1540,
+    "height": 1155
+   },
+   {
+    "kind": "text",
+    "value": "3. Birch Coffee"
+   },
+   {
+    "kind": "text",
+    "value": "This is a small coffee chain around NYC but is very classy and cozy. Great coffee and service, you should try their espresso options. I would recommend this place for a short date or picking up your daily caffeine."
+   },
+   {
+    "kind": "text",
+    "value": "Experience 3.5/5"
+   },
+   {
+    "kind": "text",
+    "value": "Taste 4.5/5"
+   },
+   {
+    "kind": "text",
+    "value": "Environment 4/5"
+   },
+   {
+    "kind": "text",
+    "value": "Price $$$$$"
+   },
+   {
+    "kind": "image",
+    "base": "img-best-coffee-shops-new-york-city-20170801-152508",
+    "widths": [
+     770,
+     1540
+    ],
+    "fallbackWidth": 1540,
+    "width": 1540,
+    "height": 1227
+   },
+   {
+    "kind": "image",
+    "base": "img-best-coffee-shops-new-york-city-20170801-152452",
+    "widths": [
+     770,
+     1540
+    ],
+    "fallbackWidth": 1540,
+    "width": 1540,
+    "height": 1155
+   },
+   {
+    "kind": "text",
+    "value": "4. Joe and the Juice"
+   },
+   {
+    "kind": "text",
+    "value": "This is also a small coffee chain in NYC but you will experience one of the coolest vibes of your life. Unlike most coffee shops (good place to talk with bright lighting) this coffee shop feels like a chill night club. It’s dark and they play disco and rap music. Another great thing about this place is the prices are pretty low for Manhattan."
+   },
+   {
+    "kind": "text",
+    "value": "Experience 4.5/5"
+   },
+   {
+    "kind": "text",
+    "value": "Taste 3.5/5"
+   },
+   {
+    "kind": "text",
+    "value": "Environment 4/5"
+   },
+   {
+    "kind": "text",
+    "value": "Price $$$$$"
+   },
+   {
+    "kind": "image",
+    "base": "img-best-coffee-shops-new-york-city-20170801-164752",
+    "widths": [
+     770,
+     1540
+    ],
+    "fallbackWidth": 1540,
+    "width": 1540,
+    "height": 1155
+   },
+   {
+    "kind": "text",
+    "value": "5. RISE"
+   },
+   {
+    "kind": "text",
+    "value": "This is probably the smallest coffee shop I have ever seen in my life. It’s cozy and cute. RISE is known for their draft coffee and even though I am not a big fan of nitro coffee, I really enjoyed it. They also sell their coffee in packaged cans."
+   },
+   {
+    "kind": "text",
+    "value": "Experience 4/5"
+   },
+   {
+    "kind": "text",
+    "value": "Taste 3.5/5"
+   },
+   {
+    "kind": "text",
+    "value": "Environment 4/5"
+   },
+   {
+    "kind": "text",
+    "value": "Price $$$$$"
+   },
+   {
+    "kind": "image",
+    "base": "img-best-coffee-shops-new-york-city-20170610-122608",
+    "widths": [
+     770,
+     1540
+    ],
+    "fallbackWidth": 1540,
+    "width": 1540,
+    "height": 1155
+   },
+   {
+    "kind": "image",
+    "base": "img-best-coffee-shops-new-york-city-a",
+    "widths": [
+     770,
+     1540
+    ],
+    "fallbackWidth": 1540,
+    "width": 1540,
+    "height": 1155
+   },
+   {
+    "kind": "text",
+    "value": "© 2015 ALEX J. WOO"
+   }
+  ],
+  "blue-olive": [
+   {
+    "kind": "text",
+    "value": "Blue Olive"
+   },
+   {
+    "kind": "text",
+    "value": "Blue Olive is in the 7th ARR near the Eiffel Tower. This cafe was so cozy and beautiful that I had to post it on my blog! As you can see in the cover photo, the cafe is very open and feels more like an open lounge where you can take a break. My numeric summary on this coffee shop I would say:"
+   },
+   {
+    "kind": "text",
+    "value": "Environment: 4.5/5"
+   },
+   {
+    "kind": "text",
+    "value": "Taste: 4/5"
+   },
+   {
+    "kind": "text",
+    "value": "Experience: 4/5"
+   },
+   {
+    "kind": "text",
+    "value": "Location"
+   },
+   {
+    "kind": "image",
+    "base": "img-blue-olive-19650396-1379490358765590-836124176-o-1",
+    "widths": [
+     770
+    ],
+    "fallbackWidth": 770,
+    "width": 770,
+    "height": 127
+   },
+   {
+    "kind": "text",
+    "value": "Environment"
+   },
+   {
+    "kind": "text",
+    "value": "From outside the coffee shop looks very open and nice but the true beauty of this place is when you enter the shop. When you enter the place it feels like as if you are going inside a Van Gogh's painting. The color palette and the interior design is extraordinary! The mix and the combination of Yellow, Khaki Green, Navy Blue, and White feels very natural. Also the open to outside window makes it feel very comfortable emotionally and allows more natural light to come in the store."
+   },
+   {
+    "kind": "image",
+    "base": "img-blue-olive-img-3878",
+    "widths": [
+     770,
+     1540
+    ],
+    "fallbackWidth": 1540,
+    "width": 1540,
+    "height": 1122
+   },
+   {
+    "kind": "text",
+    "value": "Taste"
+   },
+   {
+    "kind": "text",
+    "value": "I got to try out some iced coffee, beer, and juice here. It was pretty nice but not extraordinary. The environment was so great that Ithe drinks taste better. They also serve pastries and food, so you can grab a small snack or bunch here. I posted a part of their menu below of check it out!"
+   },
+   {
+    "kind": "image",
+    "base": "img-blue-olive-aaa-copy",
+    "widths": [
+     770
+    ],
+    "fallbackWidth": 770,
+    "width": 770,
+    "height": 1051
+   },
+   {
+    "kind": "text",
+    "value": "This is some of the photos of what I had in the cafe! Personally, the illustration of the bottles matches well with the interior design of the shop."
+   },
+   {
+    "kind": "image",
+    "base": "img-blue-olive-19619688-1379492322098727-659505103-o",
+    "widths": [
+     770,
+     1540
+    ],
+    "fallbackWidth": 1540,
+    "width": 1540,
+    "height": 1155
+   },
+   {
+    "kind": "text",
+    "value": "Experience"
+   },
+   {
+    "kind": "text",
+    "value": "The experience of this cafe was satisfactory. There was nothing too special but had great service. I would like to say that the positive experience comes from the cozy and cute atmosphere around the cafe. I personally loved this cafe and would definitely recommend this place!"
+   },
+   {
+    "kind": "image",
+    "base": "img-blue-olive-img-3884",
+    "widths": [
+     770,
+     1540
+    ],
+    "fallbackWidth": 1540,
+    "width": 1540,
+    "height": 1024
+   },
+   {
+    "kind": "image",
+    "base": "img-blue-olive-19650136-1379492855432007-1868628096-o-1",
+    "widths": [
+     770,
+     1540
+    ],
+    "fallbackWidth": 1540,
+    "width": 1540,
+    "height": 1155
+   },
+   {
+    "kind": "text",
+    "value": "© 2015 ALEX J. WOO"
+   }
+  ],
+  "coin-lock": [
+   {
+    "kind": "image",
+    "base": "img-coin-lock-22222222222",
+    "widths": [
+     770,
+     1540
+    ],
+    "fallbackWidth": 1540,
+    "width": 1540,
+    "height": 866
+   },
+   {
+    "kind": "image",
+    "base": "img-coin-lock-coin-1",
+    "widths": [
+     770,
+     1540
+    ],
+    "fallbackWidth": 1540,
+    "width": 1540,
+    "height": 866
+   },
+   {
+    "kind": "image",
+    "base": "img-coin-lock-sg",
+    "widths": [
+     770,
+     1540
+    ],
+    "fallbackWidth": 1540,
+    "width": 1540,
+    "height": 618
+   },
+   {
+    "kind": "motion",
+    "base": "mov-coin-lock-33",
+    "hasWebm": true,
+    "width": 570,
+    "height": 570
+   },
+   {
+    "kind": "image",
+    "base": "img-coin-lock-untitlesd-2-04",
+    "widths": [
+     770,
+     1540
+    ],
+    "fallbackWidth": 1540,
+    "width": 1540,
+    "height": 679
+   },
+   {
+    "kind": "motion",
+    "base": "mov-coin-lock-22",
+    "hasWebm": true,
+    "width": 570,
+    "height": 570
+   },
+   {
+    "kind": "image",
+    "base": "img-coin-lock-aaa-02",
+    "widths": [
+     770,
+     1540
+    ],
+    "fallbackWidth": 1540,
+    "width": 1540,
+    "height": 1752
+   },
+   {
+    "kind": "image",
+    "base": "img-coin-lock-untitled-42-2-copy",
+    "widths": [
+     770,
+     1540
+    ],
+    "fallbackWidth": 1540,
+    "width": 1540,
+    "height": 1144
+   }
+  ],
+  "dynamics-365-customer-voice": [
+   {
+    "kind": "image",
+    "base": "img-dynamics-365-customer-voice-screen-shot-2020-10-01-at-9-15-46-pm",
+    "widths": [
+     770
+    ],
+    "fallbackWidth": 770,
+    "width": 770,
+    "height": 297
+   },
+   {
+    "kind": "embed",
+    "src": "https://www.youtube.com/embed/sbMReFrVYbs",
+    "title": "Introduction to Dynamics 365 Customer Voice"
+   },
+   {
+    "kind": "embed",
+    "src": "https://www.youtube.com/embed/Qn9hGppCitw",
+    "title": "Dynamics 365 Customer Voice demo"
+   }
+  ],
+  "layout": [
+   {
+    "kind": "image",
+    "base": "img-layout-asdc",
+    "widths": [
+     770,
+     1540
+    ],
+    "fallbackWidth": 1540,
+    "width": 1540,
+    "height": 550
+   },
+   {
+    "kind": "motion",
+    "base": "mov-layout-ezgif-2-16a9f28470d2",
+    "hasWebm": true,
+    "width": 600,
+    "height": 338
+   },
+   {
+    "kind": "text",
+    "value": "My role"
+   },
+   {
+    "kind": "text",
+    "value": "As a product designer, I was involved in the end-to-end experience of the product since July 2018. I led multiple design workstreams and developed the application alongside with Customers, Designers, Developers, Researchers, Strategists, Data Scientists, and Product Managers."
+   },
+   {
+    "kind": "text",
+    "value": "The HoloLens application launched in October 2018."
+   },
+   {
+    "kind": "text",
+    "value": "The challenge"
+   },
+   {
+    "kind": "text",
+    "value": "Our goal for the product was to evangelize Firstline Workers and bring customer value with Mixed Reality (HoloLens)."
+   },
+   {
+    "kind": "text",
+    "value": "1. Easy process to plan your space."
+   },
+   {
+    "kind": "text",
+    "value": "2. Collaborate with others"
+   },
+   {
+    "kind": "text",
+    "value": "3. Fast design and iteration"
+   },
+   {
+    "kind": "image",
+    "base": "img-layout-van",
+    "widths": [
+     770
+    ],
+    "fallbackWidth": 770,
+    "width": 770,
+    "height": 438
+   },
+   {
+    "kind": "text",
+    "value": "Hypothesis"
+   },
+   {
+    "kind": "text",
+    "value": "”Mixed Reality will allow Space Designers to design with confidence.”"
+   },
+   {
+    "kind": "text",
+    "value": "Full process"
+   },
+   {
+    "kind": "embed",
+    "src": "https://www.youtube.com/embed/rK7l6Gq16WA",
+    "title": ""
+   },
+   {
+    "kind": "embed",
+    "src": "https://www.youtube.com/embed/1nnIX75Vpn0",
+    "title": ""
+   }
+  ],
+  "netmarble": [
+   {
+    "kind": "image",
+    "base": "img-netmarble-aa",
+    "widths": [
+     770
+    ],
+    "fallbackWidth": 770,
+    "width": 770,
+    "height": 411
+   },
+   {
+    "kind": "embed",
+    "src": "https://www.youtube.com/embed/p_lSOvGQiRI",
+    "title": "ㅋㅋ넷마블~ 프렌즈! | Netmarble Logo - Friends Ver. | netmarble friends"
+   },
+   {
+    "kind": "embed",
+    "src": "https://www.youtube.com/embed/Ouaj_xSyLRM",
+    "title": "Soulking : Official Promotion Video 15\" - google -"
+   }
+  ],
+  "paintsound": [
+   {
+    "kind": "image",
+    "base": "img-paintsound-screen-shot-2018-06-16-at-4-22-45-pm",
+    "widths": [
+     770,
+     1540
+    ],
+    "fallbackWidth": 1540,
+    "width": 1540,
+    "height": 738
+   },
+   {
+    "kind": "embed",
+    "src": "https://player.vimeo.com/video/198531084",
+    "title": "Paintsound.Holohack"
+   },
+   {
+    "kind": "image",
+    "base": "img-paintsound-future-of-ar-06-1",
+    "widths": [
+     770,
+     1540
+    ],
+    "fallbackWidth": 1540,
+    "width": 1540,
+    "height": 720
+   },
+   {
+    "kind": "embed",
+    "src": "https://www.youtube.com/embed/IoDgXK5FpP0",
+    "title": ""
+   },
+   {
+    "kind": "embed",
+    "src": "https://www.youtube.com/embed/pb7tyKW-DOg",
+    "title": ""
+   },
+   {
+    "kind": "text",
+    "value": "© 2015 ALEX J. WOO"
+   }
+  ],
+  "pr-ae-frame": [
+   {
+    "kind": "image",
+    "base": "img-pr-ae-frame-frame-io-adobe-copy",
+    "widths": [
+     770,
+     1540
+    ],
+    "fallbackWidth": 1540,
+    "width": 1540,
+    "height": 379
+   },
+   {
+    "kind": "embed",
+    "src": "https://www.youtube.com/embed/5Mu9y5WpCNY",
+    "title": "Bring It All Together - Frame.io in Premiere Pro"
+   },
+   {
+    "kind": "embed",
+    "src": "https://www.youtube.com/embed/t4uuCuxng3Y",
+    "title": "Finally! Premiere Pro updates we’ve been waiting for… (v23.1)"
+   }
+  ],
+  "product-visualize": [
+   {
+    "kind": "image",
+    "base": "img-product-visualize-salesassistheroimage",
+    "widths": [
+     770,
+     1540
+    ],
+    "fallbackWidth": 1540,
+    "width": 1540,
+    "height": 665
+   },
+   {
+    "kind": "text",
+    "value": "Build buyer confidence in your products"
+   },
+   {
+    "kind": "text",
+    "value": "Accelerate your sales cycle"
+   },
+   {
+    "kind": "text",
+    "value": "Capture and share key sales details"
+   },
+   {
+    "kind": "embed",
+    "src": "https://www.youtube.com/embed/lk2HzxZfkW4",
+    "title": "Introducing Microsoft Dynamics 365 Product Visualize"
+   },
+   {
+    "kind": "embed",
+    "src": "https://www.youtube.com/embed/NIgog6rYO00",
+    "title": "Ecolab delivers a compelling vision using mixed reality from Dynamics 365"
+   }
+  ],
+  "seeing-ai": [
+   {
+    "kind": "image",
+    "base": "img-seeing-ai-seesing-ai",
+    "widths": [
+     770,
+     1540
+    ],
+    "fallbackWidth": 1540,
+    "width": 1540,
+    "height": 498
+   },
+   {
+    "kind": "embed",
+    "src": "https://www.youtube.com/embed/R2mC-NUAmMk",
+    "title": "Seeing AI 2016 Prototype - A Microsoft research project"
+   },
+   {
+    "kind": "embed",
+    "src": "https://www.youtube.com/embed/bqeQByqf_f8",
+    "title": "Seeing AI app from Microsoft"
+   },
+   {
+    "kind": "text",
+    "value": "Process"
+   },
+   {
+    "kind": "text",
+    "value": "We interview more than 20 people with visual impairments and asked the mismatches they face on a daily bases. Many of the interviewees indicated the need to locate a chair or a door. In addition, Saqib Shaikh (project owner) agreed to the need for this experience."
+   },
+   {
+    "kind": "motion",
+    "base": "mov-seeing-ai-chairloopicon",
+    "hasWebm": true,
+    "width": 960,
+    "height": 540
+   },
+   {
+    "kind": "text",
+    "value": "AudioHaptics"
+   },
+   {
+    "kind": "text",
+    "value": "The application uses audio and haptics to help the visually impaired community. For the example below, it helps people locate a chair in your space. If the chair is on your right you will get audio and haptic feedback from your right and if on the left the user will get the audio and haptic from the left. As the user gets close to the chair the audio will pulse faster until the person reaches the chair. (The black pulsing dot represents the audio and haptics)"
+   }
+  ],
+  "starbucks-technology": [
+   {
+    "kind": "image",
+    "base": "img-starbucks-technology-sbx20190610-starbucks-tryer-lab-featured-image",
+    "widths": [
+     770
+    ],
+    "fallbackWidth": 770,
+    "width": 770,
+    "height": 374
+   },
+   {
+    "kind": "embed",
+    "src": "https://www.youtube.com/embed/fLgzDa3gcIs",
+    "title": "Inside the Tryer Center, the Starbucks Lab Where Anything is Possible"
+   }
+  ],
+  "telescope": [
+   {
+    "kind": "text",
+    "value": "Télescope"
+   },
+   {
+    "kind": "text",
+    "value": "This cafe is the first cafe review on my blog! 🙂 This is a hidden coffee shop near the Louvre. As you can see in the cover photo, they don't have a big sign so you might miss it. It's very cozy and feels like home. A barista friend of mine told me about this coffee shop so I had to give it a visit. To give a numeric summary on this coffee shop I would say:"
+   },
+   {
+    "kind": "text",
+    "value": "Environment: 4/5"
+   },
+   {
+    "kind": "text",
+    "value": "Taste: 4.5/5"
+   },
+   {
+    "kind": "text",
+    "value": "Experience: 5/5"
+   },
+   {
+    "kind": "text",
+    "value": "location"
+   },
+   {
+    "kind": "image",
+    "base": "img-telescope-img-4104",
+    "widths": [
+     770,
+     1540
+    ],
+    "fallbackWidth": 1540,
+    "width": 1540,
+    "height": 374
+   },
+   {
+    "kind": "text",
+    "value": "Environment"
+   },
+   {
+    "kind": "text",
+    "value": "As I said in the summary review and see on the photo above it's hard to know if this is the right cafe. The small gold plate on the left side of the photo above is the store sign! But when you notice that it is the coffee shop that you have been looking for, you'll feel special. Also as you can see in the photo the community between the barista and the costumes are very strong."
+   },
+   {
+    "kind": "image",
+    "base": "img-telescope-img-4107",
+    "widths": [
+     770,
+     1540
+    ],
+    "fallbackWidth": 1540,
+    "width": 1540,
+    "height": 1027
+   },
+   {
+    "kind": "text",
+    "value": "Taste"
+   },
+   {
+    "kind": "text",
+    "value": "I got to try out the espresso and iced cafe latte in this coffee shop. I would stay that the coffee was slightly acidic in a good way with not too strong after taste. Actually, it was really good! The iced latte was really nice too. The presentation of the coffee was pretty good too. When I received the iced latte, I was able to see the milk and espresso slowly getting mixed."
+   },
+   {
+    "kind": "text",
+    "value": "In terms of pastries and food the selection of a little limited. They had different types of bread and some cookies."
+   },
+   {
+    "kind": "image",
+    "base": "img-telescope-aaa",
+    "widths": [
+     770,
+     1540
+    ],
+    "fallbackWidth": 1540,
+    "width": 1540,
+    "height": 770
+   },
+   {
+    "kind": "text",
+    "value": "Experience"
+   },
+   {
+    "kind": "text",
+    "value": "The experience of this cafe would be the highlight of this place. Having no directly visible sign makes it feel very independent from other coffee shops. But what this is coffee shop great is the showmanship of the barista. The barista fully shows you the process of how your coffee is being made. Due to seat layout facing the barista, you can see how each costumer's coffee being made! In the photo below, I believe the barista is using an Aeropress coffee maker (kind of like a French press)."
+   },
+   {
+    "kind": "image",
+    "base": "img-telescope-img-4114",
+    "widths": [
+     770,
+     1540
+    ],
+    "fallbackWidth": 1540,
+    "width": 1540,
+    "height": 1027
+   },
+   {
+    "kind": "text",
+    "value": "© 2015 ALEX J. WOO"
+   }
+  ],
+  "top-3-fancy-cafes-paris": [
+   {
+    "kind": "text",
+    "value": "Top 3 Fancy cafes in Paris"
+   },
+   {
+    "kind": "text",
+    "value": "I normally post coffee shops with decent price range but I wanted to post some fancy cafes which were pretty worth visiting."
+   },
+   {
+    "kind": "text",
+    "value": "1. Musée d'Orsay Café"
+   },
+   {
+    "kind": "text",
+    "value": "2. Le Meurice"
+   },
+   {
+    "kind": "text",
+    "value": "3. Printemps Department Store Café"
+   },
+   {
+    "kind": "image",
+    "base": "img-top-3-fancy-cafes-paris-aaas",
+    "widths": [
+     770
+    ],
+    "fallbackWidth": 770,
+    "width": 770,
+    "height": 171
+   },
+   {
+    "kind": "text",
+    "value": "1. Musée d'Orsay Café"
+   },
+   {
+    "kind": "text",
+    "value": "If you get to visit the Orsay Museum you MUST try to visit this café. I think this café might have the fanciest environment to enjoy your cup of coffee at an affordable price range (even though it might be a somewhat expensive)."
+   },
+   {
+    "kind": "text",
+    "value": "Experience 4/5"
+   },
+   {
+    "kind": "text",
+    "value": "Taste 4/5"
+   },
+   {
+    "kind": "text",
+    "value": "Environment 5/5"
+   },
+   {
+    "kind": "text",
+    "value": "Price $$$$$"
+   },
+   {
+    "kind": "image",
+    "base": "img-top-3-fancy-cafes-paris-img-20170623-232342-244",
+    "widths": [
+     770
+    ],
+    "fallbackWidth": 770,
+    "width": 770,
+    "height": 963
+   },
+   {
+    "kind": "text",
+    "value": "2. Le Meurice"
+   },
+   {
+    "kind": "text",
+    "value": "If you want something really fancy this hotel provides you with maybe the most elegant experience for coffee/tea. This place is very expensive, an espresso is 12 Euros and full tea/coffee experience is 50 Euros but this Hotel is known to have 2016 master patissier as their pastry chef! (Maybe that explains why) The video below is a footage of the Rubik's Cube Cake known as probably the most famous cake in the world."
+   },
+   {
+    "kind": "text",
+    "value": "Experience 5/5"
+   },
+   {
+    "kind": "text",
+    "value": "Taste 4.5/5"
+   },
+   {
+    "kind": "text",
+    "value": "Environment 4.5/5"
+   },
+   {
+    "kind": "text",
+    "value": "Price $$$$$"
+   },
+   {
+    "kind": "image",
+    "base": "img-top-3-fancy-cafes-paris-20170718-170130",
+    "widths": [
+     770
+    ],
+    "fallbackWidth": 770,
+    "width": 770,
+    "height": 1027
+   },
+   {
+    "kind": "text",
+    "value": "3. Printemps Department Store Café"
+   },
+   {
+    "kind": "text",
+    "value": "This café is on the top floor of Printemps Department Store and honestly it is kind of a tourist trap. But when you enter the café you’ll see one of the most beautiful stain glass dome roofs that will make you want to grab something to drink."
+   },
+   {
+    "kind": "text",
+    "value": "Experience 4/5"
+   },
+   {
+    "kind": "text",
+    "value": "Taste 4/5"
+   },
+   {
+    "kind": "text",
+    "value": "Environment 4.5/5"
+   },
+   {
+    "kind": "text",
+    "value": "Price $$$$$"
+   },
+   {
+    "kind": "image",
+    "base": "img-top-3-fancy-cafes-paris-20170704-163455",
+    "widths": [
+     770
+    ],
+    "fallbackWidth": 770,
+    "width": 770,
+    "height": 1026
+   },
+   {
+    "kind": "text",
+    "value": "© 2015 ALEX J. WOO"
+   }
+  ],
+  "top-5-coffee-shop-paris": [
+   {
+    "kind": "text",
+    "value": "Top 5 in Paris"
+   },
+   {
+    "kind": "text",
+    "value": "During my childhood, I used to live in Paris and I got to revisit Paris when I was studying in a Le Corden Blue. These are my favorite coffee shops in Paris 🙂 Each coffee shop is special for a different reason so keep reading and try it out!"
+   },
+   {
+    "kind": "text",
+    "value": "1. KB coffee"
+   },
+   {
+    "kind": "text",
+    "value": "2. Fragments"
+   },
+   {
+    "kind": "text",
+    "value": "3. Il Macchiato"
+   },
+   {
+    "kind": "text",
+    "value": "4. La Caféothèque Paris"
+   },
+   {
+    "kind": "text",
+    "value": "5. La Lingerie Café (Les Grands Voisins)"
+   },
+   {
+    "kind": "image",
+    "base": "img-top-5-coffee-shop-paris-20170629-181040",
+    "widths": [
+     770,
+     1540
+    ],
+    "fallbackWidth": 1540,
+    "width": 1540,
+    "height": 680
+   },
+   {
+    "kind": "text",
+    "value": "1. KB coffee"
+   },
+   {
+    "kind": "text",
+    "value": "Many Parisians (Paris people) recommended me this place so I tried it out. Honestly, I personally think this coffee shop might have one of the best espressos in Paris. The vibe of the coffee shop is really good and the price range is low for Paris as well. For the Price of goods and services, I would rate this coffee shop as my favorite in Paris."
+   },
+   {
+    "kind": "text",
+    "value": "Experience 4/5"
+   },
+   {
+    "kind": "text",
+    "value": "Taste 4.5/5"
+   },
+   {
+    "kind": "text",
+    "value": "Environment 4/5"
+   },
+   {
+    "kind": "text",
+    "value": "Price $$$$$"
+   },
+   {
+    "kind": "image",
+    "base": "img-top-5-coffee-shop-paris-20170714-155651",
+    "widths": [
+     770,
+     1540
+    ],
+    "fallbackWidth": 1540,
+    "width": 1540,
+    "height": 1101
+   },
+   {
+    "kind": "text",
+    "value": "2. Fragments"
+   },
+   {
+    "kind": "text",
+    "value": "I heard that this café has the best avocado toast in Paris so I gave it a visit and actually they did have one of the best avocado toast! In addition, the coffee and the environment was very cozy and homelike. I would strongly recommend trying avocado toast 🙂 and a cup of coffee."
+   },
+   {
+    "kind": "text",
+    "value": "Experience 4/5"
+   },
+   {
+    "kind": "text",
+    "value": "Taste 4.5/5"
+   },
+   {
+    "kind": "text",
+    "value": "Environment 4/5"
+   },
+   {
+    "kind": "text",
+    "value": "Price $$$$$"
+   },
+   {
+    "kind": "image",
+    "base": "img-top-5-coffee-shop-paris-20170707-123007",
+    "widths": [
+     770,
+     1540
+    ],
+    "fallbackWidth": 1540,
+    "width": 1540,
+    "height": 1253
+   },
+   {
+    "kind": "text",
+    "value": "3. Il Macchiato"
+   },
+   {
+    "kind": "text",
+    "value": "This place is not well known in the coffee community but I had an amazing time here. From outside it just looks like an old French café but the experience you have will be amazing. I got some iced coffee and they made my coffee just like a cocktail."
+   },
+   {
+    "kind": "text",
+    "value": "Experience 4.5/5"
+   },
+   {
+    "kind": "text",
+    "value": "Taste 4.5/5"
+   },
+   {
+    "kind": "text",
+    "value": "Environment 3/5"
+   },
+   {
+    "kind": "text",
+    "value": "Price $$$$$"
+   },
+   {
+    "kind": "image",
+    "base": "img-top-5-coffee-shop-paris-img-3986",
+    "widths": [
+     770,
+     1540
+    ],
+    "fallbackWidth": 1540,
+    "width": 1540,
+    "height": 1026
+   },
+   {
+    "kind": "image",
+    "base": "img-top-5-coffee-shop-paris-img-3995",
+    "widths": [
+     770,
+     1540
+    ],
+    "fallbackWidth": 1540,
+    "width": 1540,
+    "height": 1133
+   },
+   {
+    "kind": "text",
+    "value": "4. La Caféothèque Paris"
+   },
+   {
+    "kind": "text",
+    "value": "This café sells coffee, pastries, and raw coffee beans. I would strongly* recommend the Matcha (green tea) brownie. As an individual who professionally studies cooking and pastries to some extent, this matcha brownie was the best matcha related pastry I have ever had. Also, the price was around 3.5 Euros which is pretty low for its amazing taste. The coffee is pretty good and they have a large coffee bean selection if you want to just buy their beans."
+   },
+   {
+    "kind": "text",
+    "value": "Experience 3.5/5"
+   },
+   {
+    "kind": "text",
+    "value": "Taste 4.5/5"
+   },
+   {
+    "kind": "text",
+    "value": "Environment 3.5/5"
+   },
+   {
+    "kind": "text",
+    "value": "Price $$$$$"
+   },
+   {
+    "kind": "image",
+    "base": "img-top-5-coffee-shop-paris-20170725-161239",
+    "widths": [
+     770,
+     1540
+    ],
+    "fallbackWidth": 1540,
+    "width": 1540,
+    "height": 1154
+   },
+   {
+    "kind": "image",
+    "base": "img-top-5-coffee-shop-paris-20170725-161521",
+    "widths": [
+     770
+    ],
+    "fallbackWidth": 770,
+    "width": 770,
+    "height": 608
+   },
+   {
+    "kind": "text",
+    "value": "5. La Lingerie Café (Les Grands Voisins)"
+   },
+   {
+    "kind": "text",
+    "value": "La lingerie Café is in 14 ARR. The Coffee shop is cozy, designerly, homelike, warm, hipster… but the true beauty is the history of its creation. This location feels nothing like Paris. The entire area where this café is used to be a hospital that was going through reconstruction, however, due to the beauty of its natural area, people fought with the government and built small café/shopping/recreation areas. It feels like the Paris community created this beautiful location."
+   },
+   {
+    "kind": "text",
+    "value": "Experience 4/5"
+   },
+   {
+    "kind": "text",
+    "value": "Taste 3.5/5"
+   },
+   {
+    "kind": "text",
+    "value": "Environment 4/5"
+   },
+   {
+    "kind": "text",
+    "value": "Price $$$$$"
+   },
+   {
+    "kind": "image",
+    "base": "img-top-5-coffee-shop-paris-20170629-181107",
+    "widths": [
+     770,
+     1540
+    ],
+    "fallbackWidth": 1540,
+    "width": 1540,
+    "height": 1155
+   },
+   {
+    "kind": "text",
+    "value": "© 2015 ALEX J. WOO"
+   }
+  ],
+  "top-5-coffee-shops-in-london": [
+   {
+    "kind": "text",
+    "value": "Top 5 in London"
+   },
+   {
+    "kind": "text",
+    "value": "These are my personal favorites during my trips to London! 🙂 Each coffee shop is special for a different reason so keep reading and try it out!"
+   },
+   {
+    "kind": "text",
+    "value": "1. Better Coffee"
+   },
+   {
+    "kind": "text",
+    "value": "2. Coffee Island"
+   },
+   {
+    "kind": "text",
+    "value": "3. Attendant"
+   },
+   {
+    "kind": "text",
+    "value": "4. TY Seven Dials"
+   },
+   {
+    "kind": "text",
+    "value": "5. Brill"
+   },
+   {
+    "kind": "image",
+    "base": "img-top-5-coffee-shops-in-london-20216333-1397168966997729-1992974993-o",
+    "widths": [
+     770,
+     1540
+    ],
+    "fallbackWidth": 1540,
+    "width": 1540,
+    "height": 653
+   },
+   {
+    "kind": "text",
+    "value": "1. Better Coffee"
+   },
+   {
+    "kind": "text",
+    "value": "There are couple Better Coffee shops in London. They have great coffee, food, and prices. The cover photo is from this cafe as well!"
+   },
+   {
+    "kind": "text",
+    "value": "Experience 4/5"
+   },
+   {
+    "kind": "text",
+    "value": "Environment 4/5"
+   },
+   {
+    "kind": "text",
+    "value": "Taste 4/5"
+   },
+   {
+    "kind": "text",
+    "value": "Price $$$$$"
+   },
+   {
+    "kind": "image",
+    "base": "img-top-5-coffee-shops-in-london-20216768-1397148553666437-1983934829-o",
+    "widths": [
+     770,
+     1540
+    ],
+    "fallbackWidth": 1540,
+    "width": 1540,
+    "height": 1155
+   },
+   {
+    "kind": "text",
+    "value": "2. Coffee Island"
+   },
+   {
+    "kind": "text",
+    "value": "This coffee shop is in the near Soho London. The cafe provides you with many different types of coffee beans and coffee brewing methods from different countries."
+   },
+   {
+    "kind": "text",
+    "value": "Experience 4.5/5"
+   },
+   {
+    "kind": "text",
+    "value": "Environment 3.5/5"
+   },
+   {
+    "kind": "text",
+    "value": "Taste 4/5"
+   },
+   {
+    "kind": "text",
+    "value": "Price $$$$$"
+   },
+   {
+    "kind": "image",
+    "base": "img-top-5-coffee-shops-in-london-20205568-1397148520333107-1470007983-o-1",
+    "widths": [
+     770,
+     1540
+    ],
+    "fallbackWidth": 1540,
+    "width": 1540,
+    "height": 1138
+   },
+   {
+    "kind": "text",
+    "value": "3. Attendant"
+   },
+   {
+    "kind": "text",
+    "value": "This is a coffee shop has a metro station entrance exterior. Inside the cafe has an interior of a classical English style toilet and their cold brew coffee has a rum note to its taste. It has many surprises!"
+   },
+   {
+    "kind": "text",
+    "value": "Experience 4.5/5"
+   },
+   {
+    "kind": "text",
+    "value": "Environment 4/5"
+   },
+   {
+    "kind": "text",
+    "value": "Taste 3/5"
+   },
+   {
+    "kind": "text",
+    "value": "Price $$$$$"
+   },
+   {
+    "kind": "image",
+    "base": "img-top-5-coffee-shops-in-london-20216741-1397152833666009-781567314-o",
+    "widths": [
+     770,
+     1540
+    ],
+    "fallbackWidth": 1540,
+    "width": 1540,
+    "height": 1155
+   },
+   {
+    "kind": "text",
+    "value": "4. TY Seven Dials"
+   },
+   {
+    "kind": "text",
+    "value": "This coffee shop has one of the most casual vibes, I thought I ran into my friends' place for a cup of coffee. I wanted to relax and read a book or do some work as soon as I entered the cafe."
+   },
+   {
+    "kind": "text",
+    "value": "Experience 4/5"
+   },
+   {
+    "kind": "text",
+    "value": "Environment 4.5/5"
+   },
+   {
+    "kind": "text",
+    "value": "Taste 2.5/5"
+   },
+   {
+    "kind": "text",
+    "value": "Price $$$$$"
+   },
+   {
+    "kind": "image",
+    "base": "img-top-5-coffee-shops-in-london-20216458-1397148566999769-1585143206-o",
+    "widths": [
+     770,
+     1540
+    ],
+    "fallbackWidth": 1540,
+    "width": 1540,
+    "height": 1155
+   },
+   {
+    "kind": "text",
+    "value": "5. Brill"
+   },
+   {
+    "kind": "text",
+    "value": "Brill is a coffee shop in London with hip music albums all around the cafe. They have good music and sell them as well."
+   },
+   {
+    "kind": "text",
+    "value": "Experience 4/5"
+   },
+   {
+    "kind": "text",
+    "value": "Environment 3.5/5"
+   },
+   {
+    "kind": "text",
+    "value": "Taste 3.5/5"
+   },
+   {
+    "kind": "text",
+    "value": "Price $$$$$"
+   },
+   {
+    "kind": "image",
+    "base": "img-top-5-coffee-shops-in-london-20186991-1397148543666438-1553485314-o",
+    "widths": [
+     770,
+     1540
+    ],
+    "fallbackWidth": 1540,
+    "width": 1540,
+    "height": 1075
+   },
+   {
+    "kind": "text",
+    "value": "© 2015 ALEX J. WOO"
+   }
+  ],
+  "wrap-and-charge": [
+   {
+    "kind": "image",
+    "base": "img-wrap-and-charge-bbb",
+    "widths": [
+     770,
+     1540
+    ],
+    "fallbackWidth": 1540,
+    "width": 1540,
+    "height": 858
+   },
+   {
+    "kind": "image",
+    "base": "img-wrap-and-charge-screen-shot-2019-02-08-at-9-08-25-pm",
+    "widths": [
+     770,
+     1540
+    ],
+    "fallbackWidth": 1540,
+    "width": 1540,
+    "height": 858
+   },
+   {
+    "kind": "text",
+    "value": "Question"
+   },
+   {
+    "kind": "text",
+    "value": "\"Why can't I wrap my cable on the charger?\""
+   },
+   {
+    "kind": "text",
+    "value": "Process"
+   },
+   {
+    "kind": "text",
+    "value": "After noticing and validating the missing opportunity, I started my design process with simple sketches. Then with SolidWorks I made CAD rendering to finalize the design. The phone on the right is the final prototype (3D print + hardware prototyping) which I pitch to the partner companies."
+   },
+   {
+    "kind": "image",
+    "base": "img-wrap-and-charge-screen-shot-2019-02-08-at-9-13-43-pm",
+    "widths": [
+     770,
+     1540
+    ],
+    "fallbackWidth": 1540,
+    "width": 1540,
+    "height": 688
+   },
+   {
+    "kind": "text",
+    "value": "Sales Pitch"
+   },
+   {
+    "kind": "text",
+    "value": "In order to sell the idea to manufacturing and retail companies, I had to formulate a story the clearly illustrates the user needs and design purpose."
+   },
+   {
+    "kind": "image",
+    "base": "img-wrap-and-charge-screen-shot-2019-02-08-at-9-12-54-pm",
+    "widths": [
+     770,
+     1540
+    ],
+    "fallbackWidth": 1540,
+    "width": 1540,
+    "height": 697
+   },
+   {
+    "kind": "text",
+    "value": "Results"
+   },
+   {
+    "kind": "text",
+    "value": "+10,000 units sold"
+   },
+   {
+    "kind": "text",
+    "value": "Sold in +100 stores"
+   },
+   {
+    "kind": "text",
+    "value": "3 publications"
+   },
+   {
+    "kind": "image",
+    "base": "img-wrap-and-charge-screen-shot-2019-02-08-at-9-33-33-pm",
+    "widths": [
+     770,
+     1540
+    ],
+    "fallbackWidth": 1540,
+    "width": 1540,
+    "height": 860
+   }
+  ]
  }
 }

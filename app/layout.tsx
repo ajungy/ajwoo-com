@@ -1,7 +1,6 @@
 import type { Metadata } from 'next';
 import '@/styles/globals.css';
 import { TopBar } from '@/components/TopBar';
-import { Cursor } from '@/components/Cursor';
 import { site } from '@/content/site';
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:4321';
@@ -47,7 +46,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             {site.fullName}
           </div>
         </footer>
-        <Cursor />
       </body>
     </html>
   );
