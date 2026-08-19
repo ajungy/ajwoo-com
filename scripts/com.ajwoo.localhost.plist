@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  Optional. Keeps http://localhost:4321 up permanently: starts at login and
+  restarts automatically if it ever exits.
+
+  Install:
+    cp scripts/com.ajwoo.localhost.plist ~/Library/LaunchAgents/
+    launchctl bootstrap gui/$(id -u) ~/Library/LaunchAgents/com.ajwoo.localhost.plist
+
+  Remove:
+    launchctl bootout gui/$(id -u)/com.ajwoo.localhost
+    rm ~/Library/LaunchAgents/com.ajwoo.localhost.plist
+-->
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.ajwoo.localhost</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/Users/alexwoo/Desktop/desktop files/Development/www.ajwoo.com minimal system/scripts/serve.sh</string>
+        <string>run</string>
+    </array>
+
+    <key>WorkingDirectory</key>
+    <string>/Users/alexwoo/Desktop/desktop files/Development/www.ajwoo.com minimal system</string>
+
+    <key>RunAtLoad</key>
+    <true/>
+    <key>KeepAlive</key>
+    <true/>
+    <key>ThrottleInterval</key>
+    <integer>5</integer>
+
+    <key>StandardOutPath</key>
+    <string>/Users/alexwoo/Desktop/desktop files/Development/www.ajwoo.com minimal system/logs/dev.log</string>
+    <key>StandardErrorPath</key>
+    <string>/Users/alexwoo/Desktop/desktop files/Development/www.ajwoo.com minimal system/logs/dev.error.log</string>
+</dict>
+</plist>
