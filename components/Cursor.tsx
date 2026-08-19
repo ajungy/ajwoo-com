@@ -38,7 +38,14 @@ const MAX_MORPH_H = 88;    // so we use a labelled bubble instead
 /** A displacement map shaped like a lens: neutral in the middle, bending hard
  *  at the rim. Red encodes x-offset, green y-offset, and the radial mask makes
  *  the bend fall off toward the centre — which is exactly how a real droplet
- *  refracts what is behind it. */
+ *  refracts what is behind it.
+ *
+ *  NOTE ON THE HEX VALUES BELOW — they are the one place in this codebase where
+ *  a raw hex is correct, and they must NOT be swapped for design tokens. These
+ *  are not colours anyone sees: they are vector data for feDisplacementMap.
+ *  #808000 means "displace by zero"; the #f00/#0f0 ramps encode x and y offsets;
+ *  #fff/#000 are mask luminance. Replacing them with tokens would silently
+ *  break the lens. */
 const LENS_MAP = `<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128">
 <defs>
 <linearGradient id="gx" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#000"/><stop offset="1" stop-color="#f00"/></linearGradient>

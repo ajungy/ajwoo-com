@@ -21,6 +21,10 @@ tracked, and no Figma file was written. Live ajwoo.com is untouched.
 | 6 | **Card press scale** | **NOTED** | `components.md` specifies `scale(0.995)` for cards; the preset carries no token. Defined once in `globals.css` as `.card-press` rather than as a bracket value in a component. |
 | 7 | **Hero alt text** | **NEEDS YOU** | Set to `"Alex Woo"` after seeing it is a portrait. Confirm that is the right description. |
 | 8 | **Reduced motion, real device** | **CODE-VERIFIED ONLY** | Entrance and cursor are both gated in CSS and JS, but I did not toggle the OS setting on real hardware. |
+| 9 | **Water cursor, live behaviour** | **PARTIALLY VERIFIED** | The water material, the lens refraction, the rim on light and dark, and the morph-to-element shape were all verified by screenshot. The *chase and settle* could not be captured: `requestAnimationFrame` pauses whenever the browser pane is hidden between my tool calls, so every screenshot catches the drop mid-flight or frozen. The physics is verified by code, not by eye — look at it yourself and tell me if `FOLLOW` needs to change. |
+| 10 | **Raw hex in `components/Cursor.tsx`** | **DOCUMENTED EXCEPTION** | 10 hex values, all inside the `LENS_MAP` SVG. They are displacement-vector data, not colour — `#808000` means "displace by zero". Swapping them for tokens would break the lens. Commented in place. |
+| 11 | **Safari refraction** | **DEGRADED** | Safari does not support an SVG filter reference in `backdrop-filter`; it gets a 0.4px blur instead. Rim, glints, shadow and deformation still apply. |
+| 12 | **App pricing** | **NEEDS YOU** | Capture, Dictate and Narrate render "Pricing TBD". No price was given and §6 says cost is never wrong — so none was invented. |
 
 ---
 
@@ -73,7 +77,7 @@ tracked, and no Figma file was written. Live ajwoo.com is untouched.
 | Check | Result |
 |---|---|
 | Green/amber/red only as status | **Pass** — no status colour appears anywhere; the site is monochrome |
-| No hex in components | **Pass** — **0** raw hex values across `app/` and `components/` |
+| No hex in components | **Pass, with one documented exception** — 0 in any styling context; 10 in the cursor's displacement map, which is vector data, not colour (item 10) |
 | No bracket values | **Pass** — **0** occurrences |
 | Nothing moves unless user-caused | **Pass** — one entrance (arrival), one cursor (pointer). The liquid edge advances on pointer displacement, so it is static when the pointer is still |
 | Only opacity/transform/colour animate | **Pass** |
