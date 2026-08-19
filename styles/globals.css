@@ -18,26 +18,43 @@
 }
 
 /* ==========================================================================
-   DOCUMENTED EXTENSIONS — CLAUDE.md §6. Three considered additions (§9).
+   DOCUMENTED EXTENSIONS — CLAUDE.md §6. Considered additions (§9).
    Semantic tokens only; no raw hex appears in any component.
    ========================================================================== */
 :root {
-  /* (c) The liquid edge. Confined to the cursor pill's 1.5px border ring and
-     nowhere else — the page stays opaque, --surface-chrome is untouched.
-     --edge-phase is advanced by POINTER DISPLACEMENT, never by elapsed time,
-     so nothing modulates while the pointer is still (Principle 14). */
-  --edge-phase: 0deg;
-  --material-liquid-edge: conic-gradient(
-    from var(--edge-phase),
-    rgba(255, 255, 255, 0.00) 0deg,
-    rgba(255, 255, 255, 0.55) 42deg,
-    rgba(160, 210, 255, 0.42) 96deg,
-    rgba(255, 255, 255, 0.00) 168deg,
-    rgba(255, 190, 220, 0.34) 244deg,
-    rgba(255, 255, 255, 0.50) 310deg,
-    rgba(255, 255, 255, 0.00) 360deg
-  );
-  --cursor-dot-size: 10px;
+  /* --- The water droplet -------------------------------------------------
+     A real drop is almost colourless. What makes it read as water is not tint
+     but four things: it bends what is behind it, it is brighter at the rim
+     than in the middle (Fresnel), it carries a hard specular glint, and it
+     deforms when it moves. These tokens carry the parts that are colour; the
+     refraction itself is an SVG lens filter, and the deformation is transform. */
+  --water-body: rgba(255, 255, 255, 0.015);
+  --water-rim-outer: rgba(255, 255, 255, 0.72);
+  --water-rim-inner: rgba(255, 255, 255, 0.10);
+  --water-glint: rgba(255, 255, 255, 0.98);
+  --water-glint-soft: rgba(255, 255, 255, 0.20);
+  --water-caustic: rgba(200, 230, 255, 0.30);
+  --water-shadow: rgba(0, 0, 0, 0.16);
+  --water-contact: rgba(0, 0, 0, 0.08);
+  /* Total internal reflection: against a light surface a real drop shows a
+     DARK ring at the rim, not a bright one. Without this the drop vanishes
+     on white. */
+  --water-rim-dark: rgba(0, 0, 0, 0.16);
+
+  --cursor-dot-size: 5px;
+}
+
+/* Dark pages: a drop over near-black needs a touch more rim and glint to be
+   visible at all, and its shadow has to weaken or it turns into a smudge. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --water-body: rgba(255, 255, 255, 0.02);
+    --water-rim-outer: rgba(255, 255, 255, 0.62);
+    --water-rim-inner: rgba(255, 255, 255, 0.07);
+    --water-shadow: rgba(0, 0, 0, 0.34);
+    --water-contact: rgba(0, 0, 0, 0.22);
+    --water-rim-dark: rgba(0, 0, 0, 0.30);
+  }
 }
 
 /* --- (a) Entrance sequence -------------------------------------------------
@@ -53,65 +70,145 @@
   animation: entrance-settle var(--d-slower) var(--e-entrance) both;
 }
 
-/* --- (b) The cursor -------------------------------------------------------- */
-.cursor-layer {
+/* --- (b) The cursor: a drop of water that follows the pointer ---------------
+   Two objects. The DOT is the truth — it sits exactly under the pointer with
+   no lag, so precision is never in question. The DROP is the physics — it
+   chases the dot, arrives late, stretches along its direction of travel and
+   settles when it stops. Over something clickable it swells to cover the
+   target, which is the affordance: the water finds the thing you can press. */
+.cursor-root {
   position: fixed;
-  top: 0; left: 0;
+  inset: 0;
   z-index: var(--z-tooltip);
   pointer-events: none;
-  will-change: transform;
   opacity: 0;
-  transition: opacity var(--d-fast) var(--e-standard);
+  transition: opacity var(--d-base) var(--e-standard);
 }
-.cursor-layer[data-visible="true"] { opacity: 1; }
+.cursor-root[data-visible="true"] { opacity: 1; }
 
 .cursor-dot {
+  position: fixed;
+  top: 0;
+  left: 0;
   width: var(--cursor-dot-size);
   height: var(--cursor-dot-size);
+  margin: calc(var(--cursor-dot-size) / -2) 0 0 calc(var(--cursor-dot-size) / -2);
   border-radius: var(--r-full);
   background: var(--surface-inverse);
-  transform: translate(-50%, -50%);
+  will-change: transform;
 }
 
-.cursor-pill {
-  position: relative;
-  display: flex;
-  align-items: center;
-  height: 28px;
-  padding: 0 12px;
-  border-radius: var(--r-full);
-  background: var(--surface-inverse);
-  color: var(--text-inverse);
-  font-size: var(--t-caption-size);
-  line-height: var(--t-caption-lh);
-  font-weight: var(--fw-medium);
-  white-space: nowrap;
-  transform: translate(-50%, -50%);
+.cursor-drop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  will-change: transform;
+  /* width/height/border-radius are driven per-frame by the rAF loop so the
+     drop can take the exact shape of whatever it is over. This element is
+     position:fixed and out of flow, so none of it can move page content. */
 }
-/* The refracting edge: gradient painted only on the border ring
-   (border-box minus content-box). */
-.cursor-pill::before {
-  content: "";
+
+/* The lens. This is the layer that actually bends the page behind it. */
+.cursor-drop-body {
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  padding: 1.5px;
-  background: var(--material-liquid-edge);
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-          mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-          mask-composite: exclude;
+  background: var(--water-body);
+  backdrop-filter: url(#dropletLens) saturate(1.12);
+  /* Safari does not support an SVG filter reference in backdrop-filter, so it
+     gets a whisper of blur instead of true refraction. The rim, glints, shadow
+     and deformation all still apply, so it still reads as a drop — just a
+     less optically accurate one. */
+  -webkit-backdrop-filter: blur(0.4px) saturate(1.12);
+  box-shadow:
+    /* Fresnel: mirror-bright seen edge-on, invisible through the middle.
+       One hairline only — anything thicker reads as a plastic bead. */
+    inset 0 0 0 0.5px var(--water-rim-outer),
+    inset 0 0 3px 1px var(--water-rim-dark),
+    inset 0 0.5px 1px 0 var(--water-rim-inner),
+    inset 0 -3px 6px -4px var(--water-caustic),
+    /* it sits ON the page, so it casts a little and it touches */
+    0 3px 8px -3px var(--water-shadow),
+    0 1px 1px 0 var(--water-contact);
 }
 
-/* Native cursor is hidden only where the custom one actually runs. */
+/* Specular glints. Deliberately NOT inside the rotating layer: as the drop
+   rolls, a real highlight stays put relative to the light instead of turning
+   with the body. Keeping these anchored is most of what sells the roll. */
+.cursor-drop-gloss {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  overflow: hidden;
+}
+.cursor-drop-gloss::before,
+.cursor-drop-gloss::after {
+  content: "";
+  position: absolute;
+  border-radius: var(--r-full);
+  pointer-events: none;
+}
+/* primary glint, upper-left, hard and small */
+.cursor-drop-gloss::before {
+  top: 15%;
+  left: 18%;
+  width: 17%;
+  height: 12%;
+  background: radial-gradient(closest-side, var(--water-glint), transparent 100%);
+  filter: blur(0.3px);
+}
+/* bounce light, lower-right, wide and faint */
+.cursor-drop-gloss::after {
+  right: 14%;
+  bottom: 14%;
+  width: 26%;
+  height: 16%;
+  background: radial-gradient(closest-side, var(--water-glint-soft), transparent 100%);
+  filter: blur(1.5px);
+}
+
+.cursor-drop-label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 var(--s-4);
+  text-align: center;
+  font-size: var(--t-caption-size);
+  line-height: var(--t-caption-lh);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--t-caption-ls);
+  color: var(--text-inverse);
+  text-shadow: 0 1px 2px var(--water-shadow);
+  white-space: nowrap;
+}
+
+/* The custom cursor replaces the native one only where it actually runs. */
 @media (any-pointer: fine) and (prefers-reduced-motion: no-preference) {
-  html[data-cursor="on"], html[data-cursor="on"] a, html[data-cursor="on"] button {
+  html[data-cursor="on"],
+  html[data-cursor="on"] a,
+  html[data-cursor="on"] button {
     cursor: none;
   }
 }
-/* Coarse pointers and reduced-motion users never see it at all. */
+/* Coarse pointers and reduced-motion users get the native cursor, untouched. */
 @media (any-pointer: coarse), (prefers-reduced-motion: reduce) {
-  .cursor-layer { display: none; }
+  .cursor-root { display: none; }
+}
+
+/* Interactive card press. components.md specifies scale(0.995) for cards — a
+   distinct value from the 0.98 control press, and the preset carries no token
+   for it. Defined once here rather than as a bracket value in the component. */
+.card-press {
+  transition:
+    box-shadow var(--d-base) var(--e-standard),
+    border-color var(--d-base) var(--e-standard),
+    transform var(--d-fast) var(--e-standard);
+}
+.card-press:active { transform: scale(0.995); }
+@media (prefers-reduced-motion: reduce) {
+  .card-press:active { transform: none; }
 }
 
 /* ==========================================================================
@@ -128,7 +225,7 @@
     letter-spacing: var(--t-body-ls);
     -webkit-font-smoothing: antialiased;
   }
-  /* Focus is always visible. `outline: none` appears nowhere in this codebase. */
+  /* Focus is always visible. No `outline: none` in this codebase. */
   :focus-visible {
     outline: var(--focus-ring-width) solid var(--focus-ring);
     outline-offset: var(--focus-ring-offset);
@@ -136,10 +233,3 @@
   }
   ::selection { background: var(--surface-active); }
 }
-
-/* Interactive card press. components.md specifies scale(0.995) for cards — a
-   distinct value from the 0.98 control press, and the preset carries no token
-   for it. Defined once here rather than as a bracket value in the component. */
-.card-press { transition: box-shadow var(--d-base) var(--e-standard), border-color var(--d-base) var(--e-standard), transform var(--d-fast) var(--e-standard); }
-.card-press:active { transform: scale(0.995); }
-@media (prefers-reduced-motion: reduce) { .card-press:active { transform: none; } }

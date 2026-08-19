@@ -1,35 +1,70 @@
-// /apps — the gallery of shipped apps and tools.
+// /apps — shipped desktop tools.
 //
-// DELIBERATELY EMPTY. The Phase 0 crawl found no shipped, distributable app on
-// ajwoo.com: every /work/ entry is either an employer product (Seeing AI,
-// Product Visualize, Dynamics 365, GenAI in Premiere Pro) that Alex designed but
-// cannot distribute, or a concept with no download. Listing any of them with a
-// "Get" action would invent a distribution channel that does not exist, and
-// listing a price would invent a cost — which §6 of the design system says is
-// never allowed to be wrong or hidden.
+// Content supplied by Alex. Two claims are load-bearing and appear on every
+// card because they are the reason someone would choose these over a web tool:
+// they are native macOS apps, and they do their work on-device.
 //
-// So the page renders its empty state (Principle 7: name what's missing, offer
-// the action that fills it). Add real entries below and the grid, badges,
-// grouping and the guarded purchase action all light up with no other change.
+// NOTE ON PRICE (CLAUDE.md D2, still unanswered): no price has been set for any
+// of these. §6 of the design system says cost is never hidden and never wrong,
+// so rather than invent one the cards render an explicit "Pricing TBD". Set
+// `price` to { kind: 'free' } or { kind: 'paid', ... } and the badge and the
+// guarded checkout action resolve themselves.
+
+export type Price =
+  | { kind: 'free' }
+  | { kind: 'tbd' }
+  | { kind: 'paid'; label: string; checkoutId: string };
 
 export type App = {
   slug: string;
   name: string;
   /** What it does FOR THE USER, in one line. Not a feature list. */
   description: string;
+  /** The gesture that starts it — the thing people actually remember. */
+  trigger: string;
   platform: string;
-  /** Cost is never disclosed behind an interaction — it renders on the card. */
-  price: { kind: 'free' } | { kind: 'paid'; label: string; checkoutId: string };
+  /** Short, factual capability claims. Rendered as neutral badges, never as
+   *  status colour: "local" is a property, not a success state. */
+  traits: string[];
+  price: Price;
   /** Outcome-naming verb phrase. Never "Go" or "Click". */
   action: { label: string; href: string };
-  /** Group by user intent, never by tech stack. ≤7 per group. */
-  group: string;
 };
 
-/** Outcome-named groups. Never "Other" or "Misc". */
-export const appGroups: { id: string; title: string; blurb: string }[] = [
-  { id: 'make', title: 'Tools for making things', blurb: 'Small utilities that remove a step from a working day.' },
-  { id: 'see',  title: 'Things to look through',  blurb: 'Viewers and readers for material you already have.' },
+export const apps: App[] = [
+  {
+    slug: 'capture',
+    name: 'Capture',
+    description: 'Records what happened on your screen and hands back a cut version, already edited.',
+    trigger: 'Records, then edits itself',
+    platform: 'macOS',
+    traits: ['Native macOS app', 'Runs fully on-device'],
+    price: { kind: 'tbd' },
+    action: { label: 'Get Capture', href: '#' },
+  },
+  {
+    slug: 'dictate',
+    name: 'Dictate',
+    description: 'Turns speech into text anywhere you can type, without sending your voice to a server.',
+    trigger: 'Double-tap Command to start talking',
+    platform: 'macOS',
+    traits: ['Native macOS app', 'Runs fully on-device'],
+    price: { kind: 'tbd' },
+    action: { label: 'Get Dictate', href: '#' },
+  },
+  {
+    slug: 'narrate',
+    name: 'Narrate',
+    description: 'Reads any text you select out loud, so you can take in a long page without reading it.',
+    trigger: 'Select text, press once to listen',
+    platform: 'macOS',
+    traits: ['Native macOS app', 'Runs fully on-device'],
+    price: { kind: 'tbd' },
+    action: { label: 'Get Narrate', href: '#' },
+  },
 ];
 
-export const apps: App[] = [];
+// Deliberately no groups. reference/disclosure.md caps a group at 7 and says a
+// group of one is not a group — at three apps, grouping is an unearned control
+// and the flat grid is the simpler thing that works (Principle 12). Introduce
+// outcome-named groups when this list passes about seven.

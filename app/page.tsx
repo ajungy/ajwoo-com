@@ -21,11 +21,11 @@ export default function Home() {
         <h1 className="entrance-target max-w-content text-display text-fg">{site.identity}</h1>
         <p className="mt-8 max-w-content text-body-lg text-fg-secondary">{site.bio}</p>
         <div className="mt-9 flex flex-wrap items-center gap-6">
-          <Action href={site.calendlyUrl} external variant="primary" cursorLabel={site.ctaLabel}>
+          <Action href={site.calendlyUrl} external variant="primary" cursorLabel="Book time">
             {site.ctaLabel}
           </Action>
           {social.map((s) => (
-            <Action key={s.label} href={s.href} external variant="tertiary" cursorLabel={`Open ${s.label}`}>
+            <Action key={s.label} href={s.href} external variant="tertiary" cursorLabel={s.label}>
               {s.label}
             </Action>
           ))}
@@ -47,7 +47,7 @@ export default function Home() {
       <section className="pb-12">
         <div className="flex items-baseline justify-between gap-8">
           <h2 className="text-h2 text-fg">Selected work</h2>
-          <Action href="/design/" variant="tertiary" cursorLabel="See all the work">
+          <Action href="/design/" variant="tertiary" cursorLabel="All work">
             All work
           </Action>
         </div>

@@ -250,56 +250,76 @@ drawing across is the more novel gesture and I'd happily build it instead, but i
 puts the only motion on a divider while the largest type sits beside it, which
 splits emphasis. **Say if you want the rule; it's a one-line change in Phase 7.**
 
-### (b) The cursor
+### (b) The cursor — a drop of water
 
-**The riskiest thing in this build, and I want that on the record.** A pill that
-follows the pointer is, by construction, something moving whenever the pointer
-moves — which is most of the session. "Calm" and "constantly in motion" are in
-genuine tension. I'm building it, and here are the constraints that make it
-survivable plus the exact knob to turn if it doesn't.
+**Revised on Alex's direction.** The earlier spec was a black pill carrying a
+verb. It is now an actual drop of water: transparent, refracting, deforming as
+it moves, and swelling to cover whatever you can click.
 
-**Constraints, all mandatory, all from your brief:**
+**Two objects, with different jobs — this split is what keeps it usable:**
 
-- **Enhancement only.** Every target carries its verb visibly at rest and in its
-  accessible name. The cursor echoes; it never reveals. If a verb exists only in
-  the cursor, that's a Principle 5 bug, and it's on the Phase 8 checklist.
-- **Gated** on `@media (any-pointer: fine)` **and**
-  `prefers-reduced-motion: no-preference`. Coarse pointers get the native cursor
-  and native behavior, unmodified. `can-hover:` in Tailwind, never bare `hover:`.
-- **Keyboard parity:** 2px `--focus-ring`, 2px offset, on every focusable
-  element. `outline: none` appears nowhere in the codebase.
-- **Label swap under 100ms** — swaps on `pointerenter`, no transition on the text.
-- **Zero layout shift.** The cursor is `position: fixed`, out of flow, and
-  affects no page content. Its own width changes as the label changes; that
-  cannot produce CLS because nothing is laid out against it. Stating this
-  explicitly because "the pill resizes" looks like a Principle 4 violation and
-  isn't — Principle 4 governs controls the user must find again.
-- **Composite-only:** `transform` and `opacity`. One `requestAnimationFrame`
-  loop, one lerp, zero layout reads per frame (no `getBoundingClientRect` in the
-  loop — target geometry is cached on `pointerenter`).
-- **Verbs are outcome phrases:** `Book 20 minutes`, `Read the review`,
-  `Download for macOS`, `Get for $1 per month`. Never `Go`, never `Click`.
+| | Job |
+|---|---|
+| **The dot** (5px) | The truth. Sits exactly under the pointer with **zero lag**, so precision is never in question. |
+| **The drop** | The physics. Chases the dot and arrives late, stretches along its direction of travel, settles when it stops. |
 
-**Two decisions I'm making, both aimed at the busy-ness problem:**
+Without the dot, a laggy cursor would be a usability tax — you would not know
+where you were actually pointing. The dot pays that debt, which is what buys the
+drop permission to be slow and physical.
 
-1. **Resting form is a 10px dot, not a pill.** The pill and its verb exist only
-   over an interactive target. Most of the time, the thing following the pointer
-   is a dot the size of a period.
-2. **Lerp factor 0.25, tunable down.** Your note is right: if it feels busy, the
-   fix is a shorter follow and a smaller pill, not a subtler gradient. That's the
-   first knob I'll reach for, and I'll say so rather than defending the build.
+**Over an interactive target,** the drop swells to *become* that target:
 
-**Budget:** 60fps sustained. Measured on this machine with the DevTools
-performance panel over a 10-second continuous-movement trace, reported as a real
-number in Phase 8 — not "feels smooth."
+- **Small targets** (≤300×88 — buttons, nav links): the drop takes the element's
+  exact size, position and corner radius, plus 8px of spread. **No label** — the
+  element's own text refracts up through the water, and a second label on top
+  would be the same word twice.
+- **Large targets** (cards, tiles): covering a 370px card would be a blob, so the
+  drop becomes a 96px bubble carrying a **maximum of two words** (`See project`,
+  `Read review`, `Book time`). Enforced in code by `twoWords()`, not by
+  discipline.
 
-**Kill condition:** if it can't hold 60fps or it reads as busy at lerp 0.15 with
-a 10px dot, I'll tell you it should be cut rather than tuning it forever.
+**Making it look like water rather than frosted glass.** Four things do the work,
+and the first attempt failed because it only had two of them:
 
-### (c) The liquid edge
+1. **It bends what is behind it.** An SVG `feDisplacementMap` driven by a
+   generated lens map — red encodes x-offset, green y-offset, and a radial mask
+   makes the bend fall to zero toward the centre. So the middle is optically
+   clean and the distortion lives in the last third near the rim, which is how a
+   real droplet behaves. Applied via `backdrop-filter: url(#dropletLens)`.
+2. **Fresnel.** Mirror-bright seen edge-on, invisible through the middle.
+3. **Total internal reflection.** Against a *light* surface a real drop shows a
+   **dark** ring, not a bright one — `--water-rim-dark`. Without this the drop
+   disappears on white.
+4. **It deforms.** Stretch along travel, squeeze across it, volume conserved.
+   Suppressed once settled over a target, which should look calm.
 
-**Token:** one semantic token, `--material-liquid-edge`, defined in the
-extensions block of the project's CSS. Never a raw hex in the component.
+**The glints are deliberately outside the deforming layer.** As a real drop
+rolls, its highlight stays put relative to the light rather than turning with the
+body. Anchoring them is most of what sells the roll.
+
+**Why this is not a Principle 14 violation:** nothing moves unless the pointer
+moves. Stop moving and the drop settles and holds. There is no clock anywhere in
+it.
+
+**Constraints unchanged:** enhancement only — every target carries its verb
+visibly at rest and in its accessible name; gated on `(any-pointer: fine)` and
+`prefers-reduced-motion: no-preference`; keyboard users get the full 2px focus
+ring and never need the cursor; zero layout shift, since the drop is
+`position: fixed` and out of flow.
+
+**Known gap:** Safari does not support an SVG filter reference in
+`backdrop-filter`, so it gets a small blur instead of true refraction. Rim,
+glints, shadow and deformation still apply.
+
+**Tuning knobs, in the order to reach for them:** `FOLLOW` (0.16 — lower is more
+lag), `MORPH` (0.22), `STRETCH` (0.055).
+
+### (c) The liquid material
+
+**Superseded by (b).** The conic-gradient edge ring was a stand-in for water on a
+black pill. Now that the cursor *is* water, the material is the drop itself and
+the tokens are `--water-*` — body, rim, glint, caustic, shadow, contact — defined
+in the extensions block of the project's CSS. Never a raw hex in the component.
 
 **Confinement:** the cursor pill's 1–2px border only. Not cards, not nav, not
 modals, not the top bar. The page stays opaque. `--surface-chrome` remains the

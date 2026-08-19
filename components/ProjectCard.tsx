@@ -17,7 +17,7 @@ export function ProjectCard({ project, priority = false }: { project: Project; p
   return (
     <Link
       href={`/work/${project.slug}/`}
-      data-cursor-label={project.kind === 'coffee' ? 'Read the review' : 'See the project'}
+      data-cursor-label={project.kind === 'coffee' ? 'Read review' : 'See project'}
       className={
         'group block rounded-lg border border-line-subtle bg-raised shadow-e1 overflow-hidden card-press ' +
         'can-hover:hover:shadow-e2 can-hover:hover:border-line'

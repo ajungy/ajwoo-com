@@ -23,7 +23,7 @@ export default function WorkPage({ params }: { params: { slug: string } }) {
     <div className="mx-auto max-w-content px-page">
       {/* A way back, at the top-left of the content area — not the browser's. */}
       <div className="pt-9">
-        <Action href={backHref} variant="tertiary" cursorLabel={`Back to ${project.kind === 'coffee' ? 'Coffee' : 'Design'}`}>
+        <Action href={backHref} variant="tertiary" cursorLabel="Go back">
           ← {project.kind === 'coffee' ? 'Coffee' : 'Design'}
         </Action>
       </div>

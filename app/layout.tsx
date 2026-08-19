@@ -42,7 +42,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </a>
         <TopBar />
         <main id="main">{children}</main>
-        <footer className="mt-15 border-t border-line-subtle">
+        <footer className="mt-15">
           <div className="mx-auto max-w-app px-page py-9 text-caption text-fg-tertiary">
             {site.fullName}
           </div>

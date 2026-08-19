@@ -27,7 +27,7 @@ export function TopBar() {
           key={n.href}
           href={n.href}
           aria-current={isActive(n.href) ? 'page' : undefined}
-          data-cursor-label={`Open ${n.label}`}
+          data-cursor-label={n.label}
           className={
             'text-label transition-colors duration-fast ease-standard ' +
             (isActive(n.href)
@@ -42,12 +42,12 @@ export function TopBar() {
   );
 
   return (
-    <header className="sticky top-0 z-sticky bg-page border-b border-line-subtle">
+    <header className="sticky top-0 z-sticky bg-page">
       <div className="mx-auto max-w-app px-page">
         <div className="flex h-12 items-center justify-between gap-8">
           <Link
             href="/"
-            data-cursor-label="Back to the start"
+            data-cursor-label="Home"
             className="text-title font-semibold text-fg transition-colors duration-fast ease-standard can-hover:hover:text-fg-secondary"
           >
             {site.name}
@@ -55,7 +55,7 @@ export function TopBar() {
 
           <div className="flex items-center gap-8">
             <div className="hidden medium:block">{links}</div>
-            <Action href={site.calendlyUrl} external variant="secondary" cursorLabel={site.ctaLabel}>
+            <Action href={site.calendlyUrl} external variant="secondary" cursorLabel="Book time">
               {site.ctaLabel}
             </Action>
           </div>
