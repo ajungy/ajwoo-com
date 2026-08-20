@@ -42,6 +42,15 @@
   --water-rim-dark: rgba(0, 0, 0, 0.11);
 
   --cursor-dot-size: 5px;
+
+  /* --- Content over media -------------------------------------------------
+     A photograph does not change with the theme, so text on top of one must
+     not either. --text-inverse flips and is the wrong tool. The scrim is what
+     buys the contrast; it is confined to media overlays and appears nowhere
+     else. */
+  --on-media-fg: rgba(255, 255, 255, 0.96);
+  --on-media-fg-dim: rgba(255, 255, 255, 0.72);
+  --on-media-scrim: linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.72) 30%, rgba(0,0,0,0.34) 66%, rgba(0,0,0,0) 100%);
 }
 
 /* Dark pages: a drop over near-black needs a touch more rim and glint to be
@@ -55,6 +64,17 @@
     --water-contact: rgba(0, 0, 0, 0.22);
     --water-rim-dark: rgba(0, 0, 0, 0.22);
   }
+}
+
+/* Same values when dark is chosen explicitly rather than inherited from the OS.
+   Without this the drop keeps its light-mode rim after using the toggle. */
+:root[data-theme="dark"] {
+  --water-body: rgba(255, 255, 255, 0.02);
+  --water-rim-outer: rgba(255, 255, 255, 0.46);
+  --water-rim-inner: rgba(255, 255, 255, 0.07);
+  --water-shadow: rgba(0, 0, 0, 0.34);
+  --water-contact: rgba(0, 0, 0, 0.22);
+  --water-rim-dark: rgba(0, 0, 0, 0.22);
 }
 
 /* --- (a) Entrance sequence -------------------------------------------------
@@ -184,6 +204,19 @@
   .cursor-root { display: none; }
 }
 
+/* Typing caret. Blink is the one place a looping animation is conventional
+   enough to read as a text cursor rather than as decoration; it is suppressed
+   entirely under reduced motion (the class is only applied when motion is
+   allowed, and this rule is a belt-and-braces second guard). */
+@keyframes caret-blink { 0%, 45% { opacity: 1; } 55%, 100% { opacity: 0; } }
+.caret-blink { animation: caret-blink 1.06s steps(1, end) infinite; }
+@media (prefers-reduced-motion: reduce) { .caret-blink { animation: none; } }
+
+/* Text laid over a photograph. */
+.on-media { color: var(--on-media-fg); }
+.on-media-dim { color: var(--on-media-fg-dim); }
+.on-media-scrim { background: var(--on-media-scrim); }
+
 /* Interactive card press. components.md specifies scale(0.995) for cards — a
    distinct value from the 0.98 control press, and the preset carries no token
    for it. Defined once here rather than as a bracket value in the component. */
@@ -219,4 +252,14 @@
     border-radius: var(--r-xs);
   }
   ::selection { background: var(--surface-active); }
+}
+
+/* Stretched link: makes an entire card clickable from a single anchor without
+   nesting anchors, so a sibling control (Install) can sit above it on its own
+   stacking context and keep its own hit area. */
+.card-link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
 }

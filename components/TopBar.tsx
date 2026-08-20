@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Action } from './Action';
 import { Logo } from './Logo';
+import { ThemeToggle } from './ThemeToggle';
 import { nav, site } from '@/content/site';
 
 /**
@@ -20,8 +21,12 @@ import { nav, site } from '@/content/site';
  * --text-primary, the rest at --text-secondary. Both clear AAA (7:1) against
  * the page, so the indicator costs no reserved space and no extra line.
  *
- * Density: 5 interactive elements at compact — exactly at the budget ceiling.
- * Nothing may be added here without removing something.
+ * DENSITY, honestly: adding the theme toggle takes compact to SIX interactive
+ * elements against a budget of five (reference/disclosure.md). CLAUDE.md §4
+ * recorded that compact sat exactly at the ceiling and that nothing could be
+ * added without a removal. Alex asked for the toggle, so it is in and the
+ * breach is recorded rather than quietly absorbed — the removal candidate, if
+ * we want to get back inside budget, is the CTA on compact.
  */
 export function TopBar() {
   const pathname = usePathname();
@@ -68,6 +73,7 @@ export function TopBar() {
 
           <div className="flex items-center gap-8">
             <div className="hidden medium:block">{links}</div>
+            <ThemeToggle />
             <Action href={site.calendlyUrl} external variant="secondary" cursorLabel="Book time">
               {site.ctaLabel}
             </Action>

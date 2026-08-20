@@ -197,7 +197,7 @@ decide this before I've seen the assets.** Flagging rather than guessing.
 
 | Considered | Rejected because |
 |---|---|
-| Theme toggle | The system says omit `data-theme` and follow the OS. A toggle is a control that exists to change a preference the OS already knows. Two states to verify, one more thing in the chrome, at the compact ceiling. |
+| ~~Theme toggle~~ | **Reversed on Alex's instruction (built).** The original reasoning stands and is worth keeping on the record: the system says omit `data-theme` and follow the OS, and a toggle changes a preference the OS already knows. Two consequences accepted: compact chrome now holds **6** interactive elements against a budget of 5 (§4), and there are two more states to verify. It starts from the OS and only writes `data-theme` once the user chooses, so anyone who ignores it still gets the system's intended behaviour. |
 | Hamburger / drawer nav | Three destinations, three short words. Hiding a visible affordance to save 150px is a Principle 5 risk for no gain. |
 | Calendly inline embed | ~200kB of third-party iframe, its own type and color, its own focus behavior, and a `--surface` we don't control. A plain link to the Calendly page is the same number of clicks to booked and costs nothing. Rejected — the CTA is an `<a>`. |
 | Modal for app details | Nothing on `/apps` requires a decision, which is the only thing a Dialog is for (`taxonomy.md`). Detail is a page or it is on the card. |
@@ -313,6 +313,31 @@ glints, shadow and deformation still apply.
 
 **Tuning knobs, in the order to reach for them:** `FOLLOW` (0.16 — lower is more
 lag), `MORPH` (0.22), `STRETCH` (0.055).
+
+### (d) The hero typing line — a documented deviation, not an extension
+
+**This one breaks Principle 14 and I am not going to pretend otherwise.** A
+typing loop is time-driven: it moves when nobody has touched anything. That is
+the exact thing the principle forbids, and it is the same objection that got the
+`javascript-snow` script cut in Phase 0.
+
+Alex asked for it directly, so it ships with the two guards that keep it from
+being the worst version of itself:
+
+1. **`prefers-reduced-motion: reduce` renders the first phrase statically** and
+   never starts a timer.
+2. **It stops when the hero scrolls out of view** (IntersectionObserver), so it
+   is not burning frames behind the rest of the page.
+
+It is also not announced to assistive tech — a caption rewriting itself every
+70ms would flood a screen reader — so the nine phrases are exposed once, as
+static text, in a visually-hidden span.
+
+**Tokens:** text over a photograph has no expression in the system, because the
+system has no media-overlay surface, and `--text-inverse` is wrong here (it
+flips with the theme; a photograph does not). Added as `--on-media-fg`,
+`--on-media-fg-dim` and `--on-media-scrim`, confined to media overlays.
+Measured **16.78:1** over the brightest part of the photo.
 
 ### (c) The liquid material
 

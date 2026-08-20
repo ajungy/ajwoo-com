@@ -12,10 +12,15 @@ export const metadata: Metadata = {
   openGraph: { title: 'Alex Woo', description: site.identity, url: '/', siteName: 'Alex Woo' },
 };
 
-// Runs BEFORE first paint. Without this the first frame shows the pre-animation
+// Runs BEFORE first paint. Two jobs: apply a saved theme so a chosen theme
+// never flashes the other one, and decide whether the entrance plays. Without this the first frame shows the pre-animation
 // state and the entrance becomes a flash — worse than no entrance at all.
 // Reduced motion is handled in CSS, so it wins regardless of what this did.
-const entranceScript = `
+const bootScript = `
+try {
+  var t = localStorage.getItem('theme');
+  if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+} catch (e) {}
 try {
   if (!sessionStorage.getItem('entrance-played')) {
     document.documentElement.setAttribute('data-entrance', 'run');
@@ -30,7 +35,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     // already knows, and compact chrome is at its density ceiling.
     <html lang="en" suppressHydrationWarning>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: entranceScript }} />
+        <script dangerouslySetInnerHTML={{ __html: bootScript }} />
       </head>
       <body>
         <a

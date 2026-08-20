@@ -33,6 +33,10 @@ export type App = {
   action: { label: string; href: string };
   /** Longer copy for the app's own page. */
   detail: string[];
+  /** Real exported app icon, when one exists. Falls back to the drawn glyph. */
+  iconImage?: string;
+  /** A recording of the app doing its job, shown as the card's media. */
+  media?: { base: string; poster: string; width: number; height: number };
 };
 
 export const apps: App[] = [
@@ -40,16 +44,20 @@ export const apps: App[] = [
     slug: 'capture',
     icon: 'capture',
     name: 'Capture',
-    description: 'Records what happened on your screen and hands back a cut version, already edited.',
-    trigger: 'Records, then edits itself',
+    description: 'Records your screen, then edits itself — trim, cut, zoom and a cursor you can restyle after the fact.',
+    trigger: 'Record a display or a region, with camera and mic',
     platform: 'macOS',
-    traits: ['Native macOS app', 'Runs fully on-device'],
+    traits: ['Native macOS app', 'Runs fully on-device', 'Exports movie or GIF'],
     price: { kind: 'tbd' },
     action: { label: 'Get Capture', href: '#' },
     detail: [
-      'Capture records a region or a whole window, then does the edit you were going to do anyway: trims the dead air at both ends, drops the frames where nothing changed, and hands you a file that is ready to send.',
-      'Recording and editing both happen on your Mac. No upload step, no account, no link that expires.',
+      'Capture records a full display or a region — with camera and microphone — and writes the master at native pixels alongside a metadata file. Nothing is baked in at record time, so every edit stays reversible.',
+      'Zoom is a crop, never an upscale. A 2x zoom on a 3456x2234 master exporting to 1080p is still sampling real pixels, so it stays sharp instead of turning to mush.',
+      'The cursor is not in the video. It is recorded as a path and drawn at export, which means it can be resized, restyled, smoothed and animated afterwards — and it stays a constant on-screen size at any zoom level.',
+      'Recording and editing both happen on your Mac. No upload step, no account, and no link that expires.',
     ],
+    iconImage: 'appicon-capture',
+    media: { base: 'capture-demo', poster: 'capture-demo-poster.webp', width: 1280, height: 804 },
   },
   {
     slug: 'dictate',

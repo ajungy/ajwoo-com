@@ -16,6 +16,7 @@ export const site = {
   // 20. The label below follows the LINK, because a label that misstates the
   // commitment is exactly the kind of dishonesty §6 of the checklist forbids.
   ctaLabel: 'Book 30 minutes',
+  email: 'alex.wooj@gmail.com',
 } as const;
 
 export const nav = [
@@ -55,6 +56,7 @@ export const featured = [
 // Phase 0 recommendation: keep the two that serve the hiring-manager job, cut
 // Facebook, Pinterest and Spotify. Five links dilute one primary action.
 export const social = [
-  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/alex-j-woo-8188ab99' },
-  { label: 'Instagram', href: 'https://www.instagram.com/alexwoodesign/' },
+  { label: 'Email', href: 'mailto:alex.wooj@gmail.com', external: false },
+  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/alex-j-woo-8188ab99', external: true },
+  { label: 'Instagram', href: 'https://www.instagram.com/alexwoodesign/', external: true },
 ] as const;

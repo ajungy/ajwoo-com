@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import type { ReactNode } from 'react';
 
-type Variant = 'primary' | 'secondary' | 'tertiary';
+type Variant = 'primary' | 'secondary' | 'tertiary' | 'on-media';
 
 const base =
   'inline-flex items-center justify-center h-control-md rounded-control border ' +
@@ -22,6 +22,12 @@ const variants: Record<Variant, string> = {
   tertiary:
     'bg-tertiary text-tertiary-fg border-transparent px-5 font-semibold ' +
     'can-hover:hover:bg-tertiary-hover active:bg-tertiary-active',
+  // Laid over a photograph. The theme action tokens are wrong here because they
+  // flip with the theme and the photograph does not — see --on-media-* in
+  // globals.css.
+  'on-media':
+    'on-media border-white/40 bg-white/10 px-6 backdrop-blur-sm ' +
+    'can-hover:hover:bg-white/20 can-hover:hover:border-white/60',
 };
 
 /**
