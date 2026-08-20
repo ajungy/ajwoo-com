@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { Action } from '@/components/Action';
-import { AppIconTile } from '@/components/AppIcon';
+import { AppIcon } from '@/components/AppIcon';
 import { PriceBadge } from '@/components/PriceBadge';
 import { apps } from '@/content/apps';
 import { resolveCheckout } from '@/lib/checkout';
@@ -32,7 +32,19 @@ export default function AppPage({ params }: { params: { slug: string } }) {
       </div>
 
       <header className="flex flex-col gap-8 pt-8 pb-12 medium:flex-row medium:items-start">
-        <AppIconTile name={app.icon} size="lg" />
+        {app.iconImage ? (
+          <img
+            src={`/img/${app.iconImage}-256.webp`}
+            alt=""
+            width={64}
+            height={64}
+            className="h-16 w-16 shrink-0 rounded-full border border-line-subtle"
+          />
+        ) : (
+          <span className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full border border-line-subtle bg-sunken text-fg">
+            <AppIcon name={app.icon} className="h-8 w-8" />
+          </span>
+        )}
         <div className="flex-1">
           <div className="flex flex-wrap items-center gap-6">
             <h1 className="text-h1 text-fg">{app.name}</h1>

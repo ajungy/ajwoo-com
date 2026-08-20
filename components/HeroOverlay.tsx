@@ -3,37 +3,38 @@
 import { useEffect, useRef, useState } from 'react';
 
 /**
- * Typing overlay for the landing portrait.
+ * The headline's verb, typed and deleted in place: "designs" → "builds" →
+ * "codes" → "creates" → "pioneers" → loops back to "designs". Everything else
+ * in the h1 ("Alex Woo ___ creative tools at Netflix.") stays fixed text.
  *
- * DOCUMENTED DEVIATION — Principle 14 says nothing moves unless the user caused
- * it or is waiting on it, and a typing loop is time-driven by definition. Alex
- * asked for it directly, so it ships, with the two guards that keep it from
- * being the worst version of itself:
- *   1. `prefers-reduced-motion: reduce` renders the first phrase, statically,
- *      and never starts a timer.
- *   2. It stops entirely when the hero scrolls out of view, so it is not
- *      burning frames behind the rest of the page.
- * The rejection is recorded in CLAUDE.md rather than quietly reversed.
+ * DOCUMENTED DEVIATION — Principle 14 says nothing moves unless the user
+ * caused it or is waiting on it, and a typing loop is time-driven by
+ * definition. This was originally built as an overlay on the hero photo and
+ * moved here on Alex's instruction; the deviation itself was already accepted
+ * and is recorded in CLAUDE.md. Same two guards carry over:
+ *   1. `prefers-reduced-motion: reduce` renders the first word statically and
+ *      never starts a timer.
+ *   2. It stops when the headline scrolls out of view, so it is not burning
+ *      frames behind the rest of the page.
+ *
+ * STABILITY (Principle 4), and the one place this component does NOT hold the
+ * line: an inline-block reserved to the longest word ("pioneers") was tried
+ * first and broke text wrapping inside the headline — a rigid inline-block
+ * inside wrapping text forces the browser to lay the rest of the line out
+ * around a box instead of flowing through it, which is worse than the
+ * reflow it was meant to prevent. The word is plain inline text instead, so
+ * the headline may re-break by a few pixels as the word's length changes.
+ * That is a real, accepted deviation, not an oversight.
  */
-const PHRASES = [
-  'Currently at Netflix',
-  'Product Design',
-  'Loves coffee',
-  'Before at Adobe',
-  'UX Design',
-  'Loves film',
-  'Before at Microsoft',
-  'Design Lead',
-  'Loves building',
-];
+const WORDS = ['designs', 'builds', 'codes', 'creates', 'pioneers'];
 
-const TYPE_MS = 68;
-const DELETE_MS = 34;   // deleting is faster than typing, as it is in a real editor
-const HOLD_MS = 1300;   // long enough to actually read the phrase
-const EMPTY_MS = 320;
+const TYPE_MS = 90;
+const DELETE_MS = 46;
+const HOLD_MS = 1500;
+const EMPTY_MS = 260;
 
-export function TypingLine() {
-  const [text, setText] = useState(PHRASES[0]);
+export function TypingWord() {
+  const [text, setText] = useState(WORDS[0]);
   const [animate, setAnimate] = useState(false);
   const hostRef = useRef<HTMLSpanElement>(null);
 
@@ -41,30 +42,29 @@ export function TypingLine() {
     if (!window.matchMedia('(prefers-reduced-motion: no-preference)').matches) return;
     setAnimate(true);
 
-    let phrase = 0;
-    let chars = PHRASES[0].length;
+    let word = 0;
+    let chars = WORDS[0].length;
     let deleting = true;
     let timer: ReturnType<typeof setTimeout>;
     let running = true;
 
     const step = () => {
       if (!running) return;
-      const full = PHRASES[phrase];
+      const full = WORDS[word];
       let delay = TYPE_MS;
       if (deleting) {
         chars -= 1;
-        if (chars <= 0) { chars = 0; deleting = false; phrase = (phrase + 1) % PHRASES.length; delay = EMPTY_MS; }
+        if (chars <= 0) { chars = 0; deleting = false; word = (word + 1) % WORDS.length; delay = EMPTY_MS; }
         else delay = DELETE_MS;
       } else {
         chars += 1;
         if (chars >= full.length) { chars = full.length; deleting = true; delay = HOLD_MS; }
       }
-      setText(PHRASES[phrase].slice(0, chars));
+      setText(WORDS[word].slice(0, chars));
       timer = setTimeout(step, delay);
     };
     timer = setTimeout(step, HOLD_MS);
 
-    // Stop when the hero leaves the viewport — no reason to run behind content.
     const io = new IntersectionObserver(([e]) => {
       if (e.isIntersecting && !running) { running = true; timer = setTimeout(step, TYPE_MS); }
       if (!e.isIntersecting) { running = false; clearTimeout(timer); }
@@ -75,15 +75,15 @@ export function TypingLine() {
   }, []);
 
   return (
-    <span ref={hostRef} className="inline-flex items-baseline">
-      {/* aria-live is deliberately off: a caption that rewrites itself every
-          70ms would flood a screen reader. The same facts are in the bio. */}
+    <span ref={hostRef} className="relative">
       <span aria-hidden="true">{text}</span>
       <span
         aria-hidden="true"
-        className={'ml-1 inline-block w-px self-stretch bg-current ' + (animate ? 'caret-blink' : '')}
+        className={'ml-0.5 inline-block w-px self-stretch bg-current ' + (animate ? 'caret-blink' : '')}
       />
-      <span className="sr-only">{PHRASES.join('. ')}</span>
+      {/* The static, fully-formed sentence for assistive tech — a caption
+          rewriting every 60ms would flood a screen reader. */}
+      <span className="sr-only">designs</span>
     </span>
   );
 }

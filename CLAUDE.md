@@ -314,7 +314,12 @@ glints, shadow and deformation still apply.
 **Tuning knobs, in the order to reach for them:** `FOLLOW` (0.16 — lower is more
 lag), `MORPH` (0.22), `STRETCH` (0.055).
 
-### (d) The hero typing line — a documented deviation, not an extension
+### (d) The typing verb in the headline — a documented deviation, not an extension
+
+**Moved on Alex's instruction from the hero photo into the headline itself.**
+The h1 now reads "Alex Woo ___ creative tools at Netflix.", with the verb
+cycling designs -> builds -> codes -> creates -> pioneers -> looping. Everything
+else in that sentence is fixed text; only the one word types and deletes.
 
 **This one breaks Principle 14 and I am not going to pretend otherwise.** A
 typing loop is time-driven: it moves when nobody has touched anything. That is
@@ -333,11 +338,19 @@ It is also not announced to assistive tech — a caption rewriting itself every
 70ms would flood a screen reader — so the nine phrases are exposed once, as
 static text, in a visually-hidden span.
 
-**Tokens:** text over a photograph has no expression in the system, because the
-system has no media-overlay surface, and `--text-inverse` is wrong here (it
-flips with the theme; a photograph does not). Added as `--on-media-fg`,
-`--on-media-fg-dim` and `--on-media-scrim`, confined to media overlays.
-Measured **16.78:1** over the brightest part of the photo.
+**Tried and reverted: reserving the longest word's width so the headline never
+re-breaks.** An inline-block sized to "pioneers" inside wrapping text does not
+just reserve space — it forces the browser to lay the rest of the line out
+around a rigid box, which broke the wrap entirely (words landed on the wrong
+line, one floated free of the sentence). The word is plain inline text now, and
+the headline may shift by a few pixels as the word's length changes. Accepted
+rather than fixed further; the alternative was worse.
+
+**The hero photo and the on-media tokens stay in the codebase** (`--on-media-*`
+in `globals.css`, the `on-media` Action variant) even though nothing currently
+renders on top of the photo — Email/LinkedIn/Instagram moved to sit under the
+bio instead, at Alex's direction. Removing the tokens outright would be
+premature; nothing else needs deleting to make that move.
 
 ### (c) The liquid material
 

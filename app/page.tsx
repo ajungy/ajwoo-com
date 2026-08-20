@@ -1,6 +1,6 @@
 import { Action } from '@/components/Action';
 import { Cursor } from '@/components/Cursor';
-import { TypingLine } from '@/components/HeroOverlay';
+import { TypingWord } from '@/components/HeroOverlay';
 import { Picture } from '@/components/Picture';
 import { FeaturedApp } from '@/components/FeaturedApp';
 import { siteData } from '@/content/projects';
@@ -21,16 +21,33 @@ export default function Home() {
 
       <div className="mx-auto max-w-app px-page">
         <section className="pt-12 pb-9">
-          <h1 className="entrance-target max-w-content text-display text-fg">{site.identity}</h1>
+          {/* The single most important element on the page, and the only place
+              the one-time entrance animation runs. The verb inside it also
+              types and deletes in a loop — see HeroOverlay.tsx for why that is
+              a documented deviation from "nothing moves at rest". */}
+          <h1 className="entrance-target max-w-content text-display text-fg">
+            Alex Woo <TypingWord /> creative tools at Netflix.
+          </h1>
           <p className="mt-8 max-w-content text-body-lg text-fg-secondary">{site.bio}</p>
+
+          {/* Moved off the hero photo and under the bio, at Alex's direction —
+              this is the same three actions, just anchored to the identity
+              text instead of floating over an image. */}
+          <div className="mt-8 flex flex-wrap items-center gap-4">
+            {social.map((s) => (
+              <Action key={s.label} href={s.href} external={s.external} variant="secondary" cursorLabel={s.label}>
+                {s.label}
+              </Action>
+            ))}
+          </div>
         </section>
       </div>
 
       {/* Full-bleed portrait, matching the width it runs at on ajwoo.com today.
-          Breaking out of the container is deliberate — this is the one element
-          on the site that spans edge to edge. */}
+          No overlay any more — the typing line and the social row both moved
+          up into the header block above. */}
       {siteData.hero && (
-        <section className="relative mb-12">
+        <section className="mb-12">
           <Picture
             img={siteData.hero}
             alt="Alex Woo"
@@ -38,30 +55,6 @@ export default function Home() {
             sizes="100vw"
             className="block h-auto w-full"
           />
-
-          {/* One row across the foot of the photo: the typing line on the left,
-              the three ways to reach him on the right. The scrim is what makes
-              white text legible over an unknown part of a photograph. */}
-          <div className="on-media-scrim absolute inset-x-0 bottom-0 pt-14">
-            <div className="mx-auto flex max-w-app flex-col gap-6 px-page py-8 medium:flex-row medium:items-center medium:justify-between">
-              <p className="on-media text-h2">
-                <TypingLine />
-              </p>
-              <div className="flex flex-wrap items-center gap-4">
-                {social.map((s) => (
-                  <Action
-                    key={s.label}
-                    href={s.href}
-                    external={s.external}
-                    variant="on-media"
-                    cursorLabel={s.label}
-                  >
-                    {s.label}
-                  </Action>
-                ))}
-              </div>
-            </div>
-          </div>
         </section>
       )}
 

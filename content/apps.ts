@@ -1,14 +1,14 @@
 // /apps — shipped desktop tools.
 //
-// Content supplied by Alex. Two claims are load-bearing and appear on every
-// card because they are the reason someone would choose these over a web tool:
-// they are native macOS apps, and they do their work on-device.
+// Content supplied by Alex, plus facts pulled from each app's own repo
+// (README/NOTES) rather than invented. Two claims are load-bearing and appear
+// on every detail page: native macOS app, runs fully on-device.
 //
 // NOTE ON PRICE (CLAUDE.md D2, still unanswered): no price has been set for any
-// of these. §6 of the design system says cost is never hidden and never wrong,
-// so rather than invent one the cards render an explicit "Pricing TBD". Set
-// `price` to { kind: 'free' } or { kind: 'paid', ... } and the badge and the
-// guarded checkout action resolve themselves.
+// of these. The /apps grid no longer shows a price badge at Alex's direction —
+// see app/apps/page.tsx for the reasoning. Price still lives here and still
+// renders on each app's own detail page, because §6 of the design system says
+// cost may never be hidden, only the *grid* was asked to simplify.
 
 export type Price =
   | { kind: 'free' }
@@ -17,23 +17,22 @@ export type Price =
 
 export type App = {
   slug: string;
-  /** Key into components/AppIcon.tsx. Placeholder marks until real artwork. */
+  /** Key into components/AppIcon.tsx. Used only when iconImage is absent. */
   icon: string;
   name: string;
-  /** What it does FOR THE USER, in one line. Not a feature list. */
+  /** One line, fits in a single row next to the icon. Not a feature list. */
   description: string;
   /** The gesture that starts it — the thing people actually remember. */
   trigger: string;
   platform: string;
-  /** Short, factual capability claims. Rendered as neutral badges, never as
-   *  status colour: "local" is a property, not a success state. */
+  /** Short, factual capability claims, shown on the detail page. */
   traits: string[];
   price: Price;
   /** Outcome-naming verb phrase. Never "Go" or "Click". */
   action: { label: string; href: string };
   /** Longer copy for the app's own page. */
   detail: string[];
-  /** Real exported app icon, when one exists. Falls back to the drawn glyph. */
+  /** Real exported app icon. Falls back to the drawn glyph in AppIcon.tsx. */
   iconImage?: string;
   /** A recording of the app doing its job, shown as the card's media. */
   media?: { base: string; poster: string; width: number; height: number };
@@ -44,7 +43,7 @@ export const apps: App[] = [
     slug: 'capture',
     icon: 'capture',
     name: 'Capture',
-    description: 'Records your screen, then edits itself — trim, cut, zoom and a cursor you can restyle after the fact.',
+    description: 'Records your screen, then edits itself.',
     trigger: 'Record a display or a region, with camera and mic',
     platform: 'macOS',
     traits: ['Native macOS app', 'Runs fully on-device', 'Exports movie or GIF'],
@@ -63,7 +62,7 @@ export const apps: App[] = [
     slug: 'dictate',
     icon: 'dictate',
     name: 'Dictate',
-    description: 'Turns speech into text anywhere you can type, without sending your voice to a server.',
+    description: 'Turns speech into text, anywhere you type.',
     trigger: 'Double-tap Command to start talking',
     platform: 'macOS',
     traits: ['Native macOS app', 'Runs fully on-device'],
@@ -73,21 +72,24 @@ export const apps: App[] = [
       'Dictate puts speech into whatever already has your cursor — a document, a terminal, a message box. There is no window to switch to and nothing to paste.',
       'The speech model runs on your Mac. Your voice is never uploaded, so it works on a plane and it keeps working if this site disappears.',
     ],
+    iconImage: 'appicon-dictate',
   },
   {
     slug: 'narrate',
     icon: 'narrate',
     name: 'Narrate',
-    description: 'Reads any text you select out loud, so you can take in a long page without reading it.',
-    trigger: 'Select text, press once to listen',
+    description: 'Reads your selected text aloud, offline.',
+    trigger: 'Highlight text, double-tap a modifier key',
     platform: 'macOS',
-    traits: ['Native macOS app', 'Runs fully on-device'],
+    traits: ['Native macOS app', 'Runs fully on-device', 'Neural voice, no cloud'],
     price: { kind: 'tbd' },
     action: { label: 'Get Narrate', href: '#' },
     detail: [
-      'Narrate reads the text you have selected, anywhere in macOS, with one key. Useful for long articles, for proofreading your own writing, and for resting your eyes.',
-      'Synthesis happens locally, so there is no per-character billing and nothing you read leaves the machine.',
+      'Narrate reads whatever you have highlighted in any macOS app out loud, the moment you double-tap a modifier key. No window, no dock icon — it lives in the menu bar and stays out of the way until you need it.',
+      'Voices are neural only, running locally in a sidecar (Kokoro-82M). The built-in macOS voices are not offered as a choice; they only appear as an emergency fallback if the neural engine cannot start.',
+      'Nothing you select is sent anywhere. The model runs on your Mac.',
     ],
+    iconImage: 'appicon-narrate',
   },
 ];
 
