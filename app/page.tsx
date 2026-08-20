@@ -26,7 +26,9 @@ export default function Home() {
               types and deletes in a loop — see HeroOverlay.tsx for why that is
               a documented deviation from "nothing moves at rest". */}
           <h1 className="entrance-target max-w-content text-display text-fg">
-            Alex Woo <TypingWord /> creative tools at Netflix.
+            Alex Woo <TypingWord />
+            <br />
+            creative tools at Netflix.
           </h1>
           <p className="mt-8 max-w-content text-body-lg text-fg-secondary">{site.bio}</p>
 

@@ -79,7 +79,7 @@ export function TypingWord() {
       <span aria-hidden="true">{text}</span>
       <span
         aria-hidden="true"
-        className={'ml-0.5 inline-block w-px self-stretch bg-current ' + (animate ? 'caret-blink' : '')}
+        className={'type-caret ' + (animate ? 'caret-blink' : '')}
       />
       {/* The static, fully-formed sentence for assistive tech — a caption
           rewriting every 60ms would flood a screen reader. */}

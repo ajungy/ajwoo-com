@@ -7,11 +7,11 @@ import type { App } from '@/content/apps';
  * Same shape as the Design and Coffee cards — media on top, title block below —
  * so all three grids read as one system.
  *
- * Footer, per Alex's spec: icon and name share a row (icon circular, like a
- * phone home-screen icon — the one deliberate departure from the system's
- * rounded-square icon tiles, because "install this" is exactly the context
- * where a circular mark reads as an app). Install sits on the same row, right
- * side. The description is one short line underneath, not a paragraph.
+ * Footer, per Alex's spec: one row holds the icon, a title+description column,
+ * and Install. Icon is the system's usual rounded-square tile — an earlier pass
+ * tried a circle (phone-homescreen shape) and Alex asked for the square back,
+ * so this now matches every other icon tile in the system rather than being a
+ * one-off exception.
  *
  * Price is deliberately absent from this card. CLAUDE.md D2 (pricing) is still
  * open, and every price here is currently "TBD" — a badge that always reads
@@ -60,40 +60,40 @@ export function AppCard({ app }: { app: App }) {
         )}
       </div>
 
-      <div className="flex flex-1 flex-col p-7">
-        <div className="flex items-center justify-between gap-5">
-          <div className="flex min-w-0 items-center gap-4">
-            {app.iconImage ? (
-              <img
-                src={`/img/${app.iconImage}-128.webp`}
-                alt=""
-                width={40}
-                height={40}
-                className="h-10 w-10 shrink-0 rounded-full border border-line-subtle"
-              />
-            ) : (
-              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-line-subtle bg-sunken text-fg">
-                <AppIcon name={app.icon} className="h-5 w-5" />
-              </span>
-            )}
-            <h3 className="truncate text-title text-fg">
-              {/* The stretched link: the whole card is clickable and the app
-                  name is its accessible label. */}
-              <Link href={`/apps/${app.slug}/`} data-cursor-label={app.name} className="card-link">
-                {app.name}
-              </Link>
-            </h3>
-          </div>
+      <div className="flex items-center gap-5 p-7">
+        {app.iconImage ? (
+          <img
+            src={`/img/${app.iconImage}-128.webp`}
+            alt=""
+            width={44}
+            height={44}
+            className="h-11 w-11 shrink-0 rounded-lg border border-line-subtle"
+          />
+        ) : (
+          <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg border border-line-subtle bg-sunken text-fg">
+            <AppIcon name={app.icon} className="h-5 w-5" />
+          </span>
+        )}
 
-          {/* Above the stretched link so it is its own target. */}
-          <div className="relative z-10 shrink-0">
-            <Action href={app.action.href} external variant="secondary" cursorLabel="Install">
-              Install
-            </Action>
-          </div>
+        {/* Title above description, one column, sharing the row with the icon
+            and Install rather than spanning the full card width. */}
+        <div className="min-w-0 flex-1">
+          <h3 className="truncate text-title text-fg">
+            {/* The stretched link: the whole card is clickable and the app
+                name is its accessible label. */}
+            <Link href={`/apps/${app.slug}/`} data-cursor-label={app.name} className="card-link">
+              {app.name}
+            </Link>
+          </h3>
+          <p className="truncate text-caption text-fg-secondary">{app.description}</p>
         </div>
 
-        <p className="mt-4 truncate text-caption text-fg-secondary">{app.description}</p>
+        {/* Above the stretched link so it is its own target. */}
+        <div className="relative z-10 shrink-0">
+          <Action href={app.action.href} external variant="secondary" cursorLabel="Install">
+            Install
+          </Action>
+        </div>
       </div>
     </article>
   );

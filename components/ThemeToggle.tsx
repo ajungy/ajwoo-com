@@ -48,9 +48,13 @@ export function ThemeToggle() {
       }
     >
       {/* Both glyphs are always in the DOM at the same size, so the box never
-          resizes between states (Principle 4). */}
+          resizes between states (Principle 4). Sized up from the system's
+          usual 20px icon to 24px, at Alex's direction — closer to the visual
+          weight of "Book 30 minutes" beside it. Stroke stays 1.5px, the
+          system's one line weight for every icon (icons-and-illustrations.md),
+          so it still reads as the same family rather than a heavier one. */}
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"
-        strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="h-5 w-5">
+        strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="h-6 w-6">
         {theme === 'dark' ? (
           <>
             <circle cx="12" cy="12" r="4" />

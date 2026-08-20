@@ -204,10 +204,23 @@
   .cursor-root { display: none; }
 }
 
-/* Typing caret. Blink is the one place a looping animation is conventional
-   enough to read as a text cursor rather than as decoration; it is suppressed
-   entirely under reduced motion (the class is only applied when motion is
-   allowed, and this rule is a belt-and-braces second guard). */
+/* Typing caret — an I-beam, the same shape a text editor uses while you are
+   actually typing, so the headline reads as being written rather than as text
+   fading in and out. `self-stretch` does nothing on an inline element (no flex
+   parent), so height is set directly to 1em: that was a real bug — the caret
+   had zero height and was invisible before this fix. Blink is the one place a
+   looping animation is conventional enough to read as a cursor rather than as
+   decoration; it is suppressed entirely under reduced motion (the class is
+   only applied when motion is allowed, and this rule is a belt-and-braces
+   second guard). */
+.type-caret {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  margin-left: 2px;
+  vertical-align: -0.14em;
+  background: currentColor;
+}
 @keyframes caret-blink { 0%, 45% { opacity: 1; } 55%, 100% { opacity: 0; } }
 .caret-blink { animation: caret-blink 1.06s steps(1, end) infinite; }
 @media (prefers-reduced-motion: reduce) { .caret-blink { animation: none; } }

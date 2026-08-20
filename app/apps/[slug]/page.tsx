@@ -38,10 +38,10 @@ export default function AppPage({ params }: { params: { slug: string } }) {
             alt=""
             width={64}
             height={64}
-            className="h-16 w-16 shrink-0 rounded-full border border-line-subtle"
+            className="h-16 w-16 shrink-0 rounded-xl border border-line-subtle"
           />
         ) : (
-          <span className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full border border-line-subtle bg-sunken text-fg">
+          <span className="flex h-16 w-16 shrink-0 items-center justify-center rounded-xl border border-line-subtle bg-sunken text-fg">
             <AppIcon name={app.icon} className="h-8 w-8" />
           </span>
         )}

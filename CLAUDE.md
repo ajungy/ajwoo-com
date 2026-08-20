@@ -198,6 +198,7 @@ decide this before I've seen the assets.** Flagging rather than guessing.
 | Considered | Rejected because |
 |---|---|
 | ~~Theme toggle~~ | **Reversed on Alex's instruction (built).** The original reasoning stands and is worth keeping on the record: the system says omit `data-theme` and follow the OS, and a toggle changes a preference the OS already knows. Two consequences accepted: compact chrome now holds **6** interactive elements against a budget of 5 (§4), and there are two more states to verify. It starts from the OS and only writes `data-theme` once the user chooses, so anyone who ignores it still gets the system's intended behaviour. |
+| App icon shape | **Tried circular, reverted to the system's rounded-square tile.** Alex asked for circular first ("like phone application shapes"), then asked for the square back once seen next to Install in the card row. Logged both directions rather than only the final state, since the reversal itself is the useful fact if this comes up again. |
 | Hamburger / drawer nav | Three destinations, three short words. Hiding a visible affordance to save 150px is a Principle 5 risk for no gain. |
 | Calendly inline embed | ~200kB of third-party iframe, its own type and color, its own focus behavior, and a `--surface` we don't control. A plain link to the Calendly page is the same number of clicks to booked and costs nothing. Rejected — the CTA is an `<a>`. |
 | Modal for app details | Nothing on `/apps` requires a decision, which is the only thing a Dialog is for (`taxonomy.md`). Detail is a page or it is on the card. |
@@ -313,6 +314,32 @@ glints, shadow and deformation still apply.
 
 **Tuning knobs, in the order to reach for them:** `FOLLOW` (0.16 — lower is more
 lag), `MORPH` (0.22), `STRETCH` (0.055).
+
+### (e) Big-target cap and the pop-on-navigate — considered additions, not violations
+
+**The size cap.** Over a small target (a button, a nav link) the drop morphs to
+the element's exact shape. Over something the size of the featured Capture card
+that would be a static blob, not water, so past `MAX_TARGET` (80px in either
+dimension — double `--control-h-md`'s 40px, Alex's own reference point for "a
+standard button") the drop stops morphing and instead caps at that same 80px,
+continuing to track the raw pointer position rather than snapping to the
+target's center. It behaves exactly like it does over empty page, just larger.
+
+**The pop.** The drop exists only on `/`. A click that leaves the page must not
+just vanish under it, so every internal link click is intercepted on the
+capture phase, the drop plays a quick swell-then-burst (transform + opacity
+only, on the already-fixed, out-of-flow drop element), and the actual
+navigation is deferred until the pop finishes. This is fully compliant with
+Principle 14, not a deviation: it is motion in direct response to the user's
+own click, the same category as a press state.
+
+**A bug this surfaced, not something added on purpose:** the pop's visual
+timing runs on `requestAnimationFrame`, and a backgrounded or hidden tab
+throttles or fully pauses `rAF` in most browsers. If that happened mid-click,
+navigation would never fire — the user's click would silently do nothing. Fixed
+with a `setTimeout` fallback racing the animation frame, guarded to invoke the
+actual `router.push` exactly once from whichever completes first. The visual
+pop is best-effort; leaving the page on click is not.
 
 ### (d) The typing verb in the headline — a documented deviation, not an extension
 
