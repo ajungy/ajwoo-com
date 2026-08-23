@@ -58,7 +58,7 @@ export function AppCard({ app }: { app: App }) {
         'bg-raised shadow-e1 card-press can-hover:hover:border-line can-hover:hover:shadow-e2'
       }
     >
-      <div className="relative aspect-square overflow-hidden bg-sunken">
+      <div className="skeleton-shimmer relative aspect-square overflow-hidden">
         {app.thumbnail ? (
           <picture>
             <source srcSet={`/img/${app.thumbnail}.webp`} type="image/webp" />

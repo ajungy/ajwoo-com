@@ -22,6 +22,19 @@ import { tileFor, motionTileFor, type Project } from '@/content/projects';
  * tiles are already square at the source, but this is a durable guarantee
  * rather than a hope: a future tile sourced at the wrong aspect still lands
  * in a square slot instead of visibly warping the grid.
+ *
+ * `skeleton-shimmer` replaces the old plain `bg-sunken` on the media
+ * container — a shimmer placeholder shows through until the real image or
+ * video paints over it, at Alex's direction, so a slow network reads as
+ * "loading" rather than as a blank gray box.
+ *
+ * Motion tiles used `preload="auto"` unconditionally, which forces every
+ * autoplaying video's FULL body to download immediately regardless of
+ * whether the card is even on screen — on a page with several motion tiles
+ * that's real bandwidth spent on video nobody has scrolled to yet. Only the
+ * `priority` cards (the first row, already above the fold) still preload
+ * eagerly; everything else defers to `metadata` (just enough to know
+ * duration/dimensions) until the browser actually needs more to play it.
  */
 export function ProjectCard({ project, priority = false }: { project: Project; priority?: boolean }) {
   const tile = tileFor(project.slug);
@@ -35,14 +48,14 @@ export function ProjectCard({ project, priority = false }: { project: Project; p
         'can-hover:hover:shadow-e2 can-hover:hover:border-line'
       }
     >
-      <div className="aspect-square overflow-hidden bg-sunken">
+      <div className="skeleton-shimmer aspect-square overflow-hidden">
         {motion ? (
           <video
             autoPlay
             muted
             loop
             playsInline
-            preload="auto"
+            preload={priority ? 'auto' : 'metadata'}
             poster={`/img/${motion.base}-poster.webp`}
             width={motion.width}
             height={motion.height}

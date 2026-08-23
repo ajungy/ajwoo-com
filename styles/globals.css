@@ -530,6 +530,33 @@ html[data-theme-transition] * {
    thumbnail now only ever moves as a rigid passenger of `.card-press`'s own
    scale(1.02) above, locked to the card, not animated independently. */
 
+/* --- Card media skeleton --------------------------------------------------
+   A shimmer placeholder behind every card thumbnail (ProjectCard, AppCard),
+   at Alex's direction, for the moment before the image/video has painted.
+   Pure CSS, no loading-state JS: the shimmer lives on the thumbnail's own
+   CONTAINER as a persistent background, and the real media sits on top of
+   it via normal document order — the instant the image decodes, it opaquely
+   covers the shimmer, so there's nothing to toggle or clean up. Only visible
+   at all during the real network gap before that paint. */
+.skeleton-shimmer {
+  background-color: var(--skeleton-base);
+  background-image: linear-gradient(
+    100deg,
+    transparent 30%,
+    var(--skeleton-sheen) 50%,
+    transparent 70%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-sheen 1.6s ease-in-out infinite;
+}
+@keyframes skeleton-sheen {
+  from { background-position: 150% 0; }
+  to   { background-position: -50% 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .skeleton-shimmer { animation: none; background-image: none; }
+}
+
 /* ==========================================================================
    Base
    ========================================================================== */
