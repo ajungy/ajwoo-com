@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { Action } from './Action';
 import { AppIcon } from './AppIcon';
-import type { App } from '@/content/apps';
+import { WAITLIST_FORM_URL, type App } from '@/content/apps';
 
 /**
  * Same shape as the Design and Coffee cards: media on top, title block below,
@@ -13,17 +13,15 @@ import type { App } from '@/content/apps';
  * so this now matches every other icon tile in the system rather than being a
  * one-off exception.
  *
- * Price is deliberately absent from this card. CLAUDE.md D2 (pricing) is still
- * open, and every price here is currently "TBD", a badge that always reads
- * "TBD" is noise on 3 cards, not information. Price still renders on each
- * app's own detail page once it exists, so nothing is permanently hidden
- * (SKILL.md §6: cost is never hidden, not "never absent from every surface").
+ * Price is gone entirely (CLAUDE.md D2 is still unanswered) — see
+ * content/apps.ts. Every app is pre-release, so the footer button always
+ * reads "Waitlist" and points at WAITLIST_FORM_URL, never a real purchase.
  *
  * DEVIATION, stated rather than hidden: components.md says "don't put competing
- * buttons inside a clickable card". This card has both a card-level link and an
- * Install button. Resolved with a stretched overlay (`card-link`) for the card,
- * with Install sitting above it on its own stacking context: the markup stays
- * valid (no nested anchors) and the hit areas never overlap. Install is the
+ * buttons inside a clickable card". This card has both a card-level link and a
+ * Waitlist button. Resolved with a stretched overlay (`card-link`) for the card,
+ * with Waitlist sitting above it on its own stacking context: the markup stays
+ * valid (no nested anchors) and the hit areas never overlap. Waitlist is the
  * primary path; the card is the "tell me more" path.
  *
  * The cursor label lives on the outer `<article>`, not on the inner stretched
@@ -35,12 +33,10 @@ import type { App } from '@/content/apps';
  * what actually has the card's real, full-size bounding box.
  *
  * Media is always shown in a 1:1 frame now, matching the Design/Coffee grids.
- * A static thumbnail (`app.thumbnail`, from Figma node 359:987 — "Apps cards
- * with png") is the card's media for all three apps now, Capture included,
- * at Alex's direction: it replaces the earlier video-loop treatment, which
- * only Capture had real footage for anyway. `object-cover` crops it to fill
- * the square exactly like the Design/Coffee tiles, since these are already
- * composed screenshots, not raw footage that needs the whole frame visible.
+ * Capture uses a real autoplaying demo (`app.thumbnailVideo`, muted/looped,
+ * same pattern as the Design grid's motion tiles); Dictate and Narrate use a
+ * static thumbnail (`app.thumbnail`). `object-cover` crops either to fill the
+ * square exactly like the Design/Coffee tiles.
  *
  * Card radius, icon radius, and footer typography match the Figma reference
  * (node 358:941, "Apps cards") exactly: 20px card corners (`rounded-xl`, not
@@ -48,6 +44,13 @@ import type { App } from '@/content/apps';
  * `text-title`'s 17px — the Figma comp treats the app name at the same
  * weight class as a button label, not a heading — and a 10px icon radius
  * (`rounded-control`) instead of the 14px tile radius used elsewhere.
+ *
+ * Icons render with `object-contain`, not `object-cover` or the browser's
+ * `fill` default (what plain `<img>` uses when no `object-fit` is set) — the
+ * three source icons ship at different native resolutions (Capture and
+ * Narrate at 160x160, Dictate at 40x40) and `fill` would stretch the smaller
+ * one to match its box non-uniformly, which is exactly why they looked
+ * inconsistent with each other before this.
  */
 export function AppCard({ app }: { app: App }) {
   return (
@@ -59,14 +62,27 @@ export function AppCard({ app }: { app: App }) {
       }
     >
       <div className="skeleton-shimmer relative aspect-square overflow-hidden">
-        {app.thumbnail ? (
+        {app.thumbnailVideo ? (
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="auto"
+            poster={`/img/${app.thumbnailVideo}-poster.webp`}
+            className="card-thumb-media block h-full w-full object-cover"
+          >
+            <source src={`/img/${app.thumbnailVideo}.webm`} type="video/webm" />
+            <source src={`/img/${app.thumbnailVideo}.mp4`} type="video/mp4" />
+          </video>
+        ) : app.thumbnail ? (
           <picture>
             <source srcSet={`/img/${app.thumbnail}.webp`} type="image/webp" />
             <img
               src={`/img/${app.thumbnail}.jpg`}
               alt=""
-              width={419}
-              height={419}
+              width={838}
+              height={838}
               className="card-thumb-media block h-full w-full object-cover"
             />
           </picture>
@@ -82,7 +98,7 @@ export function AppCard({ app }: { app: App }) {
 
       <div className="flex items-center gap-5 p-7">
         {/* h-control-md, not a fixed h-11: the icon must stay exactly the
-            Install button's height at every breakpoint (control-md itself
+            Waitlist button's height at every breakpoint (control-md itself
             grows on coarse pointers/TV — see tokens.css §6), not just match
             it at the default 40px and drift apart everywhere else. */}
         {app.iconImage ? (
@@ -91,7 +107,7 @@ export function AppCard({ app }: { app: App }) {
             alt=""
             width={40}
             height={40}
-            className="h-control-md w-control-md shrink-0 rounded-control border border-line-subtle"
+            className="h-control-md w-control-md shrink-0 rounded-control border border-line-subtle object-contain"
           />
         ) : (
           <span className="flex h-control-md w-control-md shrink-0 items-center justify-center rounded-control border border-line-subtle bg-sunken text-fg">
@@ -100,7 +116,7 @@ export function AppCard({ app }: { app: App }) {
         )}
 
         {/* Title above description, one column, sharing the row with the icon
-            and Install rather than spanning the full card width. */}
+            and Waitlist rather than spanning the full card width. */}
         <div className="min-w-0 flex-1">
           <h3 className="truncate text-label font-medium text-fg">
             {/* The stretched link: the whole card is clickable and the app
@@ -112,14 +128,12 @@ export function AppCard({ app }: { app: App }) {
           <p className="truncate text-caption text-fg-secondary">{app.description}</p>
         </div>
 
-        {/* Above the stretched link so it is its own target. "Install" for
-            an app with a real build, "Waitlist" for one that doesn't have
-            one yet (Dictate, Narrate — see content/apps.ts's `waitlist`
-            flag), at Alex's direction. Distinct from `action.label`, which
-            is the detail page's own longer "Get Dictate" style copy. */}
+        {/* Above the stretched link so it is its own target. Every app is
+            pre-release, so this always points at the waitlist form rather
+            than a real install. */}
         <div className="relative z-10 shrink-0">
-          <Action href={app.action.href} external variant="secondary" cursorLabel={app.waitlist ? 'Waitlist' : 'Install'}>
-            {app.waitlist ? 'Waitlist' : 'Install'}
+          <Action href={WAITLIST_FORM_URL} external variant="secondary" cursorLabel="Join waitlist">
+            Waitlist
           </Action>
         </div>
       </div>

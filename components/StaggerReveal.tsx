@@ -33,7 +33,19 @@ function assignRowStagger(el: HTMLElement) {
  * Fires once per mount (`io.disconnect()` after the first intersection) —
  * this is a "welcome to this section" animation, not a repeating one that
  * replays every time the user scrolls past the same content twice.
- */
+ *
+ * IntersectionObserver never runs its callback while `document.hidden` is
+ * true (a real, spec'd browser behavior, not a bug) — and on mobile, a page
+ * can briefly report hidden during the initial load/paint transition before
+ * becoming active. If that happens to overlap the observer's first check,
+ * the callback is silently skipped, and nothing else re-triggers it until a
+ * scroll event forces a recompute — which is exactly "cards don't appear
+ * until the user scrolls a little." The synchronous check below is the
+ * fix: right after mount, measure the grid directly with
+ * `getBoundingClientRect()` — cheap, and DOM layout is already committed by
+ * the time an effect runs — and if it's already on screen, reveal
+ * immediately without ever waiting on the observer at all. Below the fold,
+ * this check is false and the observer takes over exactly as before. */
 export function StaggerReveal({ className = '', children }: { className?: string; children: ReactNode }) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
@@ -41,6 +53,15 @@ export function StaggerReveal({ className = '', children }: { className?: string
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
+
+    const rect = el.getBoundingClientRect();
+    const alreadyOnScreen = rect.top < window.innerHeight && rect.bottom > 0;
+    if (alreadyOnScreen) {
+      assignRowStagger(el);
+      setVisible(true);
+      return;
+    }
+
     const io = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {

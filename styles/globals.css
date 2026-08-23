@@ -234,7 +234,9 @@
   transform: translateY(8px);
 }
 .stagger-grid.is-visible > * {
-  animation: stagger-in 300ms var(--e-standard) both;
+  /* 500ms, up from 300ms, at Alex's direction — 300 read as too fast to
+     actually notice the fade/rise on new content (cards, text blocks). */
+  animation: stagger-in 500ms var(--e-standard) both;
   animation-delay: calc(var(--stagger-base, 0ms) + var(--stagger-i) * var(--stagger-step, 45ms));
 }
 @keyframes stagger-in {
