@@ -25,9 +25,9 @@ export default function AppsPage() {
       <section className="pt-12 pb-16">
         <p className="text-title font-bold text-fg">Local. Functional. Minimal.</p>
         <p className="mt-4 max-w-content text-body-lg text-fg-secondary">
-          Every app runs entirely on your Mac, with no cloud connection. Nothing
-          you record, say, or read ever leaves your machine, so there is nothing
-          to intercept. That constraint is what keeps them fast and fully capable.
+          Every app runs entirely on-device, with no cloud connection. Nothing
+          ever leaves your machine. That constraint is what keeps them fast,
+          capable, and affordable.
         </p>
       </section>
 
@@ -52,7 +52,7 @@ export default function AppsPage() {
               own density, which won out. */}
           <StaggerReveal className="grid grid-cols-1 gap-8 medium:grid-cols-2 expanded:grid-cols-3">
             {apps.map((a) => (
-              <AppCard key={a.slug} app={a} />
+              <AppCard key={a.slug} app={a} hoverPlay />
             ))}
           </StaggerReveal>
         </section>

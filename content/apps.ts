@@ -29,7 +29,11 @@ export type App = {
   /** Short, factual capability claims, shown on the detail page. */
   traits: string[];
   /** Longer copy for the app's own page. */
-  detail: string[];
+  /** A plain string is a full paragraph. `{ label, body }` is one line of a
+   *  feature list — label bolded, same size and family as everything else
+   *  on the page (same "weight only, never a different type scale" rule
+   *  Blocks.tsx uses for the work-page feature sections). */
+  detail: (string | { label: string; body: string })[];
   /** Real exported app icon. Falls back to the drawn glyph in AppIcon.tsx. */
   iconImage?: string;
   /** Static square card thumbnail, base filename with no extension —
@@ -51,13 +55,23 @@ export const apps: App[] = [
     description: 'Screen recording, auto editing',
     trigger: 'Record a display or a region, with camera and mic',
     platform: 'macOS',
-    traits: ['Native macOS app', 'Runs fully on-device', 'Exports movie or GIF'],
+    traits: ['macOS', 'Auto video edit', 'Subtitle', 'Screen record', 'Local', 'Fully on-device', 'No cloud'],
     thumbnailVideo: 'appcard-capture',
     detail: [
-      'Capture records a full display or a region, with camera and microphone, and writes the master at native pixels alongside a metadata file. Nothing is baked in at record time, so every edit stays reversible.',
-      'Zoom is a crop, never an upscale. A 2x zoom on a 3456x2234 master exporting to 1080p is still sampling real pixels, so it stays sharp instead of turning to mush.',
-      'The cursor is not in the video. It is recorded as a path and drawn at export, which means it can be resized, restyled, smoothed and animated afterwards, and it stays a constant on-screen size at any zoom level.',
-      'Built end to end in Claude Code, alongside this site — the demo above is Capture recording its own editing pass on this very page. Recording and editing both happen on your Mac; no upload step, no account, no link that expires.',
+      'Capture is the fastest way to turn an idea on your screen into a video that’s ready to share.',
+      'Record your screen, camera, and microphone with one click. Capture automatically transforms your raw recording into a polished video.',
+      { label: 'Record once. Get a polished video.', body: 'Capture takes care of the tedious editing for you:' },
+      { label: 'Automatic Zooms', body: 'Capture identifies important areas of your screen and automatically zooms in to keep viewers focused on what matters.' },
+      { label: 'Beautiful Backgrounds', body: 'Give your recordings a clean, professional look with customizable backgrounds.' },
+      { label: 'Better Cursor Visibility', body: 'Make your cursor easier to follow with automatic cursor styling and emphasis.' },
+      { label: 'Automatic Camera Styling', body: 'Customize your camera’s size, shape, position, and overall appearance to create the look you want.' },
+      { label: 'Clean Up Your Audio', body: 'Improve your recording with automatic audio cleanup, volume adjustments, and pause removal.' },
+      { label: 'Remove Filler Words', body: 'Automatically remove distracting filler words like “um” and “uh” from your recording.' },
+      { label: 'Automatic Transcription', body: 'Capture transcribes what you say, giving you an editable transcript alongside your video.' },
+      { label: 'Dynamic Subtitles', body: 'Generate subtitles automatically and customize their typography, size, animations, and visual effects.' },
+      { label: 'Export and Share', body: 'Make a few tweaks if you want, then export your finished video and share it wherever you like.' },
+      'Whether you’re creating product demos, tutorials, educational content, software walkthroughs, presentations, or social videos, Capture helps you go from recording to finished video in seconds.',
+      'Stop spending an hour editing screen recordings. Just Capture it.',
     ],
     iconImage: 'appicon-capture',
   },

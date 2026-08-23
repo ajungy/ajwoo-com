@@ -27,34 +27,38 @@ export default function AppPage({ params }: { params: { slug: string } }) {
           other two, so a second back affordance sitting alone above the
           fold wasn't earning its space (same reasoning as the /work pages). */}
       <header className="flex flex-col gap-8 pt-12 pb-12 medium:flex-row medium:items-start">
+        {/* h-24/w-24 (96px), up from 64px — bigger at Alex's direction, now
+            that this is the ONLY visual identity in the header (the
+            platform/trigger caption line that used to sit here is gone). */}
         {app.iconImage ? (
           <img
             src={`/img/${app.iconImage}-256.webp`}
             alt=""
-            width={64}
-            height={64}
-            className="h-16 w-16 shrink-0 rounded-xl border border-line-subtle object-contain"
+            width={96}
+            height={96}
+            className="h-24 w-24 shrink-0 rounded-xl border border-line-subtle object-contain"
           />
         ) : (
-          <span className="flex h-16 w-16 shrink-0 items-center justify-center rounded-xl border border-line-subtle bg-sunken text-fg">
-            <AppIcon name={app.icon} className="h-8 w-8" />
+          <span className="flex h-24 w-24 shrink-0 items-center justify-center rounded-xl border border-line-subtle bg-sunken text-fg">
+            <AppIcon name={app.icon} className="h-12 w-12" />
           </span>
         )}
         <div className="flex-1">
           <h1 className="text-h1 text-fg">{app.name}</h1>
           <p className="mt-4 max-w-content text-body-lg text-fg-secondary">{app.description}</p>
-          <p className="mt-4 text-caption text-fg-tertiary">
-            {app.platform} · {app.trigger}
-          </p>
 
-          {/* Every app is pre-release right now, so every detail page points
-              at the same waitlist form rather than a real purchase flow —
-              no price badge, no disabled "not yet available" state to
-              maintain, just one honest next step (Principle 9: ≥24px of
-              separation, never default-focused, a plain navigation so it
-              can't double-fire). */}
-          <div className="mt-9">
-            <Action href={WAITLIST_FORM_URL} external variant="primary" cursorLabel="Join waitlist">
+          {/* The platform/trigger caption line that used to sit here is
+              gone, at Alex's direction — the smallest, least load-bearing
+              text on the page, replaced by the one thing worth doing this
+              high up: the actual next step. Every app is pre-release right
+              now, so every detail page points at the same waitlist form
+              rather than a real purchase flow. Secondary, not primary — at
+              Alex's direction, since "Waitlist" is an interim state, not
+              the confident, one-primary-per-view action a real download
+              would be (Principle 9: ≥24px of separation, never
+              default-focused, a plain navigation so it can't double-fire). */}
+          <div className="mt-6">
+            <Action href={WAITLIST_FORM_URL} external variant="secondary" cursorLabel="Join waitlist">
               Waitlist
             </Action>
           </div>
@@ -62,9 +66,20 @@ export default function AppPage({ params }: { params: { slug: string } }) {
       </header>
 
       <article className="max-w-content space-y-8 pb-12">
-        {app.detail.map((para) => (
-          <p key={para} className="text-body-lg text-fg-secondary">{para}</p>
-        ))}
+        {app.detail.map((para, i) =>
+          typeof para === 'string' ? (
+            <p key={i} className="text-body-lg text-fg-secondary">{para}</p>
+          ) : (
+            // Feature-list line: label bolded, same size and family as every
+            // other line on the page — the same "weight only, never a
+            // different type scale" rule Blocks.tsx uses for the work
+            // pages' own feature sections (Generative Extend, Process, …).
+            <p key={i} className="text-body-lg text-fg-secondary">
+              <span className="font-semibold text-fg">{para.label}</span>{' '}
+              {para.body}
+            </p>
+          ),
+        )}
         <ul className="flex flex-wrap gap-3 pt-2">
           {app.traits.map((t) => (
             <li key={t} className="rounded-xs bg-sunken px-4 py-2 text-caption text-fg-secondary">

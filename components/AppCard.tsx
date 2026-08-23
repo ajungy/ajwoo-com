@@ -1,3 +1,6 @@
+'use client';
+
+import { useRef } from 'react';
 import Link from 'next/link';
 import { Action } from './Action';
 import { AppIcon } from './AppIcon';
@@ -51,11 +54,24 @@ import { WAITLIST_FORM_URL, type App } from '@/content/apps';
  * Narrate at 160x160, Dictate at 40x40) and `fill` would stretch the smaller
  * one to match its box non-uniformly, which is exactly why they looked
  * inconsistent with each other before this.
+ *
+ * `hoverPlay`: on the /apps grid, Capture's demo only plays while the
+ * pointer is actually over the card — a whole grid of autoplaying video was
+ * more motion than a browsing page needs at rest (Principle 14). The
+ * landing page's featured-app card keeps the original always-on autoplay
+ * (hoverPlay omitted/false there), since it's the one card on that page and
+ * reads as a deliberate showcase rather than grid noise. Implemented with a
+ * ref + play()/pause() rather than toggling the `autoPlay` attribute, since
+ * `autoPlay` only affects a video's behavior at the moment its source is
+ * first assigned, not on demand afterward.
  */
-export function AppCard({ app }: { app: App }) {
+export function AppCard({ app, hoverPlay = false }: { app: App; hoverPlay?: boolean }) {
+  const videoRef = useRef<HTMLVideoElement>(null);
   return (
     <article
       data-cursor-label={app.name}
+      onMouseEnter={hoverPlay ? () => videoRef.current?.play() : undefined}
+      onMouseLeave={hoverPlay ? () => videoRef.current?.pause() : undefined}
       className={
         'group relative flex flex-col overflow-hidden rounded-xl border border-line-subtle ' +
         'bg-raised shadow-e1 card-press can-hover:hover:border-line can-hover:hover:shadow-e2'
@@ -64,11 +80,12 @@ export function AppCard({ app }: { app: App }) {
       <div className="skeleton-shimmer relative aspect-square overflow-hidden">
         {app.thumbnailVideo ? (
           <video
-            autoPlay
+            ref={videoRef}
+            autoPlay={!hoverPlay}
             muted
             loop
             playsInline
-            preload="auto"
+            preload={hoverPlay ? 'metadata' : 'auto'}
             poster={`/img/${app.thumbnailVideo}-poster.webp`}
             className="card-thumb-media block h-full w-full object-cover"
           >

@@ -6,9 +6,12 @@ import { useRouter } from 'next/navigation';
 /**
  * CLAUDE.md §6(b)/(c) — a drop of water resting on the interface.
  *
- * Mounted on the landing page ONLY. Everywhere else the native cursor applies,
- * unmodified: on pages people are reading or scanning a grid, a chasing object
- * competes with the content instead of decorating it.
+ * Mounted site-wide (app/layout.tsx), at Alex's direction — was originally
+ * landing-page-only, on the reasoning that a chasing object competes with
+ * content on pages people are reading or scanning a grid. That objection
+ * didn't hold up in practice: every interactive target still carries its own
+ * visible affordance underneath the drop, so the water reads as decoration
+ * riding on top of the real UI rather than replacing it.
  *
  * Two objects:
  *   DOT   the truth. Exactly under the pointer, zero lag. Painted with

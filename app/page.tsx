@@ -1,5 +1,4 @@
 import { Action } from '@/components/Action';
-import { Cursor } from '@/components/Cursor';
 import { TypingWord } from '@/components/HeroOverlay';
 import { HeroPhoto } from '@/components/HeroPhoto';
 import { FeaturedApp } from '@/components/FeaturedApp';
@@ -20,9 +19,6 @@ export default function Home() {
 
   return (
     <>
-      {/* The water cursor lives on the landing page only. */}
-      <Cursor />
-
       <div className="mx-auto max-w-app px-page">
         <section className="pt-12 pb-9">
           {/* The single most important element on the page, and the only place

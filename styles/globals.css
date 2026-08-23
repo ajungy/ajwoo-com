@@ -117,7 +117,7 @@
      on white. */
   --water-rim-dark: rgba(0, 0, 0, 0.11);
 
-  --cursor-dot-size: 5px;
+  --cursor-dot-size: 2.5px; /* 5px, halved, at Alex's direction */
 
   /* --- Content over media -------------------------------------------------
      A photograph does not change with the theme, so text on top of one must
@@ -166,14 +166,14 @@
 
    Opacity, not display: none — `display` can't be transitioned, which meant
    the portrait used to hard-cut the instant the theme flipped while the
-   rest of the page was crossfading around it over 300ms (see
-   `[data-theme-transition]` below). 300ms here matches that exactly, so the
-   photo and the page fade together instead of the photo visibly lagging or
-   leaping ahead. The non-visible photo is also taken out of the hit-test
-   and accessibility tree via pointer-events/visibility, since opacity:0
-   alone leaves it clickable and screen-reader-reachable. */
+   rest of the page was crossfading around it (see `[data-theme-transition]`
+   below). 1000ms `ease` here matches that exactly, so the photo and the
+   page fade together instead of the photo visibly lagging or leaping ahead.
+   The non-visible photo is also taken out of the hit-test and accessibility
+   tree via pointer-events/visibility, since opacity:0 alone leaves it
+   clickable and screen-reader-reachable. */
 .hero-light, .hero-dark {
-  transition: opacity 300ms var(--e-standard), visibility 300ms;
+  transition: opacity 1000ms ease, visibility 1000ms ease;
 }
 .hero-dark { opacity: 0; visibility: hidden; pointer-events: none; }
 @media (prefers-color-scheme: dark) {
@@ -193,12 +193,17 @@
    Default state is the FINAL state, so the page is complete and clickable at
    0ms and there is no flash if JS never runs. An inline script in <head> sets
    data-entrance="run" before first paint, once per session. */
+/* Same shape as .stagger-grid's own keyframe below (8px rise, opacity fade),
+   at Alex's direction — one motion language for every piece of text that
+   appears on this site, not two visually-different systems depending on
+   whether it happens to be a heading or a grid item. Same 1000ms duration,
+   same var(--e-standard) easing, everywhere. */
 @keyframes entrance-settle {
-  from { opacity: 0; transform: translateY(6px); }
+  from { opacity: 0; transform: translateY(8px); }
   to   { opacity: 1; transform: none; }
 }
 [data-entrance="run"] .entrance-target {
-  animation: entrance-settle var(--d-slower) var(--e-entrance) both;
+  animation: entrance-settle 1000ms var(--e-standard) both;
 }
 
 /* Header bar: animates ONLY on a visitor's genuine first visit this session
@@ -209,7 +214,7 @@
    to be caused by the user or expected, and "the chrome you already saw a
    second ago re-animates" is neither. */
 [data-entrance="run"] .entrance-header {
-  animation: entrance-settle var(--d-base) var(--e-entrance) both;
+  animation: entrance-settle 1000ms var(--e-standard) both;
 }
 
 /* --- Stagger-in: cards, and button rows, revealed as the user scrolls ------
@@ -234,9 +239,10 @@
   transform: translateY(8px);
 }
 .stagger-grid.is-visible > * {
-  /* 500ms, up from 300ms, at Alex's direction — 300 read as too fast to
-     actually notice the fade/rise on new content (cards, text blocks). */
-  animation: stagger-in 500ms var(--e-standard) both;
+  /* 1000ms, up from 500ms then 300ms, at Alex's direction — wants a
+     noticeably slow, deliberate top-to-bottom pace users can actually
+     register, not a quick fade. */
+  animation: stagger-in 1000ms var(--e-standard) both;
   animation-delay: calc(var(--stagger-base, 0ms) + var(--stagger-i) * var(--stagger-step, 45ms));
 }
 @keyframes stagger-in {
@@ -258,7 +264,7 @@
    "header, then everything below it, top to bottom" rather than both
    animating at once. */
 [data-entrance="run"] .stagger-grid {
-  --stagger-base: 220ms;
+  --stagger-base: 500ms;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -274,12 +280,16 @@
 
 /* --- Theme fade: light/dark toggle crossfade --------------------------------
    An earlier version played a multi-stage white→orange→navy→black sweep;
-   Alex asked for that removed in favor of a plain 300ms crossfade back to
-   the system's real white/black surfaces. `data-theme-transition` is set on
-   `<html>` for exactly 300ms (see ThemeToggle.tsx) and fades every text
-   color, icon color, border, and background — including the page background
-   itself, since `background-color` is in the property list and `body` is a
-   `*` descendant of `html` — instead of snapping instantly.
+   Alex asked for that removed in favor of a plain crossfade back to the
+   system's real white/black surfaces, then asked for that crossfade slowed
+   to 1000ms with a plain `ease` curve — noticeably slower than any of this
+   site's other (much snappier, hover/press-scale) transitions, which is
+   deliberate: this one is meant to be felt, not just technically present.
+   `data-theme-transition` is set on `<html>` for exactly 1000ms (see
+   ThemeToggle.tsx) and fades every text color, icon color, border, and
+   background — including the page background itself, since
+   `background-color` is in the property list and `body` is a `*`
+   descendant of `html` — instead of snapping instantly.
 
    Plain text/headings have no transition of their own and pick this up
    immediately — but most interactive chrome (nav links, buttons) already
@@ -291,11 +301,11 @@
    exactly the elements most likely to be read as "foreground". Dropping
    :where() ties the specificity instead of zeroing it, and since this rule
    sits after `@tailwind utilities` in source order, the tie resolves in its
-   favor for the 300ms the attribute is present — still fully inert (reverts
-   to each component's own transition) the instant it's removed. */
+   favor for the 1000ms the attribute is present — still fully inert
+   (reverts to each component's own transition) the instant it's removed. */
 html[data-theme-transition] * {
-  transition: color 300ms var(--e-standard), background-color 300ms var(--e-standard),
-    border-color 300ms var(--e-standard), fill 300ms var(--e-standard), stroke 300ms var(--e-standard);
+  transition: color 1000ms ease, background-color 1000ms ease,
+    border-color 1000ms ease, fill 1000ms ease, stroke 1000ms ease;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -349,7 +359,7 @@ html[data-theme-transition] * {
   transition: opacity var(--d-base) var(--e-standard);
   will-change: transform;
 }
-.cursor-dot[data-visible="true"] { opacity: 1; }
+.cursor-dot[data-visible="true"] { opacity: 0.3; } /* was full opacity, at Alex's direction */
 
 .cursor-drop {
   position: fixed;
