@@ -18,6 +18,71 @@
 }
 
 /* ==========================================================================
+   Per-word display faces for the headline's typing verb — see components/
+   HeroOverlay.tsx. This is a deliberate, documented breach of SKILL.md §3
+   ("one family, no pairing"), not a drift: five faces, each chosen to LOOK
+   like the word it spells, on Alex's direct instruction. Confined to five
+   words in one place; every other typographic decision on the site is still
+   Plus Jakarta Sans alone. See CLAUDE.md §6(f) for the reasoning per face.
+   All four are free (OFL or Apache-2.0), self-hosted for the same reason as
+   the primary face: no third-party request, no FOUT dependent on a network
+   we don't control. ========================================================== */
+@font-face {
+  font-family: "Archivo Black";
+  src: url("/fonts/ArchivoBlack-Regular-latin.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("/fonts/JetBrainsMono-Medium-latin.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Caveat";
+  src: url("/fonts/Caveat-Bold-latin.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Playfair Display";
+  src: url("/fonts/PlayfairDisplay-BoldItalic-latin.woff2") format("woff2");
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* ==========================================================================
+   Text selection colors — theme-aware, back to flipping per mode.
+   Light mode: black highlight (90%) with white text.
+   Dark mode: white highlight (90%) with black text.
+   ========================================================================== */
+/* A single unflipped rule (black bg/white text everywhere) briefly lived
+   here, on the reasoning that black reads as a highlight against either a
+   light or a dark page. That stopped being true once the dark page itself
+   became pure black (#000000, see --d-page in tokens.css) rather than the
+   near-black #0E0E10 it used to be — a black selection on a black page is
+   genuinely invisible, not just low-contrast. Flipping per theme again. */
+::selection {
+  background-color: rgba(0, 0, 0, 0.9);
+  color: white;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) ::selection {
+    background-color: rgba(255, 255, 255, 0.9);
+    color: black;
+  }
+}
+:root[data-theme="dark"] ::selection {
+  background-color: rgba(255, 255, 255, 0.9);
+  color: black;
+}
+
+/* ==========================================================================
    DOCUMENTED EXTENSIONS — CLAUDE.md §6. Considered additions (§9).
    Semantic tokens only; no raw hex appears in any component.
    ========================================================================== */
@@ -29,13 +94,24 @@
      deforms when it moves. These tokens carry the parts that are colour; the
      refraction itself is an SVG lens filter, and the deformation is transform. */
   --water-body: rgba(255, 255, 255, 0.015);
-  --water-rim-outer: rgba(255, 255, 255, 0.55);
+  --water-rim-outer: rgba(255, 255, 255, 0.75);
   --water-rim-inner: rgba(255, 255, 255, 0.10);
+  /* Second, inner ring — sits just inside the hairline Fresnel rim above,
+     reading as a refraction fringe rather than a plain repeat of it. A pale
+     blue like the existing caustic tint (not plain white) is what sells
+     "light bending" rather than "another white line". */
+  --water-rim-refract: rgba(190, 225, 255, 0.10);
   --water-glint: rgba(255, 255, 255, 0.98);
   --water-glint-soft: rgba(255, 255, 255, 0.20);
   --water-caustic: rgba(200, 230, 255, 0.20);
-  --water-shadow: rgba(0, 0, 0, 0.16);
-  --water-contact: rgba(0, 0, 0, 0.08);
+  /* A soft glass sheen — light catching the upper-left of a curved surface,
+     the way a real glass or water sphere never reads as perfectly flat.
+     Positioned off-center in the body's background-image (see
+     .cursor-drop-body) rather than centered, so it reads as a highlight
+     from a light source rather than a flat glow. */
+  --water-sheen: rgba(255, 255, 255, 0.16);
+  --water-shadow: rgba(0, 0, 0, 0.34);
+  --water-contact: rgba(0, 0, 0, 0.18);
   /* Total internal reflection: against a light surface a real drop shows a
      DARK ring at the rim, not a bright one. Without this the drop vanishes
      on white. */
@@ -58,10 +134,12 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --water-body: rgba(255, 255, 255, 0.02);
-    --water-rim-outer: rgba(255, 255, 255, 0.46);
+    --water-rim-outer: rgba(255, 255, 255, 0.85);
+    --water-rim-refract: rgba(190, 225, 255, 0.10);
     --water-rim-inner: rgba(255, 255, 255, 0.07);
-    --water-shadow: rgba(0, 0, 0, 0.34);
-    --water-contact: rgba(0, 0, 0, 0.22);
+    --water-sheen: rgba(255, 255, 255, 0.22);
+    --water-shadow: rgba(0, 0, 0, 0.52);
+    --water-contact: rgba(0, 0, 0, 0.36);
     --water-rim-dark: rgba(0, 0, 0, 0.22);
   }
 }
@@ -70,11 +148,44 @@
    Without this the drop keeps its light-mode rim after using the toggle. */
 :root[data-theme="dark"] {
   --water-body: rgba(255, 255, 255, 0.02);
-  --water-rim-outer: rgba(255, 255, 255, 0.46);
+  --water-rim-outer: rgba(255, 255, 255, 0.85);
+  --water-rim-refract: rgba(190, 225, 255, 0.10);
   --water-rim-inner: rgba(255, 255, 255, 0.07);
-  --water-shadow: rgba(0, 0, 0, 0.34);
-  --water-contact: rgba(0, 0, 0, 0.22);
+  --water-sheen: rgba(255, 255, 255, 0.22);
+  --water-shadow: rgba(0, 0, 0, 0.52);
+  --water-contact: rgba(0, 0, 0, 0.36);
   --water-rim-dark: rgba(0, 0, 0, 0.22);
+}
+
+/* --- Landing-page hero photo, theme-aware (components/HeroPhoto.tsx) -------
+   Two real photos, not one filtered. Same OS-default-then-explicit-override
+   shape as the water tokens above: the OS's dark preference picks the dark
+   photo unless the toggle has been used, in which case the toggle wins. Both
+   <picture> elements share one grid cell (col/row-start-1 in HeroPhoto.tsx),
+   so which one is visible never changes the section's height.
+
+   Opacity, not display: none — `display` can't be transitioned, which meant
+   the portrait used to hard-cut the instant the theme flipped while the
+   rest of the page was crossfading around it over 300ms (see
+   `[data-theme-transition]` below). 300ms here matches that exactly, so the
+   photo and the page fade together instead of the photo visibly lagging or
+   leaping ahead. The non-visible photo is also taken out of the hit-test
+   and accessibility tree via pointer-events/visibility, since opacity:0
+   alone leaves it clickable and screen-reader-reachable. */
+.hero-light, .hero-dark {
+  transition: opacity 300ms var(--e-standard), visibility 300ms;
+}
+.hero-dark { opacity: 0; visibility: hidden; pointer-events: none; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .hero-light { opacity: 0; visibility: hidden; pointer-events: none; }
+  :root:not([data-theme="light"]) .hero-dark { opacity: 1; visibility: visible; pointer-events: auto; }
+}
+:root[data-theme="dark"] .hero-light { opacity: 0; visibility: hidden; pointer-events: none; }
+:root[data-theme="dark"] .hero-dark { opacity: 1; visibility: visible; pointer-events: auto; }
+:root[data-theme="light"] .hero-light { opacity: 1; visibility: visible; pointer-events: auto; }
+:root[data-theme="light"] .hero-dark { opacity: 0; visibility: hidden; pointer-events: none; }
+@media (prefers-reduced-motion: reduce) {
+  .hero-light, .hero-dark { transition: none; }
 }
 
 /* --- (a) Entrance sequence -------------------------------------------------
@@ -88,6 +199,105 @@
 }
 [data-entrance="run"] .entrance-target {
   animation: entrance-settle var(--d-slower) var(--e-entrance) both;
+}
+
+/* Header bar: animates ONLY on a visitor's genuine first visit this session
+   (same [data-entrance="run"] flag as the headline above — it's set once,
+   before first paint, then never again this session). On every OTHER page
+   view — a fresh route, a reload later in the same session — the header is
+   simply there at 0ms, same as it always was; Principle 14 says motion has
+   to be caused by the user or expected, and "the chrome you already saw a
+   second ago re-animates" is neither. */
+[data-entrance="run"] .entrance-header {
+  animation: entrance-settle var(--d-base) var(--e-entrance) both;
+}
+
+/* --- Stagger-in: cards, and button rows, revealed as the user scrolls ------
+   Paired with components/StaggerReveal.tsx, a tiny client wrapper that adds
+   `.is-visible` via IntersectionObserver the first time this grid actually
+   scrolls into view — above the fold that's effectively instant on mount;
+   below the fold it means a visitor scrolling down keeps discovering new
+   rows animating in as they arrive, rather than the whole page's worth of
+   grids finishing their animation off-screen before anyone saw it.
+   `--stagger-i` is assigned per VISUAL ROW, not per element — StaggerReveal
+   measures each child's offsetTop after layout and gives every child sharing
+   a row the same index, so multi-column grids stagger top-to-bottom only,
+   with no left-to-right offset within a row. `--stagger-base` is 0 by
+   default and gets pushed later, in the layout itself, only on the
+   first-visit-this-session flag, so the header finishes before the FIRST
+   grid on the page starts (see .entrance-header) — every other grid, and
+   every other page view, starts as soon as it's scrolled to, with no wait on
+   a header that isn't animating anyway. */
+.stagger-grid > * {
+  --stagger-i: 0;
+  opacity: 0;
+  transform: translateY(8px);
+}
+.stagger-grid.is-visible > * {
+  animation: stagger-in 300ms var(--e-standard) both;
+  animation-delay: calc(var(--stagger-base, 0ms) + var(--stagger-i) * var(--stagger-step, 45ms));
+}
+@keyframes stagger-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* Below `medium` (600px), grids are single-column, so every card is its own
+   "row" — a 45ms step compounds into ~500ms before the last card of a long
+   list even starts, which read as sluggish rather than snappy on a phone.
+   A smaller step keeps the top-to-bottom sequence recognizable without the
+   cumulative lag. */
+@media (max-width: 599px) {
+  .stagger-grid { --stagger-step: 18ms; }
+}
+
+/* First-visit-this-session only: the grid waits for the header's own
+   entrance to clear before it starts, so the sequence genuinely reads as
+   "header, then everything below it, top to bottom" rather than both
+   animating at once. */
+[data-entrance="run"] .stagger-grid {
+  --stagger-base: 220ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Final state directly, not just "animation: none" — the base rule above
+     now sets opacity:0 unconditionally (waiting for .is-visible to trigger
+     the keyframe), so simply cancelling the animation here would leave
+     reduced-motion users looking at permanently invisible content instead
+     of skipping straight to it, which is the opposite of what the query is
+     for. */
+  .stagger-grid > * { animation: none; opacity: 1; transform: none; }
+  [data-entrance="run"] .entrance-header { animation: none; }
+}
+
+/* --- Theme fade: light/dark toggle crossfade --------------------------------
+   An earlier version played a multi-stage white→orange→navy→black sweep;
+   Alex asked for that removed in favor of a plain 300ms crossfade back to
+   the system's real white/black surfaces. `data-theme-transition` is set on
+   `<html>` for exactly 300ms (see ThemeToggle.tsx) and fades every text
+   color, icon color, border, and background — including the page background
+   itself, since `background-color` is in the property list and `body` is a
+   `*` descendant of `html` — instead of snapping instantly.
+
+   Plain text/headings have no transition of their own and pick this up
+   immediately — but most interactive chrome (nav links, buttons) already
+   carries a `transition`/`transition-colors` utility class at the SAME
+   specificity as a bare attribute selector (0,1,0 either way), which meant
+   an earlier `:where(...)` version of this rule (deliberately zeroed to
+   0,0,0 "so it can never override a component's own transition") instead
+   lost to EVERY element that already had one, silently doing nothing on
+   exactly the elements most likely to be read as "foreground". Dropping
+   :where() ties the specificity instead of zeroing it, and since this rule
+   sits after `@tailwind utilities` in source order, the tie resolves in its
+   favor for the 300ms the attribute is present — still fully inert (reverts
+   to each component's own transition) the instant it's removed. */
+html[data-theme-transition] * {
+  transition: color 300ms var(--e-standard), background-color 300ms var(--e-standard),
+    border-color 300ms var(--e-standard), fill 300ms var(--e-standard), stroke 300ms var(--e-standard);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-theme-transition] * { transition: none; }
 }
 
 /* --- (b) The cursor: a drop of water that follows the pointer ---------------
@@ -104,22 +314,40 @@
   opacity: 0;
   transition: opacity var(--d-base) var(--e-standard);
 }
-.cursor-root[data-visible="true"] { opacity: 1; }
+/* 50%, at Alex's direction — the drop reads as a lighter, less intrusive
+   presence. The dot (below) stays at full opacity: it's the precision
+   indicator, not decoration, and mix-blend-mode inversion needs full
+   strength to read correctly against arbitrary backgrounds. */
+.cursor-root[data-visible="true"] { opacity: 0.5; }
 
+/* The dot lives OUTSIDE .cursor-root, as its own top-level fixed element, not
+   nested inside it. This is load-bearing, not a style choice: .cursor-root is
+   position:fixed + z-index, which makes it its own stacking context, and
+   mix-blend-mode only blends against whatever is painted BEHIND an element
+   WITHIN its own containing stacking context. A dot nested inside cursor-root
+   would blend only against cursor-root's own (mostly transparent) local
+   paint group, i.e. basically nothing, rather than against the real page —
+   which is exactly why the inversion looked broken. Kept as a sibling of
+   cursor-root, it sits in the page's own top-level stacking context and
+   blends correctly against real content underneath it: white on black,
+   black on white, blue on orange, unconditionally, in every state. */
 .cursor-dot {
   position: fixed;
   top: 0;
   left: 0;
+  z-index: var(--z-tooltip);
+  pointer-events: none;
   width: var(--cursor-dot-size);
   height: var(--cursor-dot-size);
   margin: calc(var(--cursor-dot-size) / -2) 0 0 calc(var(--cursor-dot-size) / -2);
   border-radius: var(--r-full);
-  /* Inverts whatever is under it: white on black, black on white, blue on
-     orange. Legible on any background without measuring the background. */
   background: #FFFFFF;
   mix-blend-mode: difference;
+  opacity: 0;
+  transition: opacity var(--d-base) var(--e-standard);
   will-change: transform;
 }
+.cursor-dot[data-visible="true"] { opacity: 1; }
 
 .cursor-drop {
   position: fixed;
@@ -136,7 +364,13 @@
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: var(--water-body);
+  /* Glass sheen: a soft, off-center highlight (light hitting the upper-left
+     of a curved surface) layered over the flat water-body tint. A perfectly
+     flat, evenly-lit fill reads as a sticker; this asymmetric brightness is
+     what makes it read as a curved, glassy surface instead. Kept soft
+     (transparent past 55% of the drop) so it never competes with the two
+     hard specular glints in .cursor-drop-gloss below. */
+  background: radial-gradient(circle at 32% 26%, var(--water-sheen), transparent 55%), var(--water-body);
   backdrop-filter: url(#dropletLens) saturate(1.06);
   /* Safari does not support an SVG filter reference in backdrop-filter, so it
      gets a whisper of blur instead of true refraction. The rim, glints, shadow
@@ -147,12 +381,23 @@
     /* Fresnel: mirror-bright seen edge-on, invisible through the middle.
        One hairline only — anything thicker reads as a plastic bead. */
     inset 0 0 0 0.5px var(--water-rim-outer),
+    /* Second ring, 1px, sitting just inside that hairline — a pale blue
+       rather than another white line, reading as a refraction fringe (light
+       splitting at the lens edge) rather than a doubled Fresnel highlight.
+       True per-pixel bending only the SVG lens filter can do (see
+       dropletLens below); this is the honest CSS approximation of it: color,
+       not distortion, placed exactly where a real fringe would sit. Faint
+       (10% opacity, set on the token below) — a whisper of color, not a
+       second visible line. */
+    inset 0 0 0 1.5px var(--water-rim-refract),
     inset 0 0 3px 1px var(--water-rim-dark),
     inset 0 0.5px 1px 0 var(--water-rim-inner),
     inset 0 -3px 6px -4px var(--water-caustic),
-    /* it sits ON the page, so it casts a little and it touches */
-    0 3px 8px -3px var(--water-shadow),
-    0 1px 1px 0 var(--water-contact);
+    /* it sits ON the page, so it casts a little and it touches — darker and
+       further-reaching than the drop's earlier version, at Alex's direction,
+       so the whole shape reads as more clearly separated from the page. */
+    0 5px 12px -3px var(--water-shadow),
+    0 2px 3px 0 var(--water-contact);
 }
 
 /* Specular glints. Deliberately NOT inside the rotating layer: as the drop
@@ -199,10 +444,27 @@
     cursor: none;
   }
 }
-/* Coarse pointers and reduced-motion users get the native cursor, untouched. */
-@media (any-pointer: coarse), (prefers-reduced-motion: reduce) {
+/* Reduced-motion users get the native cursor, untouched, on any pointer type.
+   Coarse pointers with motion on get the tap-relocate drop instead (see
+   Cursor.tsx's touchMode) — `data-cursor="touch"` is the JS-side gate for
+   that, so this rule only needs to cover the case CSS alone can catch. */
+@media (prefers-reduced-motion: reduce) {
   .cursor-root { display: none; }
 }
+@media (any-pointer: coarse) {
+  html:not([data-cursor="touch"]) .cursor-root { display: none; }
+}
+
+/* Per-word display faces for the typing verb (HeroOverlay.tsx). All words
+   sit on the same fixed line-height set on the parent span (leading-tight in
+   the JSX), so the layout never reflows as fonts change. Font metrics vary
+   between faces, but inheriting the parent's line-height keeps baselines
+   fixed and lets the text sit still. */
+.word-designs   { font-family: var(--font-sans); line-height: inherit; }
+.word-builds    { font-family: "Archivo Black", var(--font-sans); font-size: 0.95em; letter-spacing: -0.01em; line-height: inherit; }
+.word-codes     { font-family: "JetBrains Mono", var(--font-mono); font-weight: 500; letter-spacing: -0.02em; line-height: inherit; }
+.word-creates   { font-family: "Caveat", var(--font-sans); font-weight: 700; font-size: 1.52em; line-height: inherit; }
+.word-pioneers  { font-family: "Playfair Display", serif; font-style: italic; font-weight: 700; line-height: inherit; }
 
 /* Typing caret — an I-beam, the same shape a text editor uses while you are
    actually typing, so the headline reads as being written rather than as text
@@ -244,6 +506,30 @@
   .card-press:active { transform: none; }
 }
 
+/* Hover: a very subtle grow — 2%, not the 5% an earlier pass tried (Alex:
+   "not this big"). `:not(:active)` rather than relying on source order, so a
+   press while hovering still wins with the smaller 0.995 scale above,
+   whichever rule happens to come first in the stylesheet. Border stays a
+   constant 1px in every state — the earlier 2px hover thickening was
+   reverted once the grow itself became the hover signal. */
+@media (hover: hover) and (pointer: fine) {
+  .card-press:hover:not(:active) { transform: scale(1.02); }
+}
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: reduce) {
+  .card-press:hover:not(:active) { transform: none; }
+}
+
+/* The thumbnail carries NO hover motion of its own any more — two earlier
+   attempts (a static scale-up, then a slow independent float) both moved the
+   image separately from the card around it, which read as the thumbnail
+   hovering rather than the card. Alex's own words: "the card is hovering and
+   not the thumbnail... it should hover together with the thumbnail and the
+   card at the same time." The `.card-thumb-media` class name stays on the
+   markup (harmless, unused hook) so nothing has to change in the components
+   if a future pass wants it back, but it carries no rule here — the
+   thumbnail now only ever moves as a rigid passenger of `.card-press`'s own
+   scale(1.02) above, locked to the card, not animated independently. */
+
 /* ==========================================================================
    Base
    ========================================================================== */
@@ -264,7 +550,10 @@
     outline-offset: var(--focus-ring-offset);
     border-radius: var(--r-xs);
   }
-  ::selection { background: var(--surface-active); }
+  /* Real ::selection rule lives near the top of the file, unlayered so it
+     always wins over this layer regardless of source order — this one was
+     dead weight duplicating (and confusing) that decision. Deleted rather
+     than left here contradicting the rule that actually applies. */
 }
 
 /* Stretched link: makes an entire card clickable from a single anchor without

@@ -1,89 +1,119 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Action } from './Action';
 import { Logo } from './Logo';
 import { ThemeToggle } from './ThemeToggle';
-import { nav, site } from '@/content/site';
+import { ShareButton } from './ShareButton';
+import { HeaderMenu } from './HeaderMenu';
+import { nav } from '@/content/site';
 
 /**
- * The app shell. Identity top-left, global cluster top-right — same pixel
- * position on every page, every canvas class (Principle 3 / 17).
+ * The app shell. Identity top-left, centered nav, right cluster (theme toggle,
+ * Share, kebab), same pixel position on every page, every canvas class.
  *
  * The bar is the system's ONE translucent surface: `--surface-chrome` at 72%
  * over a 24px backdrop blur (SKILL.md §2). Page content dissolves into it as
  * it scrolls up rather than being clipped by an opaque band. 72% is the floor
- * at which text on top still clears 4.5:1 over arbitrary scrolling content —
- * it is not lowered here.
+ * at which text on top still clears 4.5:1 over arbitrary scrolling content.
  *
- * Current location is carried by contrast alone: the active destination sits at
- * --text-primary, the rest at --text-secondary. Both clear AAA (7:1) against
- * the page, so the indicator costs no reserved space and no extra line.
+ * Current location is carried by contrast: active at --text-primary
+ * (17-19:1), inactive at --text-tertiary (~4.8-5.6:1). The gap is deliberately
+ * large so the state is immediately obvious.
  *
- * DENSITY, honestly: adding the theme toggle takes compact to SIX interactive
- * elements against a budget of five (reference/disclosure.md). CLAUDE.md §4
- * recorded that compact sat exactly at the ceiling and that nothing could be
- * added without a removal. Alex asked for the toggle, so it is in and the
- * breach is recorded rather than quietly absorbed — the removal candidate, if
- * we want to get back inside budget, is the CTA on compact.
+ * Layout:
+ * - Compact (<600px): Logo left, theme toggle + kebab right. Nav links don't
+ *   sit below the bar at rest any more — Design/Coffee/Apps only appear when
+ *   the kebab is opened, in a second row that pushes the bar itself taller,
+ *   at Alex's direction, rather than a popover floating over the page. That
+ *   second row also carries Share. Book 30 minutes lives in the hero on `/`
+ *   only now — it was redundant in both the header and this menu.
+ * - Medium+ (≥600px): Logo left, centered nav, right cluster with theme
+ *   toggle and Share. No kebab; there's room for everything already.
  */
 export function TopBar() {
   const pathname = usePathname();
   const norm = (p: string) => (p.length > 1 ? p.replace(/\/$/, '') : p);
   const isActive = (href: string) => norm(pathname) === norm(href);
   const home = norm(pathname) === '/';
+  const [menuOpen, setMenuOpen] = useState(false);
 
-  const links = (
-    <nav aria-label="Sections" className="flex items-center gap-6">
-      {nav.map((n) => (
-        <Link
-          key={n.href}
-          href={n.href}
-          aria-current={isActive(n.href) ? 'page' : undefined}
-          data-cursor-label={n.label}
-          className={
-            'text-label transition-colors duration-fast ease-standard ' +
-            (isActive(n.href)
-              ? 'font-semibold text-fg'
-              : 'text-fg-secondary can-hover:hover:text-fg')
-          }
-        >
-          {n.label}
-        </Link>
-      ))}
-    </nav>
-  );
+  const navLinks = (extraClassName: string) =>
+    nav.map((n) => (
+      <Link
+        key={n.href}
+        href={n.href}
+        aria-current={isActive(n.href) ? 'page' : undefined}
+        data-cursor-label={n.label}
+        className={
+          'text-label transition-colors duration-fast ease-standard ' +
+          (isActive(n.href) ? 'font-semibold text-fg' : 'text-fg-tertiary can-hover:hover:text-fg') +
+          ' ' + extraClassName
+        }
+      >
+        {n.label}
+      </Link>
+    ));
 
   return (
-    <header className="chrome sticky top-0 z-sticky">
+    <header className="chrome entrance-header sticky top-0 z-sticky">
       <div className="mx-auto max-w-app px-page">
-        <div className="flex h-12 items-center justify-between gap-8">
+        <div className="flex h-12 items-center gap-4 medium:gap-8">
+          {/* Logo — top-left, always visible */}
           <Link
             href="/"
             aria-current={home ? 'page' : undefined}
             data-cursor-label="Home"
             className={
-              'flex items-center transition-colors duration-fast ease-standard ' +
+              'flex items-center transition-colors duration-fast ease-standard shrink-0 ' +
               (home ? 'text-fg' : 'text-fg-secondary can-hover:hover:text-fg')
             }
           >
             <Logo className="h-6 w-auto" />
           </Link>
 
-          <div className="flex items-center gap-8">
-            <div className="hidden medium:block">{links}</div>
+          {/* Centered nav — hidden on compact, visible on medium+ */}
+          <nav
+            aria-label="Sections"
+            className="hidden medium:flex items-center gap-9 absolute left-1/2 -translate-x-1/2"
+          >
+            {navLinks('')}
+          </nav>
+
+          {/* Right cluster: theme toggle, Share on medium+; kebab menu on compact.
+              Neither ThemeToggle nor HeaderMenu sits inside a scale wrapper —
+              an earlier scale-125 around HeaderMenu made it visibly bigger
+              than ThemeToggle on compact despite both using the same
+              h/w-control-md token, which is exactly the mismatch Alex flagged
+              (button size, icon size, and line weight all need to match
+              between the two). Removing it makes them match natively, with
+              no token override needed. 4px gap between them at medium+, at
+              Alex's direction (gap-4 at compact is unrelated — that's the
+              toggle-to-kebab gap, untouched). */}
+          <div className="flex items-center gap-4 medium:gap-2 shrink-0 ml-auto">
             <ThemeToggle />
-            <Action href={site.calendlyUrl} external variant="secondary" cursorLabel="Book time">
-              {site.ctaLabel}
-            </Action>
+            <div className="hidden medium:block">
+              <ShareButton />
+            </div>
+            <div className="medium:hidden">
+              <HeaderMenu open={menuOpen} onToggle={() => setMenuOpen((v) => !v)} />
+            </div>
           </div>
         </div>
 
-        {/* Compact: destinations sit below the bar, visible at rest. No
-            hamburger — hiding three short words costs an interaction and buys
-            nothing, and compact is already at its density ceiling. */}
-        <div className="pb-5 medium:hidden">{links}</div>
+        {/* Compact expanded row — the bar itself grows taller when the kebab
+            is opened, rather than a menu popping over the page. Design,
+            Coffee, Apps on the left; Share on the right, matching the
+            medium+ layout's right-cluster position. */}
+        {menuOpen && (
+          <div className="flex items-center justify-between pb-4 medium:hidden">
+            <nav aria-label="Sections" className="flex items-center gap-6">
+              {navLinks('')}
+            </nav>
+            <ShareButton />
+          </div>
+        )}
       </div>
     </header>
   );

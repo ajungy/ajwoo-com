@@ -7,7 +7,7 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:4321';
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: { default: 'Alex Woo', template: '%s — Alex Woo' },
+  title: { default: 'Alex Woo', template: '%s, Alex Woo' },
   description: site.identity,
   openGraph: { title: 'Alex Woo', description: site.identity, url: '/', siteName: 'Alex Woo' },
 };
@@ -36,6 +36,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: bootScript }} />
+        {/* Scroll-reveal (.stagger-grid, components/StaggerReveal.tsx) needs
+            JS to add the class that makes content visible. Without this,
+            a no-JS visitor would see permanently-invisible sections —
+            strictly worse than no animation at all. */}
+        <noscript>
+          <style>{'.stagger-grid > * { opacity: 1 !important; transform: none !important; }'}</style>
+        </noscript>
       </head>
       <body>
         <a
@@ -46,9 +53,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </a>
         <TopBar />
         <main id="main">{children}</main>
+        {/* The only copyright notice on the site now, at Alex's direction —
+            every project page used to repeat "© 2015 ALEX J. WOO" as its own
+            trailing text block; consolidated to this one line, present on
+            every page via the root layout, instead of eleven copies of the
+            same fact scattered through the content. */}
         <footer className="mt-15">
           <div className="mx-auto max-w-app px-page py-9 text-caption text-fg-tertiary">
-            {site.fullName}
+            &copy; {site.fullName}
           </div>
         </footer>
       </body>

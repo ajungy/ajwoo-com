@@ -1,0 +1,63 @@
+'use client';
+
+import { useEffect, useRef, useState, type ReactNode } from 'react';
+
+/* Groups direct children by visual row (matching offsetTop, 2px tolerance)
+   and assigns each row a shared --stagger-i, so a multi-column grid staggers
+   top-to-bottom only — no left-to-right offset within a row. Column count
+   varies by breakpoint, so this can't be known at CSS-authoring time; it's
+   measured after layout instead, once per reveal. Capped at 12 distinct
+   rows; anything past that shares the 12th's delay. */
+function assignRowStagger(el: HTMLElement) {
+  const children = Array.from(el.children) as HTMLElement[];
+  let row = -1;
+  let lastTop = -Infinity;
+  for (const child of children) {
+    const top = child.offsetTop;
+    if (Math.abs(top - lastTop) > 2) {
+      row += 1;
+      lastTop = top;
+    }
+    child.style.setProperty('--stagger-i', String(Math.min(row, 11)));
+  }
+}
+
+/**
+ * Wraps a `.stagger-grid` (see globals.css) so its children animate in when
+ * the grid actually scrolls into view, not unconditionally on mount. Above
+ * the fold on page load, that's the same instant either way; below the
+ * fold, it means a visitor scrolling down keeps discovering new rows
+ * animating in as they arrive, rather than everything having silently
+ * finished animating off-screen before it was ever seen.
+ *
+ * Fires once per mount (`io.disconnect()` after the first intersection) —
+ * this is a "welcome to this section" animation, not a repeating one that
+ * replays every time the user scrolls past the same content twice.
+ */
+export function StaggerReveal({ className = '', children }: { className?: string; children: ReactNode }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          assignRowStagger(el);
+          setVisible(true);
+          io.disconnect();
+        }
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -10% 0px' },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  return (
+    <div ref={ref} className={`stagger-grid ${visible ? 'is-visible' : ''} ${className}`}>
+      {children}
+    </div>
+  );
+}

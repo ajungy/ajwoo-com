@@ -14,22 +14,39 @@ import type { App } from '@/content/apps';
  */
 export function FeaturedApp({ app }: { app: App }) {
   return (
-    <section className="pb-12">
+    // No bottom padding here — the gap to whatever follows (the Education/
+    // Clients/Featured columns on `/`) is that consumer's call, not this
+    // component's. See app/page.tsx, which gives it a deliberately large
+    // mt-24 (96px) — more than the 48px between "Alex's choice" and the
+    // thumbnail above, at Alex's direction.
+    <section>
       <div className="flex flex-col items-center">
-        <div className="flex items-center gap-6 text-fg-tertiary">
-          <Laurel className="h-14 w-auto" />
-          <div className="text-center">
-            <p className="text-micro uppercase text-fg-tertiary">Featured</p>
-            <h2 className="mt-2 text-h1 text-fg">{app.name}</h2>
-          </div>
-          <Laurel flip className="h-14 w-auto" />
+        {/* Single row — leaves, text, leaves — matching Alex's Figma reference
+            (node 300:253) as closely as the system's tokens allow: gap-2
+            (8px) mirrors the source's gap-[8px], text-title/bold
+            approximates its 18px Plus Jakarta Sans Bold (17px is the
+            system's nearest token), and the leaves are set to their native
+            38.6276px height (this reference's leaves are shorter and
+            proportionally fuller than the previous one) rather than rounded
+            to a token, since Figma's own size is itself the spec here.
+            FLIP SIDES, not orientation: in the source, the LEFT copy is the
+            one built from `scaleY(-1) rotate(180deg)` (Group 2) and the
+            RIGHT copy is the plain, untransformed artwork (Group 4) — i.e.
+            the rounded ends point outward on both sides, away from the
+            text. `flip` sits on the left one to match. */}
+        <div className="flex items-center gap-2 text-fg">
+          <Laurel flip className="h-[38.6276px] w-auto" />
+          <p className="text-title font-bold text-fg whitespace-nowrap">Alex's choice</p>
+          <Laurel className="h-[38.6276px] w-auto" />
         </div>
-        <p className="mt-6 max-w-content text-center text-body-lg text-fg-secondary">
-          {app.description}
-        </p>
       </div>
 
-      <div className="mx-auto mt-12 max-w-content">
+      {/* Deliberately narrower than max-w-content (720px): once the card's
+          media went 1:1, a 720px-wide card meant a 720px-TALL square — the
+          card ballooned on this full-bleed landing-page placement in a way
+          it never did inside the /apps grid's ~380px columns. max-w-[420px]
+          keeps it close to a single grid column's width instead. */}
+      <div className="mx-auto mt-12 max-w-[420px]">
         <AppCard app={app} />
       </div>
 

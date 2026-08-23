@@ -8,6 +8,9 @@ module.exports = {
         // reference/components.md — empty states are centred at max-width 360.
         'app-empty': '360px',
       },
+      zIndex: {
+        'toast': '40',
+      },
     },
   },
 };

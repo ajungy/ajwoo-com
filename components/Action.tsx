@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import type { ReactNode } from 'react';
+import { ExternalLink } from './Icons';
 
 type Variant = 'primary' | 'secondary' | 'tertiary' | 'on-media';
 
@@ -34,25 +35,39 @@ const variants: Record<Variant, string> = {
  * Every action on this site is a navigation, so the component is an anchor.
  * `cursorLabel` is what the custom cursor echoes — it must never be the ONLY
  * place the verb appears, which is why it defaults to the visible children.
+ *
+ * `showExternalIcon` is opt-in, not automatic on every `external` link — a
+ * glyph next to every "Book time" / "Install" / "Buy now" button would be
+ * noise on buttons whose destination is already the point. Alex asked for it
+ * specifically on LinkedIn and Instagram, where "this leaves the site" is
+ * the one thing worth signaling up front.
  */
 export function Action({
-  href, children, variant = 'secondary', external = false, cursorLabel, className = '',
+  href, children, variant = 'secondary', external = false, cursorLabel, className = '', showExternalIcon = false,
 }: {
   href: string; children: ReactNode; variant?: Variant; external?: boolean;
-  cursorLabel?: string; className?: string;
+  cursorLabel?: string; className?: string; showExternalIcon?: boolean;
 }) {
-  const cls = `${base} ${variants[variant]} ${className}`;
+  const cls = `${base} ${variants[variant]} ${showExternalIcon ? 'gap-1.5' : ''} ${className}`;
   const label = cursorLabel ?? (typeof children === 'string' ? children : undefined);
+  const content = showExternalIcon ? (
+    <>
+      {children}
+      <ExternalLink className="w-3.5 h-3.5" strokeWidth="2" />
+    </>
+  ) : (
+    children
+  );
   if (external) {
     return (
       <a href={href} target="_blank" rel="noopener noreferrer" className={cls} data-cursor-label={label}>
-        {children}
+        {content}
       </a>
     );
   }
   return (
     <Link href={href} className={cls} data-cursor-label={label}>
-      {children}
+      {content}
     </Link>
   );
 }

@@ -10,6 +10,17 @@
   "width": 1540,
   "height": 799
  },
+ "heroDark": {
+  "base": "hero-dark",
+  "widths": [
+   770,
+   1540,
+   2200
+  ],
+  "fallbackWidth": 1540,
+  "width": 1540,
+  "height": 799
+ },
  "tiles": {
   "704": {
    "base": "tile-704",
@@ -38,8 +49,8 @@
   },
   "seeing-ai": {
    "base": "tile-seeing-ai",
-   "width": 1140,
-   "height": 1140
+   "width": 570,
+   "height": 570
   },
   "netmarble": {
    "base": "tile-netmarble",
@@ -48,18 +59,18 @@
   },
   "starbucks-technology": {
    "base": "tile-starbucks-technology",
-   "width": 1140,
-   "height": 1140
+   "width": 576,
+   "height": 576
   },
   "wrap-and-charge": {
    "base": "tile-wrap-and-charge",
-   "width": 1140,
-   "height": 1140
+   "width": 800,
+   "height": 800
   },
   "coin-lock": {
    "base": "tile-coin-lock",
-   "width": 1140,
-   "height": 1140
+   "width": 570,
+   "height": 570
   },
   "10-borders": {
    "base": "tile-10-borders",
@@ -126,17 +137,6 @@
  "blocks": {
   "704": [
    {
-    "kind": "image",
-    "base": "img-704-obj-add-2",
-    "widths": [
-     770,
-     1540
-    ],
-    "fallbackWidth": 1540,
-    "width": 1540,
-    "height": 401
-   },
-   {
     "kind": "text",
     "value": "Gen AI in Premiere Pro - 2024"
    },
@@ -192,6 +192,22 @@
    }
   ],
   "10-borders": [
+   {
+    "kind": "text",
+    "value": "Ten-Borders, 2015"
+   },
+   {
+    "kind": "text",
+    "value": "This poster is a reflection to the article on a refugee's escape from Syria. It shows the pain and fear of the refugee and the borders one had to cross."
+   },
+   {
+    "kind": "text",
+    "value": "\"In 2012, the Syrian civil war reached the suburbs of Damascus. Army tanks rolled over anti-government protesters in Ghouta; artillery shells fell on Darayya. One morning that May, a car bomb exploded in the town of Jdeidet Artouz, southwest of the capital. The blast jolted Ghaith, a twenty-two-year-old law student, out of bed. He lived in a two-bedroom apartment with his mother; his father had died when he was an infant, and his siblings, four sisters and a brother, all older, had left the house after getting married. Ghaith stepped to the window and pulled back the curtain. Across the street, a sedan was spewing flames. Body parts littered the road.\""
+   },
+   {
+    "kind": "text",
+    "value": "- The New Yorker -"
+   },
    {
     "kind": "image",
     "base": "img-10-borders-ten-borders-2",
@@ -269,7 +285,7 @@
    },
    {
     "kind": "text",
-    "value": "Price $$$$$"
+    "value": "PRICE:2"
    },
    {
     "kind": "image",
@@ -315,7 +331,7 @@
    },
    {
     "kind": "text",
-    "value": "Price $$$$$"
+    "value": "PRICE:2"
    },
    {
     "kind": "image",
@@ -360,7 +376,7 @@
    },
    {
     "kind": "text",
-    "value": "Price $$$$$"
+    "value": "PRICE:1"
    },
    {
     "kind": "image",
@@ -382,10 +398,6 @@
     "fallbackWidth": 1540,
     "width": 1540,
     "height": 1155
-   },
-   {
-    "kind": "text",
-    "value": "© 2015 ALEX J. WOO"
    }
   ],
   "3-coffee-shops-in-tokyo": [
@@ -446,7 +458,7 @@
    },
    {
     "kind": "text",
-    "value": "Price $$$$$"
+    "value": "PRICE:2"
    },
    {
     "kind": "image",
@@ -485,7 +497,7 @@
    },
    {
     "kind": "text",
-    "value": "$$$$$"
+    "value": "PRICE:3"
    },
    {
     "kind": "image",
@@ -519,7 +531,7 @@
    },
    {
     "kind": "text",
-    "value": "$$$$$"
+    "value": "PRICE:1"
    },
    {
     "kind": "image",
@@ -531,10 +543,6 @@
     "fallbackWidth": 1540,
     "width": 1540,
     "height": 1155
-   },
-   {
-    "kind": "text",
-    "value": "© 2015 ALEX J. WOO"
    }
   ],
   "5-coffee-shops-in-seattle": [
@@ -599,7 +607,7 @@
    },
    {
     "kind": "text",
-    "value": "Price $$$$$"
+    "value": "PRICE:2"
    },
    {
     "kind": "image",
@@ -634,7 +642,7 @@
    },
    {
     "kind": "text",
-    "value": "$$$$$"
+    "value": "PRICE:3"
    },
    {
     "kind": "image",
@@ -669,7 +677,7 @@
    },
    {
     "kind": "text",
-    "value": "$$$$$"
+    "value": "PRICE:1"
    },
    {
     "kind": "image",
@@ -714,7 +722,7 @@
    },
    {
     "kind": "text",
-    "value": "$$$$$"
+    "value": "PRICE:2"
    },
    {
     "kind": "image",
@@ -749,7 +757,7 @@
    },
    {
     "kind": "text",
-    "value": "$$$$$"
+    "value": "PRICE:1"
    },
    {
     "kind": "image",
@@ -760,10 +768,6 @@
     "fallbackWidth": 770,
     "width": 770,
     "height": 592
-   },
-   {
-    "kind": "text",
-    "value": "© 2015 ALEX J. WOO"
    }
   ],
   "5-in-milan": [
@@ -828,7 +832,7 @@
    },
    {
     "kind": "text",
-    "value": "Price $$$$$"
+    "value": "PRICE:1"
    },
    {
     "kind": "image",
@@ -862,7 +866,7 @@
    },
    {
     "kind": "text",
-    "value": "Price $$$$$"
+    "value": "PRICE:1"
    },
    {
     "kind": "image",
@@ -908,7 +912,7 @@
    },
    {
     "kind": "text",
-    "value": "Price $$$$$"
+    "value": "PRICE:1"
    },
    {
     "kind": "image",
@@ -943,7 +947,7 @@
    },
    {
     "kind": "text",
-    "value": "Price $$$$$"
+    "value": "PRICE:1"
    },
    {
     "kind": "image",
@@ -978,7 +982,7 @@
    },
    {
     "kind": "text",
-    "value": "Price $$$$$"
+    "value": "PRICE:2"
    },
    {
     "kind": "image",
@@ -990,10 +994,6 @@
     "fallbackWidth": 1540,
     "width": 1540,
     "height": 1233
-   },
-   {
-    "kind": "text",
-    "value": "© 2015 ALEX J. WOO"
    }
   ],
   "best-coffee-shops-new-york-city": [
@@ -1058,7 +1058,7 @@
    },
    {
     "kind": "text",
-    "value": "Price $$$$$"
+    "value": "PRICE:2"
    },
    {
     "kind": "image",
@@ -1093,7 +1093,7 @@
    },
    {
     "kind": "text",
-    "value": "Price $$$$$"
+    "value": "PRICE:2"
    },
    {
     "kind": "image",
@@ -1128,7 +1128,7 @@
    },
    {
     "kind": "text",
-    "value": "Price $$$$$"
+    "value": "PRICE:2"
    },
    {
     "kind": "image",
@@ -1174,7 +1174,7 @@
    },
    {
     "kind": "text",
-    "value": "Price $$$$$"
+    "value": "PRICE:1"
    },
    {
     "kind": "image",
@@ -1209,7 +1209,7 @@
    },
    {
     "kind": "text",
-    "value": "Price $$$$$"
+    "value": "PRICE:2"
    },
    {
     "kind": "image",
@@ -1232,10 +1232,6 @@
     "fallbackWidth": 1540,
     "width": 1540,
     "height": 1155
-   },
-   {
-    "kind": "text",
-    "value": "© 2015 ALEX J. WOO"
    }
   ],
   "blue-olive": [
@@ -1354,13 +1350,25 @@
     "fallbackWidth": 1540,
     "width": 1540,
     "height": 1155
-   },
-   {
-    "kind": "text",
-    "value": "© 2015 ALEX J. WOO"
    }
   ],
   "coin-lock": [
+   {
+    "kind": "text",
+    "value": "Coin Lock, 2016"
+   },
+   {
+    "kind": "text",
+    "value": "Coin lock is a smart portable lock designed for bicycles, skis, strollers, etc. Have you ever had an experience when you needed to pack everything up just to go to the bathroom? For me, I've always had problems securing bikes in such cases as grabbing a coffee, food, or using the restroom. Many people can not use conventional locks because they are too bulky and heavy in situations that require mobility."
+   },
+   {
+    "kind": "text",
+    "value": "Responsibility: Product Design, Product Management, UX, UI, CAD, User Research"
+   },
+   {
+    "kind": "text",
+    "value": "Credits: K-Design Award, RISD ID, Rapha, RISD Cycling, Rhode Island Business Competition, Brian HK Park"
+   },
    {
     "kind": "image",
     "base": "img-coin-lock-22222222222",
@@ -1384,6 +1392,10 @@
     "height": 866
    },
    {
+    "kind": "text",
+    "value": "Coin lock is not only small and light but also provides an easy user experience through smartphone connection helping users to achieve another level of security. If coin lock detects 3 seconds of unnatural movement the alarm will go off scaring the thief as well as sending a notification towards the owner. We have been interacting especially with our first round of users (cyclists) to design a product that they desperately demand and many of them were willing to purchase our product once it is available in the market."
+   },
+   {
     "kind": "image",
     "base": "img-coin-lock-sg",
     "widths": [
@@ -1395,11 +1407,27 @@
     "height": 618
    },
    {
+    "kind": "text",
+    "value": "Alarm Switch"
+   },
+   {
+    "kind": "text",
+    "value": "The alarm can be switched on and off to make maximum alert towards suspected thief. Or just have fun with the sound."
+   },
+   {
     "kind": "motion",
     "base": "mov-coin-lock-33",
     "hasWebm": true,
     "width": 570,
     "height": 570
+   },
+   {
+    "kind": "text",
+    "value": "Theft / Crime Heatmap"
+   },
+   {
+    "kind": "text",
+    "value": "To have right insights and understanding your surroundings, theft/ crime heat map will be shown to help users with their decisions."
    },
    {
     "kind": "image",
@@ -1411,6 +1439,14 @@
     "fallbackWidth": 1540,
     "width": 1540,
     "height": 679
+   },
+   {
+    "kind": "text",
+    "value": "Coin Community"
+   },
+   {
+    "kind": "text",
+    "value": "The app also features a community platform in which users can share opinions and share information."
    },
    {
     "kind": "motion",
@@ -1444,14 +1480,20 @@
   ],
   "dynamics-365-customer-voice": [
    {
-    "kind": "image",
-    "base": "img-dynamics-365-customer-voice-screen-shot-2020-10-01-at-9-15-46-pm",
-    "widths": [
-     770
-    ],
-    "fallbackWidth": 770,
-    "width": 770,
-    "height": 297
+    "kind": "text",
+    "value": "Customer Voice, 2020"
+   },
+   {
+    "kind": "text",
+    "value": "Respond quickly to user feedback. Gather and track the customer metrics that matter to your business based on survey data, and then rapidly act as insights surface, all with Dynamics 365 Customer Voice."
+   },
+   {
+    "kind": "text",
+    "value": "Responsibility: Product Design, UX, UI"
+   },
+   {
+    "kind": "text",
+    "value": "Credits: Customer Voice Development Team, Dynamics 365 Sales Design Team"
    },
    {
     "kind": "embed",
@@ -1465,6 +1507,22 @@
    }
   ],
   "layout": [
+   {
+    "kind": "text",
+    "value": "Layout, 2018"
+   },
+   {
+    "kind": "text",
+    "value": "Layout brings physical designs from concept to completion with confidence. You can import 3D models to experience space layouts with holograms in the physical world and in virtual reality. You can easily edit their layouts in real-scale, share your idea with others, and make better decisions before you build."
+   },
+   {
+    "kind": "text",
+    "value": "Responsibility: Product Design, UX, UI, User Research, Customer Engagement, Creative Vision"
+   },
+   {
+    "kind": "text",
+    "value": "Credits: Layout Development Team, Mixed Reality at Work Design Team, HoloLens Analog Team"
+   },
    {
     "kind": "image",
     "base": "img-layout-asdc",
@@ -1550,14 +1608,20 @@
   ],
   "netmarble": [
    {
-    "kind": "image",
-    "base": "img-netmarble-aa",
-    "widths": [
-     770
-    ],
-    "fallbackWidth": 770,
-    "width": 770,
-    "height": 411
+    "kind": "text",
+    "value": "Netmarble, 2015"
+   },
+   {
+    "kind": "text",
+    "value": "Designed and conducted user research on Netmarble Global branding and iOS/Android games: Every Netmarble and SoulKing."
+   },
+   {
+    "kind": "text",
+    "value": "Responsibility: UI/UX Design, User Research, Branding, CAD"
+   },
+   {
+    "kind": "text",
+    "value": "Credits: Netmarble Branding Team, Netmarble UX Team"
    },
    {
     "kind": "embed",
@@ -1568,35 +1632,39 @@
     "kind": "embed",
     "src": "https://www.youtube.com/embed/Ouaj_xSyLRM",
     "title": "Soulking : Official Promotion Video 15\" - google -"
+   },
+   {
+    "kind": "image",
+    "base": "img-netmarble-aa",
+    "widths": [
+     770
+    ],
+    "fallbackWidth": 770,
+    "width": 770,
+    "height": 411
    }
   ],
   "paintsound": [
    {
-    "kind": "image",
-    "base": "img-paintsound-screen-shot-2018-06-16-at-4-22-45-pm",
-    "widths": [
-     770,
-     1540
-    ],
-    "fallbackWidth": 1540,
-    "width": 1540,
-    "height": 738
+    "kind": "text",
+    "value": "Paint Sound, 2016"
+   },
+   {
+    "kind": "text",
+    "value": "Paint Sound is a sound visualizer for people with hearing impairments to see sound through holographic visualization. The Mixed Reality application was developed during Microsoft’s first Hololens Hackathon 2016 and have been awarded for first place winner."
+   },
+   {
+    "kind": "text",
+    "value": "Environment: The user can place sound/music reactive holograms and Mixed Reality effects to enhance the physically environment."
+   },
+   {
+    "kind": "text",
+    "value": "Alert: Through 3D audio triangulation, the application detects and visually alerts where the sound is coming from."
    },
    {
     "kind": "embed",
     "src": "https://player.vimeo.com/video/198531084",
     "title": "Paintsound.Holohack"
-   },
-   {
-    "kind": "image",
-    "base": "img-paintsound-future-of-ar-06-1",
-    "widths": [
-     770,
-     1540
-    ],
-    "fallbackWidth": 1540,
-    "width": 1540,
-    "height": 720
    },
    {
     "kind": "embed",
@@ -1609,21 +1677,41 @@
     "title": ""
    },
    {
-    "kind": "text",
-    "value": "© 2015 ALEX J. WOO"
-   }
-  ],
-  "pr-ae-frame": [
-   {
     "kind": "image",
-    "base": "img-pr-ae-frame-frame-io-adobe-copy",
+    "base": "img-paintsound-screen-shot-2018-06-16-at-4-22-45-pm",
     "widths": [
      770,
      1540
     ],
     "fallbackWidth": 1540,
     "width": 1540,
-    "height": 379
+    "height": 738
+   }
+  ],
+  "pr-ae-frame": [
+   {
+    "kind": "text",
+    "value": "Frame, Pr, Ae - 2022"
+   },
+   {
+    "kind": "text",
+    "value": "Collaborate where you create. The Frame.io extension for Premiere Pro and After Effects lets you centralize and share assets, receive real-time comments, track revisions, and get faster approvals, all without leaving the timeline."
+   },
+   {
+    "kind": "text",
+    "value": "Over two thirds of films at Sundance and Oscar winners Everything Everywhere All at Once and Navalny were edited with Premiere Pro, After Effects and Frame.io."
+   },
+   {
+    "kind": "text",
+    "value": "Responsibility: UX, UI, Content, Product Design, Marketing, Discovery, User Research"
+   },
+   {
+    "kind": "text",
+    "value": "Credits: Premier Pro Team, After Effects Team, Frame.io Team (Acquired 2021)"
+   },
+   {
+    "kind": "text",
+    "value": "Featured: The Verge, TechCrunch, News Shooter, Century Award, Everything Everywhere All at Once"
    },
    {
     "kind": "embed",
@@ -1638,15 +1726,24 @@
   ],
   "product-visualize": [
    {
-    "kind": "image",
-    "base": "img-product-visualize-salesassistheroimage",
-    "widths": [
-     770,
-     1540
-    ],
-    "fallbackWidth": 1540,
-    "width": 1540,
-    "height": 665
+    "kind": "text",
+    "value": "Product Visualize, 2019"
+   },
+   {
+    "kind": "text",
+    "value": "Help your sellers meet their customers’ needs faster with mixed reality. Using Dynamics 365 Product Visualize, now in preview for iOS, sales representatives can place a 3D digital twin of a product in their customer’s environment, let them explore it as if it’s physically there, and make detailed notes about their requirements."
+   },
+   {
+    "kind": "text",
+    "value": "Responsibility: Product Design, UX, UI, User Research, Customer Engagement, Accessibility"
+   },
+   {
+    "kind": "text",
+    "value": "Credits: Product Visualize Development Team, Mixed Reality at Work Design Team, Dynamics 365 Design Team"
+   },
+   {
+    "kind": "text",
+    "value": "[Dynamics 365 Product Visualize (iOS download)](https://apps.apple.com/us/app/dynamics-365-product-visualize/id1437454781)"
    },
    {
     "kind": "text",
@@ -1669,19 +1766,39 @@
     "kind": "embed",
     "src": "https://www.youtube.com/embed/NIgog6rYO00",
     "title": "Ecolab delivers a compelling vision using mixed reality from Dynamics 365"
-   }
-  ],
-  "seeing-ai": [
+   },
    {
     "kind": "image",
-    "base": "img-seeing-ai-seesing-ai",
+    "base": "img-product-visualize-salesassistheroimage",
     "widths": [
      770,
      1540
     ],
     "fallbackWidth": 1540,
     "width": 1540,
-    "height": 498
+    "height": 665
+   }
+  ],
+  "seeing-ai": [
+   {
+    "kind": "text",
+    "value": "Seeing AI, 2017"
+   },
+   {
+    "kind": "text",
+    "value": "Seeing AI is a mobile application that narrates the world around you. The app is designed for the low vision community by Machine Learning and AI to describe people, text, and objects."
+   },
+   {
+    "kind": "text",
+    "value": "Responsibility: UX, UI, User Research, Accessibity, Prototyping"
+   },
+   {
+    "kind": "text",
+    "value": "Credits: Seeing AI Development Team, Foundry Incubation Lab, Microsoft Garage Team"
+   },
+   {
+    "kind": "text",
+    "value": "[Seeing AI App (iOS download)](https://apps.apple.com/us/app/seeing-ai/id999062298)"
    },
    {
     "kind": "embed",
@@ -1719,14 +1836,20 @@
   ],
   "starbucks-technology": [
    {
-    "kind": "image",
-    "base": "img-starbucks-technology-sbx20190610-starbucks-tryer-lab-featured-image",
-    "widths": [
-     770
-    ],
-    "fallbackWidth": 770,
-    "width": 770,
-    "height": 374
+    "kind": "text",
+    "value": "Starbucks Technology, 2019"
+   },
+   {
+    "kind": "text",
+    "value": "The HCDE Team collaborated with the Starbucks Innovation Lab Design Team to redesign the Batch Guidance iPad app. Batch Guidance is a tool for Starbucks retail partners to ensure store specific customer's beverage demand and reduce waste."
+   },
+   {
+    "kind": "text",
+    "value": "Responsibility: Product Design, User Research, UI, UX, User testing"
+   },
+   {
+    "kind": "text",
+    "value": "Credits: University of Washington HCDE Team, Starbucks Innovation Lab Design Team"
    },
    {
     "kind": "embed",
@@ -1830,10 +1953,6 @@
     "fallbackWidth": 1540,
     "width": 1540,
     "height": 1027
-   },
-   {
-    "kind": "text",
-    "value": "© 2015 ALEX J. WOO"
    }
   ],
   "top-3-fancy-cafes-paris": [
@@ -1889,7 +2008,7 @@
    },
    {
     "kind": "text",
-    "value": "Price $$$$$"
+    "value": "PRICE:3"
    },
    {
     "kind": "image",
@@ -1923,7 +2042,7 @@
    },
    {
     "kind": "text",
-    "value": "Price $$$$$"
+    "value": "PRICE:5"
    },
    {
     "kind": "image",
@@ -1957,7 +2076,7 @@
    },
    {
     "kind": "text",
-    "value": "Price $$$$$"
+    "value": "PRICE:3"
    },
    {
     "kind": "image",
@@ -1968,10 +2087,6 @@
     "fallbackWidth": 770,
     "width": 770,
     "height": 1026
-   },
-   {
-    "kind": "text",
-    "value": "© 2015 ALEX J. WOO"
    }
   ],
   "top-5-coffee-shop-paris": [
@@ -2036,7 +2151,7 @@
    },
    {
     "kind": "text",
-    "value": "Price $$$$$"
+    "value": "PRICE:1"
    },
    {
     "kind": "image",
@@ -2071,7 +2186,7 @@
    },
    {
     "kind": "text",
-    "value": "Price $$$$$"
+    "value": "PRICE:2"
    },
    {
     "kind": "image",
@@ -2106,7 +2221,7 @@
    },
    {
     "kind": "text",
-    "value": "Price $$$$$"
+    "value": "PRICE:1"
    },
    {
     "kind": "image",
@@ -2152,7 +2267,7 @@
    },
    {
     "kind": "text",
-    "value": "Price $$$$$"
+    "value": "PRICE:2"
    },
    {
     "kind": "image",
@@ -2197,7 +2312,7 @@
    },
    {
     "kind": "text",
-    "value": "Price $$$$$"
+    "value": "PRICE:1"
    },
    {
     "kind": "image",
@@ -2209,10 +2324,6 @@
     "fallbackWidth": 1540,
     "width": 1540,
     "height": 1155
-   },
-   {
-    "kind": "text",
-    "value": "© 2015 ALEX J. WOO"
    }
   ],
   "top-5-coffee-shops-in-london": [
@@ -2277,7 +2388,7 @@
    },
    {
     "kind": "text",
-    "value": "Price $$$$$"
+    "value": "PRICE:1"
    },
    {
     "kind": "image",
@@ -2312,7 +2423,7 @@
    },
    {
     "kind": "text",
-    "value": "Price $$$$$"
+    "value": "PRICE:1"
    },
    {
     "kind": "image",
@@ -2347,7 +2458,7 @@
    },
    {
     "kind": "text",
-    "value": "Price $$$$$"
+    "value": "PRICE:2"
    },
    {
     "kind": "image",
@@ -2382,7 +2493,7 @@
    },
    {
     "kind": "text",
-    "value": "Price $$$$$"
+    "value": "PRICE:1"
    },
    {
     "kind": "image",
@@ -2417,7 +2528,7 @@
    },
    {
     "kind": "text",
-    "value": "Price $$$$$"
+    "value": "PRICE:1"
    },
    {
     "kind": "image",
@@ -2429,13 +2540,33 @@
     "fallbackWidth": 1540,
     "width": 1540,
     "height": 1075
-   },
-   {
-    "kind": "text",
-    "value": "© 2015 ALEX J. WOO"
    }
   ],
   "wrap-and-charge": [
+   {
+    "kind": "text",
+    "value": "Wrap and Charge, 2016"
+   },
+   {
+    "kind": "text",
+    "value": "Wrap and Charge is a wall adopter to charge your devices on the go. Users can easily wrap their charging cables around the product easily which makes your cables more portable and organized. This product was featured in Kikkerland Magazine, Catalog Spring 2016; Best of ICFF, New York by Design Milk; and won The Container Store challenge 2016."
+   },
+   {
+    "kind": "text",
+    "value": "Responsibility: Product Design, CAD, User Research, Industrial Design, Prototyping"
+   },
+   {
+    "kind": "text",
+    "value": "Credits: Kikkerland Design Team, The Container Store, RISD ID"
+   },
+   {
+    "kind": "text",
+    "value": "Results: +10,000 units sold, +100 stores"
+   },
+   {
+    "kind": "text",
+    "value": "To purchase: https://www.amazon.com/gp/product/B06XBGPWQ7"
+   },
    {
     "kind": "image",
     "base": "img-wrap-and-charge-bbb",

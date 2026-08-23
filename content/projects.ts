@@ -41,11 +41,51 @@ export const coffeeProjects = projects.filter((p) => p.kind === 'coffee');
 export const getProject = (slug: string) => projects.find((p) => p.slug === slug);
 
 type Tile = { base: string; width: number; height: number };
+type HeroImg = { base: string; widths: number[]; fallbackWidth: number; width: number; height: number };
 export const siteData = data as {
-  hero: { base: string; widths: number[]; fallbackWidth: number; width: number; height: number } | null;
+  hero: HeroImg | null;
+  /** Dark-mode counterpart of `hero` — same portrait, shot/composited against
+      a dark background rather than light. See components/HeroPhoto.tsx for
+      how the swap is done (CSS, not JS, so there's no flash on load). */
+  heroDark: HeroImg | null;
   tiles: Record<string, Tile>;
   blocks: Record<string, Block[]>;
 };
 
 export const tileFor = (slug: string): Tile | undefined => siteData.tiles[slug];
 export const blocksFor = (slug: string): Block[] => siteData.blocks[slug] ?? [];
+
+/**
+ * Grid-tile motion — a deliberate, curated exception to the rest of the site.
+ * Every other video on this site (the `motion` blocks in project bodies,
+ * AppCard's demo clips) is click-to-play: a poster frame at rest, motion only
+ * once the user asks for it, per Principle 14. Alex asked for the `/design`
+ * grid to autoplay and loop instead, matching the original ajwoo.com, where
+ * that motion gave the grid its "depth and excitement."
+ *
+ * CORRECTED against the live grid directly (view-source on ajwoo.com/design/,
+ * reading each card's `data-thumb-src`) rather than assumed from names in the
+ * Phase 0 inventory — a first pass got two of these wrong by guessing:
+ *   - Seeing AI's grid tile is a STATIC png (Seeing-ai-570.png) on the live
+ *     site, not animated. `chairloopicon.gif` is real, but it belongs to
+ *     Seeing AI's own page BODY (still used there, in the `motion` block
+ *     above, untouched by this fix) — not its grid tile.
+ *   - Netmarble's grid tile is also a STATIC png (netmarble-570.png). The
+ *     `netmarble-logo.mp4` on its detail page is real too, but it's not what
+ *     renders in the grid.
+ *   - Layout's grid tile is `layout33333d.gif`, not the `ezgif-2-...gif` that
+ *     lives in Layout's own page body — different asset, same project.
+ * Only GenAI (704) and Layout actually animate in the live grid. Seeing AI
+ * and Netmarble render their existing static tiles (siteData.tiles) via the
+ * normal Picture path below — no motionTiles entry means no video.
+ *
+ * Every source re-confirmed frame-by-frame against ajwoo.com before encoding:
+ *   704 (GenAI in Premiere Pro)  ajwoo.com/wp-content/uploads/2024/07/genai-pr-570-compressed.gif  (570×570, already square)
+ *   layout                      ajwoo.com/wp-content/uploads/2019/02/layout33333d.gif  (865×864, center-cropped to 864×864)
+ */
+type MotionTile = { base: string; width: number; height: number; hasWebm: boolean };
+const motionTiles: Record<string, MotionTile> = {
+  '704': { base: 'mov-704-genai', width: 570, height: 570, hasWebm: true },
+  layout: { base: 'mov-layout-33333d', width: 864, height: 864, hasWebm: true },
+};
+export const motionTileFor = (slug: string): MotionTile | undefined => motionTiles[slug];

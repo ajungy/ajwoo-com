@@ -36,8 +36,14 @@
   --n-950:  #0E0E10;
   --n-1000: #000000;
 
-  /* Dark-side neutrals — the ramp read from the other end. */
-  --d-page:    #0E0E10;
+  /* Dark-side neutrals — the ramp read from the other end.
+     --d-page is pure black (#000000), not the near-black #0E0E10 the rest of
+     the dark ramp still starts from — Alex asked for the page itself (and
+     the header bar's translucent tint, which reads off the same black) to
+     be genuinely black, not a dark gray. Raised/sunken surfaces below stay
+     on the original near-black ramp so cards and wells still read as a
+     distinct, slightly lighter step above true black. */
+  --d-page:    #000000;
   --d-sunken:  #09090B;
   --d-raised:  #18181B;
   --d-overlay: #1C1C20;
@@ -341,9 +347,21 @@
   --shadow-e1:
     0 1px 2px light-dark(rgba(0,0,0,0.04), rgba(0,0,0,0.30)),
     0 1px 1px light-dark(rgba(0,0,0,0.03), rgba(0,0,0,0.20));
+  /* e2 is the hover elevation on cards (ProjectCard, AppCard). In dark mode a
+     black shadow reads as nothing against an already-dark page — especially
+     under a light-colored thumbnail, where hover became functionally
+     invisible. A white glow reads as "lifted" the same way a dark shadow
+     does on a light page, so dark mode gets the inverse treatment here
+     rather than the same rgba(0,0,0,*) every other shadow token uses. Light
+     mode keeps a directional (offset) shadow, since real light comes from
+     above; dark mode's glow is a 0-offset ring instead, on purpose — a card
+     "lifting" toward you reads as an even glow on every edge, not a light
+     source, so it needs to show on all four sides, not just the bottom. */
   --shadow-e2:
-    0 4px 12px light-dark(rgba(0,0,0,0.06), rgba(0,0,0,0.40)),
-    0 1px 2px  light-dark(rgba(0,0,0,0.04), rgba(0,0,0,0.24));
+    0 4px 16px light-dark(rgba(0,0,0,0.06), transparent),
+    0 1px 2px  light-dark(rgba(0,0,0,0.04), transparent),
+    0 0 32px   light-dark(transparent, rgba(255,255,255,0.22)),
+    0 0 8px    light-dark(transparent, rgba(255,255,255,0.30));
   --shadow-e3:
     0 16px 40px light-dark(rgba(0,0,0,0.12), rgba(0,0,0,0.55)),
     0 2px 8px   light-dark(rgba(0,0,0,0.06), rgba(0,0,0,0.32));
@@ -358,7 +376,7 @@
      a function of what happens to be scrolling underneath.
      72% opacity is the floor at which text on top still clears 4.5:1 over
      arbitrary content. Do not lower it. */
-  --surface-chrome: light-dark(rgba(255,255,255,0.72), rgba(24,24,27,0.72));
+  --surface-chrome: light-dark(rgba(255,255,255,0.72), rgba(0,0,0,0.72));
   --border-chrome:  light-dark(rgba(0,0,0,0.08), rgba(255,255,255,0.10));
   --chrome-blur: 24px;
 }

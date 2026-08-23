@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Action } from '@/components/Action';
 import { AppCard } from '@/components/AppCard';
+import { StaggerReveal } from '@/components/StaggerReveal';
 import { apps } from '@/content/apps';
 import { site } from '@/content/site';
 
@@ -9,11 +10,24 @@ export const metadata: Metadata = { title: 'Apps' };
 export default function AppsPage() {
   return (
     <div className="mx-auto max-w-app px-page">
-      <section className="pt-12 pb-9">
-        <h1 className="text-h1 text-fg">Apps</h1>
-        <p className="mt-6 max-w-content text-body-lg text-fg-secondary">
-          Native macOS tools that do their work on your machine. Nothing you record,
-          say, or read is sent anywhere.
+      {/* h1 is sr-only, matching /design and /coffee: the nav already marks
+          "Apps" as current. The subtitle stays visible here, unlike the
+          other two: it's not restating the page's name, it's the one claim
+          that actually earns a visitor's trust before they install anything,
+          local-only, on-device, no cloud round-trip. */}
+      <h1 className="sr-only">Apps</h1>
+      {/* pt-12 header-to-title is the same visual weight the other pages'
+          old header-to-title gap had, but pb-16 (paragraph-to-cards) is
+          deliberately bigger than that — the header is the same color as
+          the page here, so it doesn't read as a boundary the way the cards'
+          edge does; the gap that actually needs to feel generous is the one
+          before real content starts. */}
+      <section className="pt-12 pb-16">
+        <p className="text-title font-bold text-fg">Local. Functional. Minimal.</p>
+        <p className="mt-4 max-w-content text-body-lg text-fg-secondary">
+          Every app runs entirely on your Mac, with no cloud connection. Nothing
+          you record, say, or read ever leaves your machine, so there is nothing
+          to intercept. That constraint is what keeps them fast and fully capable.
         </p>
       </section>
 
@@ -33,11 +47,14 @@ export default function AppsPage() {
         </section>
       ) : (
         <section className="pb-12">
-          <div className="grid grid-cols-1 gap-8 medium:grid-cols-2 expanded:grid-cols-3">
+          {/* Back to 3 columns at Alex's direction — a brief 2-column pass
+              made cards bigger but 3 across matches the Design/Coffee grids'
+              own density, which won out. */}
+          <StaggerReveal className="grid grid-cols-1 gap-8 medium:grid-cols-2 expanded:grid-cols-3">
             {apps.map((a) => (
               <AppCard key={a.slug} app={a} />
             ))}
-          </div>
+          </StaggerReveal>
         </section>
       )}
     </div>

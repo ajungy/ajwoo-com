@@ -133,7 +133,14 @@ module.exports = {
       // Each entry carries size + line-height + tracking + weight together.
       // Use `text-body`, `text-h1` — never `text-[15px]`.
       fontSize: {
-        display: ['48px', { lineHeight: '52px', letterSpacing: '-0.020em', fontWeight: '600' }],
+        // Fluid, not stepped: the headline carries five swapped-in fonts of
+        // wildly different widths (Archivo Black, Caveat, Playfair italic —
+        // see HeroOverlay.tsx), so a handful of breakpoint jumps would still
+        // leave gaps where the widest word overflows a narrow phone. clamp()
+        // tracks viewport width continuously instead — 48px is the ceiling
+        // (matches the old fixed value at desktop widths), 30px is the
+        // readable floor at the narrowest supported width (compact, 320px).
+        display: ['clamp(30px, 8vw, 48px)', { lineHeight: 'clamp(34px, 8.5vw, 52px)', letterSpacing: '-0.020em', fontWeight: '600' }],
         h1:      ['32px', { lineHeight: '38px', letterSpacing: '-0.014em', fontWeight: '600' }],
         h2:      ['24px', { lineHeight: '30px', letterSpacing: '-0.012em', fontWeight: '600' }],
         h3:      ['20px', { lineHeight: '26px', letterSpacing: '-0.009em', fontWeight: '600' }],

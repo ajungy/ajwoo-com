@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { Picture } from './Picture';
-import { tileFor, type Project } from '@/content/projects';
+import { tileFor, motionTileFor, type Project } from '@/content/projects';
 
 /**
  * Interactive card. Hover raises e1 -> e2 and the border steps to default —
@@ -11,9 +11,21 @@ import { tileFor, type Project } from '@/content/projects';
  * no competing buttons inside it. Title and category are visible AT REST —
  * on the WordPress site they lived in a hover overlay, which made the only
  * label invisible to half of all sessions (Principle 5).
+ *
+ * A handful of projects render an autoplaying, looping tile instead of a
+ * still (see content/projects.ts's motionTileFor doc comment for the full
+ * reasoning) — a deliberate, curated exception to click-to-play, restoring
+ * the GIF-like motion the grid originally had.
+ *
+ * Every tile is forced to a 1:1 crop (`aspect-square` + `object-cover` on the
+ * media itself), regardless of the source asset's native aspect ratio. Most
+ * tiles are already square at the source, but this is a durable guarantee
+ * rather than a hope: a future tile sourced at the wrong aspect still lands
+ * in a square slot instead of visibly warping the grid.
  */
 export function ProjectCard({ project, priority = false }: { project: Project; priority?: boolean }) {
   const tile = tileFor(project.slug);
+  const motion = motionTileFor(project.slug);
   return (
     <Link
       href={`/work/${project.slug}/`}
@@ -23,18 +35,31 @@ export function ProjectCard({ project, priority = false }: { project: Project; p
         'can-hover:hover:shadow-e2 can-hover:hover:border-line'
       }
     >
-      <div className="bg-sunken">
-        {tile ? (
+      <div className="aspect-square overflow-hidden bg-sunken">
+        {motion ? (
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="auto"
+            poster={`/img/${motion.base}-poster.webp`}
+            width={motion.width}
+            height={motion.height}
+            className="card-thumb-media block h-full w-full object-cover"
+          >
+            <source src={`/img/${motion.base}.webm`} type="video/webm" />
+            <source src={`/img/${motion.base}.mp4`} type="video/mp4" />
+          </video>
+        ) : tile ? (
           <Picture
             img={tile}
             alt={project.title}
             priority={priority}
             sizes="(min-width: 840px) 33vw, (min-width: 600px) 50vw, 100vw"
-            className="block w-full h-auto"
+            className="card-thumb-media block h-full w-full object-cover"
           />
-        ) : (
-          <div className="aspect-square" />
-        )}
+        ) : null}
       </div>
       <div className="p-7">
         <h3 className="text-title text-fg">{project.title}</h3>
