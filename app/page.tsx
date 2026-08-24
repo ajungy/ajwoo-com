@@ -1,5 +1,4 @@
 import { Action } from '@/components/Action';
-import { TypingWord } from '@/components/HeroOverlay';
 import { HeroPhoto } from '@/components/HeroPhoto';
 import { FeaturedApp } from '@/components/FeaturedApp';
 import { CopyEmailButton } from '@/components/CopyEmailButton';
@@ -20,54 +19,51 @@ export default function Home() {
   return (
     <>
       <div className="mx-auto max-w-app px-page">
-        <section className="pt-12 pb-9">
-          {/* The single most important element on the page, and the only place
-              the one-time entrance animation runs. The verb inside it also
-              types and deletes in a loop — see HeroOverlay.tsx for why that is
-              a documented deviation from "nothing moves at rest".
-              The two lines are independent, fixed-height boxes (52px = the
-              text-display line-height), AND the typing word itself renders
-              `position: absolute` inside the first line (see HeroOverlay.tsx)
-              — it is fully out of flow, so no font among the five it cycles
-              through can ever affect the first line's height, the second
-              line's position, or anything on the page below. lineHeight={52}
-              here is the single source of truth for both the line's box
-              height and the word's own vertical centering. */}
-          <h1 className="entrance-target max-w-content text-fg">
-            <span className="block h-[clamp(34px,8.5vw,52px)] text-display">
-              Alex Woo <TypingWord lineHeight="clamp(34px, 8.5vw, 52px)" />
-            </span>
-            <span className="block text-display">
-              creative tools at Netflix
-            </span>
-            <span className="block text-display">
-              Adobe, Microsoft, and more.
-            </span>
-          </h1>
+        {/* Two columns: the identity statement + actions on the left, the
+            personal greeting + bio on the right — replacing the earlier
+            single-column typing headline entirely, at Alex's direction.
+            Stacks to one column below `medium` (600px). */}
+        <section className="entrance-target grid grid-cols-1 gap-8 pt-12 pb-9 medium:grid-cols-2 medium:gap-16">
+          <div>
+            {/* text-display carries the size; .hero-serif (globals.css)
+                swaps in EB Garamond italic on top of it — the single most
+                important element on the page, and the only place the
+                one-time entrance animation runs. */}
+            <h1 className="hero-serif max-w-content text-display text-fg">{site.headline}</h1>
 
-          {/* Moved off the hero photo and under the headline, at Alex's direction.
-              These are the same actions, anchored to the identity text instead
-              of floating over an image. Email copies to clipboard rather
-              than opening a mailto: link (CopyEmailButton), so it isn't a
-              plain href like the others. */}
-          <StaggerReveal className="mt-8 flex flex-wrap items-center gap-4">
-            <Action href={site.calendlyUrl} external variant="secondary" cursorLabel="Book time">
-              {site.ctaLabel}
-            </Action>
-            <CopyEmailButton />
-            {social.map((s) => (
-              <Action
-                key={s.label}
-                href={s.href}
-                external={s.external}
-                showExternalIcon={s.external}
-                variant="secondary"
-                cursorLabel={s.label}
-              >
-                {s.label}
+            {/* These are the same actions that used to sit under the old
+                headline. Email copies to clipboard rather than opening a
+                mailto: link (CopyEmailButton), so it isn't a plain href
+                like the other two. */}
+            <StaggerReveal className="mt-8 flex flex-wrap items-center gap-4">
+              <Action href={site.calendlyUrl} external variant="secondary" cursorLabel="Book time">
+                {site.ctaLabel}
               </Action>
-            ))}
-          </StaggerReveal>
+              <CopyEmailButton />
+              {social.map((s) => (
+                <Action
+                  key={s.label}
+                  href={s.href}
+                  external={s.external}
+                  showExternalIcon={s.external}
+                  variant="secondary"
+                  cursorLabel={s.label}
+                >
+                  {s.label}
+                </Action>
+              ))}
+            </StaggerReveal>
+          </div>
+
+          <div>
+            {/* Regular weight throughout except the emphasis clause, which
+                steps up to medium (500) — weight only, same size and family,
+                at Alex's direction. */}
+            <p className="text-body-lg text-fg">
+              {site.greeting} <span className="font-medium">{site.greetingEmphasis}</span>
+            </p>
+            <p className="mt-4 max-w-content text-body-lg text-fg-secondary">{site.bio}</p>
+          </div>
         </section>
       </div>
 
@@ -93,7 +89,7 @@ export default function Home() {
             small-window desktop looking top-heavy: three full-height stacked
             lists with nothing to balance them side by side. Now there's a
             real 2-column tablet state before the 3-column desktop one. */}
-        <StaggerReveal className="mt-36 grid grid-cols-1 gap-12 pb-12 medium:grid-cols-2 expanded:grid-cols-3">
+        <StaggerReveal className="mt-[245px] grid grid-cols-1 gap-12 pb-12 medium:grid-cols-2 expanded:grid-cols-3">
           <div>
             <h2 className="text-h3 text-fg">Education</h2>
             <ul className="mt-6 space-y-6">

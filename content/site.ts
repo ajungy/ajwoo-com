@@ -7,8 +7,17 @@
 export const site = {
   name: 'Alex Woo',
   fullName: 'Alex J. Woo',
-  // The single most important element on `/` — and the only thing that animates.
+  // Used for <title>/OpenGraph description — not rendered on the page
+  // itself any more (see `headline` below, which replaced it there).
   identity: 'Alex Woo designs creative tools at Netflix, Adobe, Microsoft, and more.',
+  // The landing page's single most important element, replacing the earlier
+  // animated "Alex Woo [verb] creative tools at Netflix..." headline — at
+  // Alex's direction, a calmer, wordmark-like statement in EB Garamond
+  // italic (see .hero-serif in globals.css) instead of a typing loop.
+  headline: 'Enable creativity.',
+  greeting: "Hi, I'm Alex.",
+  greetingEmphasis: "Let's grab coffee.",
+  bio: "I'm a Design Lead at Netflix, shaping the future of creative tools. Previously, I pioneered film and video at Adobe and incubated AI, Mixed Reality, and IoT at Microsoft. On weekends, I'm usually building something or hunting for great coffee.",
   // Switched from Calendly to a Google Calendar booking page, and the event
   // itself from 30 to 15 minutes, at Alex's direction.
   calendlyUrl: process.env.NEXT_PUBLIC_CALENDLY_URL ?? 'https://calendar.app.google/qmRwUtHFyeMUzYQj8',

@@ -201,6 +201,17 @@ export function Cursor() {
       pointer.x = e.clientX;
       pointer.y = e.clientY;
       if (!visible) setVisible(true);
+      // Touch has no hover, but it DOES fire pointermove while a finger is
+      // actively dragging across the screen — that's exactly the gesture
+      // Alex asked the drop to follow, so a touch move re-targets whatever
+      // is now under the finger and pushes the auto-hide timer back, same
+      // as a fresh tap would.
+      if (touchMode) {
+        const el = (e.target as Element | null)?.closest?.('[data-cursor-label]');
+        if (el !== active) { if (el) { active = el; measure(); } else { release(); } }
+        if (hideTimer) clearTimeout(hideTimer);
+        hideTimer = setTimeout(() => setVisible(false), 900);
+      }
     };
     const onLeave = () => setVisible(false);
 
@@ -210,19 +221,28 @@ export function Cursor() {
       gripped = true;
       if (!touchMode) return;
       // Relocate to the tap point, pick up whatever's under the finger (if
-      // it carries a label) exactly like hover would on a fine pointer, show
-      // the drop, and queue its fade — a tap has no "leave" event to hide on.
+      // it carries a label) exactly like hover would on a fine pointer, and
+      // show the drop. The auto-hide timer now starts on lift (onUp), not
+      // here — while the finger is down and dragging, onMove above keeps
+      // pushing it back, so the drop stays put and tracks the finger for as
+      // long as the gesture continues.
       pointer.x = e.clientX;
       pointer.y = e.clientY;
       const el = (e.target as Element | null)?.closest?.('[data-cursor-label]');
       if (el) { active = el; measure(); } else { release(); }
       setVisible(true);
       if (hideTimer) clearTimeout(hideTimer);
-      hideTimer = setTimeout(() => setVisible(false), 900);
     };
     const onUp = () => {
       if (gripped) bounceV += 0.10; // the flick that starts the oscillation
       gripped = false;
+      // A tap has no pointerleave to hide on — queue the fade once the
+      // finger actually lifts, rather than on a fixed delay from touchdown,
+      // so a long drag doesn't get cut off mid-gesture.
+      if (touchMode) {
+        if (hideTimer) clearTimeout(hideTimer);
+        hideTimer = setTimeout(() => setVisible(false), 900);
+      }
     };
 
     // Click handling: bubble stays present at all times, no pop animation.
@@ -320,6 +340,18 @@ export function Cursor() {
       want.x = followPointer ? pointer.x : rect!.left + rect!.width / 2;
       // For small targets, center on the bbox center exactly.
       want.y = followPointer ? pointer.y : rect!.top + rect!.height / 2;
+
+      // Hidden: collapse toward a point rather than just fading the finished
+      // shape out. Reusing the same MORPH interpolation that already handles
+      // target-shape changes, so appearing/disappearing is the same physics
+      // as everything else the drop does — grows from nothing when it next
+      // shows (want.w/h get re-targeted the moment a real hover/tap sets
+      // them), shrinks to nothing while hidden, seamlessly.
+      if (!visible) {
+        want.w = 0;
+        want.h = 0;
+        want.r = 0;
+      }
 
       const dx = want.x - drop.x;
       const dy = want.y - drop.y;

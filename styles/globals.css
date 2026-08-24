@@ -18,40 +18,18 @@
 }
 
 /* ==========================================================================
-   Per-word display faces for the headline's typing verb — see components/
-   HeroOverlay.tsx. This is a deliberate, documented breach of SKILL.md §3
-   ("one family, no pairing"), not a drift: five faces, each chosen to LOOK
-   like the word it spells, on Alex's direct instruction. Confined to five
-   words in one place; every other typographic decision on the site is still
-   Plus Jakarta Sans alone. See CLAUDE.md §6(f) for the reasoning per face.
-   All four are free (OFL or Apache-2.0), self-hosted for the same reason as
-   the primary face: no third-party request, no FOUT dependent on a network
-   we don't control. ========================================================== */
+   Hero display face — EB Garamond, italic medium, self-hosted for the same
+   reason as Plus Jakarta Sans: no third-party request, no FOUT dependent on
+   a network we don't control. Used ONLY for the landing page's "Enable
+   creativity." line (see app/page.tsx) — a deliberate, documented breach of
+   SKILL.md §3 ("one family, no pairing"), at Alex's direction, replacing the
+   earlier five-face typing-word gimmick with one calm, elegant serif in
+   exactly one place instead of five swapped-in faces in a loop.
+   ========================================================================== */
 @font-face {
-  font-family: "Archivo Black";
-  src: url("/fonts/ArchivoBlack-Regular-latin.woff2") format("woff2");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: "JetBrains Mono";
-  src: url("/fonts/JetBrainsMono-Medium-latin.woff2") format("woff2");
+  font-family: "EB Garamond";
+  src: url("/fonts/EBGaramond-MediumItalic-latin.woff2") format("woff2");
   font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Caveat";
-  src: url("/fonts/Caveat-Bold-latin.woff2") format("woff2");
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-@font-face {
-  font-family: "Playfair Display";
-  src: url("/fonts/PlayfairDisplay-BoldItalic-latin.woff2") format("woff2");
-  font-weight: 700;
   font-style: italic;
   font-display: swap;
 }
@@ -335,7 +313,13 @@ html[data-theme-transition] * {
   z-index: var(--z-tooltip);
   pointer-events: none;
   opacity: 0;
-  transition: opacity var(--d-base) var(--e-standard);
+  /* 320ms, not --d-base (180ms) — the drop's own shape collapses to a point
+     over roughly the same span (see the `!visible` branch in Cursor.tsx's
+     tick(), which drives want.w/h/r to 0 through the existing MORPH spring
+     rather than a separate CSS transform). Pairing the two durations is what
+     makes the fade and the shrink read as one seamless motion instead of two
+     unrelated animations finishing at different times. */
+  transition: opacity 320ms var(--e-standard);
 }
 /* 50%, at Alex's direction — the drop reads as a lighter, less intrusive
    presence. The dot (below) stays at full opacity: it's the precision
@@ -481,37 +465,12 @@ html[data-theme-transition] * {
   html:not([data-cursor="touch"]) .cursor-root { display: none; }
 }
 
-/* Per-word display faces for the typing verb (HeroOverlay.tsx). All words
-   sit on the same fixed line-height set on the parent span (leading-tight in
-   the JSX), so the layout never reflows as fonts change. Font metrics vary
-   between faces, but inheriting the parent's line-height keeps baselines
-   fixed and lets the text sit still. */
-.word-designs   { font-family: var(--font-sans); line-height: inherit; }
-.word-builds    { font-family: "Archivo Black", var(--font-sans); font-size: 0.95em; letter-spacing: -0.01em; line-height: inherit; }
-.word-codes     { font-family: "JetBrains Mono", var(--font-mono); font-weight: 500; letter-spacing: -0.02em; line-height: inherit; }
-.word-creates   { font-family: "Caveat", var(--font-sans); font-weight: 700; font-size: 1.52em; line-height: inherit; }
-.word-pioneers  { font-family: "Playfair Display", serif; font-style: italic; font-weight: 700; line-height: inherit; }
-
-/* Typing caret — an I-beam, the same shape a text editor uses while you are
-   actually typing, so the headline reads as being written rather than as text
-   fading in and out. `self-stretch` does nothing on an inline element (no flex
-   parent), so height is set directly to 1em: that was a real bug — the caret
-   had zero height and was invisible before this fix. Blink is the one place a
-   looping animation is conventional enough to read as a cursor rather than as
-   decoration; it is suppressed entirely under reduced motion (the class is
-   only applied when motion is allowed, and this rule is a belt-and-braces
-   second guard). */
-.type-caret {
-  display: inline-block;
-  width: 2px;
-  height: 1em;
-  margin-left: 2px;
-  vertical-align: -0.14em;
-  background: currentColor;
+/* Hero serif — "Enable creativity." (app/page.tsx), EB Garamond italic. */
+.hero-serif {
+  font-family: "EB Garamond", Georgia, "Times New Roman", serif;
+  font-style: italic;
+  font-weight: 500;
 }
-@keyframes caret-blink { 0%, 45% { opacity: 1; } 55%, 100% { opacity: 0; } }
-.caret-blink { animation: caret-blink 1.06s steps(1, end) infinite; }
-@media (prefers-reduced-motion: reduce) { .caret-blink { animation: none; } }
 
 /* Text laid over a photograph. */
 .on-media { color: var(--on-media-fg); }

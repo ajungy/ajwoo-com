@@ -11,14 +11,15 @@ import { principles } from '@/content/site';
  */
 export function DesignPrinciples() {
   return (
-    // mt-36 (144px) — bigger than the 48px between "Alex's choice" and the
-    // Capture card above it, at Alex's direction: this is a bigger jump in
-    // topic (from one featured app to the philosophy behind the whole site)
-    // and the gap should read as a bigger jump too. Every major section gap
-    // on this page shares this same 144px value (SkillsSection, Education
-    // grid below) — spacing is a consistent language, not a per-section
-    // guess (see Principle 10).
-    <section className="mt-36">
+    // 245px (mt-36's 144px, increased ~70% at Alex's direction — "more
+    // space gives luxury") — bigger than the 48px between "Alex's choice"
+    // and the Capture card above it: this is a bigger jump in topic (from
+    // one featured app to the philosophy behind the whole site) and the gap
+    // should read as a bigger jump too. Every major section gap on this
+    // page shares this same 245px value (SkillsSection, Education grid
+    // below) — spacing is a consistent language, not a per-section guess
+    // (see Principle 10).
+    <section className="mt-[245px]">
       <h2 className="text-h3 text-fg">Favorite design principles</h2>
       {/* Single column — a "vertical row" per item, not the earlier 2-column
           grid, at Alex's direction. */}
