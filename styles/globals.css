@@ -110,14 +110,20 @@
      .cursor-drop-body) rather than centered, so it reads as a highlight
      from a light source rather than a flat glow. */
   --water-sheen: rgba(255, 255, 255, 0.16);
-  --water-shadow: rgba(0, 0, 0, 0.34);
-  --water-contact: rgba(0, 0, 0, 0.18);
+  --water-shadow: rgba(0, 0, 0, 0.40);
+  --water-contact: rgba(0, 0, 0, 0.22);
   /* Total internal reflection: against a light surface a real drop shows a
      DARK ring at the rim, not a bright one. Without this the drop vanishes
      on white. */
   --water-rim-dark: rgba(0, 0, 0, 0.11);
+  /* A drop's shadow against a DARK page isn't just a weaker version of the
+     one it casts on white — a light-colored surface underneath also throws
+     a faint reflected glow back up into the shadow's own edge. Transparent
+     here (light mode has no such glow); the dark-mode blocks below give it
+     a real, very subtle white value. */
+  --water-shadow-glow: transparent;
 
-  --cursor-dot-size: 2.5px; /* 5px, halved, at Alex's direction */
+  --cursor-dot-size: 2.25px; /* was 5px, then halved to 2.5px, now another 10% smaller, at Alex's direction */
 
   /* --- Content over media -------------------------------------------------
      A photograph does not change with the theme, so text on top of one must
@@ -138,9 +144,12 @@
     --water-rim-refract: rgba(190, 225, 255, 0.10);
     --water-rim-inner: rgba(255, 255, 255, 0.07);
     --water-sheen: rgba(255, 255, 255, 0.22);
-    --water-shadow: rgba(0, 0, 0, 0.52);
-    --water-contact: rgba(0, 0, 0, 0.36);
+    --water-shadow: rgba(0, 0, 0, 0.60);
+    --water-contact: rgba(0, 0, 0, 0.42);
     --water-rim-dark: rgba(0, 0, 0, 0.22);
+    /* Subtle, at Alex's direction — a whisper of reflected light around the
+       shadow's edge, not a second visible glow competing with the rim. */
+    --water-shadow-glow: rgba(255, 255, 255, 0.08);
   }
 }
 
@@ -152,9 +161,10 @@
   --water-rim-refract: rgba(190, 225, 255, 0.10);
   --water-rim-inner: rgba(255, 255, 255, 0.07);
   --water-sheen: rgba(255, 255, 255, 0.22);
-  --water-shadow: rgba(0, 0, 0, 0.52);
-  --water-contact: rgba(0, 0, 0, 0.36);
+  --water-shadow: rgba(0, 0, 0, 0.60);
+  --water-contact: rgba(0, 0, 0, 0.42);
   --water-rim-dark: rgba(0, 0, 0, 0.22);
+  --water-shadow-glow: rgba(255, 255, 255, 0.08);
 }
 
 /* --- Landing-page hero photo, theme-aware (components/HeroPhoto.tsx) -------
@@ -167,13 +177,13 @@
    Opacity, not display: none — `display` can't be transitioned, which meant
    the portrait used to hard-cut the instant the theme flipped while the
    rest of the page was crossfading around it (see `[data-theme-transition]`
-   below). 1000ms `ease` here matches that exactly, so the photo and the
+   below). 500ms `ease` here matches that exactly, so the photo and the
    page fade together instead of the photo visibly lagging or leaping ahead.
    The non-visible photo is also taken out of the hit-test and accessibility
    tree via pointer-events/visibility, since opacity:0 alone leaves it
    clickable and screen-reader-reachable. */
 .hero-light, .hero-dark {
-  transition: opacity 1000ms ease, visibility 1000ms ease;
+  transition: opacity 500ms ease, visibility 500ms ease;
 }
 .hero-dark { opacity: 0; visibility: hidden; pointer-events: none; }
 @media (prefers-color-scheme: dark) {
@@ -281,14 +291,15 @@
 /* --- Theme fade: light/dark toggle crossfade --------------------------------
    An earlier version played a multi-stage white→orange→navy→black sweep;
    Alex asked for that removed in favor of a plain crossfade back to the
-   system's real white/black surfaces, then asked for that crossfade slowed
-   to 1000ms with a plain `ease` curve — noticeably slower than any of this
-   site's other (much snappier, hover/press-scale) transitions, which is
-   deliberate: this one is meant to be felt, not just technically present.
-   `data-theme-transition` is set on `<html>` for exactly 1000ms (see
-   ThemeToggle.tsx) and fades every text color, icon color, border, and
-   background — including the page background itself, since
-   `background-color` is in the property list and `body` is a `*`
+   system's real white/black surfaces. Duration has moved twice since:
+   300ms, then 1000ms (which read as too slow), now 500ms — a plain `ease`
+   curve, still noticeably slower than any of this site's other (much
+   snappier, hover/press-scale) transitions, which is deliberate: this one
+   is meant to be felt, not just technically present, just not to the point
+   of feeling sluggish. `data-theme-transition` is set on `<html>` for
+   exactly 500ms (see ThemeToggle.tsx) and fades every text color, icon
+   color, border, and background — including the page background itself,
+   since `background-color` is in the property list and `body` is a `*`
    descendant of `html` — instead of snapping instantly.
 
    Plain text/headings have no transition of their own and pick this up
@@ -301,11 +312,11 @@
    exactly the elements most likely to be read as "foreground". Dropping
    :where() ties the specificity instead of zeroing it, and since this rule
    sits after `@tailwind utilities` in source order, the tie resolves in its
-   favor for the 1000ms the attribute is present — still fully inert
+   favor for the 500ms the attribute is present — still fully inert
    (reverts to each component's own transition) the instant it's removed. */
 html[data-theme-transition] * {
-  transition: color 1000ms ease, background-color 1000ms ease,
-    border-color 1000ms ease, fill 1000ms ease, stroke 1000ms ease;
+  transition: color 500ms ease, background-color 500ms ease,
+    border-color 500ms ease, fill 500ms ease, stroke 500ms ease;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -409,7 +420,10 @@ html[data-theme-transition] * {
        further-reaching than the drop's earlier version, at Alex's direction,
        so the whole shape reads as more clearly separated from the page. */
     0 5px 12px -3px var(--water-shadow),
-    0 2px 3px 0 var(--water-contact);
+    0 2px 3px 0 var(--water-contact),
+    /* Dark mode only (transparent in light — see --water-shadow-glow above):
+       a very subtle white glow around the shadow's own edge. */
+    0 0 10px 0 var(--water-shadow-glow);
 }
 
 /* Specular glints. Deliberately NOT inside the rotating layer: as the drop

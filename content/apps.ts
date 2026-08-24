@@ -28,12 +28,15 @@ export type App = {
   platform: string;
   /** Short, factual capability claims, shown on the detail page. */
   traits: string[];
-  /** Longer copy for the app's own page. */
-  /** A plain string is a full paragraph. `{ label, body }` is one line of a
-   *  feature list — label bolded, same size and family as everything else
-   *  on the page (same "weight only, never a different type scale" rule
-   *  Blocks.tsx uses for the work-page feature sections). */
-  detail: (string | { label: string; body: string })[];
+  /** Longer copy for the app's own page. A plain string is a full paragraph.
+   *  `{ lead }` is the opening statement, bolded and set apart. `{ label,
+   *  body }` is one line of a feature list — label on its own line, bolded,
+   *  body directly below it, same size/family as everything else on the
+   *  page (same "weight only, never a different type scale" rule
+   *  Blocks.tsx uses for the work-page feature sections) — with a bit more
+   *  space above each one than a plain paragraph gets, so the feature list
+   *  reads as a series of small sections, not a wall of text. */
+  detail: (string | { lead: string } | { label: string; body: string })[];
   /** Real exported app icon. Falls back to the drawn glyph in AppIcon.tsx. */
   iconImage?: string;
   /** Static square card thumbnail, base filename with no extension —
@@ -58,7 +61,7 @@ export const apps: App[] = [
     traits: ['macOS', 'Auto video edit', 'Subtitle', 'Screen record', 'Local', 'Fully on-device', 'No cloud'],
     thumbnailVideo: 'appcard-capture',
     detail: [
-      'Capture is the fastest way to turn an idea on your screen into a video that’s ready to share.',
+      { lead: 'Capture is the fastest way to turn an idea on your screen into a video that’s ready to share.' },
       'Record your screen, camera, and microphone with one click. Capture automatically transforms your raw recording into a polished video.',
       { label: 'Record once. Get a polished video.', body: 'Capture takes care of the tedious editing for you:' },
       { label: 'Automatic Zooms', body: 'Capture identifies important areas of your screen and automatically zooms in to keep viewers focused on what matters.' },

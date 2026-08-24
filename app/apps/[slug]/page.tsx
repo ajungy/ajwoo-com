@@ -43,9 +43,13 @@ export default function AppPage({ params }: { params: { slug: string } }) {
             <AppIcon name={app.icon} className="h-12 w-12" />
           </span>
         )}
+        {/* Title/description/Waitlist compressed to fit inside the icon's
+            own 96px height, at Alex's direction — text-h2 instead of
+            text-h1 (30px line-height instead of 38px) and tight mt-2 gaps
+            throughout, rather than the looser mt-4/mt-6 this used to use. */}
         <div className="flex-1">
-          <h1 className="text-h1 text-fg">{app.name}</h1>
-          <p className="mt-4 max-w-content text-body-lg text-fg-secondary">{app.description}</p>
+          <h1 className="text-h2 text-fg">{app.name}</h1>
+          <p className="mt-2 max-w-content text-body-lg text-fg-secondary">{app.description}</p>
 
           {/* The platform/trigger caption line that used to sit here is
               gone, at Alex's direction — the smallest, least load-bearing
@@ -55,9 +59,9 @@ export default function AppPage({ params }: { params: { slug: string } }) {
               rather than a real purchase flow. Secondary, not primary — at
               Alex's direction, since "Waitlist" is an interim state, not
               the confident, one-primary-per-view action a real download
-              would be (Principle 9: ≥24px of separation, never
-              default-focused, a plain navigation so it can't double-fire). */}
-          <div className="mt-6">
+              would be (Principle 9: real separation, never default-focused,
+              a plain navigation so it can't double-fire). */}
+          <div className="mt-2">
             <Action href={WAITLIST_FORM_URL} external variant="secondary" cursorLabel="Join waitlist">
               Waitlist
             </Action>
@@ -66,20 +70,29 @@ export default function AppPage({ params }: { params: { slug: string } }) {
       </header>
 
       <article className="max-w-content space-y-8 pb-12">
-        {app.detail.map((para, i) =>
-          typeof para === 'string' ? (
-            <p key={i} className="text-body-lg text-fg-secondary">{para}</p>
-          ) : (
-            // Feature-list line: label bolded, same size and family as every
-            // other line on the page — the same "weight only, never a
-            // different type scale" rule Blocks.tsx uses for the work
-            // pages' own feature sections (Generative Extend, Process, …).
-            <p key={i} className="text-body-lg text-fg-secondary">
-              <span className="font-semibold text-fg">{para.label}</span>{' '}
-              {para.body}
-            </p>
-          ),
-        )}
+        {app.detail.map((para, i) => {
+          if (typeof para === 'string') {
+            return <p key={i} className="text-body-lg text-fg-secondary">{para}</p>;
+          }
+          if ('lead' in para) {
+            // The opening statement — bolded and set apart from the plain
+            // paragraphs that follow, at Alex's direction. Same size/family
+            // as everything else, only the weight changes.
+            return <p key={i} className="text-body-lg font-semibold text-fg">{para.lead}</p>;
+          }
+          // Feature-list entry: label on its OWN line, bolded, body directly
+          // below it on the next line — not inline in one paragraph, at
+          // Alex's direction. `pt-4` on top of the container's own
+          // `space-y-8` gives each entry a bit more air above it than a
+          // plain paragraph-to-paragraph gap, so the list reads as a run of
+          // small sections rather than one continuous block.
+          return (
+            <div key={i} className="pt-4">
+              <p className="text-body-lg font-semibold text-fg">{para.label}</p>
+              <p className="mt-1 text-body-lg text-fg-secondary">{para.body}</p>
+            </div>
+          );
+        })}
         <ul className="flex flex-wrap gap-3 pt-2">
           {app.traits.map((t) => (
             <li key={t} className="rounded-xs bg-sunken px-4 py-2 text-caption text-fg-secondary">

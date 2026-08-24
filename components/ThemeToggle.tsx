@@ -15,17 +15,18 @@ import { useEffect, useState } from 'react';
  * `tokens.css` maps `data-theme` to `color-scheme`, so every `light-dark()`
  * token flips underneath with no per-component work.
  *
- * The flip itself is a plain 1000ms `ease` crossfade, not a color sweep —
- * an earlier version played a multi-stage white→orange→navy→black
- * animation; Alex asked for that removed in favor of a simple fade back to
- * the system's actual white/black surfaces, slowed to a full second so it
- * reads as deliberate. `data-theme-transition` is set on `<html>` for
- * exactly that 1000ms, which fades every foreground AND background color
- * (text, icons, card surfaces, the page background itself, the hero photo —
- * see the `[data-theme-transition]` rule and `.hero-light`/`.hero-dark` in
+ * The flip itself is a plain 500ms `ease` crossfade, not a color sweep — an
+ * earlier version played a multi-stage white→orange→navy→black animation;
+ * Alex asked for that removed in favor of a simple fade back to the
+ * system's actual white/black surfaces. Duration has moved twice since
+ * (300ms, then 1000ms — which read as too slow — now 500ms).
+ * `data-theme-transition` is set on `<html>` for exactly that 500ms, which
+ * fades every foreground AND background color (text, icons, card surfaces,
+ * the page background itself, the hero photo — see the
+ * `[data-theme-transition]` rule and `.hero-light`/`.hero-dark` in
  * globals.css) at the same pace instead of snapping instantly.
  */
-const FADE_MS = 1000;
+const FADE_MS = 500;
 
 export function ThemeToggle() {
   const [theme, setTheme] = useState<'light' | 'dark' | null>(null);

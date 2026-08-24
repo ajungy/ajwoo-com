@@ -44,7 +44,7 @@ import { useRouter } from 'next/navigation';
  */
 
 // Tuning, in the order to reach for them.
-const FOLLOW = 0.12;    // lower = more lag — reduced for smoother, less frantic motion
+const FOLLOW = 0.18;    // lower = more lag — raised from 0.12 at Alex's direction, chases the pointer faster
 const MORPH = 0.18;     // how fast it takes a target's shape — reduced to be smoother
 const STRETCH = 0.05;   // how much speed deforms it
 const REST_SIZE = 28;
