@@ -69,6 +69,26 @@ export default function AppPage({ params }: { params: { slug: string } }) {
         </div>
       </header>
 
+      {/* Real demo, not another icon/screenshot — the actual thing the app
+          does, between the "Waitlist" action and the copy explaining it.
+          Never autoplays (Principle 14 — nothing moves until the reader
+          asks): controls, a poster frame, and preload="none" so it isn't
+          fetched at all until played, same convention as the project-page
+          videos in components/Blocks.tsx. */}
+      {app.demoVideo && (
+        <div className="mb-12">
+          <video
+            controls
+            preload="none"
+            poster={`/img/${app.demoVideo}-poster.webp`}
+            className="block h-auto w-full rounded-lg border border-line-subtle bg-sunken"
+          >
+            <source src={`/img/${app.demoVideo}.webm`} type="video/webm" />
+            <source src={`/img/${app.demoVideo}.mp4`} type="video/mp4" />
+          </video>
+        </div>
+      )}
+
       <article className="max-w-content space-y-8 pb-12">
         {app.detail.map((para, i) => {
           if (typeof para === 'string') {

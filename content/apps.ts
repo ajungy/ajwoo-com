@@ -48,6 +48,12 @@ export type App = {
    *  `${thumbnailVideo}.mp4`/`.webm` with a `${thumbnailVideo}-poster.webp`
    *  poster frame. Takes priority over `thumbnail` when both are present. */
   thumbnailVideo?: string;
+  /** Full-width demo video on the app's own detail page, between the
+   *  header (icon/name/Waitlist) and the body copy — base filename with no
+   *  extension, resolved the same way as `thumbnailVideo`. Never
+   *  autoplays: carries a poster and controls, same as every other video
+   *  on this site (Principle 14 — nothing moves until the reader asks). */
+  demoVideo?: string;
 };
 
 export const apps: App[] = [
@@ -60,6 +66,7 @@ export const apps: App[] = [
     platform: 'macOS',
     traits: ['macOS', 'Auto video edit', 'Subtitle', 'Screen record', 'Local', 'Fully on-device', 'No cloud'],
     thumbnailVideo: 'appcard-capture',
+    demoVideo: 'capture-demo',
     detail: [
       { lead: 'Capture is the fastest way to turn an idea on your screen into a video that’s ready to share.' },
       'Record your screen, camera, and microphone with one click. Capture automatically transforms your raw recording into a polished video.',
