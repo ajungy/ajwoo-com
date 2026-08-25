@@ -60,7 +60,13 @@ export default function Home() {
             </StaggerReveal>
           </div>
 
-          <div>
+          {/* mt-3 optically aligns this with the headline opposite it — the
+              italic serif's cap-height sits differently than the sans-serif
+              body type at a much smaller size, so a shared grid-row top
+              edge alone reads as slightly too high; nudging this column
+              down a few pixels is what actually lines the two up by eye,
+              at Alex's direction. */}
+          <div className="mt-3">
             {/* Regular weight throughout except the emphasis clause, which
                 steps up to medium (500) — weight only, same size and family,
                 at Alex's direction. */}

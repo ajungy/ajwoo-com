@@ -18,18 +18,24 @@
 }
 
 /* ==========================================================================
-   Hero display face — EB Garamond, italic medium, self-hosted for the same
-   reason as Plus Jakarta Sans: no third-party request, no FOUT dependent on
-   a network we don't control. Used ONLY for the landing page's "Enable
-   creativity." line (see app/page.tsx) — a deliberate, documented breach of
-   SKILL.md §3 ("one family, no pairing"), at Alex's direction, replacing the
-   earlier five-face typing-word gimmick with one calm, elegant serif in
-   exactly one place instead of five swapped-in faces in a loop.
-   ========================================================================== */
+   Hero display face — EB Garamond italic, self-hosted for the same reason as
+   Plus Jakarta Sans: no third-party request, no FOUT dependent on a network
+   we don't control. Used ONLY for the landing page's "Enable creativity."
+   line (see app/page.tsx) — a deliberate, documented breach of SKILL.md §3
+   ("one family, no pairing"), at Alex's direction, replacing the earlier
+   five-face typing-word gimmick with one calm, elegant serif in exactly one
+   place instead of five swapped-in faces in a loop.
+
+   This is the actual variable font (`font-weight: 400 800`, one file
+   covering the whole italic weight range), not a single static instance —
+   Alex asked specifically for the variable file so .hero-serif can dial in
+   whatever weight reads right, rather than being locked to one baked-in
+   cut. 400 is the lightest weight EB Garamond's italic axis goes to; there
+   is no lighter cut to fall back to. */
 @font-face {
   font-family: "EB Garamond";
-  src: url("/fonts/EBGaramond-MediumItalic-latin.woff2") format("woff2");
-  font-weight: 500;
+  src: url("/fonts/EBGaramond-Italic-Variable-latin.woff2") format("woff2");
+  font-weight: 400 800;
   font-style: italic;
   font-display: swap;
 }
@@ -481,14 +487,14 @@ html[data-theme-transition] * {
 .hero-serif {
   font-family: "EB Garamond", Georgia, "Times New Roman", serif;
   font-style: italic;
-  font-weight: 500;
-  /* 14cqw measured against the actual rendered text (not guessed): at 100px
-     "Enable creativity." sets ~688px wide, so 14cqw of the column keeps it
-     just under one column-width on a single line at every size, which is
-     what "fill the column horizontally" means for a headline that has to
-     stay on one line — 22cqw (an earlier pass) overshot and wrapped to two
-     lines instead. */
-  font-size: clamp(2.75rem, 14cqw, 5.5rem);
+  /* 400, not 500 — the lightest weight the variable font's italic axis
+     goes to, at Alex's direction ("very light font"). */
+  font-weight: 400;
+  /* 12.5cqw (was 14), at Alex's direction — a touch smaller than a full
+     column-width fit. Measured the same way as before: at 100px "Enable
+     creativity." sets ~688px wide, so 12.5cqw keeps a visible margin
+     against the column edge rather than running edge-to-edge. */
+  font-size: clamp(2.5rem, 12.5cqw, 5rem);
   line-height: 1.05;
   letter-spacing: -0.01em;
 }
