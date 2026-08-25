@@ -29,7 +29,16 @@ export const metadata: Metadata = {
 const bootScript = `
 try {
   var t = localStorage.getItem('theme');
-  if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-theme', t);
+  if (t === 'light' || t === 'dark') {
+    document.documentElement.setAttribute('data-theme', t);
+  } else {
+    // First-time visitor, no saved preference yet — default to dark rather
+    // than following the OS, at Alex's direction. Not written to
+    // localStorage: this is only the starting point, not a saved choice, so
+    // the toggle in TopBar still shows as "not yet chosen" and a later OS
+    // preference change is free to matter for anyone who never toggles.
+    document.documentElement.setAttribute('data-theme', 'dark');
+  }
 } catch (e) {}
 try {
   if (!sessionStorage.getItem('entrance-played')) {

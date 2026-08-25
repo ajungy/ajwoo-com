@@ -466,10 +466,31 @@ html[data-theme-transition] * {
 }
 
 /* Hero serif — "Enable creativity." (app/page.tsx), EB Garamond italic. */
+/* The column itself is the sizing reference, not the viewport — at Alex's
+   direction, "Enable creativity." should fill the horizontal length of its
+   own column on desktop (half the hero, once it's 2-up) and the screen width
+   on mobile (single column, full width). A viewport-relative (vw) size can't
+   do both: at the same vw value it's either too small on a half-width
+   desktop column or overflows once that column becomes the full mobile
+   width. cqw solves it directly — .hero-col below marks the column itself as
+   the query container, so 22cqw always means "22% of THIS column's own
+   width," correct at every breakpoint without separate rules for each. */
+.hero-col {
+  container-type: inline-size;
+}
 .hero-serif {
   font-family: "EB Garamond", Georgia, "Times New Roman", serif;
   font-style: italic;
   font-weight: 500;
+  /* 14cqw measured against the actual rendered text (not guessed): at 100px
+     "Enable creativity." sets ~688px wide, so 14cqw of the column keeps it
+     just under one column-width on a single line at every size, which is
+     what "fill the column horizontally" means for a headline that has to
+     stay on one line — 22cqw (an earlier pass) overshot and wrapped to two
+     lines instead. */
+  font-size: clamp(2.75rem, 14cqw, 5.5rem);
+  line-height: 1.05;
+  letter-spacing: -0.01em;
 }
 
 /* Text laid over a photograph. */

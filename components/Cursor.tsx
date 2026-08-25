@@ -391,13 +391,31 @@ export function Cursor() {
       }
       raf = requestAnimationFrame(tick);
     };
-    raf = requestAnimationFrame(tick);
+    // Fine pointer: the drop is standing in for the OS cursor, so it should
+    // be there from the first frame, not only once the mouse first moves —
+    // a stationary mouse (the common case right after a page load) would
+    // otherwise never fire a pointermove to trigger it. Deferred one frame
+    // rather than called synchronously here: `enabled` (the state flip that
+    // actually mounts rootRef/dotRef's DOM nodes) hasn't committed yet at
+    // this point in the effect, so the refs setVisible relies on are still
+    // null and the call would silently no-op. By the first rAF callback,
+    // React has committed that render and the refs are live. Starts at the
+    // viewport center and glides to the real pointer position via the same
+    // FOLLOW lerp as everything else, the moment a move event arrives.
+    // Touch is unaffected: there's no persistent OS cursor concept to stand
+    // in for on a touchscreen, so it still only appears on contact.
+    raf = requestAnimationFrame(() => {
+      if (!touchMode) setVisible(true);
+      tick();
+    });
 
-    // Touch has no hover to chase and no pointerleave to hide on — those
-    // listeners would only ever fire from an active drag/scroll gesture,
-    // which isn't "the cursor moved", so they're fine-pointer only.
+    // pointermove is registered unconditionally — touch fires it too, for
+    // as long as a finger is down and dragging, which is exactly the
+    // gesture the touch branch inside onMove above is there to handle. Only
+    // pointerover/pointerleave stay fine-pointer only: touch has no hover
+    // state and no "the pointer left the window" event worth acting on.
+    addEventListener('pointermove', onMove, { passive: true });
     if (!touchMode) {
-      addEventListener('pointermove', onMove, { passive: true });
       addEventListener('pointerover', onOver, { passive: true });
       document.addEventListener('pointerleave', onLeave);
     }

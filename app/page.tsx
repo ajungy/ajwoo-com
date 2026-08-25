@@ -22,14 +22,19 @@ export default function Home() {
         {/* Two columns: the identity statement + actions on the left, the
             personal greeting + bio on the right — replacing the earlier
             single-column typing headline entirely, at Alex's direction.
-            Stacks to one column below `medium` (600px). */}
-        <section className="entrance-target grid grid-cols-1 gap-8 pt-12 pb-9 medium:grid-cols-2 medium:gap-16">
-          <div>
-            {/* text-display carries the size; .hero-serif (globals.css)
-                swaps in EB Garamond italic on top of it — the single most
-                important element on the page, and the only place the
-                one-time entrance animation runs. */}
-            <h1 className="hero-serif max-w-content text-display text-fg">{site.headline}</h1>
+            Stacks to one column below `medium` (600px). pt-20 (was pt-12),
+            at Alex's direction — more air between the header bar and the
+            headline than the chrome's own internal spacing implies. */}
+        {/* gap-14 stacked (was gap-8), at Alex's direction — more room
+            between the button row and the "Hi, I'm Alex" column once they
+            stack on mobile. medium:gap-16 (side-by-side layout) is
+            unaffected — that gap is horizontal, not the one Alex meant. */}
+        <section className="entrance-target grid grid-cols-1 gap-14 pt-20 pb-9 medium:grid-cols-2 medium:gap-16">
+          <div className="hero-col">
+            {/* Sizing now lives entirely in .hero-serif (globals.css), fluid
+                against the column's own width via a container query — see
+                the comment there. text-display no longer applies here. */}
+            <h1 className="hero-serif text-fg">{site.headline}</h1>
 
             {/* These are the same actions that used to sit under the old
                 headline. Email copies to clipboard rather than opening a
