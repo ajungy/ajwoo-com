@@ -25,6 +25,17 @@ import { useEffect, useState } from 'react';
  * the page background itself, the hero photo — see the
  * `[data-theme-transition]` rule and `.hero-light`/`.hero-dark` in
  * globals.css) at the same pace instead of snapping instantly.
+ *
+ * The icon itself is a moon-to-sun morph, not two swapped glyphs, at Alex's
+ * direction — one orb, one overlapping "cutout" circle that masks a bite out
+ * of it. In dark mode the cutout overlaps the orb, leaving a crescent; on
+ * toggle it slides clear via `transform: translateX()` (see `.theme-cutout`
+ * in globals.css), progressively unmasking the orb into a full circle. Both
+ * states also carry a soft colored glow — icy blue for the moon, warm orange
+ * for the sun — via `drop-shadow`, plus one shared specular highlight
+ * ellipse for the "inner light." Same 500ms as the rest of this component's
+ * crossfade, all through CSS custom properties (`--theme-toggle-*` in
+ * globals.css), never a raw color in this file.
  */
 const FADE_MS = 500;
 
@@ -32,6 +43,20 @@ export function ThemeToggle() {
   const [theme, setTheme] = useState<'light' | 'dark' | null>(null);
 
   useEffect(() => {
+    // The actual APPLIED theme (set by the boot script in app/layout.tsx,
+    // which defaults new visitors to dark) is the source of truth, not a
+    // fresh read of localStorage/matchMedia — those two can disagree with
+    // what's already on <html> (e.g. a first-time visitor on a light-OS
+    // machine: boot script applies data-theme="dark", but matchMedia still
+    // reports light), which left this button's icon and "Switch to ___
+    // mode" label backwards from the page's actual appearance until the
+    // first click. Reading the DOM attribute keeps this in sync with
+    // whatever's actually rendered, in every case.
+    const applied = document.documentElement.getAttribute('data-theme');
+    if (applied === 'light' || applied === 'dark') {
+      setTheme(applied);
+      return;
+    }
     const stored = localStorage.getItem('theme');
     if (stored === 'light' || stored === 'dark') setTheme(stored);
     else setTheme(matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
@@ -49,45 +74,44 @@ export function ThemeToggle() {
   };
 
   return (
-    <>
-      <button
-        type="button"
-        onClick={apply}
-        // Icon-only, so it carries a real accessible name that states the
-        // OUTCOME, not the current state (Principle 6).
-        aria-label={`Switch to ${next} mode`}
-        title={`Switch to ${next} mode`}
-        data-cursor-label="Switch theme"
-        className={
-          'inline-flex h-control-md w-control-md items-center justify-center rounded-control ' +
-          'border border-transparent text-fg-secondary transition duration-fast ease-standard ' +
-          'can-hover:hover:bg-tertiary-hover can-hover:hover:text-fg ' +
-          'motion-safe:active:scale-press'
-        }
-      >
-        {/* Both glyphs are always in the DOM at the same size, so the box never
-            resizes between states (Principle 4). Sized up one step on this
-            project's custom spacing scale (h-6→h-7, 16px→20px — NOT
-            Tailwind's default rem scale, see tokens/tailwind.preset.js),
-            at Alex's direction — the button itself stays h-control-md
-            (matching HeaderMenu.tsx exactly), only the glyph inside grows,
-            to close the gap between this icon's visual weight and the
-            hamburger/X's own 18px bar span next to it. Stroke stays 1.5px,
-            the system's one line weight for every icon
-            (icons-and-illustrations.md), so it still reads as the same
-            family rather than a heavier one. */}
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"
-          strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="h-7 w-7">
-          {theme === 'dark' ? (
-            <>
-              <circle cx="12" cy="12" r="4" />
-              <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" />
-            </>
-          ) : (
-            <path d="M20 13.5A8.5 8.5 0 1 1 10.5 4a6.5 6.5 0 0 0 9.5 9.5Z" />
-          )}
-        </svg>
-      </button>
-    </>
+    <button
+      type="button"
+      onClick={apply}
+      // Icon-only, so it carries a real accessible name that states the
+      // OUTCOME, not the current state (Principle 6).
+      aria-label={`Switch to ${next} mode`}
+      title={`Switch to ${next} mode`}
+      data-cursor-label="Switch theme"
+      className={
+        'inline-flex h-control-md w-control-md items-center justify-center rounded-control ' +
+        'border border-transparent text-fg-secondary transition duration-fast ease-standard ' +
+        'can-hover:hover:bg-tertiary-hover can-hover:hover:text-fg ' +
+        'motion-safe:active:scale-press'
+      }
+    >
+      {/* overflow: visible — the drop-shadow glow extends past the 24x24
+          viewBox, and clipping it would cut the "outer light" off flat at
+          the box edge instead of letting it fall off softly. Sized up one
+          step (h-7/w-7, 20px) to match the previous icon's visual weight
+          next to the hamburger's 18px bar span. */}
+      <svg viewBox="0 0 24 24" aria-hidden="true" className="h-7 w-7 overflow-visible">
+        <mask id="theme-toggle-mask">
+          <rect x="0" y="0" width="24" height="24" fill="white" />
+          {/* Positioned over the orb's upper-left by default (dark/moon);
+              globals.css slides it clear on data-theme="light". Black in a
+              luminance mask = "cut this out." */}
+          <circle className="theme-cutout" cx="8.5" cy="10" r="5.5" fill="black" />
+        </mask>
+        <circle className="theme-orb" cx="12" cy="12" r="5.5" mask="url(#theme-toggle-mask)" />
+        {/* The one shared "inner light" specular highlight — present on
+            both moon and sun, unrecolored, the way a real lit sphere always
+            carries one highlight regardless of its own color. Placed on the
+            orb's upper-RIGHT, not upper-left — the cutout circle (above)
+            sits over the upper-left in dark mode, and a highlight placed
+            there would fall inside the masked-out crescent bite and
+            disappear entirely in that state. */}
+        <ellipse cx="14.4" cy="9.8" rx="1.6" ry="1.1" fill="var(--theme-toggle-highlight)" mask="url(#theme-toggle-mask)" />
+      </svg>
+    </button>
   );
 }

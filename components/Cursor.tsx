@@ -215,6 +215,25 @@ export function Cursor() {
     };
     const onLeave = () => setVisible(false);
 
+    // The real bug behind "the bubble disappears when I come back to this
+    // tab": switching tabs (or apps) usually moves the real pointer up out
+    // of the page into browser chrome first, which fires the pointerleave
+    // above and hides the drop — correctly, at that instant. The problem is
+    // what happens on RETURN: if the user doesn't happen to jiggle the
+    // mouse over the page content again, nothing ever calls setVisible(true)
+    // — onMove only runs on an actual pointermove, and there isn't
+    // necessarily one. The drop stays invisible indefinitely with a real
+    // cursor sitting right there on the page. `visibilitychange` (tab
+    // switch) and `focus` (window/app switch) are both events that fire
+    // reliably on return, with no dependency on the mouse having moved, so
+    // both re-show the drop immediately rather than waiting for movement
+    // that might not come.
+    const onReturn = () => {
+      if (!touchMode && document.visibilityState !== 'hidden') setVisible(true);
+    };
+    document.addEventListener('visibilitychange', onReturn);
+    addEventListener('focus', onReturn);
+
     // Touching the water: it grips and swells, then rings back to size.
     const onDown = (e: PointerEvent) => {
       if (popping) return;
@@ -435,6 +454,8 @@ export function Cursor() {
       removeEventListener('scroll', measure);
       removeEventListener('resize', measure);
       document.removeEventListener('pointerleave', onLeave);
+      document.removeEventListener('visibilitychange', onReturn);
+      removeEventListener('focus', onReturn);
       document.removeEventListener('click', onClickCapture, true);
       // Leaving the landing page must give the native cursor back.
       document.documentElement.removeAttribute('data-cursor');

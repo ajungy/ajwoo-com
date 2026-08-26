@@ -17,7 +17,7 @@ export const site = {
   headline: 'Enable creativity.',
   greeting: "Hi, I'm Alex.",
   greetingEmphasis: "Let's grab coffee.",
-  bio: "I'm a Design Lead at Netflix, shaping the future of creative tools. Previously, I pioneered film and video at Adobe and incubated AI, Mixed Reality, and IoT at Microsoft. On weekends, I'm usually building something or hunting for great coffee.",
+  bio: "I'm a Design Lead at Netflix, shaping the future of creative tools. Previously at Adobe and Microsoft, I worked across video, AI, and AR. On weekends, I'm usually building something or hunting for great coffee.",
   // Switched from Calendly to a Google Calendar booking page, and the event
   // itself from 30 to 15 minutes, at Alex's direction.
   calendlyUrl: process.env.NEXT_PUBLIC_CALENDLY_URL ?? 'https://calendar.app.google/qmRwUtHFyeMUzYQj8',

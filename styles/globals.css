@@ -94,8 +94,13 @@
      .cursor-drop-body) rather than centered, so it reads as a highlight
      from a light source rather than a flat glow. */
   --water-sheen: rgba(255, 255, 255, 0.16);
-  --water-shadow: rgba(0, 0, 0, 0.40);
-  --water-contact: rgba(0, 0, 0, 0.22);
+  /* Darker than the drop's original light-mode shadow (0.40/0.22), at
+     Alex's direction — the drop was hard to spot at a glance against pale
+     surfaces; a stronger cast shadow is the fix rather than a border or a
+     tint on the body itself, which would have changed what the drop looks
+     like rather than just how visible it is. */
+  --water-shadow: rgba(0, 0, 0, 0.55);
+  --water-contact: rgba(0, 0, 0, 0.34);
   /* Total internal reflection: against a light surface a real drop shows a
      DARK ring at the rim, not a bright one. Without this the drop vanishes
      on white. */
@@ -117,6 +122,22 @@
   --on-media-fg: rgba(255, 255, 255, 0.96);
   --on-media-fg-dim: rgba(255, 255, 255, 0.72);
   --on-media-scrim: linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.72) 30%, rgba(0,0,0,0.34) 66%, rgba(0,0,0,0) 100%);
+
+  /* --- Theme toggle: moon-to-sun morph (components/ThemeToggle.tsx) -------
+     One orb, one overlapping "cutout" circle masking a bite out of it. Dark
+     mode: the cutout overlaps the orb, leaving a crescent (moon). Toggling
+     to light mode slides the cutout off to the right (transform — the same
+     animatable-property allowlist every other motion on this site keeps),
+     which progressively reveals the rest of the orb until it reads as a
+     full circle (sun). Same 500ms as the rest of the theme crossfade. */
+  --theme-toggle-moon: #cfe0ff;
+  --theme-toggle-moon-glow: rgba(120, 160, 255, 0.5);
+  --theme-toggle-sun: #ffb35c;
+  --theme-toggle-sun-glow: rgba(255, 140, 40, 0.45);
+  /* The "inner light" — a single soft specular highlight, present on both
+     states rather than recolored per state, the way a real lit sphere
+     always carries one highlight regardless of what color it is. */
+  --theme-toggle-highlight: rgba(255, 255, 255, 0.45);
 }
 
 /* Dark pages: a drop over near-black needs a touch more rim and glint to be
@@ -131,9 +152,11 @@
     --water-shadow: rgba(0, 0, 0, 0.60);
     --water-contact: rgba(0, 0, 0, 0.42);
     --water-rim-dark: rgba(0, 0, 0, 0.22);
-    /* Subtle, at Alex's direction — a whisper of reflected light around the
-       shadow's edge, not a second visible glow competing with the rim. */
-    --water-shadow-glow: rgba(255, 255, 255, 0.08);
+    /* Raised from 0.08, at Alex's direction — the original value was tuned
+       to read as a whisper of reflected light, but that made the drop hard
+       to spot at a glance against near-black surfaces. Still soft (the box-
+       shadow blur radius below does the rest of the work), just brighter. */
+    --water-shadow-glow: rgba(255, 255, 255, 0.16);
   }
 }
 
@@ -148,7 +171,7 @@
   --water-shadow: rgba(0, 0, 0, 0.60);
   --water-contact: rgba(0, 0, 0, 0.42);
   --water-rim-dark: rgba(0, 0, 0, 0.22);
-  --water-shadow-glow: rgba(255, 255, 255, 0.08);
+  --water-shadow-glow: rgba(255, 255, 255, 0.16);
 }
 
 /* --- Landing-page hero photo, theme-aware (components/HeroPhoto.tsx) -------
@@ -180,6 +203,39 @@
 :root[data-theme="light"] .hero-dark { opacity: 0; visibility: hidden; pointer-events: none; }
 @media (prefers-reduced-motion: reduce) {
   .hero-light, .hero-dark { transition: none; }
+}
+
+/* --- Theme toggle icon: moon-to-sun morph (components/ThemeToggle.tsx) -----
+   .theme-cutout sits inside an SVG <mask> and punches a hole out of
+   .theme-orb wherever it overlaps. Dark mode (default): the cutout sits
+   over the orb's upper-left, leaving a right-lit crescent. Toggling to
+   light slides the cutout fully clear via `transform: translateX()` — the
+   orb is then unmasked edge to edge, reading as a plain circle (sun). One
+   property, `transform`, no separate light/dark artwork to cut between. */
+.theme-orb {
+  fill: var(--theme-toggle-moon);
+  filter: drop-shadow(0 0 2px var(--theme-toggle-moon-glow)) drop-shadow(0 0 5px var(--theme-toggle-moon-glow));
+  transition: fill 500ms ease, filter 500ms ease;
+}
+.theme-cutout {
+  transform: translateX(0);
+  transition: transform 500ms ease;
+}
+:root[data-theme="light"] .theme-orb {
+  fill: var(--theme-toggle-sun);
+  filter: drop-shadow(0 0 2px var(--theme-toggle-sun-glow)) drop-shadow(0 0 5px var(--theme-toggle-sun-glow));
+}
+:root[data-theme="light"] .theme-cutout {
+  /* The cutout isn't concentric with the orb (it starts offset up-left, at
+     cx 8.5 vs the orb's cx 12, which is what makes the crescent shape) — an
+     11px shift (the diameter) only moves its edge as far as the orb's OWN
+     original edge, not clear of the orb's shifted-right far edge, so a
+     visible bite remained. 15px clears the two circles fully: cutout's left
+     edge at 8.5+15-5.5=18, past the orb's right edge at 12+5.5=17.5. */
+  transform: translateX(15px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .theme-orb, .theme-cutout { transition: none; }
 }
 
 /* --- (a) Entrance sequence -------------------------------------------------
@@ -412,8 +468,11 @@ html[data-theme-transition] * {
     0 5px 12px -3px var(--water-shadow),
     0 2px 3px 0 var(--water-contact),
     /* Dark mode only (transparent in light — see --water-shadow-glow above):
-       a very subtle white glow around the shadow's own edge. */
-    0 0 10px 0 var(--water-shadow-glow);
+       a soft white glow around the drop, widened from 10px along with the
+       token's own opacity bump, at Alex's direction — the drop needs to be
+       spottable at a glance, especially right after the cursor reappears
+       (see the visibilitychange fix in Cursor.tsx). */
+    0 0 14px 1px var(--water-shadow-glow);
 }
 
 /* Specular glints. Deliberately NOT inside the rotating layer: as the drop
