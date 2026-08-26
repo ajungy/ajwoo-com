@@ -341,37 +341,82 @@ with a `setTimeout` fallback racing the animation frame, guarded to invoke the
 actual `router.push` exactly once from whichever completes first. The visual
 pop is best-effort; leaving the page on click is not.
 
-### (d) The typing verb in the headline — a documented deviation, not an extension
+### (d) The headline — two superseded deviations, then a third that stuck
 
-**Moved on Alex's instruction from the hero photo into the headline itself.**
-The h1 now reads "Alex Woo ___ creative tools at Netflix.", with the verb
-cycling designs -> builds -> codes -> creates -> pioneers -> looping. Everything
-else in that sentence is fixed text; only the one word types and deletes.
+**All of the below is history.** The current headline is a plain, static
+`h1` reading "Enable creativity." in EB Garamond italic (`.hero-serif`,
+`globals.css`), sized against its own column width via a container query
+(`.hero-col`) rather than the viewport. It types nothing, loops nothing, and
+does not violate Principle 14 on its own. What follows is superseded, kept
+for the record rather than deleted.
 
-**This one breaks Principle 14 and I am not going to pretend otherwise.** A
-typing loop is time-driven: it moves when nobody has touched anything. That is
-the exact thing the principle forbids, and it is the same objection that got the
-`javascript-snow` script cut in Phase 0.
+**First version (superseded):** the h1 read "Alex Woo ___ creative tools at
+Netflix.", with one word cycling designs → builds → codes → creates →
+pioneers → looping — a genuine Principle 14 violation, shipped anyway at
+Alex's direct request, with `prefers-reduced-motion` and an
+IntersectionObserver pause as the two guards that kept it from being the
+worst version of itself. Replaced when Alex asked for a calmer, wordmark-like
+statement instead of the typing loop.
 
-Alex asked for it directly, so it ships with the two guards that keep it from
-being the worst version of itself:
+**Second version (superseded):** the plain static line described above,
+which is what a visitor without JavaScript or with `prefers-reduced-motion:
+reduce` still sees today (see `(e)` below) — this is the fallback the third
+version degrades to, not a separate thing that was removed.
 
-1. **`prefers-reduced-motion: reduce` renders the first phrase statically** and
-   never starts a timer.
-2. **It stops when the hero scrolls out of view** (IntersectionObserver), so it
-   is not burning frames behind the rest of the page.
+### (f) ParticleText — a canvas particle system replacing the plain headline, a deliberate exception to §2 AND Principle 14
 
-It is also not announced to assistive tech — a caption rewriting itself every
-70ms would flood a screen reader — so the nine phrases are exposed once, as
-static text, in a visually-hidden span.
+**"Enable creativity." now assembles from drifting canvas particles that
+scatter and reform on hover**, via `components/ParticleText.tsx` — a
+TypeScript port of React Bits' `ParticleText` (JS-CSS variant,
+reactbits.dev/text-animations/particle-text). Alex asked for this by name,
+with an exact prop configuration, after being shown that it conflicts with
+two rules this file otherwise holds everywhere:
 
-**Tried and reverted: reserving the longest word's width so the headline never
-re-breaks.** An inline-block sized to "pioneers" inside wrapping text does not
-just reserve space — it forces the browser to lay the rest of the line out
-around a rigid box, which broke the wrap entirely (words landed on the wrong
-line, one floated free of the sentence). The word is plain inline text now, and
-the headline may shift by a few pixels as the word's length changes. Accepted
-rather than fixed further; the alternative was worse.
+1. **§2 sets "Animation library: None,"** specifically rejecting Framer
+   Motion for making it easy to animate more than opacity/transform/color
+   without the author noticing. A canvas particle simulation — per-pixel
+   text sampling, a scatter/gather spring, a pointer-repulsion field — is
+   well past that line. It has zero npm dependencies (the registry entry
+   lists none), so nothing was actually installed; the two files are
+   vendored directly into `components/`.
+2. **Principle 14** is violated by `idleDrift={2}`: particles drift
+   continuously at rest, with no user action driving it. Same objection that
+   cut `javascript-snow` in Phase 0 and that required the first headline
+   deviation above to be logged rather than shipped silently.
+
+Given both conflicts directly, Alex confirmed the deviation is intentional —
+same treatment as the (superseded) typing-verb deviation was. It replaces
+"Enable creativity." on the landing page ONLY; nothing else on the site uses
+it, and nothing else in this codebase has a canvas animation anywhere in it.
+
+**One prop tuned away from Alex's literal pasted config: `fontSize`.** The
+given value (`clamp(3rem, 12vw, 8rem)`) sizes off the viewport. Alex's own
+follow-up in that same request — "fit it inside the horizontal column space
+of original Enable Creativity if possible" — asks for exactly what
+`.hero-serif`'s own `12.5cqw`-based clamp already does (fills the column,
+not a fraction of the viewport), so the component reuses that formula
+instead of the copy-pasted one. Every other prop (color, particle density,
+scatter/gather timing, hover trigger, glow) matches Alex's spec exactly.
+
+**One real bug fixed in the vendored source, not just ported around:** the
+registry component's `fontFamily="inherit"` reads the container's computed
+font FAMILY only — the canvas `font` string it builds never included a style
+term, so on a page with `.hero-serif`'s italic, the particles would silently
+assemble into upright type. Patched to also read `computed.fontStyle` and
+include it in the canvas font string, so "inherit" actually means "look like
+what CSS says this looks like," not just "same typeface." This is the one
+change to the particle logic itself; the sampling/physics is otherwise
+byte-for-byte the registry source, just typed.
+
+**Accessibility:** the visible canvas sits in an `aria-hidden` wrapper
+inside the `h1`; the `h1`'s real accessible name is a `sr-only` span with
+the plain text, so the page keeps exactly one real `<h1>` with real text —
+putting `aria-hidden` on the `h1` itself would have deleted it from the
+accessibility tree entirely, not just hidden the decoration. Reduced-motion
+users get the component's own built-in fallback: particles render directly
+at their target positions with no scatter, no gather animation, and no idle
+drift, which is the same "final state immediately, no exception" contract
+every other motion on this site keeps.
 
 **The hero photo and the on-media tokens stay in the codebase** (`--on-media-*`
 in `globals.css`, the `on-media` Action variant) even though nothing currently

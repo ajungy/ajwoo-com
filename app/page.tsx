@@ -1,4 +1,5 @@
 import { Action } from '@/components/Action';
+import ParticleText from '@/components/ParticleText';
 import { HeroPhoto } from '@/components/HeroPhoto';
 import { FeaturedApp } from '@/components/FeaturedApp';
 import { CopyEmailButton } from '@/components/CopyEmailButton';
@@ -31,10 +32,57 @@ export default function Home() {
             unaffected — that gap is horizontal, not the one Alex meant. */}
         <section className="entrance-target grid grid-cols-1 gap-14 pt-20 pb-9 medium:grid-cols-2 medium:gap-16">
           <div className="hero-col">
-            {/* Sizing now lives entirely in .hero-serif (globals.css), fluid
-                against the column's own width via a container query — see
-                the comment there. text-display no longer applies here. */}
-            <h1 className="hero-serif text-fg">{site.headline}</h1>
+            {/* ParticleText (components/ParticleText.tsx) — a vendored React
+                Bits component, installed as a deliberate, logged exception
+                to this site's own "no animation library, nothing moves at
+                rest" rules, at Alex's explicit direction. See the long
+                comment at the top of that file for the full reasoning and
+                what was and wasn't changed from the registry source.
+
+                `hero-serif` still supplies the type: ParticleText's own
+                `fontFamily="inherit"` (below) reads whatever's computed on
+                this wrapper, so the particles assemble into the same EB
+                Garamond italic the plain-text headline used. fontSize uses
+                the same 12.5cqw formula .hero-serif itself used, not the
+                vw-based value from Alex's pasted config — that's the one
+                deliberate deviation from the given props, because Alex's
+                own follow-up ("fit it inside the horizontal column space")
+                asks for exactly what the cqw version already does: fill
+                this column's width, not some fraction of the viewport. */}
+            {/* The h1 itself stays a real heading with real text (sr-only,
+                visually replaced by the canvas below it) — putting
+                aria-hidden on the h1 element itself would have deleted the
+                page's only h1 from the accessibility tree entirely, not
+                just hidden the decorative canvas. */}
+            <h1 className="hero-serif">
+              <span className="sr-only">{site.headline}</span>
+              <div aria-hidden="true">
+                <ParticleText
+                  text={site.headline}
+                  particleSize={2}
+                  density={2}
+                  color="#ffe5e5"
+                  highlightColor="#ffffff"
+                  scatter={120}
+                  gatherDuration={500}
+                  stagger={0}
+                  pointerRepel={90}
+                  repelRadius={220}
+                  idleDrift={2}
+                  trigger="hover"
+                  fontSize="clamp(2.5rem, 12.5cqw, 5rem)"
+                  fontWeight={400}
+                  fontFamily="inherit"
+                  glow
+                  // minHeight overrides the vendored component's own
+                  // 240px CSS floor (ParticleText.module.css), which was
+                  // taller than this headline needs at any column width
+                  // this site actually renders at and pushed the button
+                  // row below it down by an extra ~150px on desktop.
+                  style={{ height: 'clamp(7rem, 25cqw, 11rem)', minHeight: 0 }}
+                />
+              </div>
+            </h1>
 
             {/* These are the same actions that used to sit under the old
                 headline. Email copies to clipboard rather than opening a
