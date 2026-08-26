@@ -18,30 +18,24 @@ import { useEffect, useState } from 'react';
  * The flip itself is a plain 500ms `ease` crossfade, not a color sweep — an
  * earlier version played a multi-stage white→orange→navy→black animation;
  * Alex asked for that removed in favor of a simple fade back to the
- * system's actual white/black surfaces. Duration has moved twice since
- * (300ms, then 1000ms — which read as too slow — now 500ms).
- * `data-theme-transition` is set on `<html>` for exactly that 500ms, which
- * fades every foreground AND background color (text, icons, card surfaces,
- * the page background itself, the hero photo — see the
- * `[data-theme-transition]` rule and `.hero-light`/`.hero-dark` in
- * globals.css) at the same pace instead of snapping instantly.
+ * system's actual white/black surfaces. `data-theme-transition` is set on
+ * `<html>` for exactly that 500ms, which fades every foreground AND
+ * background color (text, icons, card surfaces, the page background
+ * itself, the hero photo — see `[data-theme-transition]` and
+ * `.hero-light`/`.hero-dark` in globals.css) at the same pace instead of
+ * snapping instantly.
  *
- * THE SWITCH — ported from the Figma reference (node 395:299, "Dark and
- * light mode toggle"), at Alex's explicit direction to use "the exact
- * component." A 44x26 pill with a 22px white knob that slides from left
- * (dark) to right (light). Figma's own layer for the knob is named
- * "Subtract" and ships as 3 flattened keyframe SVGs (dark/mid/light) — the
- * knob is a boolean subtraction between two circles, thinning from a deep
- * crescent (dark) through a shallow one (mid-drag) to a plain full circle
- * (light). Reproduced here as a live SVG mask (`.switch-knob`/
- * `.switch-cutout` in globals.css) rather than swapped artwork: the cutout
- * circle stays fixed at the knob's dark/left position while the knob slides
- * across it via `transform`, so the crescent thins continuously over the
- * whole 500ms trip — not just at the two endpoints — landing on a full
- * circle exactly where Figma's "light" keyframe has one. Every color
- * (the icy-blue glow, the warm-orange one, the ambient shadow, the track's
- * own gray) was read directly off the reference SVGs' filter primitives,
- * not eyeballed — see the token comments in globals.css.
+ * BACK TO THE PLAIN ICON-ONLY SQUARE BUTTON, at Alex's direction — this
+ * control has been a moon-morph icon, then a Figma-ported pill/switch
+ * (node 395:299); the pill is gone and this is the original square button
+ * shape again. The icon itself is now ported from jolyui.dev's
+ * AnimatedThemeToggle (jolyui.dev/docs/components/inputs/
+ * animated-theme-toggle) — the exact sun (circle + 8 rays) and moon
+ * (single crescent) SVG paths from its registry source, copied verbatim.
+ * The reference drives the animation with the `motion` npm package and
+ * reads theme state via `next-themes`; neither is used here — see the
+ * long comment on `.theme-icon-sun`/`.theme-icon-moon` in globals.css for
+ * why, and what plain-CSS equivalent replaces them.
  */
 const FADE_MS = 500;
 
@@ -54,8 +48,8 @@ export function ThemeToggle() {
     // fresh read of localStorage/matchMedia — those two can disagree with
     // what's already on <html> (e.g. a first-time visitor on a light-OS
     // machine: boot script applies data-theme="dark", but matchMedia still
-    // reports light), which left this control's position and "Switch to
-    // ___ mode" label backwards from the page's actual appearance until the
+    // reports light), which left this control's icon and "Switch to ___
+    // mode" label backwards from the page's actual appearance until the
     // first click. Reading the DOM attribute keeps this in sync with
     // whatever's actually rendered, in every case.
     const applied = document.documentElement.getAttribute('data-theme');
@@ -83,57 +77,44 @@ export function ThemeToggle() {
     <button
       type="button"
       onClick={apply}
-      role="switch"
-      aria-checked={theme === 'light'}
       // Icon-only, so it carries a real accessible name that states the
-      // OUTCOME, not the current state (Principle 6) — role="switch" above
-      // separately exposes the actual on/off state to assistive tech.
+      // OUTCOME, not the current state (Principle 6).
       aria-label={`Switch to ${next} mode`}
       title={`Switch to ${next} mode`}
       data-cursor-label="Switch theme"
-      // p-1 pads the hit area slightly past the 44x26 visual track (the
-      // exact Figma size) without changing how it looks — a bare 26px-tall
-      // target is under this project's usual control heights.
-      className="inline-flex shrink-0 items-center rounded-full p-1 motion-safe:active:scale-press"
+      className={
+        'inline-flex h-control-md w-control-md items-center justify-center rounded-control ' +
+        'border border-transparent text-fg-secondary transition duration-fast ease-standard ' +
+        'can-hover:hover:bg-tertiary-hover can-hover:hover:text-fg ' +
+        'motion-safe:active:scale-press'
+      }
     >
-      <span className="switch-track">
-        <svg className="switch-knob-svg" viewBox="0 0 44 26" aria-hidden="true">
-          <defs>
-            <mask id="theme-switch-mask">
-              <rect x="0" y="0" width="44" height="26" fill="white" />
-              {/* Fixed at the knob's own dark/left rest position, offset
-                  up-left — never animated. The knob (below) is what moves;
-                  the shrinking overlap between a moving circle and this
-                  still one is what thins the crescent as it travels. */}
-              <circle cx="8" cy="11" r="11" fill="black" />
-            </mask>
-          </defs>
-          {/* The knob slides by animating its `cx` (see .switch-knob in
-              globals.css), not `transform` — a mask's cutout is resolved
-              against an element's geometry BEFORE that element's (or any
-              ancestor's) CSS transform is applied, confirmed by testing
-              both ways directly in the browser, so a merely-transformed
-              circle left the mask seeing the exact same (untransformed)
-              overlap forever. `cx` is real geometry, so the mask sees the
-              actual new position and the crescent genuinely thins as it
-              travels.
-
-              `filter`, on the other hand, DOES need to be one level up, on
-              this <g> — an element's own `mask` resolves AFTER its own
-              `filter` (filter samples the pre-mask shape), but resolves
-              BEFORE a filter set on an ancestor (the ancestor's filter
-              samples the child's already-masked output). Filter directly
-              on the circle was drawing the glow from the full pre-mask
-              circle, which the fixed cutout then clipped a chunk out of
-              even once the circle had genuinely moved clear. Split across
-              two elements like this, both are true at once: the mask sees
-              the real position, and the glow traces the real
-              (already-masked) result. */}
-          <g className="switch-knob-fx">
-            <circle className="switch-knob" cx="13" cy="13" r="11" mask="url(#theme-switch-mask)" />
-          </g>
-        </svg>
-      </span>
+      {/* Both groups are always in the DOM at the same size, so the box
+          never resizes between states (Principle 4) — only opacity/scale
+          (see globals.css) decide which one is actually visible. 20px
+          (h-7/w-7 on this project's custom spacing scale), matching the
+          reference's own 20x20 default exactly. */}
+      <svg viewBox="0 0 25 25" fill="none" aria-hidden="true" className="h-7 w-7">
+        <g className="theme-icon-sun">
+          <circle cx="12.4058" cy="12.7625" r="5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M12.4058 1.76251V3.76251" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M12.4058 21.7625V23.7625" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M4.62598 4.98248L6.04598 6.40248" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M18.7656 19.1225L20.1856 20.5425" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M1.40576 12.7625H3.40576" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M21.4058 12.7625H23.4058" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M4.62598 20.5425L6.04598 19.1225" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M18.7656 6.40248L20.1856 4.98248" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        </g>
+        <path
+          className="theme-icon-moon"
+          d="M21.1918 13.2013C21.0345 14.9035 20.3957 16.5257 19.35 17.8781C18.3044 19.2305 16.8953 20.2571 15.2875 20.8379C13.6797 21.4186 11.9398 21.5294 10.2713 21.1574C8.60281 20.7854 7.07479 19.9459 5.86602 18.7371C4.65725 17.5283 3.81774 16.0003 3.4457 14.3318C3.07367 12.6633 3.18451 10.9234 3.76526 9.31561C4.346 7.70783 5.37263 6.29868 6.72501 5.25307C8.07739 4.20746 9.69959 3.56862 11.4018 3.41132C10.4052 4.75958 9.92564 6.42077 10.0503 8.09273C10.175 9.76469 10.8957 11.3364 12.0812 12.5219C13.2667 13.7075 14.8384 14.4281 16.5104 14.5528C18.1823 14.6775 19.8435 14.1979 21.1918 13.2013Z"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
     </button>
   );
 }

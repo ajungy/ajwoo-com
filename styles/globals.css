@@ -123,29 +123,6 @@
   --on-media-fg-dim: rgba(255, 255, 255, 0.72);
   --on-media-scrim: linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.72) 30%, rgba(0,0,0,0.34) 66%, rgba(0,0,0,0) 100%);
 
-  /* --- Theme toggle: switch (components/ThemeToggle.tsx) -----------------
-     Ported from the Figma reference (node 395:299, "Dark and light mode
-     toggle") — a 44x26 pill with a 22px white knob sliding between a left
-     (dark) and right (light) resting position. Figma's own layer is named
-     "Subtract": the crescent is a boolean subtraction between the knob
-     circle and a second, offset circle, exported as 3 flattened keyframes
-     (dark/mid/light). Reproduced here as a live SVG mask instead — the
-     cutout circle stays fixed at the knob's dark/left position while the
-     knob itself slides via `transform`, so the overlap (and therefore the
-     crescent) shrinks continuously as it travels, landing on a full circle
-     once it clears the cutout — the same 3 keyframes Figma shows, plus
-     every position between them, from one CSS transition.
-     Colors read directly off the reference SVGs' own filter primitives
-     (not eyeballed): dark's glow resolves to rgb(164,178,255), its inner
-     shadow to rgb(181,165,255); light's glow to rgb(255,140,0), its inner
-     shadow to rgb(255,166,0); both share the same rgba(0,0,0,0.25) ambient
-     drop shadow and the same rgba(179,179,179,0.5) (#B3B3B3 50%) track. */
-  --switch-track: rgba(179, 179, 179, 0.5);
-  --switch-knob-shadow: rgba(0, 0, 0, 0.25);
-  --switch-knob-glow-dark: rgba(164, 178, 255, 0.9);
-  --switch-knob-inner-dark: rgba(181, 165, 255, 0.35);
-  --switch-knob-glow-light: rgba(255, 140, 0, 0.55);
-  --switch-knob-inner-light: rgba(255, 166, 0, 0.3);
 }
 
 /* Dark pages: a drop over near-black needs a touch more rim and glint to be
@@ -213,75 +190,43 @@
   .hero-light, .hero-dark { transition: none; }
 }
 
-/* --- Theme toggle: switch (components/ThemeToggle.tsx) ---------------------
-   44x26 track, 22px knob, 2px clearance top/bottom/at-rest — exact geometry
-   from the Figma reference. The knob is a white circle inside an SVG mask;
-   the cutout sits at a FIXED position (the knob's own dark/left rest spot,
-   offset up-left) and never moves. `.switch-knob` slides by animating its
-   own `cx` attribute, NOT `transform`. This is load-bearing, confirmed by
-   testing both ways directly in the rendered page: a `mask`'s cutout is
-   resolved against an element's geometry BEFORE that element's own CSS
-   `transform` is applied, on every element the mask sits on OR any
-   ancestor of it — so a transformed-but-not-actually-repositioned circle
-   makes the mask see the exact same (untransformed) overlap forever, no
-   matter which element carries the transform. `cx` is real SVG geometry,
-   not a paint-time transform, so the mask sees the ACTUAL new position and
-   the overlap — and so the crescent — genuinely shrinks as the value
-   animates from 13 to 31, landing on a full circle once it clears the
-   cutout. (cx/cy/r have been CSS-animatable SVG geometry properties since
-   SVG2; this project already leans on comparably-recent CSS elsewhere,
-   e.g. container queries in .hero-serif.)
+/* --- Theme toggle: sun/moon icon-morph (components/ThemeToggle.tsx) --------
+   Back to the plain icon-only square button, at Alex's direction — the
+   pill/switch (Figma node 395:299) is gone. Icon design ported from
+   jolyui.dev's AnimatedThemeToggle (jolyui.dev/docs/components/inputs/
+   animated-theme-toggle): the exact same sun (circle + 8 rays) and moon
+   (single crescent) SVG paths, at the reference's own 25x25 viewBox/20px
+   size — copied byte-for-byte from its registry JSON, not retraced.
 
-   `filter` (the shadow/glow) lives one level up, on `.switch-knob-fx` —
-   also load-bearing, for the mirror-image reason. An element's own `mask`
-   resolves AFTER its own `filter` (filter samples the pre-mask shape), but
-   resolves BEFORE a filter set on an ANCESTOR (the ancestor's filter
-   samples the child's already-masked, already-correct output). Filter
-   directly on the circle was generating the glow from the full pre-mask
-   circle every time, which the still-fixed cutout then clipped a chunk out
-   of — even once the circle had genuinely moved clear — because the
-   blurred glow physically reached back into the cutout's location. Split
-   across the two elements like this, both are true at once: the mask sees
-   the real position, and the glow traces the real (already-masked) shape
-   at every point along the way. */
-.switch-track {
-  position: relative;
-  width: 44px;
-  height: 26px;
-  border-radius: 9999px;
-  background: var(--switch-track);
-  flex-shrink: 0;
+   The reference animates via the `motion` npm package (Framer Motion's
+   successor) driving `scale` + `pathLength`, and reads/writes theme state
+   through `next-themes`. Neither is used here: `motion` is exactly the
+   class of dependency §2 rules out ("Animation library: None"), and
+   `next-themes` would mean replacing this project's own theme system —
+   the OS-default-then-explicit-override boot script, the dark-default for
+   first-time visitors, the 500ms page-wide crossfade, the desync-bug fix
+   from two rounds ago — with a different one, for a component that only
+   needed to change how the BUTTON looks. `scale` and `opacity` are both
+   already on this codebase's permitted-properties list, so the same visual
+   effect (rays shrink and fade out, moon grows and fades in, or the
+   reverse) is fully achievable in plain CSS keyed off the same
+   `data-theme` attribute every other themed element already uses. The
+   reference's `pathLength` "stroke draws in" flourish is not reproduced —
+   it needs each path's precise rendered length (SVG `getTotalLength()`) to
+   fake with `stroke-dasharray`, real JS measurement for a detail this
+   subtle at 20px. 500ms, not the reference's 700ms, to match the single
+   duration every other piece of theme motion on this site already uses. */
+.theme-icon-sun, .theme-icon-moon {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: transform 500ms ease, opacity 500ms ease;
 }
-.switch-knob-svg {
-  position: absolute;
-  inset: 0;
-  overflow: visible;
-}
-.switch-knob {
-  fill: white;
-  cx: 13px;
-  transition: cx 500ms ease;
-}
-:root[data-theme="light"] .switch-knob {
-  /* The knob's own center travels from x13 to x31 (44px track, 22px knob,
-     2px clearance on every side: 2+11=13, 44-2-11=31). */
-  cx: 31px;
-}
-.switch-knob-fx {
-  filter:
-    drop-shadow(0 1px 1px var(--switch-knob-shadow))
-    drop-shadow(0 0 1px var(--switch-knob-inner-dark))
-    drop-shadow(0 0 6px var(--switch-knob-glow-dark));
-  transition: filter 500ms ease;
-}
-:root[data-theme="light"] .switch-knob-fx {
-  filter:
-    drop-shadow(0 1px 1px var(--switch-knob-shadow))
-    drop-shadow(0 0 1px var(--switch-knob-inner-light))
-    drop-shadow(0 0 6px var(--switch-knob-glow-light));
-}
+.theme-icon-sun { transform: scale(1); opacity: 1; }
+.theme-icon-moon { transform: scale(0); opacity: 0; }
+:root[data-theme="dark"] .theme-icon-sun { transform: scale(0); opacity: 0; }
+:root[data-theme="dark"] .theme-icon-moon { transform: scale(1); opacity: 1; }
 @media (prefers-reduced-motion: reduce) {
-  .switch-knob, .switch-knob-fx { transition: none; }
+  .theme-icon-sun, .theme-icon-moon { transition: none; }
 }
 
 /* --- (a) Entrance sequence -------------------------------------------------
