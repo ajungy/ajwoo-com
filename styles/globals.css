@@ -123,21 +123,29 @@
   --on-media-fg-dim: rgba(255, 255, 255, 0.72);
   --on-media-scrim: linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.72) 30%, rgba(0,0,0,0.34) 66%, rgba(0,0,0,0) 100%);
 
-  /* --- Theme toggle: moon-to-sun morph (components/ThemeToggle.tsx) -------
-     One orb, one overlapping "cutout" circle masking a bite out of it. Dark
-     mode: the cutout overlaps the orb, leaving a crescent (moon). Toggling
-     to light mode slides the cutout off to the right (transform — the same
-     animatable-property allowlist every other motion on this site keeps),
-     which progressively reveals the rest of the orb until it reads as a
-     full circle (sun). Same 500ms as the rest of the theme crossfade. */
-  --theme-toggle-moon: #cfe0ff;
-  --theme-toggle-moon-glow: rgba(120, 160, 255, 0.5);
-  --theme-toggle-sun: #ffb35c;
-  --theme-toggle-sun-glow: rgba(255, 140, 40, 0.45);
-  /* The "inner light" — a single soft specular highlight, present on both
-     states rather than recolored per state, the way a real lit sphere
-     always carries one highlight regardless of what color it is. */
-  --theme-toggle-highlight: rgba(255, 255, 255, 0.45);
+  /* --- Theme toggle: switch (components/ThemeToggle.tsx) -----------------
+     Ported from the Figma reference (node 395:299, "Dark and light mode
+     toggle") — a 44x26 pill with a 22px white knob sliding between a left
+     (dark) and right (light) resting position. Figma's own layer is named
+     "Subtract": the crescent is a boolean subtraction between the knob
+     circle and a second, offset circle, exported as 3 flattened keyframes
+     (dark/mid/light). Reproduced here as a live SVG mask instead — the
+     cutout circle stays fixed at the knob's dark/left position while the
+     knob itself slides via `transform`, so the overlap (and therefore the
+     crescent) shrinks continuously as it travels, landing on a full circle
+     once it clears the cutout — the same 3 keyframes Figma shows, plus
+     every position between them, from one CSS transition.
+     Colors read directly off the reference SVGs' own filter primitives
+     (not eyeballed): dark's glow resolves to rgb(164,178,255), its inner
+     shadow to rgb(181,165,255); light's glow to rgb(255,140,0), its inner
+     shadow to rgb(255,166,0); both share the same rgba(0,0,0,0.25) ambient
+     drop shadow and the same rgba(179,179,179,0.5) (#B3B3B3 50%) track. */
+  --switch-track: rgba(179, 179, 179, 0.5);
+  --switch-knob-shadow: rgba(0, 0, 0, 0.25);
+  --switch-knob-glow-dark: rgba(164, 178, 255, 0.9);
+  --switch-knob-inner-dark: rgba(181, 165, 255, 0.35);
+  --switch-knob-glow-light: rgba(255, 140, 0, 0.55);
+  --switch-knob-inner-light: rgba(255, 166, 0, 0.3);
 }
 
 /* Dark pages: a drop over near-black needs a touch more rim and glint to be
@@ -205,37 +213,75 @@
   .hero-light, .hero-dark { transition: none; }
 }
 
-/* --- Theme toggle icon: moon-to-sun morph (components/ThemeToggle.tsx) -----
-   .theme-cutout sits inside an SVG <mask> and punches a hole out of
-   .theme-orb wherever it overlaps. Dark mode (default): the cutout sits
-   over the orb's upper-left, leaving a right-lit crescent. Toggling to
-   light slides the cutout fully clear via `transform: translateX()` — the
-   orb is then unmasked edge to edge, reading as a plain circle (sun). One
-   property, `transform`, no separate light/dark artwork to cut between. */
-.theme-orb {
-  fill: var(--theme-toggle-moon);
-  filter: drop-shadow(0 0 2px var(--theme-toggle-moon-glow)) drop-shadow(0 0 5px var(--theme-toggle-moon-glow));
-  transition: fill 500ms ease, filter 500ms ease;
+/* --- Theme toggle: switch (components/ThemeToggle.tsx) ---------------------
+   44x26 track, 22px knob, 2px clearance top/bottom/at-rest — exact geometry
+   from the Figma reference. The knob is a white circle inside an SVG mask;
+   the cutout sits at a FIXED position (the knob's own dark/left rest spot,
+   offset up-left) and never moves. `.switch-knob` slides by animating its
+   own `cx` attribute, NOT `transform`. This is load-bearing, confirmed by
+   testing both ways directly in the rendered page: a `mask`'s cutout is
+   resolved against an element's geometry BEFORE that element's own CSS
+   `transform` is applied, on every element the mask sits on OR any
+   ancestor of it — so a transformed-but-not-actually-repositioned circle
+   makes the mask see the exact same (untransformed) overlap forever, no
+   matter which element carries the transform. `cx` is real SVG geometry,
+   not a paint-time transform, so the mask sees the ACTUAL new position and
+   the overlap — and so the crescent — genuinely shrinks as the value
+   animates from 13 to 31, landing on a full circle once it clears the
+   cutout. (cx/cy/r have been CSS-animatable SVG geometry properties since
+   SVG2; this project already leans on comparably-recent CSS elsewhere,
+   e.g. container queries in .hero-serif.)
+
+   `filter` (the shadow/glow) lives one level up, on `.switch-knob-fx` —
+   also load-bearing, for the mirror-image reason. An element's own `mask`
+   resolves AFTER its own `filter` (filter samples the pre-mask shape), but
+   resolves BEFORE a filter set on an ANCESTOR (the ancestor's filter
+   samples the child's already-masked, already-correct output). Filter
+   directly on the circle was generating the glow from the full pre-mask
+   circle every time, which the still-fixed cutout then clipped a chunk out
+   of — even once the circle had genuinely moved clear — because the
+   blurred glow physically reached back into the cutout's location. Split
+   across the two elements like this, both are true at once: the mask sees
+   the real position, and the glow traces the real (already-masked) shape
+   at every point along the way. */
+.switch-track {
+  position: relative;
+  width: 44px;
+  height: 26px;
+  border-radius: 9999px;
+  background: var(--switch-track);
+  flex-shrink: 0;
 }
-.theme-cutout {
-  transform: translateX(0);
-  transition: transform 500ms ease;
+.switch-knob-svg {
+  position: absolute;
+  inset: 0;
+  overflow: visible;
 }
-:root[data-theme="light"] .theme-orb {
-  fill: var(--theme-toggle-sun);
-  filter: drop-shadow(0 0 2px var(--theme-toggle-sun-glow)) drop-shadow(0 0 5px var(--theme-toggle-sun-glow));
+.switch-knob {
+  fill: white;
+  cx: 13px;
+  transition: cx 500ms ease;
 }
-:root[data-theme="light"] .theme-cutout {
-  /* The cutout isn't concentric with the orb (it starts offset up-left, at
-     cx 8.5 vs the orb's cx 12, which is what makes the crescent shape) — an
-     11px shift (the diameter) only moves its edge as far as the orb's OWN
-     original edge, not clear of the orb's shifted-right far edge, so a
-     visible bite remained. 15px clears the two circles fully: cutout's left
-     edge at 8.5+15-5.5=18, past the orb's right edge at 12+5.5=17.5. */
-  transform: translateX(15px);
+:root[data-theme="light"] .switch-knob {
+  /* The knob's own center travels from x13 to x31 (44px track, 22px knob,
+     2px clearance on every side: 2+11=13, 44-2-11=31). */
+  cx: 31px;
+}
+.switch-knob-fx {
+  filter:
+    drop-shadow(0 1px 1px var(--switch-knob-shadow))
+    drop-shadow(0 0 1px var(--switch-knob-inner-dark))
+    drop-shadow(0 0 6px var(--switch-knob-glow-dark));
+  transition: filter 500ms ease;
+}
+:root[data-theme="light"] .switch-knob-fx {
+  filter:
+    drop-shadow(0 1px 1px var(--switch-knob-shadow))
+    drop-shadow(0 0 1px var(--switch-knob-inner-light))
+    drop-shadow(0 0 6px var(--switch-knob-glow-light));
 }
 @media (prefers-reduced-motion: reduce) {
-  .theme-orb, .theme-cutout { transition: none; }
+  .switch-knob, .switch-knob-fx { transition: none; }
 }
 
 /* --- (a) Entrance sequence -------------------------------------------------
