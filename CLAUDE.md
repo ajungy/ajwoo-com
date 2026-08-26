@@ -358,65 +358,23 @@ IntersectionObserver pause as the two guards that kept it from being the
 worst version of itself. Replaced when Alex asked for a calmer, wordmark-like
 statement instead of the typing loop.
 
-**Second version (superseded):** the plain static line described above,
-which is what a visitor without JavaScript or with `prefers-reduced-motion:
-reduce` still sees today (see `(e)` below) — this is the fallback the third
-version degrades to, not a separate thing that was removed.
+**Second version:** the plain static line described above — current again,
+after a third version (f) was tried and reverted.
 
-### (f) ParticleText — a canvas particle system replacing the plain headline, a deliberate exception to §2 AND Principle 14
+### (f) ParticleText — tried, reverted
 
-**"Enable creativity." now assembles from drifting canvas particles that
-scatter and reform on hover**, via `components/ParticleText.tsx` — a
-TypeScript port of React Bits' `ParticleText` (JS-CSS variant,
-reactbits.dev/text-animations/particle-text). Alex asked for this by name,
-with an exact prop configuration, after being shown that it conflicts with
-two rules this file otherwise holds everywhere:
-
-1. **§2 sets "Animation library: None,"** specifically rejecting Framer
-   Motion for making it easy to animate more than opacity/transform/color
-   without the author noticing. A canvas particle simulation — per-pixel
-   text sampling, a scatter/gather spring, a pointer-repulsion field — is
-   well past that line. It has zero npm dependencies (the registry entry
-   lists none), so nothing was actually installed; the two files are
-   vendored directly into `components/`.
-2. **Principle 14** is violated by `idleDrift={2}`: particles drift
-   continuously at rest, with no user action driving it. Same objection that
-   cut `javascript-snow` in Phase 0 and that required the first headline
-   deviation above to be logged rather than shipped silently.
-
-Given both conflicts directly, Alex confirmed the deviation is intentional —
-same treatment as the (superseded) typing-verb deviation was. It replaces
-"Enable creativity." on the landing page ONLY; nothing else on the site uses
-it, and nothing else in this codebase has a canvas animation anywhere in it.
-
-**One prop tuned away from Alex's literal pasted config: `fontSize`.** The
-given value (`clamp(3rem, 12vw, 8rem)`) sizes off the viewport. Alex's own
-follow-up in that same request — "fit it inside the horizontal column space
-of original Enable Creativity if possible" — asks for exactly what
-`.hero-serif`'s own `12.5cqw`-based clamp already does (fills the column,
-not a fraction of the viewport), so the component reuses that formula
-instead of the copy-pasted one. Every other prop (color, particle density,
-scatter/gather timing, hover trigger, glow) matches Alex's spec exactly.
-
-**One real bug fixed in the vendored source, not just ported around:** the
-registry component's `fontFamily="inherit"` reads the container's computed
-font FAMILY only — the canvas `font` string it builds never included a style
-term, so on a page with `.hero-serif`'s italic, the particles would silently
-assemble into upright type. Patched to also read `computed.fontStyle` and
-include it in the canvas font string, so "inherit" actually means "look like
-what CSS says this looks like," not just "same typeface." This is the one
-change to the particle logic itself; the sampling/physics is otherwise
-byte-for-byte the registry source, just typed.
-
-**Accessibility:** the visible canvas sits in an `aria-hidden` wrapper
-inside the `h1`; the `h1`'s real accessible name is a `sr-only` span with
-the plain text, so the page keeps exactly one real `<h1>` with real text —
-putting `aria-hidden` on the `h1` itself would have deleted it from the
-accessibility tree entirely, not just hidden the decoration. Reduced-motion
-users get the component's own built-in fallback: particles render directly
-at their target positions with no scatter, no gather animation, and no idle
-drift, which is the same "final state immediately, no exception" contract
-every other motion on this site keeps.
+**Superseded — reverted back to (d)'s second version on Alex's instruction.**
+Briefly, "Enable creativity." assembled from drifting canvas particles that
+scattered and reformed on hover, via a vendored TypeScript port of React
+Bits' `ParticleText` (JS-CSS variant). It was installed as a knowing,
+explicit exception to two rules this file holds everywhere else — §2's
+"Animation library: None" and Principle 14 (`idleDrift` moved particles
+continuously at rest, unprompted) — the same treatment given the
+(superseded) typing-verb deviation above. Alex reverted it shortly after;
+`components/ParticleText.tsx` and its CSS module were removed rather than
+left in the codebase unused. If this comes back, the reasoning that made it
+compatible with this file's rules the first time (documented in git history,
+commit `8347996`) still applies.
 
 **The hero photo and the on-media tokens stay in the codebase** (`--on-media-*`
 in `globals.css`, the `on-media` Action variant) even though nothing currently
