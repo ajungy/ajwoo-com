@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 /**
  * Light/dark toggle.
@@ -41,6 +41,25 @@ const FADE_MS = 500;
 
 export function ThemeToggle() {
   const [theme, setTheme] = useState<'light' | 'dark' | null>(null);
+  const iconRef = useRef<SVGSVGElement>(null);
+
+  // The reference's "stroke draws in" flourish — the one piece of its
+  // animation not yet reproduced. Framer's `pathLength` motion value is a
+  // 0–1 FRACTION of each path's own length; the CSS equivalent is
+  // `stroke-dasharray`/`stroke-dashoffset`, but those need each path's
+  // real rendered length in pixels, which only the browser can measure
+  // (`getTotalLength()`) — there's no way to know it from the `d` string
+  // alone, and 17 paths of different lengths (9 sun + 1 moon, sized
+  // differently) rules out a single hardcoded number. Measured once after
+  // mount (the artwork is static; nothing here ever resizes) and written
+  // as a `--path-length` custom property per element, which the CSS in
+  // globals.css turns into the actual draw-in/draw-out transition.
+  useEffect(() => {
+    const els = iconRef.current?.querySelectorAll<SVGGeometryElement>('path, circle');
+    els?.forEach((el) => {
+      el.style.setProperty('--path-length', String(el.getTotalLength()));
+    });
+  }, []);
 
   useEffect(() => {
     // The actual APPLIED theme (set by the boot script in app/layout.tsx,
@@ -94,7 +113,7 @@ export function ThemeToggle() {
           (see globals.css) decide which one is actually visible. 20px
           (h-7/w-7 on this project's custom spacing scale), matching the
           reference's own 20x20 default exactly. */}
-      <svg viewBox="0 0 25 25" fill="none" aria-hidden="true" className="h-7 w-7">
+      <svg ref={iconRef} viewBox="0 0 25 25" fill="none" aria-hidden="true" className="h-7 w-7 theme-icon">
         <g className="theme-icon-sun">
           <circle cx="12.4058" cy="12.7625" r="5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
           <path d="M12.4058 1.76251V3.76251" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />

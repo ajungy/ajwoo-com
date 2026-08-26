@@ -207,15 +207,27 @@
    first-time visitors, the 500ms page-wide crossfade, the desync-bug fix
    from two rounds ago — with a different one, for a component that only
    needed to change how the BUTTON looks. `scale` and `opacity` are both
-   already on this codebase's permitted-properties list, so the same visual
-   effect (rays shrink and fade out, moon grows and fades in, or the
-   reverse) is fully achievable in plain CSS keyed off the same
-   `data-theme` attribute every other themed element already uses. The
-   reference's `pathLength` "stroke draws in" flourish is not reproduced —
-   it needs each path's precise rendered length (SVG `getTotalLength()`) to
-   fake with `stroke-dasharray`, real JS measurement for a detail this
-   subtle at 20px. 500ms, not the reference's 700ms, to match the single
-   duration every other piece of theme motion on this site already uses. */
+   already on this codebase's permitted-properties list, so the same
+   overall effect (rays shrink and fade out, moon grows and fades in, or
+   the reverse) is fully achievable in plain CSS keyed off the same
+   `data-theme` attribute every other themed element already uses.
+
+   The reference's `pathLength` "stroke draws in" flourish IS reproduced,
+   at Alex's follow-up request — via `stroke-dasharray`/`stroke-dashoffset`
+   instead of Framer's motion value, since CSS has no equivalent property.
+   Both need each path's real rendered length in pixels, which only the
+   browser can measure (`getTotalLength()`, done once on mount in
+   ThemeToggle.tsx and written to `--path-length` per element — there's no
+   way to know it from the `d` string alone, and the 10 paths here are all
+   different lengths). `stroke-dashoffset` transitions from that full
+   length (nothing drawn) to 0 (fully drawn) on a SHORT delay after the
+   group's scale/opacity starts moving, so each shape visibly traces itself
+   in during roughly the last third of its own 500ms entrance, and the
+   already-fading shape doesn't visibly retract on its way out (still
+   technically happens, just underneath opacity that's already low by
+   then) — the same qualitative shape as the reference's own
+   [0.6, 1] → [0, 1] remap of pathLength against scale, on this project's
+   own 500ms instead of the reference's 700ms. */
 .theme-icon-sun, .theme-icon-moon {
   transform-box: fill-box;
   transform-origin: center;
@@ -225,8 +237,30 @@
 .theme-icon-moon { transform: scale(0); opacity: 0; }
 :root[data-theme="dark"] .theme-icon-sun { transform: scale(0); opacity: 0; }
 :root[data-theme="dark"] .theme-icon-moon { transform: scale(1); opacity: 1; }
+
+.theme-icon-sun path,
+.theme-icon-sun circle,
+.theme-icon-moon {
+  stroke-dasharray: var(--path-length, 0);
+  stroke-dashoffset: var(--path-length, 0);
+  transition: stroke-dashoffset 220ms ease 190ms;
+}
+.theme-icon-sun path,
+.theme-icon-sun circle {
+  stroke-dashoffset: 0;
+}
+:root[data-theme="dark"] .theme-icon-sun path,
+:root[data-theme="dark"] .theme-icon-sun circle {
+  stroke-dashoffset: var(--path-length, 0);
+}
+:root[data-theme="dark"] .theme-icon-moon {
+  stroke-dashoffset: 0;
+}
 @media (prefers-reduced-motion: reduce) {
-  .theme-icon-sun, .theme-icon-moon { transition: none; }
+  .theme-icon-sun, .theme-icon-moon,
+  .theme-icon-sun path, .theme-icon-sun circle {
+    transition: none;
+  }
 }
 
 /* --- (a) Entrance sequence -------------------------------------------------
