@@ -221,15 +221,21 @@
    way to know it from the `d` string alone, and the 10 paths here are all
    different lengths). `stroke-dashoffset` transitions from that full
    length (nothing drawn) to 0 (fully drawn) on a SHORT delay after the
-   group's scale/opacity starts moving, so each shape visibly traces itself
-   in during roughly the last third of its own 500ms entrance, and the
-   already-fading shape doesn't visibly retract on its way out (still
+   icon's own scale/opacity starts moving, so each shape visibly traces
+   itself in during roughly the last third of its own 500ms entrance, and
+   the already-fading shape doesn't visibly retract on its way out (still
    technically happens, just underneath opacity that's already low by
    then) — the same qualitative shape as the reference's own
    [0.6, 1] → [0, 1] remap of pathLength against scale, on this project's
-   own 500ms instead of the reference's 700ms. */
+   own 500ms instead of the reference's 700ms.
+
+   `.theme-icon-sun`/`.theme-icon-moon` are the whole <svg> elements now,
+   not an inner <g>/<path> — no `transform-box: fill-box` anywhere. An
+   SVG root's `transform-origin: center` already resolves against its own
+   normal border-box without it, the same as any other replaced element
+   (an <img>, a <video>) gets by default — one less thing to depend on
+   cross-browser support for, on a control every visitor sees. */
 .theme-icon-sun, .theme-icon-moon {
-  transform-box: fill-box;
   transform-origin: center;
   transition: transform 500ms ease, opacity 500ms ease;
 }
@@ -240,7 +246,7 @@
 
 .theme-icon-sun path,
 .theme-icon-sun circle,
-.theme-icon-moon {
+.theme-icon-moon path {
   stroke-dasharray: var(--path-length, 0);
   stroke-dashoffset: var(--path-length, 0);
   transition: stroke-dashoffset 220ms ease 190ms;
@@ -253,12 +259,12 @@
 :root[data-theme="dark"] .theme-icon-sun circle {
   stroke-dashoffset: var(--path-length, 0);
 }
-:root[data-theme="dark"] .theme-icon-moon {
+:root[data-theme="dark"] .theme-icon-moon path {
   stroke-dashoffset: 0;
 }
 @media (prefers-reduced-motion: reduce) {
   .theme-icon-sun, .theme-icon-moon,
-  .theme-icon-sun path, .theme-icon-sun circle {
+  .theme-icon-sun path, .theme-icon-sun circle, .theme-icon-moon path {
     transition: none;
   }
 }
