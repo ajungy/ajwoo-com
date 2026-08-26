@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 /**
  * Light/dark toggle.
@@ -25,54 +25,34 @@ import { useEffect, useRef, useState } from 'react';
  * `.hero-light`/`.hero-dark` in globals.css) at the same pace instead of
  * snapping instantly.
  *
- * The icon is ported from jolyui.dev's AnimatedThemeToggle
- * (jolyui.dev/docs/components/inputs/animated-theme-toggle) — the exact
- * sun (circle + 8 rays) and moon (single crescent) SVG paths from its
- * registry source, copied verbatim. The reference drives the animation
- * with the `motion` npm package and reads theme state via `next-themes`;
- * neither is used here — see the long comment on `.theme-icon-sun`/
- * `.theme-icon-moon` in globals.css for why, and what plain-CSS
- * equivalent replaces them.
+ * A TRUE MORPH, not a fade — Alex's explicit ask, after two rounds that
+ * ported jolyui.dev's AnimatedThemeToggle (jolyui.dev/docs/components/
+ * inputs/animated-theme-toggle) as closely as possible. Worth being
+ * precise about what that reference actually does, since it matters for
+ * why this version is a genuinely different design: jolyui's own
+ * animation is ALSO a scale+opacity crossfade of two separate icon
+ * layers (plus a stroke-draw flourish) — not a line-morph. A hamburger↔X
+ * toggle works as a morph because both shapes are 3 lines that map onto
+ * each other 1:1; a sun (a ring + 8 separate rays) and a moon (one
+ * unbroken crescent outline) have no such correspondence, so nothing
+ * that actually ships as "the jolyui component" morphs sun into moon —
+ * that effect had to be designed from scratch here.
  *
- * TWO WHOLE <svg> ELEMENTS, STACKED — not one <svg> with two internal
- * groups. An earlier version scaled an inner <g> (for the sun) and <path>
- * (for the moon) directly, using `transform-box: fill-box` to center the
- * scale on each shape's own bounding box rather than the SVG viewport's
- * corner. That property's support on grouping elements specifically
- * (`<g>`, as opposed to a single leaf shape) has a real history of being
- * inconsistent in Safari, which would make the animation silently fail to
- * play, or play from the wrong origin, on exactly the browser most likely
- * to be in daily use here. Two full, separately-sized `<svg>` elements
- * need no `fill-box` at all — an SVG root's `transform-origin: center`
- * resolves against its own normal border-box, the same universally-
- * reliable behavior any other replaced HTML element gets, with nothing
- * SVG-specific to support. Same stacking technique as the hero photo
- * crossfade (HeroPhoto.tsx / `.hero-light`/`.hero-dark`): both are always
- * in the DOM, absolutely positioned in the same spot, and only their own
- * opacity/transform decide which one is actually visible.
+ * The design: the ring is ONE element in both states — never faded,
+ * never swapped — reshaped from a full circle into a crescent by an
+ * animated SVG mask (see `.theme-icon-cutout` in globals.css), the same
+ * technique already proven out for the earlier Figma pill-toggle knob.
+ * The 8 rays retract via `transform: scale + rotate` around a fixed
+ * pixel `transform-origin` (deliberately NOT `transform-box: fill-box`
+ * — the previous round's actual bug, and a real cross-browser risk on
+ * grouping elements specifically). A per-ray transition-delay staggers
+ * the retraction so they visibly sweep in one after another rather than
+ * vanishing in lockstep — real motion, not a crossfade.
  */
 const FADE_MS = 500;
 
 export function ThemeToggle() {
   const [theme, setTheme] = useState<'light' | 'dark' | null>(null);
-  const iconRef = useRef<HTMLSpanElement>(null);
-
-  // The reference's "stroke draws in" flourish. Framer's `pathLength`
-  // motion value is a 0–1 FRACTION of each path's own length; the CSS
-  // equivalent is `stroke-dasharray`/`stroke-dashoffset`, but those need
-  // each path's real rendered length in pixels, which only the browser
-  // can measure (`getTotalLength()`) — there's no way to know it from the
-  // `d` string alone, and the 10 paths here (9 sun + 1 moon) are all
-  // different lengths. Measured once after mount (the artwork is static;
-  // nothing here ever resizes) and written as a `--path-length` custom
-  // property per element, which the CSS in globals.css turns into the
-  // actual draw-in/draw-out transition.
-  useEffect(() => {
-    const els = iconRef.current?.querySelectorAll<SVGGeometryElement>('path, circle');
-    els?.forEach((el) => {
-      el.style.setProperty('--path-length', String(el.getTotalLength()));
-    });
-  }, []);
 
   useEffect(() => {
     // The actual APPLIED theme (set by the boot script in app/layout.tsx,
@@ -105,6 +85,21 @@ export function ThemeToggle() {
     setTheme(next);
   };
 
+  // Ray order sets the stagger direction (see --ray-i on each path below,
+  // consumed by the transition-delay formula in globals.css) — top ray
+  // first, then clockwise, so the retraction visibly sweeps around the
+  // ring rather than firing in an arbitrary order.
+  const rays = [
+    'M12.4058 1.76251V3.76251',
+    'M18.7656 6.40248L20.1856 4.98248',
+    'M21.4058 12.7625H23.4058',
+    'M18.7656 19.1225L20.1856 20.5425',
+    'M12.4058 21.7625V23.7625',
+    'M4.62598 20.5425L6.04598 19.1225',
+    'M1.40576 12.7625H3.40576',
+    'M4.62598 4.98248L6.04598 6.40248',
+  ];
+
   return (
     <button
       type="button"
@@ -121,31 +116,46 @@ export function ThemeToggle() {
         'motion-safe:active:scale-press'
       }
     >
-      {/* Relative wrapper the same 20px box as both icons — the box never
-          resizes between states (Principle 4); only which <svg> is
-          visible changes. */}
-      <span ref={iconRef} className="relative inline-block h-7 w-7">
-        <svg viewBox="0 0 25 25" fill="none" aria-hidden="true" className="theme-icon-sun absolute inset-0 h-7 w-7">
-          <circle cx="12.4058" cy="12.7625" r="5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-          <path d="M12.4058 1.76251V3.76251" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-          <path d="M12.4058 21.7625V23.7625" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-          <path d="M4.62598 4.98248L6.04598 6.40248" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-          <path d="M18.7656 19.1225L20.1856 20.5425" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-          <path d="M1.40576 12.7625H3.40576" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-          <path d="M21.4058 12.7625H23.4058" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-          <path d="M4.62598 20.5425L6.04598 19.1225" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-          <path d="M18.7656 6.40248L20.1856 4.98248" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-        <svg viewBox="0 0 25 25" fill="none" aria-hidden="true" className="theme-icon-moon absolute inset-0 h-7 w-7">
+      <svg viewBox="0 0 25 25" fill="none" aria-hidden="true" className="h-7 w-7">
+        <defs>
+          {/* The cutout stays put; it's the ring (below) that's masked by
+              it. Off-canvas (cx=30) at rest = no overlap = a full circle.
+              Sliding to cx=8.5 on data-theme="dark" (globals.css) brings
+              it over the ring's own edge, carving the crescent — animated
+              via `cx`, not `transform`: a mask's cutout is resolved
+              against an element's real geometry before any CSS transform
+              on it (confirmed by testing directly, in the pill-toggle
+              build two rounds ago), so `cx` is what actually moves the
+              cut, continuously, not just at two fixed keyframes. */}
+          <mask id="theme-icon-mask">
+            <rect x="0" y="0" width="25" height="25" fill="white" />
+            <circle className="theme-icon-cutout" cx="30" cy="10" r="5.5" fill="black" />
+          </mask>
+        </defs>
+        {/* One ring, always mounted, never faded — reshaped, not swapped. */}
+        <circle
+          cx="12.4058"
+          cy="12.7625"
+          r="5"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          mask="url(#theme-icon-mask)"
+        />
+        {rays.map((d, i) => (
           <path
-            d="M21.1918 13.2013C21.0345 14.9035 20.3957 16.5257 19.35 17.8781C18.3044 19.2305 16.8953 20.2571 15.2875 20.8379C13.6797 21.4186 11.9398 21.5294 10.2713 21.1574C8.60281 20.7854 7.07479 19.9459 5.86602 18.7371C4.65725 17.5283 3.81774 16.0003 3.4457 14.3318C3.07367 12.6633 3.18451 10.9234 3.76526 9.31561C4.346 7.70783 5.37263 6.29868 6.72501 5.25307C8.07739 4.20746 9.69959 3.56862 11.4018 3.41132C10.4052 4.75958 9.92564 6.42077 10.0503 8.09273C10.175 9.76469 10.8957 11.3364 12.0812 12.5219C13.2667 13.7075 14.8384 14.4281 16.5104 14.5528C18.1823 14.6775 19.8435 14.1979 21.1918 13.2013Z"
+            key={d}
+            className="theme-icon-ray"
+            style={{ '--ray-i': i } as React.CSSProperties}
+            d={d}
             stroke="currentColor"
             strokeWidth="2"
             strokeLinecap="round"
             strokeLinejoin="round"
           />
-        </svg>
-      </span>
+        ))}
+      </svg>
     </button>
   );
 }
