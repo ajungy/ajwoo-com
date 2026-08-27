@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 /**
  * Light/dark toggle.
@@ -25,58 +25,47 @@ import { useEffect, useState } from 'react';
  * `.hero-light`/`.hero-dark` in globals.css) at the same pace instead of
  * snapping instantly.
  *
- * THE ICON — ported from toggles.dev's "Classic" toggle (toggles.dev/
- * toggles/classic; the actual open-source project behind it is Alfie
- * Jones's `theme-toggles`, github.com/alfiejones/theme-toggles, MIT). Two
- * earlier rounds tried to reproduce a sun/moon animation by hand — one
- * ported jolyui's AnimatedThemeToggle (scale+opacity crossfade of two
- * icon layers), one was a from-scratch mask-based morph. Alex pointed at
- * this specific one and asked for it directly, so this is a port of its
- * actual source (fetched from the GitHub repo, not re-derived), not
- * another attempt at approximating the idea.
+ * THE ICON — back to jolyui.dev's AnimatedThemeToggle (jolyui.dev/docs/
+ * components/inputs/animated-theme-toggle), at Alex's direction, after a
+ * detour through a from-scratch line-morph and a port of toggles.dev's
+ * "Classic". The exact sun (circle + 8 rays) and moon (single crescent)
+ * SVG paths from jolyui's registry source, copied verbatim, animated as
+ * two whole stacked <svg> elements (not one <svg> with inner groups —
+ * `transform-box: fill-box` on a grouping element is the actual bug that
+ * silently broke this in Safari two rounds ago; a whole SVG's own
+ * `transform-origin: center` needs nothing browser-specific to resolve).
+ * The reference drives this with the `motion` npm package and reads theme
+ * state via `next-themes`; neither is used here — `scale`/`opacity`/
+ * `stroke-dasharray` are all this project already leans on for motion
+ * elsewhere, and `next-themes` would mean replacing this project's own
+ * hand-tuned theme system for a component that only needed new artwork.
  *
- * How it actually works, since it's a genuinely different technique than
- * either earlier attempt: the circle is SOLID (`fill: currentColor`), not
- * a stroked ring, and it's reshaped by an animated `clip-path` — a <path>
- * inside a <clipPath>, whose own `d` attribute transitions between two
- * strings that share the same command sequence (M/h/a/v/Z in both), which
- * is what makes a `d` transition valid at all: CSS can only interpolate
- * between two path strings with matching command types and counts, not
- * arbitrary shapes. The circle ALSO scales up 1.7x at the same time, so
- * the crescent effect comes from a growing solid disc being progressively
- * clipped, not from a hole being cut into a fixed one. The 8 rays scale
- * to 0 and fade out, `transform-box: view-box` (not `fill-box` — the
- * actual cross-browser bug from two rounds ago) staggered by a 15%-of-
- * duration delay that's only applied when they're COMING BACK (light
- * mode), not going away, so darkening feels immediate and lightening
- * feels like the rays sprout back after the circle's already reshaped.
- *
- * The library ships its own fallback for browsers that can't animate the
- * `d` property at all (checked via `@supports (d: path(...))`): the clip
- * path just translates into roughly the right position instead of
- * morphing. Reproduced here too, since this was raised specifically
- * because of an older-browser report.
- *
- * Color is a deliberate, explicit override, at Alex's direction: black in
- * light mode, white in dark mode, not this project's usual
- * `text-fg-secondary`/hover-to-`text-fg` token pair — a flat, maximum-
- * contrast icon rather than a muted secondary one.
+ * Color is a flat black (light mode) / white (dark mode) pair, at Alex's
+ * explicit direction — not this project's usual text-fg-secondary/
+ * hover-to-text-fg tokens.
  */
 const FADE_MS = 500;
 
-const RAYS = [
-  'M12 1.4v2.4',
-  'm20.3 3.7-2.5 2.5',
-  'M22.6 12h-2.4',
-  'M12 22.6v-2.4',
-  'M1.4 12h2.4',
-  'm20.3 20.3-2.5-2.5',
-  'm3.7 20.3 2.5-2.5',
-  'm3.7 3.7 2.5 2.5',
-];
-
 export function ThemeToggle() {
   const [theme, setTheme] = useState<'light' | 'dark' | null>(null);
+  const iconRef = useRef<HTMLSpanElement>(null);
+
+  // The reference's "stroke draws in" flourish. Framer's `pathLength`
+  // motion value is a 0–1 FRACTION of each path's own length; the CSS
+  // equivalent is `stroke-dasharray`/`stroke-dashoffset`, but those need
+  // each path's real rendered length in pixels, which only the browser
+  // can measure (`getTotalLength()`) — there's no way to know it from the
+  // `d` string alone, and the 10 paths here (9 sun + 1 moon) are all
+  // different lengths. Measured once after mount (the artwork is static;
+  // nothing here ever resizes) and written as a `--path-length` custom
+  // property per element, which the CSS in globals.css turns into the
+  // actual draw-in/draw-out transition.
+  useEffect(() => {
+    const els = iconRef.current?.querySelectorAll<SVGGeometryElement>('path, circle');
+    els?.forEach((el) => {
+      el.style.setProperty('--path-length', String(el.getTotalLength()));
+    });
+  }, []);
 
   useEffect(() => {
     // The actual APPLIED theme (set by the boot script in app/layout.tsx,
@@ -124,37 +113,32 @@ export function ThemeToggle() {
         'can-hover:hover:bg-tertiary-hover motion-safe:active:scale-press'
       }
     >
-      {/* theme-icon-classic carries the explicit black/white color — see
-          the class comment above and .theme-icon-classic in globals.css. */}
-      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className="theme-icon-classic h-7 w-7">
-        <defs>
-          <clipPath id="theme-icon-classic-clip">
-            <path className="theme-icon-classic-clip-path" d="M0 0h25a1 1 0 0010 10v14H0Z" />
-          </clipPath>
-        </defs>
-        <g stroke="currentColor" strokeLinecap="round">
-          <circle
-            className="theme-icon-classic-circle"
-            cx="12"
-            cy="12"
-            r="5"
-            fill="currentColor"
-            clipPath="url(#theme-icon-classic-clip)"
+      {/* Relative wrapper the same 20px box as both icons — the box never
+          resizes between states (Principle 4); only which <svg> is
+          visible changes. theme-icon-flat carries the explicit
+          black/white color (see globals.css). */}
+      <span ref={iconRef} className="theme-icon-flat relative inline-block h-7 w-7">
+        <svg viewBox="0 0 25 25" fill="none" aria-hidden="true" className="theme-icon-sun absolute inset-0 h-7 w-7">
+          <circle cx="12.4058" cy="12.7625" r="5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M12.4058 1.76251V3.76251" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M12.4058 21.7625V23.7625" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M4.62598 4.98248L6.04598 6.40248" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M18.7656 19.1225L20.1856 20.5425" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M1.40576 12.7625H3.40576" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M21.4058 12.7625H23.4058" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M4.62598 20.5425L6.04598 19.1225" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M18.7656 6.40248L20.1856 4.98248" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+        <svg viewBox="0 0 25 25" fill="none" aria-hidden="true" className="theme-icon-moon absolute inset-0 h-7 w-7">
+          <path
+            d="M21.1918 13.2013C21.0345 14.9035 20.3957 16.5257 19.35 17.8781C18.3044 19.2305 16.8953 20.2571 15.2875 20.8379C13.6797 21.4186 11.9398 21.5294 10.2713 21.1574C8.60281 20.7854 7.07479 19.9459 5.86602 18.7371C4.65725 17.5283 3.81774 16.0003 3.4457 14.3318C3.07367 12.6633 3.18451 10.9234 3.76526 9.31561C4.346 7.70783 5.37263 6.29868 6.72501 5.25307C8.07739 4.20746 9.69959 3.56862 11.4018 3.41132C10.4052 4.75958 9.92564 6.42077 10.0503 8.09273C10.175 9.76469 10.8957 11.3364 12.0812 12.5219C13.2667 13.7075 14.8384 14.4281 16.5104 14.5528C18.1823 14.6775 19.8435 14.1979 21.1918 13.2013Z"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
           />
-          {RAYS.map((d) => (
-            <path
-              key={d}
-              className="theme-icon-classic-ray"
-              d={d}
-              fill="none"
-              strokeWidth={2}
-              strokeLinejoin="round"
-              strokeMiterlimit={0}
-              paintOrder="stroke markers fill"
-            />
-          ))}
-        </g>
-      </svg>
+        </svg>
+      </span>
     </button>
   );
 }
