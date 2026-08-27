@@ -20,14 +20,19 @@ export function ShareButton() {
   const handleShare = async () => {
     const url = typeof window !== 'undefined' ? window.location.href : '';
 
-    // Check if native share API is available (mobile)
+    // Check if native share API is available (mobile). `url` ONLY — no
+    // `title`/`text` fields. Those used to carry "Alex Woo" / "Creative
+    // tools at Netflix.", and on several share targets (Notes, Messages,
+    // some third-party apps) the OS-level share sheet concatenates
+    // title+text+url into a single string rather than keeping them
+    // separate, which is what produced the corrupted, space-as-%20
+    // garbled link Alex reported ("Alex%20Woo%20Creative%20tools%20
+    // at%20Netflix...") — and in at least one destination, a 404, since
+    // that concatenated string is no longer a valid URL at all. A bare
+    // `{ url }` is what every receiving app can only ever treat as a link.
     if (navigator.share) {
       try {
-        await navigator.share({
-          title: 'Alex Woo',
-          text: 'Creative tools at Netflix.',
-          url,
-        });
+        await navigator.share({ url });
       } catch (err) {
         // User cancelled share
       }
