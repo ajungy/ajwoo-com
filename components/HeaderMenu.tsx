@@ -11,18 +11,18 @@
  * Button chrome matches ThemeToggle.tsx exactly — same `h/w-control-md` hit
  * area, same `rounded-control` + transparent border + `bg-tertiary-hover` on
  * hover — so the two icon buttons in the compact top-right cluster read as
- * one family, not two different systems. Color is the same flat black
- * (light mode) / white (dark mode) pair as `.theme-icon-flat`
- * (ThemeToggle.tsx / globals.css), at Alex's direction, rather than the
- * text-fg-secondary/hover-to-text-fg token pair the rest of the chrome
- * uses — reused directly rather than a second copy of the same rule.
+ * one family, not two different systems. Color is `text-fg-tertiary` +
+ * hover-to-`text-fg`, at Alex's direction — the same gray the nav's own
+ * unselected Design/Coffee/Apps links use, replacing a brief flat-black/
+ * flat-white pass that read as too heavy next to them.
  *
- * Bar weight is 2px, up from 1.5px, at Alex's direction, to match the
- * theme toggle icon's own strokeWidth={2} (jolyui's sun/moon paths,
- * ThemeToggle.tsx) and the visual weight of the Logo monogram (Logo.tsx)
- * next to it — the logo is a filled glyph, not a literal stroke, but its
- * letterforms read at roughly this weight, and 1.5px looked thin beside
- * both once they were compared directly.
+ * Bar weight is 1.6px — thinner than an earlier 2px pass, at Alex's
+ * direction, to match the theme toggle icon's own EFFECTIVE rendered
+ * stroke: jolyui's sun/moon paths use `strokeWidth={2}` inside a 25-unit
+ * viewBox displayed at 20px (ThemeToggle.tsx), which renders at
+ * 2 * (20/25) = 1.6px on screen, not a flat 2px — matching the raw
+ * strokeWidth number without accounting for that scale is what made the
+ * first pass at this read as too thick next to it.
  *
  * Three bars, drawn and animated directly (not a Menu/X icon swap), as a
  * genuine two-phase morph rather than everything moving at once: opening,
@@ -34,7 +34,7 @@
  * `transform`.
  */
 export function HeaderMenu({ open, onToggle }: { open: boolean; onToggle: () => void }) {
-  const outer = 'absolute left-1/2 top-1/2 h-[2px] w-[18px] -translate-x-1/2 transition-transform duration-base ease-standard motion-reduce:transition-none';
+  const outer = 'absolute left-1/2 top-1/2 h-[1.6px] w-[18px] -translate-x-1/2 transition-transform duration-base ease-standard motion-reduce:transition-none';
   const inner = 'block h-full w-full rounded-full bg-current transition-transform duration-base ease-standard motion-reduce:transition-none';
 
   return (
@@ -42,9 +42,9 @@ export function HeaderMenu({ open, onToggle }: { open: boolean; onToggle: () => 
       onClick={onToggle}
       data-cursor-label="Menu"
       className={
-        'theme-icon-flat relative inline-flex h-control-md w-control-md items-center justify-center rounded-control ' +
-        'border border-transparent transition duration-fast ease-standard ' +
-        'can-hover:hover:bg-tertiary-hover ' +
+        'relative inline-flex h-control-md w-control-md items-center justify-center rounded-control ' +
+        'border border-transparent text-fg-tertiary transition duration-fast ease-standard ' +
+        'can-hover:hover:bg-tertiary-hover can-hover:hover:text-fg ' +
         'motion-safe:active:scale-press'
       }
       aria-label="Menu"

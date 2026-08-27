@@ -231,17 +231,13 @@
    against its own normal border-box without fill-box, the same as any
    other replaced element gets by default.
 
-   `.theme-icon-flat` carries a deliberate, explicit color override, at
-   Alex's direction: flat black in light mode, flat white in dark, not
-   this project's usual text-fg-secondary/hover-to-text-fg pair. */
-.theme-icon-flat {
-  color: black;
-  transition: color 500ms ease;
-}
-:root[data-theme="dark"] .theme-icon-flat {
-  color: white;
-}
-
+   Color is plain `text-fg-tertiary` (Tailwind, set directly in
+   ThemeToggle.tsx/HeaderMenu.tsx) — the same gray the nav's own
+   unselected Design/Coffee/Apps links use, at Alex's direction, after an
+   earlier flat-black/flat-white pass read as too heavy next to them. No
+   dedicated class needed for it; unlike scale/opacity/stroke-dashoffset
+   this is a token color already themed via `light-dark()`, so a plain
+   Tailwind utility is enough. */
 .theme-icon-sun, .theme-icon-moon {
   transform-origin: center;
   transition: transform 500ms ease, opacity 500ms ease;
@@ -270,7 +266,6 @@
   stroke-dashoffset: 0;
 }
 @media (prefers-reduced-motion: reduce) {
-  .theme-icon-flat,
   .theme-icon-sun, .theme-icon-moon,
   .theme-icon-sun path, .theme-icon-sun circle, .theme-icon-moon path {
     transition: none;

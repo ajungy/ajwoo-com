@@ -65,7 +65,21 @@ export default function Home() {
                 proximity={250}
                 autoAnimate
               >
-                <Action href={site.calendlyUrl} external variant="secondary" cursorLabel="Book time">
+                {/* !border-transparent — the static gray secondary border
+                    (--border-secondary-line) is redundant now that the
+                    shine effect draws its own animated one, and having
+                    both at once read as two competing outlines. Only this
+                    one instance loses its border; the plain secondary
+                    variant everywhere else (Email, LinkedIn, Instagram,
+                    Waitlist, ...) is untouched, since none of those carry
+                    the animated replacement. */}
+                <Action
+                  href={site.calendlyUrl}
+                  external
+                  variant="secondary"
+                  cursorLabel="Book time"
+                  className="!border-transparent"
+                >
                   {site.ctaLabel}
                 </Action>
               </SpecularBorder>

@@ -109,15 +109,17 @@ export function ThemeToggle() {
       data-cursor-label="Switch theme"
       className={
         'inline-flex h-control-md w-control-md items-center justify-center rounded-control ' +
-        'border border-transparent transition duration-fast ease-standard ' +
-        'can-hover:hover:bg-tertiary-hover motion-safe:active:scale-press'
+        'border border-transparent text-fg-tertiary transition duration-fast ease-standard ' +
+        'can-hover:hover:bg-tertiary-hover can-hover:hover:text-fg motion-safe:active:scale-press'
       }
     >
       {/* Relative wrapper the same 20px box as both icons — the box never
           resizes between states (Principle 4); only which <svg> is
-          visible changes. theme-icon-flat carries the explicit
-          black/white color (see globals.css). */}
-      <span ref={iconRef} className="theme-icon-flat relative inline-block h-7 w-7">
+          visible changes. Color comes from text-fg-tertiary above (same
+          gray the nav's own unselected Design/Coffee/Apps links use), not
+          a dedicated class — see the comment on .theme-icon-sun in
+          globals.css. */}
+      <span ref={iconRef} className="relative inline-block h-7 w-7">
         <svg viewBox="0 0 25 25" fill="none" aria-hidden="true" className="theme-icon-sun absolute inset-0 h-7 w-7">
           <circle cx="12.4058" cy="12.7625" r="5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
           <path d="M12.4058 1.76251V3.76251" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />

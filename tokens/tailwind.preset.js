@@ -177,7 +177,7 @@ module.exports = {
       borderRadius: {
         xs:      '6px',
         sm:      '8px',
-        control: '10px',
+        control: '8px',
         md:      '10px',
         lg:      '14px',
         xl:      '20px',
