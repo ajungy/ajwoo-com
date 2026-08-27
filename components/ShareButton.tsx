@@ -1,20 +1,18 @@
 'use client';
 
 import { useState } from 'react';
-import SpecularButton from './SpecularButton';
 import { Toast } from './Toast';
 
 /**
- * Downgraded from Action's "primary" visual language to a quieter,
- * secondary-weight button, at Alex's direction — the landing page's
- * "Book 15 min" stays the one primary action site-wide (Principle 3/
- * CLAUDE.md §0); Share doesn't need to compete with it for emphasis on
- * every other page. The chrome itself is now React Bits' SpecularButton
- * (see SpecularButton.tsx for the full reasoning on why a WebGL
- * dependency is here at all — a deliberate, logged exception, not an
- * oversight), with the exact prop configuration Alex specified: a
- * transparent tint (tintOpacity 0) over this project's own chrome/page
- * surface, white text and shine line, a mid-gray base stroke.
+ * Same visual language as Action's "primary" variant (components/Action.tsx),
+ * reproduced on a <button> rather than an <a> because Share triggers a JS
+ * action (native share sheet or clipboard write), not navigation. Back to
+ * primary at Alex's direction — the SpecularButton shine effect moved to
+ * "Book 15 min" instead (see app/page.tsx and components/SpecularBorder.tsx),
+ * which is this site's actual one primary action (Principle 3/CLAUDE.md §0);
+ * Share reverts to its plain original chrome. `--action-primary-bg`/`-fg`
+ * already flip per theme via light-dark(), so this is a white button with
+ * black text in dark mode for free.
  */
 export function ShareButton() {
   const [showToast, setShowToast] = useState(false);
@@ -47,28 +45,18 @@ export function ShareButton() {
 
   return (
     <>
-      <SpecularButton
+      <button
         onClick={handleShare}
         data-cursor-label="Share"
-        size="md"
-        radius={8}
-        tint="#ffffff"
-        tintOpacity={0}
-        blur={0}
-        textColor="#ffffff"
-        lineColor="#ffffff"
-        baseColor="#525252"
-        intensity={1}
-        shineSize={10}
-        shineFade={40}
-        thickness={1}
-        speed={0.5}
-        followMouse
-        proximity={250}
-        autoAnimate
+        className={
+          'inline-flex items-center justify-center h-control-md rounded-control border ' +
+          'text-label font-medium transition duration-fast ease-standard motion-safe:active:scale-press ' +
+          'bg-primary text-primary-fg border-transparent px-6 ' +
+          'can-hover:hover:bg-primary-hover active:bg-primary-active'
+        }
       >
         Share
-      </SpecularButton>
+      </button>
       {showToast && <Toast message="Link has been copied" duration={3000} />}
     </>
   );

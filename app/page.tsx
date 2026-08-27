@@ -1,4 +1,5 @@
 import { Action } from '@/components/Action';
+import { SpecularBorder } from '@/components/SpecularBorder';
 import { HeroPhoto } from '@/components/HeroPhoto';
 import { FeaturedApp } from '@/components/FeaturedApp';
 import { CopyEmailButton } from '@/components/CopyEmailButton';
@@ -43,9 +44,31 @@ export default function Home() {
                 mailto: link (CopyEmailButton), so it isn't a plain href
                 like the other two. */}
             <StaggerReveal className="mt-8 flex flex-wrap items-center gap-4">
-              <Action href={site.calendlyUrl} external variant="secondary" cursorLabel="Book time">
-                {site.ctaLabel}
-              </Action>
+              {/* SpecularButton's WebGL shine effect (React Bits, see
+                  components/SpecularBorder.tsx for the full reasoning),
+                  moved here from Share at Alex's direction — this is the
+                  site's actual one primary action (Principle 3/CLAUDE.md
+                  §0), so it's the button that earns the extra attention.
+                  SpecularBorder wraps the EXISTING Action unchanged; its
+                  own size/colors/hover/press states are untouched, only
+                  a light-reactive shine line rides on top. */}
+              <SpecularBorder
+                radius={8}
+                lineColor="#ffffff"
+                baseColor="#525252"
+                intensity={1}
+                shineSize={10}
+                shineFade={40}
+                thickness={1}
+                speed={0.5}
+                followMouse
+                proximity={250}
+                autoAnimate
+              >
+                <Action href={site.calendlyUrl} external variant="secondary" cursorLabel="Book time">
+                  {site.ctaLabel}
+                </Action>
+              </SpecularBorder>
               <CopyEmailButton />
               {social.map((s) => (
                 <Action
