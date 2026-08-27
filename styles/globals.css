@@ -190,63 +190,93 @@
   .hero-light, .hero-dark { transition: none; }
 }
 
-/* --- Theme toggle: a true morph, not a crossfade (components/ThemeToggle.tsx)
-   Two earlier rounds ported jolyui.dev's AnimatedThemeToggle (jolyui.dev/
-   docs/components/inputs/animated-theme-toggle) as closely as possible —
-   worth being precise that its own animation is ALSO a scale+opacity
-   crossfade of two separate icon layers, not a line-morph. Alex asked for
-   the sun's actual lines to move into the moon shape, hamburger↔X style;
-   that effect doesn't exist in the reference component at all (a sun —
-   a ring plus 8 disconnected rays — and a moon — one unbroken crescent
-   outline — have no 1:1 line correspondence the way a hamburger's 3 bars
-   map onto an X's 2), so this is a from-scratch design rather than a port.
+/* --- Theme toggle: ported from toggles.dev's "Classic" ---------------------
+   (toggles.dev/toggles/classic — the real project behind it is Alfie
+   Jones's `theme-toggles`, github.com/alfiejones/theme-toggles, MIT).
+   Alex pointed at this exact toggle after two earlier from-scratch
+   attempts; this is a port of its actual published source (the `classic`
+   package, fetched from the repo), not another approximation.
 
-   THE RING is one element in both states — never faded, never swapped,
-   reshaped by an animated SVG mask. `.theme-icon-cutout` sits at a FIXED
-   position and is what actually moves, via `cx` — not `transform`, which
-   was tried and confirmed broken two rounds ago: a mask's cutout is
-   resolved against an element's real geometry BEFORE any CSS transform on
-   it, so a transform-only slide left the mask seeing the exact same
-   overlap forever. `cx` is real geometry the mask sees update live, so
-   the ring visibly bends into a crescent continuously as it travels, not
-   just at two fixed keyframes.
+   THE CIRCLE is solid (`fill: currentColor`), not a stroked ring, and is
+   reshaped by an animated `clip-path`: `.theme-icon-classic-clip-path`'s
+   own `d` attribute transitions between "M0 0h25a1 1 0 0010 10v14H0Z" and
+   "M0 2h13a1 1 0 0010 10v14H0Z" — two strings that share the same command
+   sequence (M/h/a/v/Z), which is the only reason a `d` transition is
+   valid at all; CSS can't interpolate between path strings whose command
+   types or counts differ. The circle ALSO scales to 1.7x over the same
+   500ms, so the crescent reads as a growing disc being progressively
+   clipped, not a hole being cut into a static one — a different
+   technique from the animated-mask ring this project tried previously.
 
-   THE RAYS retract via `transform: scale + rotate`, around a hardcoded
-   PIXEL `transform-origin` — deliberately not `transform-box: fill-box`,
-   which was the actual bug behind "the animation doesn't play" two
-   rounds ago: fill-box's support on grouping elements has a real history
-   of being unreliable in Safari. A fixed pixel origin needs nothing
-   browser-specific to resolve at all. `--ray-i` (set inline per path in
-   the component) staggers each ray's `transition-delay`, so they visibly
-   sweep around the ring one after another rather than vanishing in
-   lockstep — real sequenced motion, the thing a flat crossfade can't do
-   regardless of which CSS property drives it. */
-.theme-icon-cutout {
-  transition: cx 500ms ease;
+   THE RAYS scale to 0 and fade out, `transform-box: view-box` (not
+   `fill-box` — the real cross-browser bug from two rounds ago; view-box
+   resolves against the SVG's own coordinate system, nothing element-
+   specific to support). The stagger is asymmetric on purpose, matching
+   the source exactly: reappearing (light mode) carries a
+   15%-of-duration delay so the rays visibly sprout back only once the
+   circle's mostly reshaped; disappearing (dark mode) has none, so
+   darkening reads as immediate.
+
+   THE FALLBACK is the source library's own answer to browsers that can't
+   animate `d` at all: `@supports not (d: path(...))` swaps the morph for
+   a plain `transform: translate()` that lands in roughly the same place
+   without needing true path interpolation — reproduced here specifically
+   because Alex raised an older-browser report.
+
+   COLOR is a deliberate, explicit override, at Alex's direction: flat
+   black in light mode, flat white in dark, not this project's usual
+   text-fg-secondary/hover-to-text-fg pair. */
+.theme-icon-classic {
+  color: black;
+  transition: color 500ms ease;
 }
-:root[data-theme="dark"] .theme-icon-cutout {
-  /* Off-canvas (cx=30) at rest = no overlap with the ring = a full
-     circle. This is the only other value it ever takes — sliding here
-     brings it over the ring's own edge and carves the crescent. */
-  cx: 8.5px;
+:root[data-theme="dark"] .theme-icon-classic {
+  color: white;
 }
 
-.theme-icon-ray {
-  transform-origin: 12.4058px 12.7625px;
-  transform: scale(1) rotate(0deg);
+.theme-icon-classic-circle {
+  transform-box: view-box;
+  transform-origin: center;
+  transform: scale(1);
+  transition: transform 500ms ease;
+}
+:root[data-theme="dark"] .theme-icon-classic-circle {
+  transform: scale(1.7);
+}
+
+.theme-icon-classic-clip-path {
+  d: path("M0 0h25a1 1 0 0010 10v14H0Z");
+  transition: d 500ms ease 75ms;
+}
+:root[data-theme="dark"] .theme-icon-classic-clip-path {
+  d: path("M0 2h13a1 1 0 0010 10v14H0Z");
+}
+@supports not (d: path("M0 0Z")) {
+  .theme-icon-classic-clip-path {
+    transition: transform 500ms ease 75ms;
+  }
+  :root[data-theme="dark"] .theme-icon-classic-clip-path {
+    transform: translate(-13px, 2px);
+  }
+}
+
+.theme-icon-classic-ray {
+  transform-box: view-box;
+  transform-origin: center;
+  transform: scale(1);
   opacity: 1;
-  transition: transform 400ms ease calc(var(--ray-i, 0) * 30ms), opacity 400ms ease calc(var(--ray-i, 0) * 30ms);
+  transition: transform 500ms ease 75ms, opacity 500ms ease 75ms;
 }
-:root[data-theme="dark"] .theme-icon-ray {
-  transform: scale(0) rotate(-70deg);
+:root[data-theme="dark"] .theme-icon-classic-ray {
+  transform: scale(0);
   opacity: 0;
-  /* Reversed stagger on the way back in — the last ray to retract is the
-     first to reappear, so the sweep reads as one continuous motion
-     playing forward and backward, not two independently-ordered ones. */
-  transition-delay: calc((7 - var(--ray-i, 0)) * 30ms);
+  transition-delay: 0ms;
 }
 @media (prefers-reduced-motion: reduce) {
-  .theme-icon-cutout, .theme-icon-ray {
+  .theme-icon-classic,
+  .theme-icon-classic-circle,
+  .theme-icon-classic-clip-path,
+  .theme-icon-classic-ray {
     transition: none;
   }
 }

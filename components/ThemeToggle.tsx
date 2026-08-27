@@ -25,31 +25,55 @@ import { useEffect, useState } from 'react';
  * `.hero-light`/`.hero-dark` in globals.css) at the same pace instead of
  * snapping instantly.
  *
- * A TRUE MORPH, not a fade — Alex's explicit ask, after two rounds that
- * ported jolyui.dev's AnimatedThemeToggle (jolyui.dev/docs/components/
- * inputs/animated-theme-toggle) as closely as possible. Worth being
- * precise about what that reference actually does, since it matters for
- * why this version is a genuinely different design: jolyui's own
- * animation is ALSO a scale+opacity crossfade of two separate icon
- * layers (plus a stroke-draw flourish) — not a line-morph. A hamburger↔X
- * toggle works as a morph because both shapes are 3 lines that map onto
- * each other 1:1; a sun (a ring + 8 separate rays) and a moon (one
- * unbroken crescent outline) have no such correspondence, so nothing
- * that actually ships as "the jolyui component" morphs sun into moon —
- * that effect had to be designed from scratch here.
+ * THE ICON — ported from toggles.dev's "Classic" toggle (toggles.dev/
+ * toggles/classic; the actual open-source project behind it is Alfie
+ * Jones's `theme-toggles`, github.com/alfiejones/theme-toggles, MIT). Two
+ * earlier rounds tried to reproduce a sun/moon animation by hand — one
+ * ported jolyui's AnimatedThemeToggle (scale+opacity crossfade of two
+ * icon layers), one was a from-scratch mask-based morph. Alex pointed at
+ * this specific one and asked for it directly, so this is a port of its
+ * actual source (fetched from the GitHub repo, not re-derived), not
+ * another attempt at approximating the idea.
  *
- * The design: the ring is ONE element in both states — never faded,
- * never swapped — reshaped from a full circle into a crescent by an
- * animated SVG mask (see `.theme-icon-cutout` in globals.css), the same
- * technique already proven out for the earlier Figma pill-toggle knob.
- * The 8 rays retract via `transform: scale + rotate` around a fixed
- * pixel `transform-origin` (deliberately NOT `transform-box: fill-box`
- * — the previous round's actual bug, and a real cross-browser risk on
- * grouping elements specifically). A per-ray transition-delay staggers
- * the retraction so they visibly sweep in one after another rather than
- * vanishing in lockstep — real motion, not a crossfade.
+ * How it actually works, since it's a genuinely different technique than
+ * either earlier attempt: the circle is SOLID (`fill: currentColor`), not
+ * a stroked ring, and it's reshaped by an animated `clip-path` — a <path>
+ * inside a <clipPath>, whose own `d` attribute transitions between two
+ * strings that share the same command sequence (M/h/a/v/Z in both), which
+ * is what makes a `d` transition valid at all: CSS can only interpolate
+ * between two path strings with matching command types and counts, not
+ * arbitrary shapes. The circle ALSO scales up 1.7x at the same time, so
+ * the crescent effect comes from a growing solid disc being progressively
+ * clipped, not from a hole being cut into a fixed one. The 8 rays scale
+ * to 0 and fade out, `transform-box: view-box` (not `fill-box` — the
+ * actual cross-browser bug from two rounds ago) staggered by a 15%-of-
+ * duration delay that's only applied when they're COMING BACK (light
+ * mode), not going away, so darkening feels immediate and lightening
+ * feels like the rays sprout back after the circle's already reshaped.
+ *
+ * The library ships its own fallback for browsers that can't animate the
+ * `d` property at all (checked via `@supports (d: path(...))`): the clip
+ * path just translates into roughly the right position instead of
+ * morphing. Reproduced here too, since this was raised specifically
+ * because of an older-browser report.
+ *
+ * Color is a deliberate, explicit override, at Alex's direction: black in
+ * light mode, white in dark mode, not this project's usual
+ * `text-fg-secondary`/hover-to-`text-fg` token pair — a flat, maximum-
+ * contrast icon rather than a muted secondary one.
  */
 const FADE_MS = 500;
+
+const RAYS = [
+  'M12 1.4v2.4',
+  'm20.3 3.7-2.5 2.5',
+  'M22.6 12h-2.4',
+  'M12 22.6v-2.4',
+  'M1.4 12h2.4',
+  'm20.3 20.3-2.5-2.5',
+  'm3.7 20.3 2.5-2.5',
+  'm3.7 3.7 2.5 2.5',
+];
 
 export function ThemeToggle() {
   const [theme, setTheme] = useState<'light' | 'dark' | null>(null);
@@ -85,21 +109,6 @@ export function ThemeToggle() {
     setTheme(next);
   };
 
-  // Ray order sets the stagger direction (see --ray-i on each path below,
-  // consumed by the transition-delay formula in globals.css) — top ray
-  // first, then clockwise, so the retraction visibly sweeps around the
-  // ring rather than firing in an arbitrary order.
-  const rays = [
-    'M12.4058 1.76251V3.76251',
-    'M18.7656 6.40248L20.1856 4.98248',
-    'M21.4058 12.7625H23.4058',
-    'M18.7656 19.1225L20.1856 20.5425',
-    'M12.4058 21.7625V23.7625',
-    'M4.62598 20.5425L6.04598 19.1225',
-    'M1.40576 12.7625H3.40576',
-    'M4.62598 4.98248L6.04598 6.40248',
-  ];
-
   return (
     <button
       type="button"
@@ -111,50 +120,40 @@ export function ThemeToggle() {
       data-cursor-label="Switch theme"
       className={
         'inline-flex h-control-md w-control-md items-center justify-center rounded-control ' +
-        'border border-transparent text-fg-secondary transition duration-fast ease-standard ' +
-        'can-hover:hover:bg-tertiary-hover can-hover:hover:text-fg ' +
-        'motion-safe:active:scale-press'
+        'border border-transparent transition duration-fast ease-standard ' +
+        'can-hover:hover:bg-tertiary-hover motion-safe:active:scale-press'
       }
     >
-      <svg viewBox="0 0 25 25" fill="none" aria-hidden="true" className="h-7 w-7">
+      {/* theme-icon-classic carries the explicit black/white color — see
+          the class comment above and .theme-icon-classic in globals.css. */}
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className="theme-icon-classic h-7 w-7">
         <defs>
-          {/* The cutout stays put; it's the ring (below) that's masked by
-              it. Off-canvas (cx=30) at rest = no overlap = a full circle.
-              Sliding to cx=8.5 on data-theme="dark" (globals.css) brings
-              it over the ring's own edge, carving the crescent — animated
-              via `cx`, not `transform`: a mask's cutout is resolved
-              against an element's real geometry before any CSS transform
-              on it (confirmed by testing directly, in the pill-toggle
-              build two rounds ago), so `cx` is what actually moves the
-              cut, continuously, not just at two fixed keyframes. */}
-          <mask id="theme-icon-mask">
-            <rect x="0" y="0" width="25" height="25" fill="white" />
-            <circle className="theme-icon-cutout" cx="30" cy="10" r="5.5" fill="black" />
-          </mask>
+          <clipPath id="theme-icon-classic-clip">
+            <path className="theme-icon-classic-clip-path" d="M0 0h25a1 1 0 0010 10v14H0Z" />
+          </clipPath>
         </defs>
-        {/* One ring, always mounted, never faded — reshaped, not swapped. */}
-        <circle
-          cx="12.4058"
-          cy="12.7625"
-          r="5"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          mask="url(#theme-icon-mask)"
-        />
-        {rays.map((d, i) => (
-          <path
-            key={d}
-            className="theme-icon-ray"
-            style={{ '--ray-i': i } as React.CSSProperties}
-            d={d}
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
+        <g stroke="currentColor" strokeLinecap="round">
+          <circle
+            className="theme-icon-classic-circle"
+            cx="12"
+            cy="12"
+            r="5"
+            fill="currentColor"
+            clipPath="url(#theme-icon-classic-clip)"
           />
-        ))}
+          {RAYS.map((d) => (
+            <path
+              key={d}
+              className="theme-icon-classic-ray"
+              d={d}
+              fill="none"
+              strokeWidth={2}
+              strokeLinejoin="round"
+              strokeMiterlimit={0}
+              paintOrder="stroke markers fill"
+            />
+          ))}
+        </g>
       </svg>
     </button>
   );
