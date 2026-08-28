@@ -71,6 +71,49 @@
    Semantic tokens only; no raw hex appears in any component.
    ========================================================================== */
 :root {
+  /* --- The water droplet -------------------------------------------------
+     A real drop is almost colourless. What makes it read as water is not tint
+     but four things: it bends what is behind it, it is brighter at the rim
+     than in the middle (Fresnel), it carries a hard specular glint, and it
+     deforms when it moves. These tokens carry the parts that are colour; the
+     refraction itself is an SVG lens filter, and the deformation is transform. */
+  --water-body: rgba(255, 255, 255, 0.015);
+  --water-rim-outer: rgba(255, 255, 255, 0.75);
+  --water-rim-inner: rgba(255, 255, 255, 0.10);
+  /* Second, inner ring — sits just inside the hairline Fresnel rim above,
+     reading as a refraction fringe rather than a plain repeat of it. A pale
+     blue like the existing caustic tint (not plain white) is what sells
+     "light bending" rather than "another white line". */
+  --water-rim-refract: rgba(190, 225, 255, 0.10);
+  --water-glint: rgba(255, 255, 255, 0.98);
+  --water-glint-soft: rgba(255, 255, 255, 0.20);
+  --water-caustic: rgba(200, 230, 255, 0.20);
+  /* A soft glass sheen — light catching the upper-left of a curved surface,
+     the way a real glass or water sphere never reads as perfectly flat.
+     Positioned off-center in the body's background-image (see
+     .cursor-drop-body) rather than centered, so it reads as a highlight
+     from a light source rather than a flat glow. */
+  --water-sheen: rgba(255, 255, 255, 0.16);
+  /* Darker than the drop's original light-mode shadow (0.40/0.22), at
+     Alex's direction — the drop was hard to spot at a glance against pale
+     surfaces; a stronger cast shadow is the fix rather than a border or a
+     tint on the body itself, which would have changed what the drop looks
+     like rather than just how visible it is. */
+  --water-shadow: rgba(0, 0, 0, 0.55);
+  --water-contact: rgba(0, 0, 0, 0.34);
+  /* Total internal reflection: against a light surface a real drop shows a
+     DARK ring at the rim, not a bright one. Without this the drop vanishes
+     on white. */
+  --water-rim-dark: rgba(0, 0, 0, 0.11);
+  /* A drop's shadow against a DARK page isn't just a weaker version of the
+     one it casts on white — a light-colored surface underneath also throws
+     a faint reflected glow back up into the shadow's own edge. Transparent
+     here (light mode has no such glow); the dark-mode blocks below give it
+     a real, very subtle white value. */
+  --water-shadow-glow: transparent;
+
+  --cursor-dot-size: 2.25px; /* was 5px, then halved to 2.5px, now another 10% smaller, at Alex's direction */
+
   /* --- Content over media -------------------------------------------------
      A photograph does not change with the theme, so text on top of one must
      not either. --text-inverse flips and is the wrong tool. The scrim is what
@@ -80,6 +123,40 @@
   --on-media-fg-dim: rgba(255, 255, 255, 0.72);
   --on-media-scrim: linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.72) 30%, rgba(0,0,0,0.34) 66%, rgba(0,0,0,0) 100%);
 
+}
+
+/* Dark pages: a drop over near-black needs a touch more rim and glint to be
+   visible at all, and its shadow has to weaken or it turns into a smudge. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --water-body: rgba(255, 255, 255, 0.02);
+    --water-rim-outer: rgba(255, 255, 255, 0.85);
+    --water-rim-refract: rgba(190, 225, 255, 0.10);
+    --water-rim-inner: rgba(255, 255, 255, 0.07);
+    --water-sheen: rgba(255, 255, 255, 0.22);
+    --water-shadow: rgba(0, 0, 0, 0.60);
+    --water-contact: rgba(0, 0, 0, 0.42);
+    --water-rim-dark: rgba(0, 0, 0, 0.22);
+    /* Raised from 0.08, at Alex's direction — the original value was tuned
+       to read as a whisper of reflected light, but that made the drop hard
+       to spot at a glance against near-black surfaces. Still soft (the box-
+       shadow blur radius below does the rest of the work), just brighter. */
+    --water-shadow-glow: rgba(255, 255, 255, 0.16);
+  }
+}
+
+/* Same values when dark is chosen explicitly rather than inherited from the OS.
+   Without this the drop keeps its light-mode rim after using the toggle. */
+:root[data-theme="dark"] {
+  --water-body: rgba(255, 255, 255, 0.02);
+  --water-rim-outer: rgba(255, 255, 255, 0.85);
+  --water-rim-refract: rgba(190, 225, 255, 0.10);
+  --water-rim-inner: rgba(255, 255, 255, 0.07);
+  --water-sheen: rgba(255, 255, 255, 0.22);
+  --water-shadow: rgba(0, 0, 0, 0.60);
+  --water-contact: rgba(0, 0, 0, 0.42);
+  --water-rim-dark: rgba(0, 0, 0, 0.22);
+  --water-shadow-glow: rgba(255, 255, 255, 0.16);
 }
 
 /* --- Landing-page hero photo, theme-aware (components/HeroPhoto.tsx) -------
@@ -320,12 +397,172 @@ html[data-theme-transition] * {
   html[data-theme-transition] * { transition: none; }
 }
 
-/* --- (b) The cursor: was a drop of water, now GlowCursor (components/
-   GlowCursor.tsx) layered on top of the native OS cursor, at Alex's
-   direction. The water-drop cursor CSS that used to live here is archived
-   outside this repo (see /Users/alexwoo/Desktop/ajwoo-water-cursor-backup/
-   README.md); GlowCursor's own styling lives in its CSS Module, and it
-   doesn't hide the native cursor the way this rule set used to. */
+/* --- (b) The cursor: a drop of water that follows the pointer ---------------
+   Two objects. The DOT is the truth — it sits exactly under the pointer with
+   no lag, so precision is never in question. The DROP is the physics — it
+   chases the dot, arrives late, stretches along its direction of travel and
+   settles when it stops. Over something clickable it swells to cover the
+   target, which is the affordance: the water finds the thing you can press. */
+.cursor-root {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-tooltip);
+  pointer-events: none;
+  opacity: 0;
+  /* 320ms, not --d-base (180ms) — the drop's own shape collapses to a point
+     over roughly the same span (see the `!visible` branch in Cursor.tsx's
+     tick(), which drives want.w/h/r to 0 through the existing MORPH spring
+     rather than a separate CSS transform). Pairing the two durations is what
+     makes the fade and the shrink read as one seamless motion instead of two
+     unrelated animations finishing at different times. */
+  transition: opacity 320ms var(--e-standard);
+}
+/* 50%, at Alex's direction — the drop reads as a lighter, less intrusive
+   presence. The dot (below) stays at full opacity: it's the precision
+   indicator, not decoration, and mix-blend-mode inversion needs full
+   strength to read correctly against arbitrary backgrounds. */
+.cursor-root[data-visible="true"] { opacity: 0.5; }
+
+/* The dot lives OUTSIDE .cursor-root, as its own top-level fixed element, not
+   nested inside it. This is load-bearing, not a style choice: .cursor-root is
+   position:fixed + z-index, which makes it its own stacking context, and
+   mix-blend-mode only blends against whatever is painted BEHIND an element
+   WITHIN its own containing stacking context. A dot nested inside cursor-root
+   would blend only against cursor-root's own (mostly transparent) local
+   paint group, i.e. basically nothing, rather than against the real page —
+   which is exactly why the inversion looked broken. Kept as a sibling of
+   cursor-root, it sits in the page's own top-level stacking context and
+   blends correctly against real content underneath it: white on black,
+   black on white, blue on orange, unconditionally, in every state. */
+.cursor-dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: var(--z-tooltip);
+  pointer-events: none;
+  width: var(--cursor-dot-size);
+  height: var(--cursor-dot-size);
+  margin: calc(var(--cursor-dot-size) / -2) 0 0 calc(var(--cursor-dot-size) / -2);
+  border-radius: var(--r-full);
+  background: #FFFFFF;
+  mix-blend-mode: difference;
+  opacity: 0;
+  transition: opacity var(--d-base) var(--e-standard);
+  will-change: transform;
+}
+.cursor-dot[data-visible="true"] { opacity: 0.3; } /* was full opacity, at Alex's direction */
+
+.cursor-drop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  will-change: transform;
+  /* width/height/border-radius are driven per-frame by the rAF loop so the
+     drop can take the exact shape of whatever it is over. This element is
+     position:fixed and out of flow, so none of it can move page content. */
+}
+
+/* The lens. This is the layer that actually bends the page behind it. */
+.cursor-drop-body {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  /* Glass sheen: a soft, off-center highlight (light hitting the upper-left
+     of a curved surface) layered over the flat water-body tint. A perfectly
+     flat, evenly-lit fill reads as a sticker; this asymmetric brightness is
+     what makes it read as a curved, glassy surface instead. Kept soft
+     (transparent past 55% of the drop) so it never competes with the two
+     hard specular glints in .cursor-drop-gloss below. */
+  background: radial-gradient(circle at 32% 26%, var(--water-sheen), transparent 55%), var(--water-body);
+  backdrop-filter: url(#dropletLens) saturate(1.06);
+  /* Safari does not support an SVG filter reference in backdrop-filter, so it
+     gets a whisper of blur instead of true refraction. The rim, glints, shadow
+     and deformation all still apply, so it still reads as a drop — just a
+     less optically accurate one. */
+  -webkit-backdrop-filter: saturate(1.06);
+  box-shadow:
+    /* Fresnel: mirror-bright seen edge-on, invisible through the middle.
+       One hairline only — anything thicker reads as a plastic bead. */
+    inset 0 0 0 0.5px var(--water-rim-outer),
+    /* Second ring, 1px, sitting just inside that hairline — a pale blue
+       rather than another white line, reading as a refraction fringe (light
+       splitting at the lens edge) rather than a doubled Fresnel highlight.
+       True per-pixel bending only the SVG lens filter can do (see
+       dropletLens below); this is the honest CSS approximation of it: color,
+       not distortion, placed exactly where a real fringe would sit. Faint
+       (10% opacity, set on the token below) — a whisper of color, not a
+       second visible line. */
+    inset 0 0 0 1.5px var(--water-rim-refract),
+    inset 0 0 3px 1px var(--water-rim-dark),
+    inset 0 0.5px 1px 0 var(--water-rim-inner),
+    inset 0 -3px 6px -4px var(--water-caustic),
+    /* it sits ON the page, so it casts a little and it touches — darker and
+       further-reaching than the drop's earlier version, at Alex's direction,
+       so the whole shape reads as more clearly separated from the page. */
+    0 5px 12px -3px var(--water-shadow),
+    0 2px 3px 0 var(--water-contact),
+    /* Dark mode only (transparent in light — see --water-shadow-glow above):
+       a soft white glow around the drop, widened from 10px along with the
+       token's own opacity bump, at Alex's direction — the drop needs to be
+       spottable at a glance, especially right after the cursor reappears
+       (see the visibilitychange fix in Cursor.tsx). */
+    0 0 14px 1px var(--water-shadow-glow);
+}
+
+/* Specular glints. Deliberately NOT inside the rotating layer: as the drop
+   rolls, a real highlight stays put relative to the light instead of turning
+   with the body. Keeping these anchored is most of what sells the roll. */
+.cursor-drop-gloss {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  overflow: hidden;
+}
+.cursor-drop-gloss::before,
+.cursor-drop-gloss::after {
+  content: "";
+  position: absolute;
+  border-radius: var(--r-full);
+  pointer-events: none;
+}
+/* primary glint, upper-left, hard and small */
+.cursor-drop-gloss::before {
+  top: 15%;
+  left: 18%;
+  width: 17%;
+  height: 12%;
+  background: radial-gradient(closest-side, var(--water-glint), transparent 100%);
+  filter: blur(0.3px);
+}
+/* bounce light, lower-right, wide and faint */
+.cursor-drop-gloss::after {
+  right: 14%;
+  bottom: 14%;
+  width: 26%;
+  height: 16%;
+  background: radial-gradient(closest-side, var(--water-glint-soft), transparent 100%);
+  filter: blur(1.5px);
+}
+
+
+/* The custom cursor replaces the native one only where it actually runs. */
+@media (any-pointer: fine) and (prefers-reduced-motion: no-preference) {
+  html[data-cursor="on"],
+  html[data-cursor="on"] a,
+  html[data-cursor="on"] button {
+    cursor: none;
+  }
+}
+/* Reduced-motion users get the native cursor, untouched, on any pointer type.
+   Coarse pointers with motion on get the tap-relocate drop instead (see
+   Cursor.tsx's touchMode) — `data-cursor="touch"` is the JS-side gate for
+   that, so this rule only needs to cover the case CSS alone can catch. */
+@media (prefers-reduced-motion: reduce) {
+  .cursor-root { display: none; }
+}
+@media (any-pointer: coarse) {
+  html:not([data-cursor="touch"]) .cursor-root { display: none; }
+}
 
 /* Hero serif — "Enable creativity." (app/page.tsx), EB Garamond italic. */
 /* The column itself is the sizing reference, not the viewport — at Alex's
