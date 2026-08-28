@@ -62,6 +62,13 @@ export interface BorderGlowProps {
   glowIntensity?: number;
   coneSpread?: number;
   animated?: boolean;
+  /** CSS `mix-blend-mode` for the glow ring. Defaults to `plus-lighter`
+   * (the registry's own choice) which only ever brightens — a black
+   * `glowColor` disappears under it against a light background. Pass
+   * `'multiply'` (with a black/dark `glowColor`) for a glow meant to read
+   * as darkening instead, e.g. a light-mode variant of an otherwise
+   * bright/warm dark-mode glow. */
+  blendMode?: string;
 }
 
 export function BorderGlow({
@@ -74,6 +81,7 @@ export function BorderGlow({
   glowIntensity = 1.0,
   coneSpread = 25,
   animated = false,
+  blendMode = 'plus-lighter',
 }: BorderGlowProps) {
   const rootRef = useRef<HTMLSpanElement>(null);
 
@@ -158,6 +166,7 @@ export function BorderGlow({
         '--border-radius': `${borderRadius}px`,
         '--glow-padding': `${glowRadius}px`,
         '--cone-spread': coneSpread,
+        '--glow-blend': blendMode,
         borderRadius: `${borderRadius}px`,
         ...glowVars,
       } as React.CSSProperties}

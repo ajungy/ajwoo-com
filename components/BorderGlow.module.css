@@ -35,7 +35,12 @@
     black 97.5%
   );
   opacity: calc((var(--edge-proximity) - var(--edge-sensitivity)) / (100 - var(--edge-sensitivity)));
-  mix-blend-mode: plus-lighter;
+  /* plus-lighter is additive — it can only brighten, never darken, so a
+     black glowColor is invisible against a light background under it. See
+     BorderGlow.tsx's `blendMode` prop: light mode passes `multiply` with a
+     black glow instead, at Alex's direction ("black glow ... only on light
+     mode"), so the ring actually reads as dark there. */
+  mix-blend-mode: var(--glow-blend, plus-lighter);
 }
 
 .glowRoot:not(:hover):not(.sweepActive) .edgeLight {
