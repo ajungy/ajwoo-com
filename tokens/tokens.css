@@ -350,18 +350,24 @@
   /* e2 is the hover elevation on cards (ProjectCard, AppCard). In dark mode a
      black shadow reads as nothing against an already-dark page — especially
      under a light-colored thumbnail, where hover became functionally
-     invisible. A white glow reads as "lifted" the same way a dark shadow
-     does on a light page, so dark mode gets the inverse treatment here
-     rather than the same rgba(0,0,0,*) every other shadow token uses. Light
-     mode keeps a directional (offset) shadow, since real light comes from
-     above; dark mode's glow is a 0-offset ring instead, on purpose — a card
-     "lifting" toward you reads as an even glow on every edge, not a light
-     source, so it needs to show on all four sides, not just the bottom. */
+     invisible. A glow reads as "lifted" the same way a dark shadow does on a
+     light page, so dark mode gets the inverse treatment here rather than the
+     same rgba(0,0,0,*) every other shadow token uses. Light mode keeps a
+     directional (offset) shadow, since real light comes from above; dark
+     mode's glow is a 0-offset ring instead, on purpose — a card "lifting"
+     toward you reads as an even glow on every edge, not a light source, so
+     it needs to show on all four sides, not just the bottom. Warm and
+     bright rather than a pure white glow — closer to candlelight than a
+     fluorescent tube, which reads as considered rather than a stray
+     `#fff` nobody chose on purpose. */
   --shadow-e2:
     0 4px 16px light-dark(rgba(0,0,0,0.06), transparent),
     0 1px 2px  light-dark(rgba(0,0,0,0.04), transparent),
-    0 0 32px   light-dark(transparent, rgba(255,255,255,0.22)),
-    0 0 8px    light-dark(transparent, rgba(255,255,255,0.30));
+    /* Dark-mode glow reduced to ~70% of its original strength (0.28->0.20,
+       0.38->0.27), at Alex's direction — the hover lift read as a touch too
+       bright/strong against the page. */
+    0 0 32px   light-dark(transparent, rgba(255,244,214,0.20)),
+    0 0 8px    light-dark(transparent, rgba(255,236,168,0.27));
   --shadow-e3:
     0 16px 40px light-dark(rgba(0,0,0,0.12), rgba(0,0,0,0.55)),
     0 2px 8px   light-dark(rgba(0,0,0,0.06), rgba(0,0,0,0.32));

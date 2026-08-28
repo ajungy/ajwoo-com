@@ -65,33 +65,13 @@ export function ProjectCard({ project, priority = false }: { project: Project; p
             <source src={`/img/${motion.base}.mp4`} type="video/mp4" />
           </video>
         ) : tile ? (
-          <div className="grid h-full w-full">
-            {/* Two real images, not a filter — see scripts/tile-dark-bg.mjs
-                for the full reasoning. The dark variant has ONLY its outer
-                canvas margin recolored to --d-200; anything the margin
-                frames (including white INSIDE the screenshot itself) is
-                pixel-identical to the light version. Swapped via CSS, same
-                .tile-light/.tile-dark pattern as HeroPhoto's .hero-light/
-                .hero-dark. */}
-            <div className="tile-light col-start-1 row-start-1 h-full w-full">
-              <Picture
-                img={tile}
-                alt={project.title}
-                priority={priority}
-                sizes="(min-width: 840px) 33vw, (min-width: 600px) 50vw, 100vw"
-                className="card-thumb-media block h-full w-full object-cover"
-              />
-            </div>
-            <div className="tile-dark col-start-1 row-start-1 h-full w-full">
-              <Picture
-                img={{ ...tile, base: `${tile.base}-dark` }}
-                alt={project.title}
-                priority={priority}
-                sizes="(min-width: 840px) 33vw, (min-width: 600px) 50vw, 100vw"
-                className="card-thumb-media block h-full w-full object-cover"
-              />
-            </div>
-          </div>
+          <Picture
+            img={tile}
+            alt={project.title}
+            priority={priority}
+            sizes="(min-width: 840px) 33vw, (min-width: 600px) 50vw, 100vw"
+            className="card-thumb-media block h-full w-full object-cover"
+          />
         ) : null}
       </div>
       <div className="p-7">
