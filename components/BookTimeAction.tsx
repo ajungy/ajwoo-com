@@ -50,7 +50,7 @@ export function BookTimeAction() {
 
   return (
     <BorderGlow
-      edgeSensitivity={40}
+      edgeSensitivity={1}
       glowColor={glowColor}
       blendMode={blendMode}
       borderRadius={8}
