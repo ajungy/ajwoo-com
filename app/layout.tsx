@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import '@/styles/globals.css';
 import { TopBar } from '@/components/TopBar';
-import { Cursor } from '@/components/Cursor';
+import { GlowCursor } from '@/components/GlowCursor';
 import { site } from '@/content/site';
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:4321';
@@ -68,8 +68,29 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </noscript>
       </head>
       <body>
-        {/* Site-wide now, at Alex's direction — was landing-page-only. */}
-        <Cursor />
+        {/* Site-wide, layered on top of the native OS cursor (not a
+            replacement for it) — the water-drop cursor that used to live
+            here is archived outside this repo, see
+            /Users/alexwoo/Desktop/ajwoo-water-cursor-backup/README.md. */}
+        <GlowCursor
+          color="#f8f9cc"
+          secondaryColor="#A78BFA"
+          trailLength={10}
+          trailWidth={8}
+          trailTaper={0.8}
+          followSpeed={0.35}
+          glowIntensity={1.9}
+          glowSpread={1.2}
+          hotspot={0.65}
+          brightness={1.5}
+          opacity={1}
+          pulseSpeed={1.1}
+          noiseStrength={0.01}
+          idleFade
+          idleTimeout={200}
+          fadeDuration={1500}
+          blendMode="screen"
+        />
         <a
           href="#main"
           className="sr-only focus:not-sr-only focus:absolute focus:z-modal focus:m-6 focus:rounded-control focus:bg-raised focus:px-6 focus:py-4 focus:text-label focus:shadow-e2"
