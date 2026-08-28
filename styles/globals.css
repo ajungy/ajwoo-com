@@ -450,7 +450,7 @@ html[data-theme-transition] * {
   transition: opacity var(--d-base) var(--e-standard);
   will-change: transform;
 }
-.cursor-dot[data-visible="true"] { opacity: 0.3; } /* was full opacity, at Alex's direction */
+.cursor-dot[data-visible="true"] { opacity: 0.02; } /* was 0.3, then full opacity before that, at Alex's direction */
 
 .cursor-drop {
   position: fixed;

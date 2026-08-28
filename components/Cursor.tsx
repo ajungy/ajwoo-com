@@ -363,22 +363,30 @@ export function Cursor() {
       // Hidden: collapse toward a point rather than just fading the finished
       // shape out. Reusing the same MORPH interpolation that already handles
       // target-shape changes, so appearing/disappearing is the same physics
-      // as everything else the drop does — grows from nothing when it next
-      // shows (want.w/h get re-targeted the moment a real hover/tap sets
-      // them), shrinks to nothing while hidden, seamlessly.
-      if (!visible) {
-        want.w = 0;
-        want.h = 0;
-        want.r = 0;
-      }
+      // as everything else the drop does — shrinks to nothing while hidden,
+      // grows back the moment it's visible again.
+      //
+      // BUG FIX: this used to write straight into `want.w/h/r` (the same
+      // object measure()/release() maintain as "the real target size"). On a
+      // page with no `data-cursor-label` elements anywhere near the pointer,
+      // release() never runs again after the first hide — nothing calls it —
+      // so `want` stayed permanently zeroed even once `visible` flipped back
+      // to true, and the drop never regrew: only the dot (which doesn't read
+      // `want` at all) kept showing. This is almost certainly the "sometimes
+      // I only see the dot" Alex reported. Fix: collapse a LOCAL copy of the
+      // target size instead, so `want` itself is never corrupted and the
+      // drop always has a real size to grow back to.
+      const targetW = visible ? want.w : 0;
+      const targetH = visible ? want.h : 0;
+      const targetR = visible ? want.r : 0;
 
       const dx = want.x - drop.x;
       const dy = want.y - drop.y;
       drop.x += dx * FOLLOW;
       drop.y += dy * FOLLOW;
-      drop.w += (want.w - drop.w) * MORPH;
-      drop.h += (want.h - drop.h) * MORPH;
-      drop.r += (want.r - drop.r) * MORPH;
+      drop.w += (targetW - drop.w) * MORPH;
+      drop.h += (targetH - drop.h) * MORPH;
+      drop.r += (targetR - drop.r) * MORPH;
 
       // Critically underdamped spring: overshoots, rings, settles in ~1s.
       bounceV += ((gripped ? GRIP : 0) - bounce) * SPRING;
