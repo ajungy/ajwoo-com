@@ -465,49 +465,31 @@ html[data-theme-transition] * {
      position:fixed and out of flow, so none of it can move page content. */
 }
 
-/* The lens. This is the layer that actually bends the page behind it —
-   AND, now, the mount point for GlassSurfaceFill (React Bits'
-   GlassSurface, adapted — see components/GlassSurfaceFill.tsx), rendered
-   as this element's child in Cursor.tsx. `overflow: hidden` clips it to
-   this element's own `border-radius: inherit`, so it always exactly fills
-   whatever shape the drop currently is — at rest, or morphed over a small
-   target. GlassSurfaceFill applies its OWN backdrop-filter (a dynamic SVG
-   feDisplacementMap it generates and re-generates on resize) on its own
-   inner element, which is what actually bends the page behind the drop
-   now — this element no longer needs a backdrop-filter of its own. */
+/* The lens. Stripped down to just the minimum that reliably bends the page
+   behind it — at Alex's direction ("remove all visual UI detail for the
+   cursor but keep the interaction and shape change"). Every decorative
+   layer that used to live here (the Fresnel hairline, the refraction
+   fringe, the TIR dark ring, the inner highlight, the caustic, the cast
+   shadow, the dark-mode glow) is gone; their tokens stay defined in
+   globals.css :root in case any of this needs to come back, but nothing
+   references them here any more.
+   `backdrop-filter: blur() saturate()` alone — no SVG filter reference —
+   is what's left: a plain, universally-supported CSS feature that is
+   GUARANTEED to blur/refract the real page behind the drop in every
+   browser, unlike the SVG feDisplacementMap technique GlassSurfaceFill
+   attempts (still mounted as a child, layered on top — see that file's
+   comment for why it may not visibly do anything in some engines). If
+   GlassSurfaceFill's own chromatic distortion doesn't render, this base
+   blur still guarantees the drop reads as glass over real content instead
+   of a flat, motionless shape. */
 .cursor-drop-body {
   position: absolute;
   inset: 0;
   border-radius: inherit;
   overflow: hidden;
   background: var(--water-body);
-  box-shadow:
-    /* Fresnel: mirror-bright seen edge-on, invisible through the middle.
-       One hairline only — anything thicker reads as a plastic bead. */
-    inset 0 0 0 0.5px var(--water-rim-outer),
-    /* Second ring, 1px, sitting just inside that hairline — a pale blue
-       rather than another white line, reading as a refraction fringe (light
-       splitting at the lens edge) rather than a doubled Fresnel highlight.
-       True per-pixel bending only GlassSurfaceFill's own SVG lens filter
-       can do); this is the honest CSS approximation of it: color,
-       not distortion, placed exactly where a real fringe would sit. Faint
-       (10% opacity, set on the token below) — a whisper of color, not a
-       second visible line. */
-    inset 0 0 0 1.5px var(--water-rim-refract),
-    inset 0 0 3px 1px var(--water-rim-dark),
-    inset 0 0.5px 1px 0 var(--water-rim-inner),
-    inset 0 -3px 6px -4px var(--water-caustic),
-    /* it sits ON the page, so it casts a little and it touches — darker and
-       further-reaching than the drop's earlier version, at Alex's direction,
-       so the whole shape reads as more clearly separated from the page. */
-    0 5px 12px -3px var(--water-shadow),
-    0 2px 3px 0 var(--water-contact),
-    /* Dark mode only (transparent in light — see --water-shadow-glow above):
-       a soft white glow around the drop, widened from 10px along with the
-       token's own opacity bump, at Alex's direction — the drop needs to be
-       spottable at a glance, especially right after the cursor reappears
-       (see the visibilitychange fix in Cursor.tsx). */
-    0 0 14px 1px var(--water-shadow-glow);
+  backdrop-filter: blur(3px) saturate(1.4);
+  -webkit-backdrop-filter: blur(3px) saturate(1.4);
 }
 
 /* The old .cursor-drop-gloss specular-glint layer (two flat CSS radial

@@ -93,10 +93,27 @@ export function GlassSurfaceFill({
 
   const borderRadius = 9999; // always-round edge falloff — see file comment
 
-  const generateDisplacementMap = () => {
-    const rect = rootRef.current?.getBoundingClientRect();
-    const w = rect?.width || 40;
-    const h = rect?.height || 40;
+  // BUG FIX ("weird striped marks... gray lines everywhere"): feDisplacementMap's
+  // `scale` is in absolute PIXELS in the filter region's own coordinate
+  // space — not a percentage, not relative to element size. Alex's pasted
+  // example values (distortionScale=-180, offsets up to +20) were tuned for
+  // React Bits' own ~300px-wide demo card. Applied literally to this
+  // cursor's actual ~28-80px size, that displaces the source graphic by
+  // 4-6x the element's own diameter, so feDisplacementMap samples pixels
+  // from far outside the drop entirely — which is exactly what reads as
+  // random gray noise/stripes rather than a lens. REF_SIZE normalizes the
+  // passed-in values against that same ~300px reference the stock demo
+  // used, so the same relative "intensity" Alex dialed in now scales down
+  // correctly for this element's real, much smaller size. MIN_FACTOR is a
+  // floor so the drop's smallest rest size (~28px) still gets a clearly
+  // visible bend rather than shrinking toward imperceptible — at Alex's
+  // follow-up direction ("it should refract everything... background,
+  // images, text"), being too subtle to notice is as much a bug as the
+  // original noise was.
+  const REF_SIZE = 300;
+  const MIN_FACTOR = 0.3;
+
+  const generateDisplacementMap = (w: number, h: number) => {
     const edgeSize = Math.min(w, h) * (borderWidth * 0.5);
 
     const svgContent = `
@@ -122,21 +139,31 @@ export function GlassSurfaceFill({
   };
 
   const updateDisplacementMap = () => {
-    feImageRef.current?.setAttribute('href', generateDisplacementMap());
-  };
+    const rect = rootRef.current?.getBoundingClientRect();
+    const w = rect?.width || 40;
+    const h = rect?.height || 40;
+    feImageRef.current?.setAttribute('href', generateDisplacementMap(w, h));
 
-  useEffect(() => {
-    updateDisplacementMap();
+    // Normalize against REF_SIZE (see above) using the SMALLER dimension,
+    // so a very short/wide morphed shape (e.g. a wide button) doesn't get
+    // an oversized scale just because it's wide. Floored at MIN_FACTOR so
+    // the drop's own smallest rest size still bends visibly.
+    const factor = Math.max(Math.min(w, h) / REF_SIZE, MIN_FACTOR);
+
     [
       { ref: redChannelRef, offset: redOffset },
       { ref: greenChannelRef, offset: greenOffset },
       { ref: blueChannelRef, offset: blueOffset },
     ].forEach(({ ref, offset }) => {
-      ref.current?.setAttribute('scale', String(distortionScale + offset));
+      ref.current?.setAttribute('scale', String((distortionScale + offset) * factor));
       ref.current?.setAttribute('xChannelSelector', xChannel);
       ref.current?.setAttribute('yChannelSelector', yChannel);
     });
-    gaussianBlurRef.current?.setAttribute('stdDeviation', String(displace));
+    gaussianBlurRef.current?.setAttribute('stdDeviation', String(displace * factor));
+  };
+
+  useEffect(() => {
+    updateDisplacementMap();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [distortionScale, redOffset, greenOffset, blueOffset, xChannel, yChannel, displace]);
 
@@ -164,7 +191,17 @@ export function GlassSurfaceFill({
       <svg className={styles.filterSvg}>
         <defs>
           <filter id={filterId} colorInterpolationFilters="sRGB" x="0%" y="0%" width="100%" height="100%">
-            <feImage ref={feImageRef} x="0" y="0" width="100%" height="100%" preserveAspectRatio="none" result="map" />
+            {/* href set inline too (not only imperatively after mount) so
+                the filter has real content from the very first paint —
+                no blank-map frame while the mount effect and the
+                ResizeObserver's first callback haven't run yet. */}
+            <feImage
+              ref={feImageRef}
+              href={generateDisplacementMap(40, 40)}
+              x="0" y="0" width="100%" height="100%"
+              preserveAspectRatio="none"
+              result="map"
+            />
 
             <feDisplacementMap ref={redChannelRef} in="SourceGraphic" in2="map" result="dispRed" />
             <feColorMatrix
