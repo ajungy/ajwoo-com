@@ -136,7 +136,33 @@ export function Cursor() {
     const touchMode = !isFine;
     let hideTimer: ReturnType<typeof setTimeout> | null = null;
 
-    const pointer = { x: innerWidth / 2, y: innerHeight / 2 };
+    // BUG FIX ("sometimes I don't see the cursor at all until I leave the
+    // window and come back"): this used to default to the viewport CENTER
+    // and rely on a real pointermove to correct it. If the mouse was
+    // already sitting still somewhere else the instant this mounted — the
+    // common case right after a page load, since nothing requires the user
+    // to jiggle the mouse — the drop sat inertly at dead-center, nowhere
+    // near the real cursor, until the user's mouse actually moved. That's
+    // exactly what reads as "I don't see the cursor": something IS
+    // rendered, just nowhere near where they're looking.
+    //
+    // There's no synchronous JS API for "where is the mouse right now"
+    // without a prior event, but `:hover` IS live and synchronous —
+    // `document.querySelectorAll(':hover')` returns whatever the pointer is
+    // currently sitting over even though no JS listener has fired yet. Its
+    // deepest match's center is a real, on-screen approximation of the
+    // actual cursor position (rather than an arbitrary guess), and the
+    // FOLLOW lerp glides it the rest of the way the instant a genuine
+    // pointermove arrives. Falls back to viewport center only when nothing
+    // is hovered at all (pointer outside the document — over browser
+    // chrome, or a touch device with no persistent pointer).
+    const hovered = document.querySelectorAll(':hover');
+    const bestGuess = hovered.length ? hovered[hovered.length - 1].getBoundingClientRect() : null;
+    const start = bestGuess
+      ? { x: bestGuess.left + bestGuess.width / 2, y: bestGuess.top + bestGuess.height / 2 }
+      : { x: innerWidth / 2, y: innerHeight / 2 };
+
+    const pointer = { x: start.x, y: start.y };
     const drop = { x: pointer.x, y: pointer.y, w: REST_SIZE, h: REST_SIZE, r: REST_SIZE / 2 };
     const want = { ...drop };
 
@@ -427,12 +453,23 @@ export function Cursor() {
     // this point in the effect, so the refs setVisible relies on are still
     // null and the call would silently no-op. By the first rAF callback,
     // React has committed that render and the refs are live. Starts at the
-    // viewport center and glides to the real pointer position via the same
+    // real `:hover`-derived position seeded above (or viewport center if
+    // nothing was hovered) and glides the rest of the way via the same
     // FOLLOW lerp as everything else, the moment a move event arrives.
     // Touch is unaffected: there's no persistent OS cursor concept to stand
     // in for on a touchscreen, so it still only appears on contact.
     raf = requestAnimationFrame(() => {
-      if (!touchMode) setVisible(true);
+      if (!touchMode) {
+        // Also seed the target SHAPE, not just position, if the pointer
+        // happened to already be sitting over a labelled target at mount —
+        // otherwise the drop briefly shows as a plain circle at that
+        // target's center before snapping to its shape a frame later.
+        const label = hovered.length
+          ? (hovered[hovered.length - 1] as Element).closest('[data-cursor-label]')
+          : null;
+        if (label) { active = label; measure(); }
+        setVisible(true);
+      }
       tick();
     });
 

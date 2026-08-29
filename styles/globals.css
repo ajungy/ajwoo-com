@@ -110,9 +110,12 @@
      values in light and dark — at Alex's direction, this needs to read in
      both, not just dark ("think about an actual bubble with light making
      the bubble colors but still being transparent"). */
-  --water-iris-purple: rgba(178, 110, 255, 0.26);
-  --water-iris-cyan: rgba(70, 220, 255, 0.24);
-  --water-iris-yellow: rgba(255, 210, 70, 0.22);
+  /* Yellow deliberately the strongest of the three (higher alpha AND a
+     wider gradient reach in .cursor-drop-body below) — at Alex's direction,
+     "more yellow gradient... compared to the cyan or the purple". */
+  --water-iris-purple: rgba(178, 110, 255, 0.20);
+  --water-iris-cyan: rgba(70, 220, 255, 0.18);
+  --water-iris-yellow: rgba(255, 210, 70, 0.28);
   /* Darker than the drop's original light-mode shadow (0.40/0.22), at
      Alex's direction — the drop was hard to spot at a glance against pale
      surfaces; a stronger cast shadow is the fix rather than a border or a
@@ -439,11 +442,12 @@ html[data-theme-transition] * {
      unrelated animations finishing at different times. */
   transition: opacity 320ms var(--e-standard);
 }
-/* 50%, at Alex's direction — the drop reads as a lighter, less intrusive
-   presence. The dot (below) stays at full opacity: it's the precision
-   indicator, not decoration, and mix-blend-mode inversion needs full
-   strength to read correctly against arbitrary backgrounds. */
-.cursor-root[data-visible="true"] { opacity: 0.5; }
+/* Was 50%, lowered again at Alex's direction ("even more transparent") —
+   the drop reads as a lighter, less intrusive presence. The dot (below)
+   stays at full opacity: it's the precision indicator, not decoration, and
+   mix-blend-mode inversion needs full strength to read correctly against
+   arbitrary backgrounds. */
+.cursor-root[data-visible="true"] { opacity: 0.35; }
 
 /* The dot lives OUTSIDE .cursor-root, as its own top-level fixed element, not
    nested inside it. This is load-bearing, not a style choice: .cursor-root is
@@ -506,9 +510,12 @@ html[data-theme-transition] * {
      already covering it edge-to-edge. */
   background:
     radial-gradient(circle at 32% 26%, var(--water-sheen), transparent 55%),
-    radial-gradient(circle, var(--water-iris-purple), transparent 62%),
-    radial-gradient(circle, var(--water-iris-cyan), transparent 62%),
-    radial-gradient(circle, var(--water-iris-yellow), transparent 58%),
+    radial-gradient(circle, var(--water-iris-purple), transparent 60%),
+    radial-gradient(circle, var(--water-iris-cyan), transparent 60%),
+    /* Reaches further (70% vs the other two's 60%) on top of its own higher
+       alpha above — yellow should read as the dominant hue, not an equal
+       third. */
+    radial-gradient(circle, var(--water-iris-yellow), transparent 70%),
     var(--water-body);
   background-size: 100% 100%, 220% 220%, 220% 220%, 220% 220%, 100% 100%;
   background-repeat: no-repeat;

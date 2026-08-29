@@ -66,7 +66,36 @@ export type App = {
   openUrl?: string;
 };
 
+// Convert leads the array — at Alex's direction, ordering is now
+// Convert, Capture, Dictate, Narrate — so it renders as the /apps grid's
+// first (top-left) card.
 export const apps: App[] = [
+  {
+    slug: 'convert',
+    icon: 'convert',
+    name: 'Convert',
+    description: 'Bulk convert images, videos, audio, docs, sheets, archives',
+    trigger: 'Drop files, pick a format, download',
+    platform: 'Web',
+    traits: [
+      'Runs in your browser',
+      'Nothing uploaded',
+      'Works offline',
+      'Up to 100 files at once',
+      'Images, video, audio, docs, sheets, archives',
+    ],
+    thumbnailVideo: 'appcard-convert',
+    openUrl: 'https://convert.ajwoo.com/',
+    detail: [
+      { lead: 'A private file converter that never uploads.' },
+      'Drop files, pick a format, download. Everything runs inside the browser tab — nothing is sent to a server, and it still works offline.',
+      { label: 'On your device only', body: 'Files never leave your machine. Nothing is uploaded or stored anywhere but that browser tab.' },
+      { label: 'Bulk, not one at a time', body: 'Convert up to 100 files in a batch. It stays responsive and runs several at once.' },
+      { label: 'Nearly any file', body: 'Images, video, audio, documents, spreadsheets, and archives — in and out. Scale, quality, background removal, and batch rename are built in.' },
+      'Works in any current browser, on a computer, phone, or tablet. Built in Claude Code, like Capture, Dictate, and Narrate.',
+    ],
+    iconImage: 'appicon-convert',
+  },
   {
     slug: 'capture',
     icon: 'capture',
@@ -126,32 +155,6 @@ export const apps: App[] = [
       'Nothing you select is sent anywhere. The model runs on your Mac. Like Capture and Dictate, this one was built in Claude Code, one conversation at a time.',
     ],
     iconImage: 'appicon-narrate',
-  },
-  {
-    slug: 'convert',
-    icon: 'convert',
-    name: 'Convert',
-    description: 'Bulk convert images, videos, audio, docs, sheets, archives',
-    trigger: 'Drop files, pick a format, download',
-    platform: 'Web',
-    traits: [
-      'Runs in your browser',
-      'Nothing uploaded',
-      'Works offline',
-      'Up to 100 files at once',
-      'Images, video, audio, docs, sheets, archives',
-    ],
-    thumbnailVideo: 'appcard-convert',
-    openUrl: 'https://convert.ajwoo.com/',
-    detail: [
-      { lead: 'A private file converter that never uploads.' },
-      'Drop files, pick a format, download. Everything runs inside the browser tab — nothing is sent to a server, and it still works offline.',
-      { label: 'On your device only', body: 'Files never leave your machine. Nothing is uploaded or stored anywhere but that browser tab.' },
-      { label: 'Bulk, not one at a time', body: 'Convert up to 100 files in a batch. It stays responsive and runs several at once.' },
-      { label: 'Nearly any file', body: 'Images, video, audio, documents, spreadsheets, and archives — in and out. Scale, quality, background removal, and batch rename are built in.' },
-      'Works in any current browser, on a computer, phone, or tablet. Built in Claude Code, like Capture, Dictate, and Narrate.',
-    ],
-    iconImage: 'appicon-convert',
   },
 ];
 
