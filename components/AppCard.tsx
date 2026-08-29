@@ -17,8 +17,9 @@ import { WAITLIST_FORM_URL, type App } from '@/content/apps';
  * one-off exception.
  *
  * Price is gone entirely (CLAUDE.md D2 is still unanswered) — see
- * content/apps.ts. Every app is pre-release, so the footer button always
- * reads "Waitlist" and points at WAITLIST_FORM_URL, never a real purchase.
+ * content/apps.ts. Every pre-release app's footer button reads "Waitlist"
+ * and points at WAITLIST_FORM_URL; an app with `openUrl` set (Convert —
+ * already real, already shipped) gets "Open" pointing at itself instead.
  *
  * DEVIATION, stated rather than hidden: components.md says "don't put competing
  * buttons inside a clickable card". This card has both a card-level link and a
@@ -145,13 +146,20 @@ export function AppCard({ app, hoverPlay = false }: { app: App; hoverPlay?: bool
           <p className="truncate text-caption text-fg-secondary">{app.description}</p>
         </div>
 
-        {/* Above the stretched link so it is its own target. Every app is
-            pre-release, so this always points at the waitlist form rather
-            than a real install. */}
+        {/* Above the stretched link so it is its own target. Every
+            pre-release app points at the waitlist form; an app with
+            `openUrl` set (Convert — already real, already shipped) points
+            straight at itself instead, labeled "Open". */}
         <div className="relative z-10 shrink-0">
-          <Action href={WAITLIST_FORM_URL} external variant="secondary" cursorLabel="Join waitlist">
-            Waitlist
-          </Action>
+          {app.openUrl ? (
+            <Action href={app.openUrl} external variant="secondary" cursorLabel="Open">
+              Open
+            </Action>
+          ) : (
+            <Action href={WAITLIST_FORM_URL} external variant="secondary" cursorLabel="Join waitlist">
+              Waitlist
+            </Action>
+          )}
         </div>
       </div>
     </article>

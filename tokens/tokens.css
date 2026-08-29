@@ -363,11 +363,13 @@
   --shadow-e2:
     0 4px 16px light-dark(rgba(0,0,0,0.06), transparent),
     0 1px 2px  light-dark(rgba(0,0,0,0.04), transparent),
-    /* Dark-mode glow reduced to ~70% of its original strength (0.28->0.20,
-       0.38->0.27), at Alex's direction — the hover lift read as a touch too
-       bright/strong against the page. */
-    0 0 32px   light-dark(transparent, rgba(255,244,214,0.20)),
-    0 0 8px    light-dark(transparent, rgba(255,236,168,0.27));
+    /* Dark-mode glow: full opacity (was dimmed to 0.20/0.27, before that
+       0.28/0.38), with the blur radius pulled in to compensate (32px->24px,
+       8px->6px) so full brightness doesn't read as a bigger halo — at
+       Alex's direction, "increase the opacity back to 100%, but reduce the
+       blur a little". */
+    0 0 24px   light-dark(transparent, rgba(255,244,214,1)),
+    0 0 6px    light-dark(transparent, rgba(255,236,168,1));
   --shadow-e3:
     0 16px 40px light-dark(rgba(0,0,0,0.12), rgba(0,0,0,0.55)),
     0 2px 8px   light-dark(rgba(0,0,0,0.06), rgba(0,0,0,0.32));

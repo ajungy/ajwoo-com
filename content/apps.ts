@@ -1,8 +1,13 @@
-// /apps — desktop tools built in Claude Code, pre-release.
+// /apps — tools built in Claude Code. Capture/Dictate/Narrate are desktop
+// apps, pre-release. Convert is different: a real, already-shipped web app
+// at convert.ajwoo.com, so it's the one entry with `openUrl` set (see below).
 //
 // Content supplied by Alex, plus facts pulled from each app's own repo
 // (README/NOTES) rather than invented. Two claims are load-bearing and appear
-// on every detail page: native macOS app, runs fully on-device.
+// on every detail page for the three desktop apps: native macOS app, runs
+// fully on-device. Convert's equivalent claim, pulled directly from its own
+// in-app "About" panel rather than invented, is that every conversion runs
+// inside the browser tab itself — nothing is ever uploaded to a server.
 //
 // NOTE ON PRICE (CLAUDE.md D2, still unanswered): no price badge anywhere on
 // this site any more, at Alex's direction — every app is pre-release, and a
@@ -54,6 +59,11 @@ export type App = {
    *  autoplays: carries a poster and controls, same as every other video
    *  on this site (Principle 14 — nothing moves until the reader asks). */
   demoVideo?: string;
+  /** When set, this app already exists and is real — the card footer button
+   *  and the detail page's header action both read "Open" and link straight
+   *  here (external) instead of "Waitlist" -> WAITLIST_FORM_URL. Every other
+   *  app in this array is pre-release and omits this. */
+  openUrl?: string;
 };
 
 export const apps: App[] = [
@@ -117,9 +127,36 @@ export const apps: App[] = [
     ],
     iconImage: 'appicon-narrate',
   },
+  {
+    slug: 'convert',
+    icon: 'convert',
+    name: 'Convert',
+    description: 'Bulk convert images, videos, audio, docs, sheets, archives',
+    trigger: 'Drop files, pick a format, download',
+    platform: 'Web',
+    traits: [
+      'Runs in your browser',
+      'Nothing uploaded',
+      'Works offline',
+      'Up to 100 files at once',
+      'Images, video, audio, docs, sheets, archives',
+    ],
+    thumbnailVideo: 'appcard-convert',
+    openUrl: 'https://convert.ajwoo.com/',
+    detail: [
+      { lead: 'Convert is a private file converter that never uploads.' },
+      'Drop files, pick a format, download. Every conversion runs inside the browser tab itself — nothing is sent to a server, and it keeps working even offline, straight from Convert’s own in-app description.',
+      { label: 'Everything stays on your device', body: 'No file you drop into Convert ever leaves your machine. There is no server round-trip to wait on and nothing about what you convert is stored anywhere but locally, in that browser tab.' },
+      { label: 'Bulk, not one at a time', body: 'Convert up to 100 files in a single batch. A large batch stays responsive and runs several conversions at once rather than queuing them one by one.' },
+      { label: 'Nearly any file, in or out', body: 'Images (JPG, PNG, WEBP, AVIF, BMP, HEIC, HEIF, GIF), video (MP4, MOV, WEBM, MKV), audio (MP3, WAV, M4A, AAC, FLAC, OGG), documents (PDF, DOCX, PPTX), spreadsheets (XLSX, XLS, ODS, CSV, TSV), and archives (ZIP, 7Z, RAR, TAR, GZ) are all supported both in and out.' },
+      { label: 'Real controls, not just a format picker', body: 'Scale and quality sliders, a background-removal effect, and batch-rename options (prefix, suffix, or numbered) are all built in — the kind of controls a native converter would have, running entirely in a browser tab.' },
+      'Works in any current browser — Chrome, Edge, Firefox, or Safari 17+ — on a computer, phone, or tablet, though a desktop with Chrome or Edge converts fastest and supports the most formats. Built in Claude Code, the same way as Capture, Dictate, and Narrate.',
+    ],
+    iconImage: 'appicon-convert',
+  },
 ];
 
 // Deliberately no groups. reference/disclosure.md caps a group at 7 and says a
-// group of one is not a group — at three apps, grouping is an unearned control
-// and the flat grid is the simpler thing that works (Principle 12). Introduce
-// outcome-named groups when this list passes about seven.
+// group of one is not a group — at four apps, grouping is still an unearned
+// control and the flat grid is the simpler thing that works (Principle 12).
+// Introduce outcome-named groups when this list passes about seven.

@@ -54,17 +54,26 @@ export default function AppPage({ params }: { params: { slug: string } }) {
           {/* The platform/trigger caption line that used to sit here is
               gone, at Alex's direction — the smallest, least load-bearing
               text on the page, replaced by the one thing worth doing this
-              high up: the actual next step. Every app is pre-release right
-              now, so every detail page points at the same waitlist form
-              rather than a real purchase flow. Secondary, not primary — at
-              Alex's direction, since "Waitlist" is an interim state, not
-              the confident, one-primary-per-view action a real download
-              would be (Principle 9: real separation, never default-focused,
-              a plain navigation so it can't double-fire). */}
+              high up: the actual next step. Capture/Dictate/Narrate are
+              pre-release, so their detail pages point at the same waitlist
+              form rather than a real purchase flow. Convert (app.openUrl
+              set) is different — it already exists — so its action reads
+              "Open" and links straight to convert.ajwoo.com instead.
+              Secondary, not primary either way — at Alex's direction, since
+              neither "Waitlist" nor a plain external "Open" is the
+              confident, one-primary-per-view action a real download/
+              purchase would be (Principle 9: real separation, never
+              default-focused, a plain navigation so it can't double-fire). */}
           <div className="mt-2">
-            <Action href={WAITLIST_FORM_URL} external variant="secondary" cursorLabel="Join waitlist">
-              Waitlist
-            </Action>
+            {app.openUrl ? (
+              <Action href={app.openUrl} external variant="secondary" cursorLabel="Open">
+                Open
+              </Action>
+            ) : (
+              <Action href={WAITLIST_FORM_URL} external variant="secondary" cursorLabel="Join waitlist">
+                Waitlist
+              </Action>
+            )}
           </div>
         </div>
       </header>
