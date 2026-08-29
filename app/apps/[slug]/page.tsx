@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { Action } from '@/components/Action';
+import { AppCard } from '@/components/AppCard';
 import { AppIcon } from '@/components/AppIcon';
 import { apps, WAITLIST_FORM_URL } from '@/content/apps';
 
@@ -17,7 +18,11 @@ export default function AppPage({ params }: { params: { slug: string } }) {
   const app = apps.find((a) => a.slug === params.slug);
   if (!app) notFound();
 
-  const others = apps.filter((a) => a.slug !== app.slug);
+  // Capped at 3, at Alex's direction — full cards (not the old plain-link
+  // list) take real space, and three is the /apps grid's own row width
+  // (expanded:grid-cols-3), so this reads as "the rest of that same grid"
+  // rather than an open-ended list.
+  const others = apps.filter((a) => a.slug !== app.slug).slice(0, 3);
 
   return (
     <div className="mx-auto max-w-app px-page">
@@ -134,15 +139,15 @@ export default function AppPage({ params }: { params: { slug: string } }) {
       {others.length > 0 && (
         <section className="border-t border-line-subtle pt-12 pb-12">
           <h2 className="text-h3 text-fg">More apps</h2>
-          <ul className="mt-8 grid grid-cols-1 gap-8 medium:grid-cols-2">
+          {/* Full cards — same grid as /apps itself (components/AppCard.tsx),
+              not the old plain-link list, at Alex's direction: the demo
+              video/thumbnail and the real Waitlist/Open action should both
+              be visible here, not just a name. */}
+          <div className="mt-8 grid grid-cols-1 gap-8 medium:grid-cols-2 expanded:grid-cols-3">
             {others.map((a) => (
-              <li key={a.slug}>
-                <Action href={`/apps/${a.slug}/`} variant="secondary" cursorLabel={a.name}>
-                  {a.name}
-                </Action>
-              </li>
+              <AppCard key={a.slug} app={a} hoverPlay />
             ))}
-          </ul>
+          </div>
         </section>
       )}
     </div>

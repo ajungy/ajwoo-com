@@ -94,6 +94,19 @@
      .cursor-drop-body) rather than centered, so it reads as a highlight
      from a light source rather than a flat glow. */
   --water-sheen: rgba(255, 255, 255, 0.16);
+  /* Iridescent wash — two very faint colour washes (a soft pink, a soft
+     yellow) layered under the white sheen above, at Alex's direction: "the
+     holographic rainbow looking effect of a bubble", not a saturated tint.
+     Their POSITIONS animate slowly (see .cursor-drop-body's
+     background-position keyframe) so the colour drifts across the surface
+     like a real soap-film interference pattern — a deliberate, documented
+     exception to Principle 14 (continuous motion, not driven by the
+     pointer), same category as the landing page's entrance sequence: small,
+     bounded, and stated here rather than silently added. Kept low-alpha on
+     purpose — Alex's own words, "the user has to really focus on the bubble
+     to notice this effect". */
+  --water-iris-pink: rgba(255, 196, 224, 0.10);
+  --water-iris-yellow: rgba(255, 224, 156, 0.10);
   /* Darker than the drop's original light-mode shadow (0.40/0.22), at
      Alex's direction — the drop was hard to spot at a glance against pale
      surfaces; a stronger cast shadow is the fix rather than a border or a
@@ -142,6 +155,8 @@
        to spot at a glance against near-black surfaces. Still soft (the box-
        shadow blur radius below does the rest of the work), just brighter. */
     --water-shadow-glow: rgba(255, 255, 255, 0.16);
+    --water-iris-pink: rgba(255, 196, 224, 0.14);
+    --water-iris-yellow: rgba(255, 224, 156, 0.14);
   }
 }
 
@@ -157,6 +172,8 @@
   --water-contact: rgba(0, 0, 0, 0.42);
   --water-rim-dark: rgba(0, 0, 0, 0.22);
   --water-shadow-glow: rgba(255, 255, 255, 0.16);
+  --water-iris-pink: rgba(255, 196, 224, 0.14);
+  --water-iris-yellow: rgba(255, 224, 156, 0.14);
 }
 
 /* --- Landing-page hero photo, theme-aware (components/HeroPhoto.tsx) -------
@@ -473,7 +490,23 @@ html[data-theme-transition] * {
      what makes it read as a curved, glassy surface instead. Kept soft
      (transparent past 55% of the drop) so it never competes with the two
      hard specular glints in .cursor-drop-gloss below. */
-  background: radial-gradient(circle at 32% 26%, var(--water-sheen), transparent 55%), var(--water-body);
+  /* Layer order back-to-front: base tint, two slow-drifting iridescent
+     colour washes (pink, yellow — see --water-iris-* above), then the white
+     sheen on top. Only the two iridescent layers' positions move; the sheen
+     and the base tint stay put at every keyframe stop below, so the drop's
+     own "light source" reads as fixed while the bubble-film colour drifts
+     underneath it. background-size is oversized (220%) on the two moving
+     layers so the animated position actually travels across the drop's
+     surface rather than just nudging a gradient that's already covering it
+     edge-to-edge. */
+  background:
+    radial-gradient(circle at 32% 26%, var(--water-sheen), transparent 55%),
+    radial-gradient(circle, var(--water-iris-pink), transparent 60%),
+    radial-gradient(circle, var(--water-iris-yellow), transparent 58%),
+    var(--water-body);
+  background-size: 100% 100%, 220% 220%, 220% 220%, 100% 100%;
+  background-repeat: no-repeat;
+  animation: water-iridescent 22s ease-in-out infinite alternate;
   backdrop-filter: url(#dropletLens) saturate(1.06);
   /* Safari does not support an SVG filter reference in backdrop-filter, so it
      gets a whisper of blur instead of true refraction. The rim, glints, shadow
@@ -507,6 +540,23 @@ html[data-theme-transition] * {
        spottable at a glance, especially right after the cursor reappears
        (see the visibilitychange fix in Cursor.tsx). */
     0 0 14px 1px var(--water-shadow-glow);
+}
+
+/* Slow drift for the two iridescent colour-wash layers above — three stops,
+   alternating, so the pink and yellow washes swap which side of the drop
+   they favour rather than just sliding in one direction and snapping back.
+   The sheen/base-tint layers repeat their single position at every stop
+   (comma position 1 and 4) so only layers 2 and 3 actually move. 22s is
+   deliberately glacial: at Alex's direction this should read as a bubble's
+   own film shifting, not as a loading shimmer — noticeable only if you
+   watch the cursor sit still for a while. */
+@keyframes water-iridescent {
+  0%   { background-position: 32% 26%, 15% 20%, 85% 75%, 0 0; }
+  50%  { background-position: 32% 26%, 70% 65%, 25% 30%, 0 0; }
+  100% { background-position: 32% 26%, 40% 80%, 75% 15%, 0 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cursor-drop-body { animation: none; }
 }
 
 /* Specular glints. Deliberately NOT inside the rotating layer: as the drop
