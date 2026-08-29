@@ -17,9 +17,12 @@ import { WAITLIST_FORM_URL, type App } from '@/content/apps';
  * one-off exception.
  *
  * Price is gone entirely (CLAUDE.md D2 is still unanswered) — see
- * content/apps.ts. Every pre-release app's footer button reads "Waitlist"
- * and points at WAITLIST_FORM_URL; an app with `openUrl` set (Convert —
- * already real, already shipped) gets "Open" pointing at itself instead.
+ * content/apps.ts. Footer button: `openUrl` set (Convert — already real,
+ * already shipped) gets "Open" pointing at itself; `downloadZip` set
+ * (Capture's beta build) gets "Install", a plain `download` link straight
+ * to that file; everything else still reads "Waitlist" -> WAITLIST_FORM_URL.
+ * `beta` appends "Beta" after the app's name on the card only (not the
+ * detail page's own h1) — at Alex's direction, e.g. "Capture Beta".
  *
  * DEVIATION, stated rather than hidden: components.md says "don't put competing
  * buttons inside a clickable card". This card has both a card-level link and a
@@ -138,23 +141,41 @@ export function AppCard({ app, hoverPlay = false }: { app: App; hoverPlay?: bool
         <div className="min-w-0 flex-1">
           <h3 className="truncate text-label font-medium text-fg">
             {/* The stretched link: the whole card is clickable and the app
-                name is its accessible label. */}
+                name (plus "Beta" when set) is its accessible label. */}
             <Link href={`/apps/${app.slug}/`} className="card-link">
-              {app.name}
+              {app.name}{app.beta ? ' Beta' : ''}
             </Link>
           </h3>
           <p className="truncate text-caption text-fg-secondary">{app.description}</p>
         </div>
 
-        {/* Above the stretched link so it is its own target. Every
-            pre-release app points at the waitlist form; an app with
-            `openUrl` set (Convert — already real, already shipped) points
-            straight at itself instead, labeled "Open". */}
+        {/* Above the stretched link so it is its own target. `openUrl`
+            (Convert — already real, already shipped) points straight at
+            itself, labeled "Open". `downloadZip` (Capture's beta build)
+            downloads that file directly, labeled "Install" — a plain
+            anchor with the `download` attribute, same pattern as
+            CopySkillButton.tsx, not an Action (which only ever navigates,
+            never downloads). Everything else still reads "Waitlist". */}
         <div className="relative z-10 shrink-0">
           {app.openUrl ? (
             <Action href={app.openUrl} external variant="secondary" cursorLabel="Open">
               Open
             </Action>
+          ) : app.downloadZip ? (
+            <a
+              href={app.downloadZip}
+              download
+              data-cursor-label="Install"
+              className={
+                'inline-flex items-center justify-center h-control-md rounded-control border ' +
+                'text-label font-medium transition duration-fast ease-standard motion-safe:active:scale-press ' +
+                'bg-secondary text-secondary-fg border-secondary-line px-6 ' +
+                'can-hover:hover:bg-secondary-hover can-hover:hover:border-secondary-line-hover ' +
+                'active:bg-secondary-active'
+              }
+            >
+              Install
+            </a>
           ) : (
             <Action href={WAITLIST_FORM_URL} external variant="secondary" cursorLabel="Join waitlist">
               Waitlist

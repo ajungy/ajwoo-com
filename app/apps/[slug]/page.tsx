@@ -74,6 +74,21 @@ export default function AppPage({ params }: { params: { slug: string } }) {
               <Action href={app.openUrl} external variant="secondary" cursorLabel="Open">
                 Open
               </Action>
+            ) : app.downloadZip ? (
+              <a
+                href={app.downloadZip}
+                download
+                data-cursor-label="Install"
+                className={
+                  'inline-flex items-center justify-center h-control-md rounded-control border ' +
+                  'text-label font-medium transition duration-fast ease-standard motion-safe:active:scale-press ' +
+                  'bg-secondary text-secondary-fg border-secondary-line px-6 ' +
+                  'can-hover:hover:bg-secondary-hover can-hover:hover:border-secondary-line-hover ' +
+                  'active:bg-secondary-active'
+                }
+              >
+                Install
+              </a>
             ) : (
               <Action href={WAITLIST_FORM_URL} external variant="secondary" cursorLabel="Join waitlist">
                 Waitlist

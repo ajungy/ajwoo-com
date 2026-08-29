@@ -73,6 +73,16 @@ export type App = {
    *  here (external) instead of "Waitlist" -> WAITLIST_FORM_URL. Every other
    *  app in this array is pre-release and omits this. */
   openUrl?: string;
+  /** Path to a downloadable build (a plain `download` link, same pattern as
+   *  CopySkillButton.tsx) — when set, the card footer button reads "Install"
+   *  and downloads this file directly instead of "Waitlist" ->
+   *  WAITLIST_FORM_URL. Takes priority over the Waitlist fallback but not
+   *  over `openUrl` (an app that's fully live gets "Open", not "Install"). */
+  downloadZip?: string;
+  /** Shows "Beta" next to the app's name on its /apps grid card only (not
+   *  the detail page's own h1) — at Alex's direction, for apps that are
+   *  functional but not yet a finished v1. */
+  beta?: boolean;
 };
 
 // Convert leads the array — at Alex's direction, ordering is now
@@ -115,6 +125,8 @@ export const apps: App[] = [
     platform: 'macOS',
     traits: ['macOS', 'Auto video edit', 'Subtitle', 'Screen record', 'Local', 'Fully on-device', 'No cloud'],
     thumbnailVideo: 'appcard-capture',
+    downloadZip: '/downloads/capture-beta.zip',
+    beta: true,
     demoVideo: 'capture-demo',
     // Detail-page demo replaced with a YouTube video, at Alex's direction —
     // takes priority over demoVideo above in rendering (see
@@ -150,6 +162,7 @@ export const apps: App[] = [
     platform: 'macOS',
     traits: ['Native macOS app', 'Runs fully on-device'],
     thumbnail: 'appcard-dictate',
+    beta: true,
     detail: [
       'Dictate puts speech into whatever already has your cursor: a document, a terminal, a message box. There is no window to switch to and nothing to paste.',
       'The speech model runs on your Mac. Your voice is never uploaded, so it works on a plane and it keeps working if this site disappears.',
@@ -166,6 +179,7 @@ export const apps: App[] = [
     platform: 'macOS',
     traits: ['Native macOS app', 'Runs fully on-device', 'Neural voice, no cloud'],
     thumbnail: 'appcard-narrate',
+    beta: true,
     detail: [
       'Narrate reads whatever you have highlighted in any macOS app out loud, the moment you double-tap a modifier key. No window, no dock icon: it lives in the menu bar and stays out of the way until you need it.',
       'Voices are neural only, running locally in a sidecar (Kokoro-82M). The built-in macOS voices are not offered as a choice; they only appear as an emergency fallback if the neural engine cannot start.',
