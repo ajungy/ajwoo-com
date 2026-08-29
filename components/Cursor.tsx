@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { GlassBubbleFill } from './GlassBubbleFill';
 
 /**
  * CLAUDE.md §6(b)/(c) — a drop of water resting on the interface.
@@ -535,8 +536,15 @@ export function Cursor() {
         </svg>
 
         <div ref={dropRef} className="cursor-drop">
-          <div ref={bodyRef} className="cursor-drop-body" />
-          <div className="cursor-drop-gloss" />
+          <div ref={bodyRef} className="cursor-drop-body">
+            {/* Real WebGL glass (see GlassBubbleFill.tsx) instead of the
+                flat CSS sheen/colour-wash gradients this used to paint —
+                at Alex's direction. Clipped to this element's own shape via
+                the CSS `overflow: hidden; border-radius: inherit` already
+                on .cursor-drop-body, so it always exactly fills whatever
+                the drop currently is, at rest or morphed over a target. */}
+            <GlassBubbleFill />
+          </div>
         </div>
       </div>
 
