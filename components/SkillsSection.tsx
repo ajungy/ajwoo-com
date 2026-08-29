@@ -1,5 +1,5 @@
-import { site } from '@/content/site';
 import { CopySkillButton } from './CopySkillButton';
+import { EmailMeLink } from './EmailMeLink';
 
 /**
  * "Try Alex's SKILL.md", the code/AI counterpart to the laurel-bracketed
@@ -23,9 +23,11 @@ import { CopySkillButton } from './CopySkillButton';
  * already says what this is, so a heading directly above it restating
  * "Skills" was pure redundancy, at Alex's direction.
  *
- * One combined paragraph rather than a separate description-and-CTA pair,
- * at Alex's direction: the file's purpose and the offer to reach out read
- * as one thought, not two.
+ * One combined paragraph rather than a separate description-and-CTA pair —
+ * the file's purpose and the offer to reach out are still one thought, just
+ * broken onto its own line at Alex's direction, and "Email me" now copies
+ * the address to the clipboard (EmailMeLink.tsx) rather than opening a
+ * mailto: link, matching the top-of-page Email button's behavior.
  */
 export function SkillsSection() {
   return (
@@ -38,15 +40,9 @@ export function SkillsSection() {
         </div>
         <p className="mt-4 max-w-content text-body text-fg-secondary">
           The single file this site and several apps are built from, every
-          rule in one drop. Want more?{' '}
-          <a
-            href={`mailto:${site.email}`}
-            data-cursor-label="Email Alex"
-            className="text-fg underline underline-offset-2 transition-colors duration-fast ease-standard can-hover:hover:text-fg-secondary"
-          >
-            Email me
-          </a>
-          .
+          rule in one drop.
+          <br />
+          Want more? <EmailMeLink />.
         </p>
         <div className="mt-8">
           <CopySkillButton />

@@ -7,7 +7,7 @@ import { DesignPrinciples } from '@/components/DesignPrinciples';
 import { SkillsSection } from '@/components/SkillsSection';
 import { StaggerReveal } from '@/components/StaggerReveal';
 import { siteData } from '@/content/projects';
-import { site, education, clients, featured, social } from '@/content/site';
+import { site, experience, education, clients, featured, social } from '@/content/site';
 import { apps } from '@/content/apps';
 
 /**
@@ -103,13 +103,31 @@ export default function Home() {
         <DesignPrinciples />
         <SkillsSection />
 
-        {/* medium:grid-cols-2 added as an intermediate step — the previous
-            version jumped straight from 1 column (everything stacked,
-            mobile AND tablet) to 3 (840px+), which left tablet portrait and
-            small-window desktop looking top-heavy: three full-height stacked
-            lists with nothing to balance them side by side. Now there's a
-            real 2-column tablet state before the 3-column desktop one. */}
-        <StaggerReveal className="mt-[245px] grid grid-cols-1 gap-12 pb-12 medium:grid-cols-2 expanded:grid-cols-3">
+        {/* Two 2-column rows now, not one 3-column grid — Experience/
+            Education first, then Featured/"Worked with" below a real
+            section break, at Alex's direction. Each row is its own
+            StaggerReveal so the two reveal independently rather than one
+            shared observer trying to stagger four columns' worth of items
+            in one pass. */}
+        <StaggerReveal className="mt-[245px] grid grid-cols-1 gap-12 medium:grid-cols-2">
+          <div>
+            <h2 className="text-h3 text-fg">Experience</h2>
+            <ul className="mt-6 space-y-6">
+              {experience.map((x) => (
+                <li key={x.company}>
+                  {/* Same shape as Education below: two equally load-bearing
+                      lines (company + title), not a heading/caption pair.
+                      Years get the same mono/tabular treatment as Featured's
+                      own year column, for the same reason — a run of dates
+                      reads better aligned. */}
+                  <p className="text-body text-fg">{x.company}</p>
+                  <p className="text-body text-fg-secondary">{x.title}</p>
+                  <p className="mt-1 font-mono text-caption tabular-nums text-fg-tertiary">{x.years}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
+
           <div>
             <h2 className="text-h3 text-fg">Education</h2>
             <ul className="mt-6 space-y-6">
@@ -124,16 +142,12 @@ export default function Home() {
               ))}
             </ul>
           </div>
+        </StaggerReveal>
 
-          <div>
-            <h2 className="text-h3 text-fg">Clients</h2>
-            <ul className="mt-6 space-y-4">
-              {clients.map((c) => (
-                <li key={c} className="text-body text-fg-secondary">{c}</li>
-              ))}
-            </ul>
-          </div>
-
+        {/* Same 245px major-section gap every other break on this page
+            uses (Principle 10, sidebar above) — this is a real section
+            break from Experience/Education, not a continuation of it. */}
+        <StaggerReveal className="mt-[245px] grid grid-cols-1 gap-12 pb-12 medium:grid-cols-2">
           <div>
             <h2 className="text-h3 text-fg">Featured</h2>
             <ul className="mt-6 space-y-4">
@@ -149,6 +163,18 @@ export default function Home() {
                   <span className="font-mono text-body tabular-nums text-fg-tertiary">{f.year}</span>
                   <span className="text-body text-fg-secondary">{f.what}</span>
                 </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            {/* Label changed from "Clients" to "Worked with", at Alex's
+                direction — the underlying data (content/site.ts's `clients`
+                export) is unchanged, only what the heading calls it. */}
+            <h2 className="text-h3 text-fg">Worked with</h2>
+            <ul className="mt-6 space-y-4">
+              {clients.map((c) => (
+                <li key={c} className="text-body text-fg-secondary">{c}</li>
               ))}
             </ul>
           </div>

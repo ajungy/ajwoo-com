@@ -59,6 +59,13 @@ export function X({ className = 'w-5 h-5', strokeWidth = '2' }: { className?: st
   );
 }
 
+/**
+ * A plain diagonal arrow, not the earlier "box with a corner arrow" glyph —
+ * simpler and lighter next to a one-word button label like "LinkedIn" or
+ * "Instagram", at Alex's direction ("replace the linkout icons"). Same
+ * name/signature as before so nothing calling it (Action.tsx) needed to
+ * change.
+ */
 export function ExternalLink({ className = 'w-5 h-5', strokeWidth = '2' }: { className?: string; strokeWidth?: string }) {
   return (
     <svg
@@ -71,9 +78,8 @@ export function ExternalLink({ className = 'w-5 h-5', strokeWidth = '2' }: { cla
       aria-hidden="true"
       className={className}
     >
-      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-      <polyline points="15 3 21 3 21 9" />
-      <line x1="10" y1="14" x2="21" y2="3" />
+      <line x1="7" y1="17" x2="17" y2="7" />
+      <polyline points="7 7 17 7 17 17" />
     </svg>
   );
 }

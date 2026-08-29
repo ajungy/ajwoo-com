@@ -21,7 +21,7 @@ export const site = {
   // Switched from Calendly to a Google Calendar booking page, and the event
   // itself from 30 to 15 minutes, at Alex's direction.
   calendlyUrl: process.env.NEXT_PUBLIC_CALENDLY_URL ?? 'https://calendar.app.google/NCKhKCPKq9SffYAZ7',
-  ctaLabel: 'Book 15 min',
+  ctaLabel: 'Book 15m',
   email: 'alex@ajwoo.com',
 } as const;
 
@@ -31,12 +31,24 @@ export const nav = [
   { href: '/apps/', label: 'Apps' },
 ] as const;
 
+// From Alex's LinkedIn, reverse-chronological (most recent first), matching
+// Featured's own descending-year order below.
+export const experience = [
+  { company: 'Netflix', title: 'Product Design Lead', years: '2025 – Present' },
+  { company: 'Adobe', title: 'Staff UX Designer', years: '2021 – 2025' },
+  { company: 'Microsoft', title: 'Product Designer', years: '2016 – 2021' },
+  { company: 'Netmarble Games', title: 'Designer', years: '2015' },
+] as const;
+
 export const education = [
   { school: 'Rhode Island School of Design', detail: 'BFA Industrial Design' },
   { school: 'Brown University', detail: 'Cross-registered student' },
   { school: 'Le Cordon Bleu Paris', detail: 'Pâtisserie de Base, Certifié' },
 ] as const;
 
+// Rendered under the heading "Worked with" (was "Clients"), at Alex's
+// direction — variable name kept as `clients` since that's what the data
+// actually is; only the on-page label changed (see app/page.tsx).
 export const clients = [
   'Kikkerland Design', 'The Container Store', 'USAA', 'Starbucks', 'MIT',
   'Brown University', 'Cheil Worldwide', 'IUCN', 'WIPO', 'Kim & Chang',
@@ -44,6 +56,8 @@ export const clients = [
 ] as const;
 
 export const featured = [
+  { year: '2025', what: 'AI UX Summit' },
+  { year: '2022', what: 'Terra Carta' },
   { year: '2020', what: 'Starbucks Technology' },
   { year: '2019', what: 'RISD' },
   { year: '2018', what: 'Microsoft Garage Pitch, Winner' },
