@@ -466,24 +466,21 @@ html[data-theme-transition] * {
 }
 
 /* The lens. This is the layer that actually bends the page behind it —
-   AND, now, the mount point for the real WebGL glass render (see
-   components/GlassBubbleFill.tsx, rendered as this element's child in
-   Cursor.tsx). `overflow: hidden` clips that canvas to this element's own
-   `border-radius: inherit`, so it always exactly fills whatever shape the
-   drop currently is — at rest, or morphed over a small target — with no
-   separate sizing logic needed on the WebGL side. */
+   AND, now, the mount point for GlassSurfaceFill (React Bits'
+   GlassSurface, adapted — see components/GlassSurfaceFill.tsx), rendered
+   as this element's child in Cursor.tsx. `overflow: hidden` clips it to
+   this element's own `border-radius: inherit`, so it always exactly fills
+   whatever shape the drop currently is — at rest, or morphed over a small
+   target. GlassSurfaceFill applies its OWN backdrop-filter (a dynamic SVG
+   feDisplacementMap it generates and re-generates on resize) on its own
+   inner element, which is what actually bends the page behind the drop
+   now — this element no longer needs a backdrop-filter of its own. */
 .cursor-drop-body {
   position: absolute;
   inset: 0;
   border-radius: inherit;
   overflow: hidden;
   background: var(--water-body);
-  backdrop-filter: url(#dropletLens) saturate(1.06);
-  /* Safari does not support an SVG filter reference in backdrop-filter, so it
-     gets a whisper of blur instead of true refraction. The rim, glints, shadow
-     and deformation all still apply, so it still reads as a drop — just a
-     less optically accurate one. */
-  -webkit-backdrop-filter: saturate(1.06);
   box-shadow:
     /* Fresnel: mirror-bright seen edge-on, invisible through the middle.
        One hairline only — anything thicker reads as a plastic bead. */
@@ -491,8 +488,8 @@ html[data-theme-transition] * {
     /* Second ring, 1px, sitting just inside that hairline — a pale blue
        rather than another white line, reading as a refraction fringe (light
        splitting at the lens edge) rather than a doubled Fresnel highlight.
-       True per-pixel bending only the SVG lens filter can do (see
-       dropletLens below); this is the honest CSS approximation of it: color,
+       True per-pixel bending only GlassSurfaceFill's own SVG lens filter
+       can do); this is the honest CSS approximation of it: color,
        not distortion, placed exactly where a real fringe would sit. Faint
        (10% opacity, set on the token below) — a whisper of color, not a
        second visible line. */

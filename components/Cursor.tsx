@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { GlassBubbleFill } from './GlassBubbleFill';
+import { GlassSurfaceFill } from './GlassSurfaceFill';
 
 /**
  * CLAUDE.md §6(b)/(c) — a drop of water resting on the interface.
@@ -71,47 +71,6 @@ const DAMPING = 0.86;
 // Floored to POP_MIN so a pop over a small nav link is never too small to see.
 const POP_MS = 320;
 const POP_MIN = 40; // = --control-h-md, so the burst is always at least "button-sized"
-
-/** Displacement map shaped like a lens: a ~1.1x magnification across
- *  essentially the whole disc (so the interface under the bubble reads as
- *  visibly zoomed, like a lens actually resting on it), ramping up further
- *  at the rim for a stronger bend there. Red encodes x-offset, green
- *  y-offset; the radial mask sets how much of that displacement applies at
- *  each radius.
- *
- *  The mask's stops are deliberately flatter/higher than a first pass at
- *  this (0.55 at the center, not 0.22) — that version kept the middle nearly
- *  undistorted and concentrated all the magnification at the rim, which read
- *  as a bent edge around a clean window rather than a lens you're looking
- *  through. Alex asked for the zoom to apply to "the inside of the bubble",
- *  not just its border. Center still isn't 100% (a real plano-convex lens
- *  magnifies less at its flattest point than at its curved edge, and a
- *  centered button's label needs to stay legible), just no longer near-zero.
- *
- *  NOTE ON THE HEX VALUES — the one place in this codebase where a raw hex is
- *  correct, and they must NOT be swapped for design tokens. They are not
- *  colours anyone sees: they are vector data for feDisplacementMap. #808000
- *  means "displace by zero"; the #f00/#0f0 ramps encode x and y offsets;
- *  #fff/#000 are mask luminance. Tokens here would silently break the lens. */
-const LENS_MAP = `<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128">
-<defs>
-<linearGradient id="gx" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#000"/><stop offset="1" stop-color="#f00"/></linearGradient>
-<linearGradient id="gy" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#000"/><stop offset="1" stop-color="#0f0"/></linearGradient>
-<radialGradient id="fall" cx="0.5" cy="0.5" r="0.5">
-<stop offset="0" stop-color="#fff" stop-opacity="0.55"/>
-<stop offset="0.5" stop-color="#fff" stop-opacity="0.65"/>
-<stop offset="0.85" stop-color="#fff" stop-opacity="0.85"/>
-<stop offset="1" stop-color="#fff" stop-opacity="1"/>
-</radialGradient>
-<mask id="mk"><rect width="128" height="128" fill="#000"/><circle cx="64" cy="64" r="64" fill="url(#fall)"/></mask>
-</defs>
-<rect width="128" height="128" fill="#808000"/>
-<g mask="url(#mk)">
-<rect width="128" height="128" fill="#000"/>
-<rect width="128" height="128" fill="url(#gx)" style="mix-blend-mode:screen"/>
-<rect width="128" height="128" fill="url(#gy)" style="mix-blend-mode:screen"/>
-</g>
-</svg>`;
 
 export function Cursor() {
   const rootRef = useRef<HTMLDivElement>(null);
@@ -513,37 +472,30 @@ export function Cursor() {
   return (
     <>
       <div ref={rootRef} className="cursor-root" aria-hidden="true" data-visible="false">
-        <svg width="0" height="0" style={{ position: 'absolute' }}>
-          <defs>
-            <filter id="dropletLens" x="-50%" y="-50%" width="200%" height="200%" colorInterpolationFilters="sRGB">
-              <feImage
-                href={`data:image/svg+xml;utf8,${encodeURIComponent(LENS_MAP)}`}
-                result="map"
-                preserveAspectRatio="none"
-                x="0%" y="0%" width="100%" height="100%"
-              />
-              {/* Negative scale magnifies rather than shrinks — a thin film of
-                  water is a slight zoom lens. -4 combined with the lens map's
-                  center opacity (0.55) works out to roughly a 2px pull dead
-                  center — visible as a real ~1.1x zoom on whatever's under
-                  the bubble, while still keeping a centered button's label
-                  legible rather than smeared. The rim reaches the full -4px
-                  for a clearly visible bend there. */}
-              <feDisplacementMap in="SourceGraphic" in2="map" scale="-4"
-                xChannelSelector="R" yChannelSelector="G" />
-            </filter>
-          </defs>
-        </svg>
-
         <div ref={dropRef} className="cursor-drop">
           <div ref={bodyRef} className="cursor-drop-body">
-            {/* Real WebGL glass (see GlassBubbleFill.tsx) instead of the
-                flat CSS sheen/colour-wash gradients this used to paint —
-                at Alex's direction. Clipped to this element's own shape via
-                the CSS `overflow: hidden; border-radius: inherit` already
-                on .cursor-drop-body, so it always exactly fills whatever
-                the drop currently is, at rest or morphed over a target. */}
-            <GlassBubbleFill />
+            {/* React Bits' GlassSurface (see GlassSurfaceFill.tsx) — a
+                dynamic SVG feDisplacementMap lens with per-channel
+                chromatic-aberration offsets, replacing BOTH the old static
+                `dropletLens` filter that used to live here AND the WebGL
+                FluidGlass attempt that briefly replaced it, at Alex's
+                direction ("the React bit is not really working... try to
+                use this other one instead"). Clipped to this element's own
+                shape via the CSS `overflow: hidden; border-radius: inherit`
+                already on .cursor-drop-body, so it always exactly fills
+                whatever the drop currently is, at rest or morphed over a
+                target. Prop values are the exact ones from Alex's own
+                pasted "Advanced Glass Distortion" example. */}
+            <GlassSurfaceFill
+              displace={0}
+              distortionScale={-180}
+              redOffset={0}
+              greenOffset={10}
+              blueOffset={20}
+              brightness={50}
+              opacity={1}
+              mixBlendMode="screen"
+            />
           </div>
         </div>
       </div>
