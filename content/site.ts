@@ -22,7 +22,7 @@ export const site = {
   // itself from 30 to 15 minutes, at Alex's direction.
   calendlyUrl: process.env.NEXT_PUBLIC_CALENDLY_URL ?? 'https://calendar.app.google/NCKhKCPKq9SffYAZ7',
   ctaLabel: 'Book 15 min',
-  email: 'alexjungyeopwoo@gmail.com',
+  email: 'alex@ajwoo.com',
 } as const;
 
 export const nav = [
@@ -76,14 +76,14 @@ export const social = [
 // file. Full numbering preserved so a reader who wants the rest knows
 // exactly what section to go find.
 export const principles = [
-  { n: 1, title: 'Solve the job to be done', body: 'Know what the user is trying to finish, and the shortest honest path to done. If a decision doesn\'t serve that, it\'s decoration.' },
+  { n: 1, title: 'Solve the job to be done', body: 'Know what the user needs, and the shortest honest path there. If it doesn\'t serve that, it\'s decoration.' },
   { n: 2, title: 'Achieve the goal', body: 'Name every goal in play and rank them. The user\'s goal leads; nothing else competes with it for attention.' },
   { n: 3, title: 'One hierarchy, one emphasis', body: 'Exactly one thing is the most important thing on a screen, and nothing else fights it for attention.' },
   { n: 4, title: 'Clear start, clear end', body: 'Every experience has one unmistakable starting point and an unambiguous finish. Home is always reachable.' },
   { n: 5, title: 'Be honest', body: 'Show what\'s actually happening, accurately. Never softened into neutral, never dressed up as a triumph.' },
   { n: 6, title: 'Respect the gaze', body: 'Identity top-left, global actions top-right. The eye never has to backtrack to find the next step.' },
   { n: 7, title: 'Everything comprehensible', body: 'Plain words over clever ones. A label describes the outcome, not the mechanism. No jargon the user didn\'t bring.' },
-  { n: 8, title: 'Nothing invisible', body: 'Every interactive thing has a visible affordance at rest, not only on hover.' },
+  { n: 8, title: 'Nothing invisible', body: 'Every interactive thing has a visible affordance at rest, not just a hint that appears on hover.' },
   { n: 9, title: 'Color carries meaning', body: 'Green succeeded, amber needs attention, red failed. Colors carry intentional meaning, never just decoration.' },
-  { n: 10, title: 'Space is your friend', body: 'Group with distance, not lines. Use the same spacing scale for the same relationship everywhere, so gaps read as a consistent language.' },
+  { n: 10, title: 'Space is your friend', body: 'Group with distance, not lines. Use the same spacing scale for the same relationship everywhere.' },
 ] as const;
