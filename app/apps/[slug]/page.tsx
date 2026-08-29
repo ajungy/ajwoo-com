@@ -84,12 +84,24 @@ export default function AppPage({ params }: { params: { slug: string } }) {
       </header>
 
       {/* Real demo, not another icon/screenshot — the actual thing the app
-          does, between the "Waitlist" action and the copy explaining it.
-          Never autoplays (Principle 14 — nothing moves until the reader
-          asks): controls, a poster frame, and preload="none" so it isn't
-          fetched at all until played, same convention as the project-page
-          videos in components/Blocks.tsx. */}
-      {app.demoVideo && (
+          does, between the "Waitlist"/"Open" action and the copy explaining
+          it. Never autoplays (Principle 14 — nothing moves until the reader
+          asks): a YouTube embed already shows a thumbnail and needs a click
+          to play, same as the self-hosted video path's `controls` +
+          `preload="none"` does; youtube-nocookie.com avoids setting any
+          YouTube cookies until playback actually starts. demoVideoYoutube
+          takes priority over the self-hosted demoVideo when both are set. */}
+      {app.demoVideoYoutube ? (
+        <div className="mb-12 aspect-video overflow-hidden rounded-lg border border-line-subtle bg-sunken">
+          <iframe
+            src={`https://www.youtube-nocookie.com/embed/${app.demoVideoYoutube}`}
+            title={`${app.name} demo`}
+            className="h-full w-full"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          />
+        </div>
+      ) : app.demoVideo ? (
         <div className="mb-12">
           <video
             controls
@@ -101,7 +113,7 @@ export default function AppPage({ params }: { params: { slug: string } }) {
             <source src={`/img/${app.demoVideo}.mp4`} type="video/mp4" />
           </video>
         </div>
-      )}
+      ) : null}
 
       <article className="max-w-content space-y-8 pb-12">
         {app.detail.map((para, i) => {

@@ -59,6 +59,15 @@ export type App = {
    *  autoplays: carries a poster and controls, same as every other video
    *  on this site (Principle 14 — nothing moves until the reader asks). */
   demoVideo?: string;
+  /** Same slot as `demoVideo` (full-width, between the header and the body
+   *  copy) but a YouTube video instead of a self-hosted file — a YouTube
+   *  video ID, e.g. the "tyNCdZQMKMA" in youtu.be/tyNCdZQMKMA. Takes
+   *  priority over `demoVideo` when both are set. Embedded via
+   *  youtube-nocookie.com; YouTube's own player already shows a thumbnail
+   *  and needs a click to play, so this satisfies Principle 14 (nothing
+   *  autoplays) the same way the self-hosted video's `controls` attribute
+   *  does, without this site needing to supply its own poster frame. */
+  demoVideoYoutube?: string;
   /** When set, this app already exists and is real — the card footer button
    *  and the detail page's header action both read "Open" and link straight
    *  here (external) instead of "Waitlist" -> WAITLIST_FORM_URL. Every other
@@ -85,6 +94,7 @@ export const apps: App[] = [
       'Images, video, audio, docs, sheets, archives',
     ],
     thumbnailVideo: 'appcard-convert',
+    demoVideoYoutube: '-RXXSfrtokY',
     openUrl: 'https://convert.ajwoo.com/',
     detail: [
       { lead: 'A private file converter that never uploads.' },
@@ -106,6 +116,13 @@ export const apps: App[] = [
     traits: ['macOS', 'Auto video edit', 'Subtitle', 'Screen record', 'Local', 'Fully on-device', 'No cloud'],
     thumbnailVideo: 'appcard-capture',
     demoVideo: 'capture-demo',
+    // Detail-page demo replaced with a YouTube video, at Alex's direction —
+    // takes priority over demoVideo above in rendering (see
+    // app/apps/[slug]/page.tsx). demoVideo itself is left in place rather
+    // than deleted: still the /apps grid card's own thumbnail source is
+    // separate (thumbnailVideo), and there's no reason to lose the
+    // self-hosted file's data if this ever needs to revert.
+    demoVideoYoutube: 'tyNCdZQMKMA',
     detail: [
       { lead: 'Capture is the fastest way to turn an idea on your screen into a video that’s ready to share.' },
       'Record your screen, camera, and microphone with one click. Capture automatically transforms your raw recording into a polished video.',
