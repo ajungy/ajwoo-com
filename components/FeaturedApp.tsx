@@ -155,7 +155,11 @@ export function FeaturedApp({ apps }: { apps: App[] }) {
         <Link
           href="/apps/"
           data-cursor-label="All apps"
-          className="text-label font-semibold text-fg-secondary transition-colors duration-fast ease-standard can-hover:hover:text-fg"
+          className={
+            'inline-flex items-center rounded-control px-2 -mx-2 py-1.5 -my-1.5 text-label ' +
+            'font-semibold text-fg-secondary transition duration-fast ease-standard ' +
+            'can-hover:hover:bg-tertiary-hover can-hover:hover:text-fg'
+          }
         >
           All apps →
         </Link>
