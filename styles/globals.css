@@ -399,17 +399,21 @@ html[data-theme-transition] * {
 }
 
 /* The lens. This is the layer that actually bends the page behind it.
-   Rebuilt to match Figma exactly (Vibe-code-components, node 495:2682,
-   "Bubble Cursors") — at Alex's direction: "please check the figma link...
-   try to copy the exact design as well for the default, button hover, and
-   card hover states". That file shows all three states (28px round rest,
-   100px round over a card, 128x56 rounded-rect over a button) sharing one
+   Matches Figma exactly (Vibe-code-components, node 495:2682, "Bubble
+   Cursors") — at Alex's direction: "please check the figma link... try to
+   copy the exact design as well for the default, button hover, and card
+   hover states". That file shows all three states (28px round rest, 100px
+   round over a card, 128x56 rounded-rect over a button) sharing one
    identical box-shadow stack, with size/border-radius the only things that
    differ between them — exactly how this codebase already works (Cursor.tsx
    drives width/height/border-radius per frame; nothing here needs to know
    which state it's in). No conic-gradient, no mask-image: the rim colour
-   comes entirely from eight inset box-shadow layers at fixed pixel offsets,
-   copied byte-for-byte from the Figma dev-mode output. */
+   comes entirely from seven inset box-shadow layers at fixed pixel offsets,
+   copied byte-for-byte from the Figma dev-mode output. Re-synced once
+   already (Alex tuned the file's colours/opacities/blur radii after the
+   first pass — down from eight layers to seven, the two purple layers
+   merged into one, brighter/more saturated across the board); pull
+   get_design_context on this node again if the file changes further. */
 .cursor-drop-body {
   position: absolute;
   inset: 0;
@@ -422,14 +426,13 @@ html[data-theme-transition] * {
      optically accurate one. */
   -webkit-backdrop-filter: saturate(1.06);
   box-shadow:
-    inset -1px 0px 2px 0px rgba(89, 255, 0, 0.3),
-    inset 0px -0.5px 1px 0px rgba(0, 183, 255, 0.5),
-    inset -1px -2px 2px 0px rgba(204, 0, 255, 0.25),
-    inset -1px -1px 1px 0px rgba(204, 0, 255, 0.25),
-    inset 0.5px 0.5px 2px 0px rgba(0, 0, 0, 0.1),
-    inset 0.5px 0.5px 0.5px 0px rgba(255, 204, 0, 0.25),
-    inset 0px 0px 5px 0px rgba(255, 255, 255, 0.5),
-    inset 0px 0px 0.5px 0px rgba(0, 0, 0, 0.5);
+    inset -1px 0px 2px 0px rgba(89, 255, 0, 0.4),
+    inset 0px -0.5px 2px 0px rgba(0, 234, 255, 0.5),
+    inset -1px -1.5px 2px 0px rgba(204, 0, 255, 0.5),
+    inset 0.5px 0.5px 2px 0px rgba(0, 0, 0, 0.2),
+    inset 0.5px 0.5px 0.5px 0px rgba(255, 204, 0, 0.5),
+    inset 0px 0px 3px 0px white,
+    inset 0px 0px 0.5px 0px black;
 }
 
 /* Specular glints. Deliberately NOT inside the rotating layer: as the drop
