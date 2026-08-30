@@ -110,6 +110,12 @@
   --water-ring-cyan: #38d6ff;
   --water-ring-yellow: #ffd93d;
   --water-ring-green: #4ade80;
+  /* Inner glow — the soft white/black wash a real bubble shows just inside
+     its own rim (light catching the curve of the film), at Alex's
+     direction: "white in dark mode and black in light mode... in the
+     outline as a inner glow/shadow". Flips per theme (dark overrides
+     below), unlike the ring colours above which stay identical in both. */
+  --water-inner-glow: rgba(0, 0, 0, 0.35);
   /* Darker than the drop's original light-mode shadow (0.40/0.22), at
      Alex's direction — the drop was hard to spot at a glance against pale
      surfaces; a stronger cast shadow is the fix rather than a border or a
@@ -158,6 +164,7 @@
        to spot at a glance against near-black surfaces. Still soft (the box-
        shadow blur radius below does the rest of the work), just brighter. */
     --water-shadow-glow: rgba(255, 255, 255, 0.16);
+    --water-inner-glow: rgba(255, 255, 255, 0.4);
     /* --water-ring-* deliberately NOT overridden here — same values in
        both themes, see the :root block above. */
   }
@@ -175,6 +182,7 @@
   --water-contact: rgba(0, 0, 0, 0.42);
   --water-rim-dark: rgba(0, 0, 0, 0.22);
   --water-shadow-glow: rgba(255, 255, 255, 0.16);
+  --water-inner-glow: rgba(255, 255, 255, 0.4);
   /* --water-ring-* deliberately NOT overridden here either — see :root. */
 }
 
@@ -490,23 +498,36 @@ html[data-theme-transition] * {
   /* Thin-film rim, not a filled disc — at Alex's direction, matching a
      real soap bubble's own optics: colour lives only in a thin ring right
      at the edge, and "the inside, the majority, is completely transparent".
-     A conic-gradient sweeps the five ring hues all the way around
-     (purple -> navy -> cyan -> yellow -> green -> back to purple, seamless
-     loop), then `mask-image` cuts everything below ~85% of the radius to
-     fully transparent, leaving only a thin band near the very edge — the
-     mask is alpha-based (transparent = hidden, opaque = shown), so the
-     center is genuinely transparent (you see the real page through it,
-     via the SVG lens filter below), not just painted a low-opacity white.
-     Same values in both themes, per Alex's direction. */
-  background: conic-gradient(
-    from 0deg,
-    var(--water-ring-purple),
-    var(--water-ring-navy),
-    var(--water-ring-cyan),
-    var(--water-ring-yellow),
-    var(--water-ring-green),
-    var(--water-ring-purple)
-  );
+     TWO conic-gradients, not one — a second copy rotated 137deg (not a
+     clean fraction of the first's 5 stops, so the two never line up) and
+     blended with `color-dodge` breaks the perfectly even, mechanical sweep
+     of a single conic-gradient into uneven, blotchy patches — closer to
+     how a real film's thickness (and therefore its colour) varies
+     irregularly around the ring, at Alex's direction ("organic
+     gradations... a little of other colors"), rather than a smooth
+     rainbow loop. Both layers share the same `mask-image` below, so they
+     get clipped to the same thin ring together. Same values in both
+     themes, per Alex's direction. */
+  background:
+    conic-gradient(
+      from 137deg,
+      var(--water-ring-cyan),
+      var(--water-ring-purple),
+      var(--water-ring-green),
+      var(--water-ring-navy),
+      var(--water-ring-yellow),
+      var(--water-ring-cyan)
+    ),
+    conic-gradient(
+      from 0deg,
+      var(--water-ring-purple),
+      var(--water-ring-navy),
+      var(--water-ring-cyan),
+      var(--water-ring-yellow),
+      var(--water-ring-green),
+      var(--water-ring-purple)
+    );
+  background-blend-mode: color-dodge, normal;
   mask-image: radial-gradient(circle, transparent 0%, transparent 78%, black 90%, black 100%);
   -webkit-mask-image: radial-gradient(circle, transparent 0%, transparent 78%, black 90%, black 100%);
   backdrop-filter: url(#dropletLens) saturate(1.06);
@@ -531,6 +552,13 @@ html[data-theme-transition] * {
     inset 0 0 3px 1px var(--water-rim-dark),
     inset 0 0.5px 1px 0 var(--water-rim-inner),
     inset 0 -3px 6px -4px var(--water-caustic),
+    /* Inner glow — white in dark mode, black in light mode, sitting just
+       inside the rainbow ring — at Alex's direction, matching the soft
+       glowing wash a real bubble shows just inside its own rim. Wider and
+       softer than the rim tokens above (12px blur, 2px spread) so it
+       reads as ambient light gathering at the edge rather than another
+       hard line. */
+    inset 0 0 12px 2px var(--water-inner-glow),
     /* it sits ON the page, so it casts a little and it touches — darker and
        further-reaching than the drop's earlier version, at Alex's direction,
        so the whole shape reads as more clearly separated from the page. */
