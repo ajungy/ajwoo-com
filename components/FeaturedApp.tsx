@@ -56,18 +56,20 @@ export function FeaturedApp({ apps }: { apps: App[] }) {
         </div>
       </div>
 
-      {/* pt-8 replaces AppCard's own pb-12 style gap the single-card layout
-          used to get from mt-12 — DepthCarousel needs its own vertical
-          breathing room for the prev/next controls and indicator dots,
-          which sit just outside the card stack's own box. */}
-      {/* cardWidth/cardHeight (357x437) match the /apps grid's own AppCard
-          size exactly — measured directly off a rendered card there at a
-          real desktop width (355px square media + the ~82px icon/title/
-          button footer row), not a value picked to fit this carousel's
-          own layout. At Alex's direction ("give me the size of the cards
-          inside the landing page apps cards, the same size as the apps
-          page apps card... trying to be consistent"). */}
-      <div className="mt-12 px-16">
+      {/* cardWidth/cardHeight (357x437) are the DESKTOP size, matching the
+          /apps grid's own AppCard exactly — measured directly off a
+          rendered card there at a real desktop width (355px square media
+          + the ~82px icon/title/button footer row). DepthCarousel scales
+          that geometry down to fit whatever width this wrapper actually
+          has, so the numbers below describe the largest size the stack
+          ever renders at, not a fixed size — at Alex's direction ("give me
+          the size of the cards inside the landing page apps cards, the
+          same size as the apps page apps card... trying to be consistent"
+          + "optimize on all window sizes and mobile").
+          px-4 (was px-16): the carousel's own responsive scaling does the
+          real work now; this padding only keeps the stack off the very
+          edge of the viewport on the smallest phones. */}
+      <div className="mt-12 px-4">
         <DepthCarousel
           items={apps.map((app) => (
             <AppCard key={app.slug} app={app} playing={apps[activeIndex]?.slug === app.slug} />

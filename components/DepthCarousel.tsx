@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 
 /**
  * A stacked, 3D-depth card carousel — at Alex's direction, for the landing
@@ -23,6 +23,29 @@ import { useEffect, useState, type ReactNode } from 'react';
  * FeaturedApps.tsx uses it to flip AppCard's `playing` prop so only the
  * card currently on top autoplays its demo video, per Alex's spec ("video
  * should autoplay [when] the card is on top of the stack").
+ *
+ * RESPONSIVE SCALING, at Alex's direction ("optimize on all window sizes
+ * and mobile... reduce the size of the cards"): `cardWidth`/`cardHeight`
+ * describe the stack's DESKTOP size; a ResizeObserver on the wrapper reads
+ * the actual space available and computes a uniform `scale` (never above
+ * 1) so the whole stack — cards, spread, depth, tilt geometry — shrinks
+ * together and never overflows its container, down to a `compact` (320px)
+ * phone width. A single `transform: scale()` on the unscaled stack (kept
+ * at its native pixel geometry so the 3D transforms inside it stay
+ * correct) is simpler and more robust than re-deriving every dimension in
+ * JS, and it scales the AppCard content proportionally too rather than
+ * reflowing it at a size AppCard was never designed for.
+ *
+ * CONTROLS, at Alex's direction: previously prev/next sat as bordered,
+ * filled circular buttons floating over the card stack's left/right edges,
+ * with the dot indicators separately below. Now all three live in one row
+ * BELOW the card (`showControls`/`showIndicators` render into that row,
+ * not inside the scaled stack), and the arrows drop the button chrome
+ * entirely — no border, no fill, just a bare chevron icon at the same
+ * "plain icon" treatment ThemeToggle.tsx/HeaderMenu.tsx use elsewhere in
+ * the chrome (text-fg-tertiary, hover:text-fg, no border/background),
+ * sized up from the header's 28px to 32px since these have more room and
+ * are the row's only content.
  */
 export interface DepthCarouselProps {
   items: ReactNode[];
@@ -77,7 +100,33 @@ export function DepthCarousel({
   onActiveChange,
 }: DepthCarouselProps) {
   const [index, setIndex] = useState(0);
+  const [scale, setScale] = useState(1);
+  const wrapperRef = useRef<HTMLDivElement>(null);
   const count = items.length;
+
+  const dirSign = tiltDirection === 'right' ? 1 : -1;
+  const stackWidth = cardWidth + spread * Math.max(visibleCards - 1, 0) * 2;
+
+  // Fit the stack to whatever width the wrapper actually has, down to a
+  // floor that keeps cards legible on the smallest phones (compact, 320px)
+  // rather than letting them shrink to nothing. Never scales UP past 1 —
+  // this shrinks the desktop-sized geometry to fit, it doesn't magnify it
+  // on a huge screen.
+  useEffect(() => {
+    const el = wrapperRef.current;
+    if (!el) return;
+    const MIN_SCALE = 0.5;
+    const compute = () => {
+      const available = el.clientWidth;
+      if (!available) return;
+      const next = Math.min(1, Math.max(available / stackWidth, MIN_SCALE));
+      setScale(next);
+    };
+    compute();
+    const ro = new ResizeObserver(compute);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [stackWidth]);
 
   useEffect(() => {
     onActiveChange?.(index);
@@ -98,106 +147,133 @@ export function DepthCarousel({
     });
   };
 
-  const dirSign = tiltDirection === 'right' ? 1 : -1;
-  const stackWidth = cardWidth + spread * Math.max(visibleCards - 1, 0) * 2;
-
   return (
-    <div
-      className="relative mx-auto"
-      style={{ width: stackWidth, height: cardHeight, perspective: `${perspective}px` }}
-    >
-      {items.map((item, i) => {
-        let offset = i - index;
-        // Shortest-path offset so looping wraps the short way around the
-        // stack instead of visibly sliding all the way across it.
-        if (loop) {
-          if (offset > count / 2) offset -= count;
-          if (offset < -count / 2) offset += count;
-        }
-        const abs = Math.abs(offset);
-        const isVisible = abs < visibleCards;
-        const scale = Math.max(1 - falloff * abs, 0.4);
-        const cardBlur = offset === 0 ? 0 : Math.min(blur * abs, blur * visibleCards);
-
-        return (
-          <div
-            key={i}
-            aria-hidden={offset !== 0}
-            style={{
-              position: 'absolute',
-              inset: 0,
-              margin: 'auto',
-              width: cardWidth,
-              height: cardHeight,
-              transform:
-                `translateX(${offset * spread * dirSign}px) ` +
-                `translateZ(${-abs * depth}px) ` +
-                `rotateY(${offset * -tilt * dirSign}deg) ` +
-                `scale(${scale})`,
-              transition: `transform ${duration}ms ${ease}, opacity ${duration}ms ${ease}, filter ${duration}ms ${ease}`,
-              opacity: isVisible ? Math.max(1 - abs * 0.18, 0) : 0,
-              filter: cardBlur ? `blur(${cardBlur}px)` : undefined,
-              zIndex: count - abs,
-              pointerEvents: offset === 0 ? 'auto' : 'none',
-              borderRadius: radius,
-              overflow: 'hidden',
-              backgroundColor: tint,
-              boxShadow: '0 24px 48px -12px rgba(0,0,0,0.35)',
-            }}
-          >
-            {item}
-          </div>
-        );
-      })}
-
-      {showControls && count > 1 && (
-        <>
-          <button
-            type="button"
-            onClick={() => go(-1)}
-            aria-label="Previous"
-            data-cursor-label="Previous"
-            className={
-              'absolute top-1/2 z-20 flex h-control-md w-control-md -translate-y-1/2 items-center justify-center ' +
-              'rounded-full border border-line-subtle bg-raised text-fg shadow-e1 transition ' +
-              'duration-fast ease-standard can-hover:hover:bg-secondary-hover motion-safe:active:scale-press'
+    <div ref={wrapperRef} className="mx-auto w-full">
+      {/* Scaled stack: kept at its native (desktop) pixel geometry so the
+          translateX/translateZ/rotateY math above stays correct, then
+          shrunk as one unit via `scale`. The wrapping box is sized to the
+          SCALED footprint so layout (and the controls row below) doesn't
+          reserve the full unscaled width/height. */}
+      <div
+        className="relative mx-auto"
+        style={{ width: stackWidth * scale, height: cardHeight * scale }}
+      >
+        <div
+          className="absolute left-0 top-0"
+          style={{
+            width: stackWidth,
+            height: cardHeight,
+            perspective: `${perspective}px`,
+            transform: `scale(${scale})`,
+            transformOrigin: 'top left',
+          }}
+        >
+          {items.map((item, i) => {
+            let offset = i - index;
+            // Shortest-path offset so looping wraps the short way around the
+            // stack instead of visibly sliding all the way across it.
+            if (loop) {
+              if (offset > count / 2) offset -= count;
+              if (offset < -count / 2) offset += count;
             }
-            style={{ left: -20 }}
-          >
-            ‹
-          </button>
-          <button
-            type="button"
-            onClick={() => go(1)}
-            aria-label="Next"
-            data-cursor-label="Next"
-            className={
-              'absolute top-1/2 z-20 flex h-control-md w-control-md -translate-y-1/2 items-center justify-center ' +
-              'rounded-full border border-line-subtle bg-raised text-fg shadow-e1 transition ' +
-              'duration-fast ease-standard can-hover:hover:bg-secondary-hover motion-safe:active:scale-press'
-            }
-            style={{ right: -20 }}
-          >
-            ›
-          </button>
-        </>
-      )}
+            const abs = Math.abs(offset);
+            const isVisible = abs < visibleCards;
+            const cardScale = Math.max(1 - falloff * abs, 0.4);
+            const cardBlur = offset === 0 ? 0 : Math.min(blur * abs, blur * visibleCards);
 
-      {showIndicators && count > 1 && (
-        <div className="absolute inset-x-0 flex justify-center gap-2" style={{ bottom: -32 }}>
-          {items.map((_, i) => (
+            return (
+              <div
+                key={i}
+                aria-hidden={offset !== 0}
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  margin: 'auto',
+                  width: cardWidth,
+                  height: cardHeight,
+                  transform:
+                    `translateX(${offset * spread * dirSign}px) ` +
+                    `translateZ(${-abs * depth}px) ` +
+                    `rotateY(${offset * -tilt * dirSign}deg) ` +
+                    `scale(${cardScale})`,
+                  transition: `transform ${duration}ms ${ease}, opacity ${duration}ms ${ease}, filter ${duration}ms ${ease}`,
+                  opacity: isVisible ? Math.max(1 - abs * 0.18, 0) : 0,
+                  filter: cardBlur ? `blur(${cardBlur}px)` : undefined,
+                  zIndex: count - abs,
+                  pointerEvents: offset === 0 ? 'auto' : 'none',
+                  borderRadius: radius,
+                  overflow: 'hidden',
+                  backgroundColor: tint,
+                  boxShadow: '0 24px 48px -12px rgba(0,0,0,0.35)',
+                }}
+              >
+                {item}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Controls row: prev arrow, dots, next arrow — one line, centered,
+          directly under the card. Arrows are bare icons (no border/fill),
+          matching the chrome's own plain-icon treatment (ThemeToggle.tsx)
+          rather than the filled/bordered circular buttons this used to
+          have floating over the stack's edges. */}
+      {(count > 1 && (showControls || showIndicators)) && (
+        <div className="mt-6 flex items-center justify-center gap-4">
+          {showControls && (
             <button
-              key={i}
               type="button"
-              onClick={() => setIndex(i)}
-              aria-label={`Show slide ${i + 1}`}
-              data-cursor-label={`Slide ${i + 1}`}
+              onClick={() => go(-1)}
+              aria-label="Previous"
+              data-cursor-label="Previous"
               className={
-                'h-2 rounded-full transition-all duration-base ease-standard ' +
-                (i === index ? 'w-6 bg-fg' : 'w-2 bg-fg-tertiary')
+                'inline-flex h-control-md w-control-md shrink-0 items-center justify-center ' +
+                'text-fg-tertiary transition duration-fast ease-standard ' +
+                'can-hover:hover:text-fg motion-safe:active:scale-press'
               }
-            />
-          ))}
+            >
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className="h-8 w-8">
+                <path d="M15 6l-6 6 6 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+          )}
+
+          {showIndicators && (
+            <div className="flex items-center gap-2">
+              {items.map((_, i) => (
+                <button
+                  key={i}
+                  type="button"
+                  onClick={() => setIndex(i)}
+                  aria-label={`Show slide ${i + 1}`}
+                  data-cursor-label={`Slide ${i + 1}`}
+                  className={
+                    'h-2 rounded-full transition-all duration-base ease-standard ' +
+                    (i === index ? 'w-6 bg-fg' : 'w-2 bg-fg-tertiary')
+                  }
+                />
+              ))}
+            </div>
+          )}
+
+          {showControls && (
+            <button
+              type="button"
+              onClick={() => go(1)}
+              aria-label="Next"
+              data-cursor-label="Next"
+              className={
+                'inline-flex h-control-md w-control-md shrink-0 items-center justify-center ' +
+                'text-fg-tertiary transition duration-fast ease-standard ' +
+                'can-hover:hover:text-fg motion-safe:active:scale-press'
+              }
+            >
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className="h-8 w-8">
+                <path d="M9 6l6 6-6 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </button>
+          )}
         </div>
       )}
     </div>
