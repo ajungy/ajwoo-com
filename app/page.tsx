@@ -118,14 +118,17 @@ export default function Home() {
             <ul className="mt-6 space-y-6">
               {experience.map((x) => (
                 <li key={x.company}>
-                  {/* Same shape as Education below: two equally load-bearing
-                      lines (company + title), not a heading/caption pair.
-                      Years dropped the mono/tabular-nums treatment, at
-                      Alex's direction — Plus Jakarta Sans like every other
-                      line on the page, not a separate typeface for dates. */}
+                  {/* All three lines the same size (text-body) now, at
+                      Alex's direction — company, title, and years read as
+                      one consistent block; only colour (--text-fg vs
+                      -secondary vs -tertiary) tells them apart, the same
+                      "weight/colour only, never a different type scale"
+                      rule used everywhere else on this page. Years already
+                      dropped the mono/tabular-nums treatment in an earlier
+                      pass — Plus Jakarta Sans like every other line. */}
                   <p className="text-body text-fg">{x.company}</p>
                   <p className="text-body text-fg-secondary">{x.title}</p>
-                  <p className="mt-1 text-caption text-fg-tertiary">{x.years}</p>
+                  <p className="mt-1 text-body text-fg-tertiary">{x.years}</p>
                 </li>
               ))}
             </ul>
@@ -147,10 +150,18 @@ export default function Home() {
           </div>
         </StaggerReveal>
 
-        {/* Same 245px major-section gap every other break on this page
-            uses (Principle 10, sidebar above) — this is a real section
-            break from Experience/Education, not a continuation of it. */}
-        <StaggerReveal className="mt-[245px] grid grid-cols-1 gap-12 pb-12 medium:grid-cols-2">
+        {/* 245px major-section gap (Principle 10, sidebar above) only from
+            `medium` up, where Experience/Education is genuinely a 2-column
+            row and this reads as a real jump to the next one. Below that,
+            everything in both StaggerReveals stacks into a single column,
+            and 245px there read as a much bigger gap than the one between
+            Experience's last item and Education's heading right above it —
+            same gap-12 (48px) in both cases once they're single-column, at
+            Alex's direction ("make sure the spacing... is the same as
+            [Experience's last item] to Education"). mt-12 matches that
+            48px exactly on mobile/tablet; medium:mt-[245px] restores the
+            real section break once the 2-column layout kicks in. */}
+        <StaggerReveal className="mt-12 grid grid-cols-1 gap-12 pb-12 medium:mt-[245px] medium:grid-cols-2">
           <div>
             <h2 className="text-h3 text-fg">Featured</h2>
             <ul className="mt-6 space-y-6">
