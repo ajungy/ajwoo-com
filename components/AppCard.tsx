@@ -78,24 +78,29 @@ import { WAITLIST_FORM_URL, type App } from '@/content/apps';
  * pause()s as the prop flips, same reasoning as hoverPlay above for why
  * that has to be imperative rather than toggling the attribute.
  *
- * `hoverZoom`: defaults on (the /apps grid's own behavior — `.card-press`'s
- * 2% hover grow). DepthCarousel.tsx sets it false, at Alex's direction
- * ("remove the zoom in on hover") — the carousel's own scale/tilt/translate
- * is already the card's hover-equivalent motion there, so a second,
- * independent grow on top of it read as fighting itself. `shadow-e1` ->
- * `shadow-e2` on hover and the active-press scale still apply either way,
- * matching the /apps grid's own hover shadow exactly.
+ * `hoverZoom`/`hoverShadow`: both default on (the /apps grid's own
+ * behavior — `.card-press`'s 2% hover grow, `shadow-e1` at rest stepping
+ * up to `shadow-e2` + a `border-line` hover). DepthCarousel.tsx sets BOTH
+ * false, at Alex's direction (first "remove the zoom in on hover", then —
+ * once DepthCarousel grew its own static shadow + hover zoom/shadow
+ * treatment on the card's WRAPPER instead, see that file — "remove the
+ * zoom and shadow effect" here too) so the two effects live in exactly one
+ * place at a time rather than fighting each other or double-stacking two
+ * shadows. Outside the carousel (the /apps grid, the only other caller),
+ * both stay on and this is a no-op.
  */
 export function AppCard({
   app,
   hoverPlay = false,
   playing,
   hoverZoom = true,
+  hoverShadow = true,
 }: {
   app: App;
   hoverPlay?: boolean;
   playing?: boolean;
   hoverZoom?: boolean;
+  hoverShadow?: boolean;
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -112,7 +117,8 @@ export function AppCard({
       onMouseLeave={playing === undefined && hoverPlay ? () => videoRef.current?.pause() : undefined}
       className={
         'group relative flex flex-col overflow-hidden rounded-xl border border-line-subtle ' +
-        'bg-raised shadow-e1 card-press can-hover:hover:border-line can-hover:hover:shadow-e2' +
+        'bg-raised card-press' +
+        (hoverShadow ? ' shadow-e1 can-hover:hover:border-line can-hover:hover:shadow-e2' : '') +
         (hoverZoom ? '' : ' no-hover-zoom')
       }
     >

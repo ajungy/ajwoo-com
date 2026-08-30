@@ -59,15 +59,24 @@ import { useEffect, useRef, useState, type ReactNode } from 'react';
  * hover fill ThemeToggle.tsx/the TopBar nav links use, at Alex's direction
  * ("add hover button highlights like the darkmode button").
  *
- * CARD CHROME: the per-card wrapper no longer paints its own background,
- * radius, or box-shadow — those clipped/flattened AppCard's own border,
- * corner radius, and `shadow-e1`→`shadow-e2` hover shadow (the same shadow
- * the /apps grid cards use), which is exactly the effect Alex asked this
- * carousel match ("add the shadow effect of hover like the other cards in
- * the apps page"). AppCard is already fully self-clipping (its own
- * `rounded-xl overflow-hidden`), so the wrapper only needs to carry
- * position/transform/opacity/filter — see `hoverZoom` on AppCard.tsx for
- * the other half of this (removing the carousel's own redundant zoom).
+ * CARD CHROME, reversed again: an earlier pass moved the hover zoom/shadow
+ * onto AppCard itself (its own native `shadow-e1`→`shadow-e2` + card-press
+ * grow). At Alex's direction ("remove the zoom and shadow effect [on
+ * AppCard]... add the zoom... as well as the shadow effect [on the
+ * wrapper]"), that's reversed back: AppCard renders here with
+ * `hoverZoom={false} hoverShadow={false}` (see AppCard.tsx), and this
+ * wrapper owns the full effect instead — a static `box-shadow` at rest,
+ * `border-radius: 20px` (matching AppCard's own `rounded-xl` elsewhere),
+ * `overflow: hidden`, and a JS-driven hover state (`frontHovered`) on the
+ * FRONT card only that boosts both `transform: scale()` and `box-shadow`
+ * together. JS-driven, not a CSS `:hover` rule, because this element's
+ * `transform` is already an inline style computed from the stack's own
+ * offset/depth/tilt math — inline styles beat any CSS class in
+ * specificity, so a `:hover { transform: ... }` rule could never win
+ * against it; multiplying the hover state directly into the SAME computed
+ * transform string is the only way to combine "hover zoom" with "this
+ * card's position in the stack" without one silently overriding the
+ * other.
  *
  * `cardHeight` IS MEASURED, NOT TAKEN LITERALLY: AppCard's own height is a
  * function of its width (a 1:1 square media block plus a fixed-height
@@ -99,13 +108,12 @@ export interface DepthCarouselProps {
   loop?: boolean;
   cardWidth?: number;
   cardHeight?: number;
-  /** @deprecated no longer applied — the per-card wrapper doesn't paint its
-   *  own radius any more; AppCard supplies its own `rounded-xl`. Kept in the
-   *  prop interface so existing callers don't need an edit. */
+  /** Per-card wrapper's corner radius (px). Matches AppCard's own
+   *  `rounded-xl` by default so the two don't visibly disagree. */
   radius?: number;
-  /** @deprecated no longer applied — the per-card wrapper doesn't paint its
-   *  own background any more; AppCard supplies its own `bg-raised`. Kept in
-   *  the prop interface so existing callers don't need an edit. */
+  /** Per-card wrapper's background — shows only in the sliver between the
+   *  wrapper's radius and AppCard's own (identical) radius, and while
+   *  AppCard's video/image is still loading in. */
   tint?: string;
   duration?: number;
   ease?: string;
@@ -134,6 +142,8 @@ export function DepthCarousel({
   loop = true,
   cardWidth = 300,
   cardHeight = 380,
+  radius = 20,
+  tint = '#05060a',
   duration = 700,
   ease = POWER3_OUT,
   autoplayDelay = 3200,
@@ -143,6 +153,10 @@ export function DepthCarousel({
 }: DepthCarouselProps) {
   const [index, setIndex] = useState(0);
   const [scale, setScale] = useState(1);
+  // Hover state for the front card's own zoom+shadow boost — see the
+  // "CARD CHROME, reversed again" comment above for why this is JS state
+  // rather than a CSS :hover rule.
+  const [frontHovered, setFrontHovered] = useState(false);
   // Starts as the caller's estimate so first paint has no 0-height flash;
   // replaced with the active card's real measured height once mounted.
   const [measuredHeight, setMeasuredHeight] = useState(cardHeight);
@@ -261,14 +275,18 @@ export function DepthCarousel({
             }
             const abs = Math.abs(offset);
             const isVisible = abs < visibleCards;
-            const cardScale = Math.max(1 - falloff * abs, 0.4);
-            const cardBlur = offset === 0 ? 0 : Math.min(blur * abs, blur * visibleCards);
+            const isFront = offset === 0;
+            const hoverBoost = isFront && frontHovered;
+            const cardScale = Math.max(1 - falloff * abs, 0.4) * (hoverBoost ? 1.02 : 1);
+            const cardBlur = isFront ? 0 : Math.min(blur * abs, blur * visibleCards);
 
             return (
               <div
                 key={i}
-                ref={offset === 0 ? activeCardRef : undefined}
-                aria-hidden={offset !== 0}
+                ref={isFront ? activeCardRef : undefined}
+                aria-hidden={!isFront}
+                onMouseEnter={isFront ? () => setFrontHovered(true) : undefined}
+                onMouseLeave={isFront ? () => setFrontHovered(false) : undefined}
                 style={{
                   position: 'absolute',
                   left: 0,
@@ -282,18 +300,27 @@ export function DepthCarousel({
                     `translateZ(${-abs * depth}px) ` +
                     `rotateY(${offset * -tilt * dirSign}deg) ` +
                     `scale(${cardScale})`,
-                  transition: `transform ${duration}ms ${ease}, opacity ${duration}ms ${ease}, filter ${duration}ms ${ease}`,
+                  transition:
+                    `transform ${duration}ms ${ease}, opacity ${duration}ms ${ease}, ` +
+                    `filter ${duration}ms ${ease}, box-shadow 500ms ${ease}`,
                   opacity: isVisible ? Math.max(1 - abs * 0.18, 0) : 0,
                   filter: cardBlur ? `blur(${cardBlur}px)` : undefined,
                   zIndex: count - abs,
-                  pointerEvents: offset === 0 ? 'auto' : 'none',
-                  // No radius/background/box-shadow here any more — AppCard
-                  // is fully self-clipping (its own rounded-xl
-                  // overflow-hidden, border, and shadow-e1 -> shadow-e2
-                  // hover shadow), and painting a second, static shadow on
-                  // this wrapper both clipped that hover shadow (this div
-                  // used to be `overflow: hidden`) and flattened it to one
-                  // constant look regardless of hover state.
+                  pointerEvents: isFront ? 'auto' : 'none',
+                  borderRadius: radius,
+                  overflow: 'hidden',
+                  backgroundColor: tint,
+                  // AppCard renders with hoverZoom/hoverShadow both off
+                  // inside this carousel (see FeaturedApp.tsx), so this is
+                  // the only place the "hover" look lives — a static
+                  // resting shadow, boosted on the front card's own hover
+                  // (frontHovered, set via onMouseEnter/Leave above) to a
+                  // larger, softer one. Same 500ms box-shadow fade
+                  // `.card-press` uses elsewhere, at Alex's original
+                  // direction on that ("0.5s fade to see the shadow").
+                  boxShadow: hoverBoost
+                    ? '0 32px 64px -12px rgba(0,0,0,0.45)'
+                    : '0 24px 48px -12px rgba(0,0,0,0.35)',
                 }}
               >
                 {item}
