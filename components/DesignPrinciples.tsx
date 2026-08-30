@@ -8,15 +8,19 @@ import { principles } from '@/content/site';
  * Showing the principles here rather than just linking the file makes the
  * claim "I designed this system" checkable in five seconds of scrolling,
  * not just asserted.
+ *
+ * Back to one column, 1-10 stacked in document order — reverted again after
+ * the two-column (1-5 left, 6-10 right) pass, at Alex's direction, and now
+ * placed on the same 4-column/columns-2-3 grid as Experience/Education/
+ * Featured/Worked-with below (app/page.tsx) rather than its own bespoke
+ * layout — one shared grid language across every list section on the page.
+ * `large:col-start-2 large:col-span-2` centers the single column inside
+ * columns 2-3 with 1 and 4 left empty at `large` (1200px) and up; below
+ * that the grid collapses to one column and the content just sits full-
+ * width, left-aligned — the same responsive shape used everywhere else
+ * this grid appears.
  */
 export function DesignPrinciples() {
-  // Split 1–5 / 6–10 for the two-column layout below — reverted back to
-  // two columns at Alex's direction, after an earlier pass had already
-  // reverted this same component FROM two columns to one (see git history):
-  // logging both directions rather than only the final state, since the
-  // reversal itself is the useful fact if this comes up again.
-  const left = principles.slice(0, 5);
-  const right = principles.slice(5);
   return (
     // 245px (mt-36's 144px, increased ~70% at Alex's direction — "more
     // space gives luxury") — bigger than the 48px between "Alex's choice"
@@ -27,22 +31,15 @@ export function DesignPrinciples() {
     // below) — spacing is a consistent language, not a per-section guess
     // (see Principle 10).
     <section className="mt-[245px]">
-      <h2 className="text-h3 text-fg">Favorite design principles</h2>
-      {/* Two columns, 1–5 left and 6–10 right, at Alex's direction. Each
-          column is its own StaggerReveal (rather than one shared grid) so
-          the two reveal top-to-bottom independently, side by side, instead
-          of the reveal order zigzagging across columns. */}
-      <div className="mt-8 grid grid-cols-1 gap-x-12 gap-y-8 medium:grid-cols-2">
-        <StaggerReveal className="flex flex-col gap-6">
-          {left.map((p) => (
-            <PrincipleRow key={p.n} n={p.n} title={p.title} body={p.body} />
-          ))}
-        </StaggerReveal>
-        <StaggerReveal className="flex flex-col gap-6">
-          {right.map((p) => (
-            <PrincipleRow key={p.n} n={p.n} title={p.title} body={p.body} />
-          ))}
-        </StaggerReveal>
+      <div className="grid grid-cols-1 large:grid-cols-4">
+        <div className="large:col-start-2 large:col-span-2">
+          <h2 className="text-h3 text-fg">Favorite design principles</h2>
+          <StaggerReveal className="mt-8 flex flex-col gap-6">
+            {principles.map((p) => (
+              <PrincipleRow key={p.n} n={p.n} title={p.title} body={p.body} />
+            ))}
+          </StaggerReveal>
+        </div>
       </div>
     </section>
   );
@@ -51,10 +48,8 @@ export function DesignPrinciples() {
 function PrincipleRow({ n, title, body }: { n: number; title: string; body: string }) {
   return (
     <div className="flex gap-5">
-      {/* Plain 1–10, not 01–10 — no zero-padding. Same font (mono) as
-          every other numbered/tabular column on the site (coffee scores,
-          award years). */}
-      <span className="w-6 shrink-0 font-mono text-body text-fg-tertiary tabular-nums">
+      {/* Plain 1–10, not 01–10 — no zero-padding. */}
+      <span className="w-6 shrink-0 text-body text-fg-tertiary tabular-nums">
         {n}
       </span>
       <div>

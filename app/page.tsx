@@ -106,97 +106,94 @@ export default function Home() {
         <DesignPrinciples />
         <SkillsSection />
 
-        {/* Two 2-column rows now, not one 3-column grid — Experience/
-            Education first, then Featured/"Worked with" below a real
-            section break, at Alex's direction. Each row is its own
-            StaggerReveal so the two reveal independently rather than one
-            shared observer trying to stagger four columns' worth of items
-            in one pass. */}
-        <StaggerReveal className="mt-[245px] grid grid-cols-1 gap-12 medium:grid-cols-2">
-          <div>
-            <h2 className="text-h3 text-fg">Experience</h2>
-            <ul className="mt-6 space-y-6">
-              {experience.map((x) => (
-                <li key={x.company}>
-                  {/* All three lines the same size (text-body) now, at
-                      Alex's direction — company, title, and years read as
-                      one consistent block; only colour (--text-fg vs
-                      -secondary vs -tertiary) tells them apart, the same
-                      "weight/colour only, never a different type scale"
-                      rule used everywhere else on this page. Years already
-                      dropped the mono/tabular-nums treatment in an earlier
-                      pass — Plus Jakarta Sans like every other line. */}
-                  <p className="text-body text-fg">{x.company}</p>
-                  <p className="text-body text-fg-secondary">{x.title}</p>
-                  <p className="mt-1 text-body text-fg-tertiary">{x.years}</p>
-                </li>
-              ))}
-            </ul>
-          </div>
+        {/* Four stacked sections now, not two 2-column rows — Experience,
+            Education, Featured, and "Worked with" each on their own
+            4-column grid, at Alex's direction. `large:col-start-2
+            large:col-span-2` centers each section's content inside
+            columns 2-3 with 1 and 4 left empty at `large` (1200px) and
+            up; below that the grid collapses to one column and content
+            sits full-width, left-aligned — "if the window size is large,
+            you can see the four grid system... if it becomes small, then
+            columns two [and] three... becom[e] column one, left aligned".
+            Same grid shape DesignPrinciples.tsx uses above, so every list
+            section on the page shares one grid language now instead of
+            each having its own bespoke layout.
 
-          <div>
-            <h2 className="text-h3 text-fg">Education</h2>
-            <ul className="mt-6 space-y-6">
-              {education.map((e) => (
-                <li key={e.school}>
-                  {/* Both lines the same size (text-body) — a school's name
-                      and its own degree/detail are equally load-bearing
-                      facts, not a heading-and-caption pair. */}
-                  <p className="text-body text-fg">{e.school}</p>
-                  <p className="text-body text-fg-secondary">{e.detail}</p>
-                </li>
-              ))}
-            </ul>
+            Each entry is one row, comma-joined, rather than separate
+            stacked lines — "Netflix, Product Design Lead, 2025 – Present"
+            all on one line, all the same text-body size (company gets
+            font-medium + --text-fg for emphasis, at Alex's direction —
+            "highlighting the company title is okay" — but title/years
+            stay --text-fg-secondary at the SAME size, not a smaller one). */}
+        <section className="mt-[245px]">
+          <div className="grid grid-cols-1 large:grid-cols-4">
+            <div className="large:col-start-2 large:col-span-2">
+              <h2 className="text-h3 text-fg">Experience</h2>
+              <StaggerReveal className="mt-6 flex flex-col gap-6">
+                {experience.map((x) => (
+                  <p key={x.company} className="text-body">
+                    <span className="font-medium text-fg">{x.company}</span>
+                    <span className="text-fg-secondary">, {x.title}, {x.years}</span>
+                  </p>
+                ))}
+              </StaggerReveal>
+            </div>
           </div>
-        </StaggerReveal>
+        </section>
 
-        {/* 245px major-section gap (Principle 10, sidebar above) only from
-            `medium` up, where Experience/Education is genuinely a 2-column
-            row and this reads as a real jump to the next one. Below that,
-            everything in both StaggerReveals stacks into a single column,
-            and 245px there read as a much bigger gap than the one between
-            Experience's last item and Education's heading right above it —
-            same gap-12 (48px) in both cases once they're single-column, at
-            Alex's direction ("make sure the spacing... is the same as
-            [Experience's last item] to Education"). mt-12 matches that
-            48px exactly on mobile/tablet; medium:mt-[245px] restores the
-            real section break once the 2-column layout kicks in. */}
-        <StaggerReveal className="mt-12 grid grid-cols-1 gap-12 pb-12 medium:mt-[245px] medium:grid-cols-2">
-          <div>
-            <h2 className="text-h3 text-fg">Featured</h2>
-            <ul className="mt-6 space-y-6">
-              {featured.map((f) => (
-                <li key={`${f.year}-${f.what}`} className="flex items-baseline gap-6">
-                  {/* Dropped font-mono/tabular-nums, at Alex's direction —
-                      Plus Jakarta Sans like the rest of the page. Same
-                      text-body size as the description (was text-caption) —
-                      the mismatched size and line-height was what threw the
-                      two off the same baseline whenever a longer entry like
-                      "Starbucks Technology" was next to it; items-baseline
-                      plus a matching size fixes it regardless of line
-                      length. space-y-6 (was space-y-4), matching Experience/
-                      Education's own item spacing exactly. */}
-                  <span className="text-body text-fg-tertiary">{f.year}</span>
-                  <span className="text-body text-fg-secondary">{f.what}</span>
-                </li>
-              ))}
-            </ul>
+        {/* mt-16 between each of these four — a real but smaller break
+            than the 245px topic change into Experience above; the four
+            read as one cluster of "background" sections, not four
+            unrelated topics. */}
+        <section className="mt-16">
+          <div className="grid grid-cols-1 large:grid-cols-4">
+            <div className="large:col-start-2 large:col-span-2">
+              <h2 className="text-h3 text-fg">Education</h2>
+              <StaggerReveal className="mt-6 flex flex-col gap-6">
+                {education.map((e) => (
+                  <p key={e.school} className="text-body">
+                    <span className="font-medium text-fg">{e.school}</span>
+                    <span className="text-fg-secondary">, {e.detail}</span>
+                  </p>
+                ))}
+              </StaggerReveal>
+            </div>
           </div>
+        </section>
 
-          <div>
-            {/* Label changed from "Clients" to "Worked with", at Alex's
-                direction — the underlying data (content/site.ts's `clients`
-                export) is unchanged, only what the heading calls it. */}
-            <h2 className="text-h3 text-fg">Worked with</h2>
-            {/* space-y-6 (was space-y-4), matching Experience/Education's
-                own item spacing, at Alex's direction. */}
-            <ul className="mt-6 space-y-6">
-              {clients.map((c) => (
-                <li key={c} className="text-body text-fg-secondary">{c}</li>
-              ))}
-            </ul>
+        <section className="mt-16">
+          <div className="grid grid-cols-1 large:grid-cols-4">
+            <div className="large:col-start-2 large:col-span-2">
+              <h2 className="text-h3 text-fg">Featured</h2>
+              <StaggerReveal className="mt-6 flex flex-col gap-6">
+                {featured.map((f) => (
+                  <p key={`${f.year}-${f.what}`} className="text-body">
+                    <span className="text-fg-tertiary">{f.year}</span>
+                    <span className="text-fg-secondary">, {f.what}</span>
+                  </p>
+                ))}
+              </StaggerReveal>
+            </div>
           </div>
-        </StaggerReveal>
+        </section>
+
+        <section className="mt-16 pb-12">
+          <div className="grid grid-cols-1 large:grid-cols-4">
+            <div className="large:col-start-2 large:col-span-2">
+              {/* Label changed from "Clients" to "Worked with", at Alex's
+                  direction — the underlying data (content/site.ts's
+                  `clients` export) is unchanged, only what the heading
+                  calls it. Already one name per row, nothing to
+                  comma-join. */}
+              <h2 className="text-h3 text-fg">Worked with</h2>
+              <StaggerReveal className="mt-6 flex flex-col gap-6">
+                {clients.map((c) => (
+                  <p key={c} className="text-body text-fg-secondary">{c}</p>
+                ))}
+              </StaggerReveal>
+            </div>
+          </div>
+        </section>
       </div>
     </>
   );
