@@ -30,10 +30,10 @@ import type { App } from '@/content/apps';
 export function FeaturedApp({ apps }: { apps: App[] }) {
   const [activeIndex, setActiveIndex] = useState(0);
 
+  // No bottom padding on the section below — the gap to whatever follows
+  // (the Experience/Education/Featured/Worked-with sections on `/`) is
+  // that consumer's call, not this component's.
   return (
-    // No bottom padding here — the gap to whatever follows (the Experience/
-    // Education/Featured/Worked-with sections on `/`) is that consumer's
-    // call, not this component's.
     <section>
       <div className="flex flex-col items-center">
         {/* Single row — leaves, text, leaves — matching Alex's Figma reference
@@ -60,6 +60,13 @@ export function FeaturedApp({ apps }: { apps: App[] }) {
           used to get from mt-12 — DepthCarousel needs its own vertical
           breathing room for the prev/next controls and indicator dots,
           which sit just outside the card stack's own box. */}
+      {/* cardWidth/cardHeight (357x437) match the /apps grid's own AppCard
+          size exactly — measured directly off a rendered card there at a
+          real desktop width (355px square media + the ~82px icon/title/
+          button footer row), not a value picked to fit this carousel's
+          own layout. At Alex's direction ("give me the size of the cards
+          inside the landing page apps cards, the same size as the apps
+          page apps card... trying to be consistent"). */}
       <div className="mt-12 px-16">
         <DepthCarousel
           items={apps.map((app) => (
@@ -75,8 +82,8 @@ export function FeaturedApp({ apps }: { apps: App[] }) {
           blur={6}
           autoplay={false}
           loop
-          cardWidth={300}
-          cardHeight={380}
+          cardWidth={357}
+          cardHeight={437}
           radius={18}
           tint="#05060a"
           duration={700}
