@@ -478,22 +478,33 @@ export function Cursor() {
                 dynamic SVG feDisplacementMap lens with per-channel
                 chromatic-aberration offsets, replacing BOTH the old static
                 `dropletLens` filter that used to live here AND the WebGL
-                FluidGlass attempt that briefly replaced it, at Alex's
-                direction ("the React bit is not really working... try to
-                use this other one instead"). Clipped to this element's own
-                shape via the CSS `overflow: hidden; border-radius: inherit`
-                already on .cursor-drop-body, so it always exactly fills
-                whatever the drop currently is, at rest or morphed over a
-                target. Prop values are the exact ones from Alex's own
-                pasted "Advanced Glass Distortion" example. */}
+                FluidGlass attempt that briefly replaced it. Clipped to this
+                element's own shape via the CSS `overflow: hidden;
+                border-radius: inherit` already on .cursor-drop-body, so it
+                always exactly fills whatever the drop currently is, at rest
+                or morphed over a target. Prop values are Alex's own tuned
+                state from the live reactbits.dev/components/glass-surface
+                playground (blur=30, borderWidth=0.01, displace=1.8,
+                brightness=24, distortionScale=-280, redOffset=50,
+                blueOffset=-50, saturation=0.6, opacity=1) — a second,
+                stronger pass after the first "Advanced Glass Distortion"
+                preset values weren't producing a visible effect. See
+                globals.css's .cursor-root comment for the real bug that
+                likely caused that: opacity on an ANCESTOR of a
+                backdrop-filter element blocks it from sampling real page
+                content in several engines, which is now fixed regardless of
+                these particular numbers. */}
             <GlassSurfaceFill
-              displace={0}
-              distortionScale={-180}
-              redOffset={0}
-              greenOffset={10}
-              blueOffset={20}
-              brightness={50}
+              blur={30}
+              borderWidth={0.01}
               opacity={1}
+              displace={1.8}
+              brightness={24}
+              distortionScale={-280}
+              redOffset={50}
+              blueOffset={-50}
+              greenOffset={0}
+              saturation={0.6}
               mixBlendMode="screen"
             />
           </div>

@@ -419,12 +419,17 @@ html[data-theme-transition] * {
      unrelated animations finishing at different times. */
   transition: opacity 320ms var(--e-standard);
 }
-/* Was 50%, lowered again at Alex's direction ("even more transparent") —
-   the drop reads as a lighter, less intrusive presence. The dot (below)
-   stays at full opacity: it's the precision indicator, not decoration, and
-   mix-blend-mode inversion needs full strength to read correctly against
-   arbitrary backgrounds. */
-.cursor-root[data-visible="true"] { opacity: 0.35; }
+/* BUG FIX: this used to be 0.35 (a lighter, less intrusive presence, at
+   Alex's earlier direction) — but `opacity` on an ANCESTOR of a
+   backdrop-filter element is a well-documented cause of backdrop-filter
+   failing to sample real page content in several browser engines,
+   especially combined with .cursor-drop's own per-frame `transform`
+   below it. That's very likely why GlassSurfaceFill's refraction wasn't
+   visibly doing anything through three rounds of otherwise-correct SVG
+   filter debugging. Full opacity here now; any "lighter" look comes from
+   GlassSurfaceFill's own `opacity`/`brightness` props instead, which
+   don't sit between the backdrop-filter element and the real page. */
+.cursor-root[data-visible="true"] { opacity: 1; }
 
 /* The dot lives OUTSIDE .cursor-root, as its own top-level fixed element, not
    nested inside it. This is load-bearing, not a style choice: .cursor-root is
