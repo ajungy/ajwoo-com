@@ -1,24 +1,39 @@
+'use client';
+
+import { useState } from 'react';
 import Link from 'next/link';
 import { Laurel } from './Laurel';
 import { AppCard } from './AppCard';
+import { DepthCarousel } from './DepthCarousel';
 import type { App } from '@/content/apps';
 
 /**
- * One featured app on the landing page, announced between laurels.
+ * The featured-apps row on the landing page, announced between laurels —
+ * now a stacked depth carousel over all four apps (Convert, Capture Beta,
+ * Dictate Beta, Narrate Beta), at Alex's direction, replacing the single
+ * static Capture card this used to show. See components/DepthCarousel.tsx
+ * for the carousel mechanics themselves; this file wires it to real
+ * AppCard content and to which card's demo video autoplays.
  *
  * The laurels are the only ornament on the site, and they are load-bearing
- * rather than decorative: they say "this is the thing being singled out",
- * which is what lets a single card sit alone without reading as an accident.
- * Everything inside is the same Card the /apps grid uses, so the pattern is
- * learned once (Principle 16).
+ * rather than decorative: they say "these are the things being singled
+ * out", which is what lets a small set of cards sit alone without reading
+ * as an accident. Everything inside is the same Card the /apps grid uses,
+ * so the pattern is learned once (Principle 16).
+ *
+ * "Video should autoplay [when] the card is on top of the stack": handled
+ * via AppCard's `playing` prop (new — see that file) rather than its
+ * existing `hoverPlay`, since this needs to react to the carousel's own
+ * active index, not the pointer. `onActiveChange` from DepthCarousel keeps
+ * local state in sync with whichever card is currently centered/on top.
  */
-export function FeaturedApp({ app }: { app: App }) {
+export function FeaturedApp({ apps }: { apps: App[] }) {
+  const [activeIndex, setActiveIndex] = useState(0);
+
   return (
-    // No bottom padding here — the gap to whatever follows (the Education/
-    // Clients/Featured columns on `/`) is that consumer's call, not this
-    // component's. See app/page.tsx, which gives it a deliberately large
-    // mt-24 (96px) — more than the 48px between "Alex's choice" and the
-    // thumbnail above, at Alex's direction.
+    // No bottom padding here — the gap to whatever follows (the Experience/
+    // Education/Featured/Worked-with sections on `/`) is that consumer's
+    // call, not this component's.
     <section>
       <div className="flex flex-col items-center">
         {/* Single row — leaves, text, leaves — matching Alex's Figma reference
@@ -41,16 +56,38 @@ export function FeaturedApp({ app }: { app: App }) {
         </div>
       </div>
 
-      {/* Deliberately narrower than max-w-content (720px): once the card's
-          media went 1:1, a 720px-wide card meant a 720px-TALL square — the
-          card ballooned on this full-bleed landing-page placement in a way
-          it never did inside the /apps grid's ~380px columns. max-w-[420px]
-          keeps it close to a single grid column's width instead. */}
-      <div className="mx-auto mt-12 max-w-[420px]">
-        <AppCard app={app} />
+      {/* pt-8 replaces AppCard's own pb-12 style gap the single-card layout
+          used to get from mt-12 — DepthCarousel needs its own vertical
+          breathing room for the prev/next controls and indicator dots,
+          which sit just outside the card stack's own box. */}
+      <div className="mt-12 px-16">
+        <DepthCarousel
+          items={apps.map((app) => (
+            <AppCard key={app.slug} app={app} playing={apps[activeIndex]?.slug === app.slug} />
+          ))}
+          depth={220}
+          spread={90}
+          tilt={22}
+          tiltDirection="right"
+          perspective={1400}
+          visibleCards={4}
+          falloff={0.2}
+          blur={6}
+          autoplay={false}
+          loop
+          cardWidth={300}
+          cardHeight={380}
+          radius={18}
+          tint="#05060a"
+          duration={700}
+          autoplayDelay={3200}
+          showControls
+          showIndicators
+          onActiveChange={setActiveIndex}
+        />
       </div>
 
-      <p className="mt-8 text-center">
+      <p className="mt-16 text-center">
         <Link
           href="/apps/"
           data-cursor-label="All apps"

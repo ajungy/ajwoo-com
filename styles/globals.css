@@ -518,6 +518,43 @@ html[data-theme-transition] * {
   letter-spacing: -0.01em;
 }
 
+/* --- TextAnimate ("blurInUp", by character) — components/TextAnimate.tsx,
+   used on the "Enable creativity." headline only, at Alex's direction. See
+   that file's comment for why this is plain CSS rather than the actual
+   Magic UI component (which runs on framer-motion, rejected outright by
+   this project's stack decisions) and why reusing the entrance sequence's
+   existing gate isn't a new Principle 14 exception. Default state (no
+   [data-entrance="run"]) is just a plain inline-block glyph, fully
+   visible, no motion — the animation only exists inside the gated rule
+   below. */
+.text-animate-char {
+  display: inline-block;
+  white-space: pre;
+}
+[data-entrance="run"] .text-animate-char {
+  opacity: 0;
+  filter: blur(10px);
+  transform: translateY(20px);
+  animation: text-animate-blur-in-up 600ms var(--e-standard) both;
+  /* Staggered per character via the --char-i custom property TextAnimate.tsx
+     sets on each span — 22ms apart, so "Enable creativity." (18 characters)
+     finishes its own reveal in well under half a second on top of each
+     character's own 600ms run, reading as a fast ripple rather than a slow
+     typewriter. */
+  animation-delay: calc(var(--char-i) * 22ms);
+}
+@keyframes text-animate-blur-in-up {
+  to { opacity: 1; filter: blur(0); transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-entrance="run"] .text-animate-char {
+    opacity: 1;
+    filter: none;
+    transform: none;
+    animation: none;
+  }
+}
+
 /* Text laid over a photograph. */
 .on-media { color: var(--on-media-fg); }
 .on-media-dim { color: var(--on-media-fg-dim); }

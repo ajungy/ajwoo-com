@@ -6,6 +6,7 @@ import { CopyEmailButton } from '@/components/CopyEmailButton';
 import { DesignPrinciples } from '@/components/DesignPrinciples';
 import { SkillsSection } from '@/components/SkillsSection';
 import { StaggerReveal } from '@/components/StaggerReveal';
+import { TextAnimate } from '@/components/TextAnimate';
 import { siteData } from '@/content/projects';
 import { site, experience, education, clients, featured, social } from '@/content/site';
 import { apps } from '@/content/apps';
@@ -15,8 +16,6 @@ import { apps } from '@/content/apps';
  * decision inside one scroll, and acts on it in one click.
  */
 export default function Home() {
-  const capture = apps.find((a) => a.slug === 'capture');
-
   return (
     <>
       <div className="mx-auto max-w-app px-page">
@@ -34,10 +33,17 @@ export default function Home() {
           <div className="hero-col">
             {/* Sizing lives entirely in .hero-serif (globals.css), fluid
                 against the column's own width via a container query — see
-                the comment there. Reverted from ParticleText (CLAUDE.md
-                §6(f), now marked superseded) back to plain text, at Alex's
-                direction. */}
-            <h1 className="hero-serif text-fg">{site.headline}</h1>
+                the comment there. This is the fourth pass at motion on this
+                exact headline (CLAUDE.md §6(d) logs two superseded ones,
+                a typing-verb loop then ParticleText, both reverted back to
+                plain static text) — TextAnimate.tsx's per-character
+                "blurInUp" reveal, at Alex's direction, reusing the SAME
+                session-gated entrance flag §6(a)'s already-approved
+                sequence uses rather than adding a new exception. See that
+                component's own comment for the full reasoning. */}
+            <h1 className="hero-serif text-fg">
+              <TextAnimate>{site.headline}</TextAnimate>
+            </h1>
 
             {/* These are the same actions that used to sit under the old
                 headline. Email copies to clipboard rather than opening a
@@ -101,7 +107,7 @@ export default function Home() {
       )}
 
       <div className="mx-auto max-w-app px-page">
-        {capture && <FeaturedApp app={capture} />}
+        <FeaturedApp apps={apps} />
 
         <DesignPrinciples />
         <SkillsSection />

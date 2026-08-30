@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { Action } from './Action';
 import { AppIcon } from './AppIcon';
@@ -68,14 +68,30 @@ import { WAITLIST_FORM_URL, type App } from '@/content/apps';
  * ref + play()/pause() rather than toggling the `autoPlay` attribute, since
  * `autoPlay` only affects a video's behavior at the moment its source is
  * first assigned, not on demand afterward.
+ *
+ * `playing`: a third, explicit mode for components/DepthCarousel.tsx — the
+ * landing page's stacked app carousel plays whichever card is currently on
+ * TOP of the stack, not whichever the pointer happens to be over. When set
+ * (true or false, not undefined) it overrides hoverPlay entirely; the video
+ * starts `autoPlay={false}` regardless (its `src` is only ever fetched once
+ * DepthCarousel actually needs it) and this effect explicitly play()s/
+ * pause()s as the prop flips, same reasoning as hoverPlay above for why
+ * that has to be imperative rather than toggling the attribute.
  */
-export function AppCard({ app, hoverPlay = false }: { app: App; hoverPlay?: boolean }) {
+export function AppCard({ app, hoverPlay = false, playing }: { app: App; hoverPlay?: boolean; playing?: boolean }) {
   const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    if (playing === undefined) return;
+    if (playing) videoRef.current?.play().catch(() => {});
+    else videoRef.current?.pause();
+  }, [playing]);
+
   return (
     <article
       data-cursor-label={app.name}
-      onMouseEnter={hoverPlay ? () => videoRef.current?.play() : undefined}
-      onMouseLeave={hoverPlay ? () => videoRef.current?.pause() : undefined}
+      onMouseEnter={playing === undefined && hoverPlay ? () => videoRef.current?.play() : undefined}
+      onMouseLeave={playing === undefined && hoverPlay ? () => videoRef.current?.pause() : undefined}
       className={
         'group relative flex flex-col overflow-hidden rounded-xl border border-line-subtle ' +
         'bg-raised shadow-e1 card-press can-hover:hover:border-line can-hover:hover:shadow-e2'
@@ -85,11 +101,11 @@ export function AppCard({ app, hoverPlay = false }: { app: App; hoverPlay?: bool
         {app.thumbnailVideo ? (
           <video
             ref={videoRef}
-            autoPlay={!hoverPlay}
+            autoPlay={playing === undefined && !hoverPlay}
             muted
             loop
             playsInline
-            preload={hoverPlay ? 'metadata' : 'auto'}
+            preload={playing !== undefined || hoverPlay ? 'metadata' : 'auto'}
             poster={`/img/${app.thumbnailVideo}-poster.webp`}
             className="card-thumb-media block h-full w-full object-cover"
           >
