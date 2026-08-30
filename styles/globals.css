@@ -85,19 +85,37 @@
      blue like the existing caustic tint (not plain white) is what sells
      "light bending" rather than "another white line". */
   --water-rim-refract: rgba(190, 225, 255, 0.10);
+  --water-glint: rgba(255, 255, 255, 0.98);
+  --water-glint-soft: rgba(255, 255, 255, 0.20);
   --water-caustic: rgba(200, 230, 255, 0.20);
   /* A soft glass sheen — light catching the upper-left of a curved surface,
      the way a real glass or water sphere never reads as perfectly flat.
      Positioned off-center in the body's background-image (see
      .cursor-drop-body) rather than centered, so it reads as a highlight
      from a light source rather than a flat glow. */
-  /* --water-sheen and the --water-iris-* colour washes that used to sit
-     here are gone — at Alex's direction ("remove all colors, ingredients
-     that we put in previously"), replaced by a real WebGL glass render
-     (components/GlassBubbleFill.tsx, React Bits' FluidGlass, adapted) for
-     the drop's actual light response. The rim, shadow, and refraction
-     tokens below are untouched — Alex asked to keep the outline border and
-     the shadow exactly as they were. */
+  --water-sheen: rgba(255, 255, 255, 0.16);
+  /* Iridescent wash — three colour washes (purple, cyan, yellow) layered
+     under the white sheen above, at Alex's direction: an actual soap-bubble
+     film, "saturated colors... applied on top like an actual bubble", not
+     the washed-out white/gray first pass this replaced (pale pink + pale
+     yellow at 0.10 alpha read as grayish haze rather than colour — this
+     version pushes real saturation and higher alpha so the hue reads
+     clearly while the wash stays translucent, same as light actually
+     catching a soap film). Their POSITIONS animate slowly (see
+     .cursor-drop-body's background-position keyframe) so the colour drifts
+     across the surface like a real interference pattern — a deliberate,
+     documented exception to Principle 14 (continuous motion, not driven by
+     the pointer), same category as the landing page's entrance sequence:
+     small, bounded, and stated here rather than silently added. Same
+     values in light and dark — at Alex's direction, this needs to read in
+     both, not just dark ("think about an actual bubble with light making
+     the bubble colors but still being transparent"). */
+  /* Yellow deliberately the strongest of the three (higher alpha AND a
+     wider gradient reach in .cursor-drop-body below) — at Alex's direction,
+     "more yellow gradient... compared to the cyan or the purple". */
+  --water-iris-purple: rgba(178, 110, 255, 0.20);
+  --water-iris-cyan: rgba(70, 220, 255, 0.18);
+  --water-iris-yellow: rgba(255, 210, 70, 0.28);
   /* Darker than the drop's original light-mode shadow (0.40/0.22), at
      Alex's direction — the drop was hard to spot at a glance against pale
      surfaces; a stronger cast shadow is the fix rather than a border or a
@@ -137,6 +155,7 @@
     --water-rim-outer: rgba(255, 255, 255, 0.85);
     --water-rim-refract: rgba(190, 225, 255, 0.10);
     --water-rim-inner: rgba(255, 255, 255, 0.07);
+    --water-sheen: rgba(255, 255, 255, 0.22);
     --water-shadow: rgba(0, 0, 0, 0.60);
     --water-contact: rgba(0, 0, 0, 0.42);
     --water-rim-dark: rgba(0, 0, 0, 0.22);
@@ -145,6 +164,8 @@
        to spot at a glance against near-black surfaces. Still soft (the box-
        shadow blur radius below does the rest of the work), just brighter. */
     --water-shadow-glow: rgba(255, 255, 255, 0.16);
+    /* --water-iris-* deliberately NOT overridden here — same saturated
+       purple/cyan/yellow in both themes, see the :root block above. */
   }
 }
 
@@ -155,10 +176,12 @@
   --water-rim-outer: rgba(255, 255, 255, 0.85);
   --water-rim-refract: rgba(190, 225, 255, 0.10);
   --water-rim-inner: rgba(255, 255, 255, 0.07);
+  --water-sheen: rgba(255, 255, 255, 0.22);
   --water-shadow: rgba(0, 0, 0, 0.60);
   --water-contact: rgba(0, 0, 0, 0.42);
   --water-rim-dark: rgba(0, 0, 0, 0.22);
   --water-shadow-glow: rgba(255, 255, 255, 0.16);
+  /* --water-iris-* deliberately NOT overridden here either — see :root. */
 }
 
 /* --- Landing-page hero photo, theme-aware (components/HeroPhoto.tsx) -------
@@ -419,17 +442,12 @@ html[data-theme-transition] * {
      unrelated animations finishing at different times. */
   transition: opacity 320ms var(--e-standard);
 }
-/* BUG FIX: this used to be 0.35 (a lighter, less intrusive presence, at
-   Alex's earlier direction) — but `opacity` on an ANCESTOR of a
-   backdrop-filter element is a well-documented cause of backdrop-filter
-   failing to sample real page content in several browser engines,
-   especially combined with .cursor-drop's own per-frame `transform`
-   below it. That's very likely why GlassSurfaceFill's refraction wasn't
-   visibly doing anything through three rounds of otherwise-correct SVG
-   filter debugging. Full opacity here now; any "lighter" look comes from
-   GlassSurfaceFill's own `opacity`/`brightness` props instead, which
-   don't sit between the backdrop-filter element and the real page. */
-.cursor-root[data-visible="true"] { opacity: 1; }
+/* Was 50%, lowered again at Alex's direction ("even more transparent") —
+   the drop reads as a lighter, less intrusive presence. The dot (below)
+   stays at full opacity: it's the precision indicator, not decoration, and
+   mix-blend-mode inversion needs full strength to read correctly against
+   arbitrary backgrounds. */
+.cursor-root[data-visible="true"] { opacity: 0.35; }
 
 /* The dot lives OUTSIDE .cursor-root, as its own top-level fixed element, not
    nested inside it. This is load-bearing, not a style choice: .cursor-root is
@@ -470,39 +488,125 @@ html[data-theme-transition] * {
      position:fixed and out of flow, so none of it can move page content. */
 }
 
-/* The lens. Stripped down to just the minimum that reliably bends the page
-   behind it — at Alex's direction ("remove all visual UI detail for the
-   cursor but keep the interaction and shape change"). Every decorative
-   layer that used to live here (the Fresnel hairline, the refraction
-   fringe, the TIR dark ring, the inner highlight, the caustic, the cast
-   shadow, the dark-mode glow) is gone; their tokens stay defined in
-   globals.css :root in case any of this needs to come back, but nothing
-   references them here any more.
-   `backdrop-filter: blur() saturate()` alone — no SVG filter reference —
-   is what's left: a plain, universally-supported CSS feature that is
-   GUARANTEED to blur/refract the real page behind the drop in every
-   browser, unlike the SVG feDisplacementMap technique GlassSurfaceFill
-   attempts (still mounted as a child, layered on top — see that file's
-   comment for why it may not visibly do anything in some engines). If
-   GlassSurfaceFill's own chromatic distortion doesn't render, this base
-   blur still guarantees the drop reads as glass over real content instead
-   of a flat, motionless shape. */
+/* The lens. This is the layer that actually bends the page behind it. */
 .cursor-drop-body {
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  overflow: hidden;
-  background: var(--water-body);
-  backdrop-filter: blur(3px) saturate(1.4);
-  -webkit-backdrop-filter: blur(3px) saturate(1.4);
+  /* Glass sheen: a soft, off-center highlight (light hitting the upper-left
+     of a curved surface) layered over the flat water-body tint. A perfectly
+     flat, evenly-lit fill reads as a sticker; this asymmetric brightness is
+     what makes it read as a curved, glassy surface instead. Kept soft
+     (transparent past 55% of the drop) so it never competes with the two
+     hard specular glints in .cursor-drop-gloss below. */
+  /* Layer order back-to-front: base tint, three slow-drifting iridescent
+     colour washes (purple, cyan, yellow — see --water-iris-* above), then
+     the white sheen on top. Only the three iridescent layers' positions
+     move; the sheen and the base tint stay put at every keyframe stop
+     below, so the drop's own "light source" reads as fixed while the
+     bubble-film colour drifts underneath it. background-size is oversized
+     (220%) on the moving layers so the animated position actually travels
+     across the drop's surface rather than just nudging a gradient that's
+     already covering it edge-to-edge. */
+  background:
+    radial-gradient(circle at 32% 26%, var(--water-sheen), transparent 55%),
+    radial-gradient(circle, var(--water-iris-purple), transparent 60%),
+    radial-gradient(circle, var(--water-iris-cyan), transparent 60%),
+    /* Reaches further (70% vs the other two's 60%) on top of its own higher
+       alpha above — yellow should read as the dominant hue, not an equal
+       third. */
+    radial-gradient(circle, var(--water-iris-yellow), transparent 70%),
+    var(--water-body);
+  background-size: 100% 100%, 220% 220%, 220% 220%, 220% 220%, 100% 100%;
+  background-repeat: no-repeat;
+  animation: water-iridescent 22s ease-in-out infinite alternate;
+  backdrop-filter: url(#dropletLens) saturate(1.06);
+  /* Safari does not support an SVG filter reference in backdrop-filter, so it
+     gets a whisper of blur instead of true refraction. The rim, glints, shadow
+     and deformation all still apply, so it still reads as a drop — just a
+     less optically accurate one. */
+  -webkit-backdrop-filter: saturate(1.06);
+  box-shadow:
+    /* Fresnel: mirror-bright seen edge-on, invisible through the middle.
+       One hairline only — anything thicker reads as a plastic bead. */
+    inset 0 0 0 0.5px var(--water-rim-outer),
+    /* Second ring, 1px, sitting just inside that hairline — a pale blue
+       rather than another white line, reading as a refraction fringe (light
+       splitting at the lens edge) rather than a doubled Fresnel highlight.
+       True per-pixel bending only the SVG lens filter can do (see
+       dropletLens below); this is the honest CSS approximation of it: color,
+       not distortion, placed exactly where a real fringe would sit. Faint
+       (10% opacity, set on the token below) — a whisper of color, not a
+       second visible line. */
+    inset 0 0 0 1.5px var(--water-rim-refract),
+    inset 0 0 3px 1px var(--water-rim-dark),
+    inset 0 0.5px 1px 0 var(--water-rim-inner),
+    inset 0 -3px 6px -4px var(--water-caustic),
+    /* it sits ON the page, so it casts a little and it touches — darker and
+       further-reaching than the drop's earlier version, at Alex's direction,
+       so the whole shape reads as more clearly separated from the page. */
+    0 5px 12px -3px var(--water-shadow),
+    0 2px 3px 0 var(--water-contact),
+    /* Dark mode only (transparent in light — see --water-shadow-glow above):
+       a soft white glow around the drop, widened from 10px along with the
+       token's own opacity bump, at Alex's direction — the drop needs to be
+       spottable at a glance, especially right after the cursor reappears
+       (see the visibilitychange fix in Cursor.tsx). */
+    0 0 14px 1px var(--water-shadow-glow);
 }
 
-/* The old .cursor-drop-gloss specular-glint layer (two flat CSS radial
-   highlights) and its @keyframes water-iridescent colour drift are gone —
-   both superseded by GlassBubbleFill's real WebGL lighting, which produces
-   its own specular highlights from the three point lights defined there,
-   rather than painted ones. components/Cursor.tsx no longer renders that
-   element. */
+/* Slow drift for the three iridescent colour-wash layers above — three
+   stops, alternating, so the purple/cyan/yellow washes swap which side of
+   the drop they favour rather than just sliding in one direction and
+   snapping back. The sheen/base-tint layers repeat their single position at
+   every stop (comma positions 1 and 5) so only layers 2-4 actually move.
+   22s is deliberately glacial: at Alex's direction this should read as a
+   bubble's own film shifting, not as a loading shimmer — noticeable only
+   if you watch the cursor sit still for a while. */
+@keyframes water-iridescent {
+  0%   { background-position: 32% 26%, 15% 20%, 85% 30%, 50% 85%, 0 0; }
+  50%  { background-position: 32% 26%, 70% 60%, 20% 70%, 80% 20%, 0 0; }
+  100% { background-position: 32% 26%, 45% 85%, 75% 15%, 15% 45%, 0 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cursor-drop-body { animation: none; }
+}
+
+/* Specular glints. Deliberately NOT inside the rotating layer: as the drop
+   rolls, a real highlight stays put relative to the light instead of turning
+   with the body. Keeping these anchored is most of what sells the roll. */
+.cursor-drop-gloss {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  overflow: hidden;
+}
+.cursor-drop-gloss::before,
+.cursor-drop-gloss::after {
+  content: "";
+  position: absolute;
+  border-radius: var(--r-full);
+  pointer-events: none;
+}
+/* primary glint, upper-left, hard and small */
+.cursor-drop-gloss::before {
+  top: 15%;
+  left: 18%;
+  width: 17%;
+  height: 12%;
+  background: radial-gradient(closest-side, var(--water-glint), transparent 100%);
+  filter: blur(0.3px);
+}
+/* bounce light, lower-right, wide and faint */
+.cursor-drop-gloss::after {
+  right: 14%;
+  bottom: 14%;
+  width: 26%;
+  height: 16%;
+  background: radial-gradient(closest-side, var(--water-glint-soft), transparent 100%);
+  filter: blur(1.5px);
+}
+
 
 /* The custom cursor replaces the native one only where it actually runs. */
 @media (any-pointer: fine) and (prefers-reduced-motion: no-preference) {
