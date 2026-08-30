@@ -54,12 +54,15 @@ export default function Home() {
                   inline. */}
               <BookTimeAction />
               <CopyEmailButton />
+              {/* showExternalIcon dropped, at Alex's direction — the
+                  linkout glyph next to LinkedIn/Instagram is gone; the
+                  label alone plus `external` (which still opens a new
+                  tab) is enough. */}
               {social.map((s) => (
                 <Action
                   key={s.label}
                   href={s.href}
                   external={s.external}
-                  showExternalIcon={s.external}
                   variant="secondary"
                   cursorLabel={s.label}
                 >
@@ -117,12 +120,12 @@ export default function Home() {
                 <li key={x.company}>
                   {/* Same shape as Education below: two equally load-bearing
                       lines (company + title), not a heading/caption pair.
-                      Years get the same mono/tabular treatment as Featured's
-                      own year column, for the same reason — a run of dates
-                      reads better aligned. */}
+                      Years dropped the mono/tabular-nums treatment, at
+                      Alex's direction — Plus Jakarta Sans like every other
+                      line on the page, not a separate typeface for dates. */}
                   <p className="text-body text-fg">{x.company}</p>
                   <p className="text-body text-fg-secondary">{x.title}</p>
-                  <p className="mt-1 font-mono text-caption tabular-nums text-fg-tertiary">{x.years}</p>
+                  <p className="mt-1 text-caption text-fg-tertiary">{x.years}</p>
                 </li>
               ))}
             </ul>
@@ -150,17 +153,19 @@ export default function Home() {
         <StaggerReveal className="mt-[245px] grid grid-cols-1 gap-12 pb-12 medium:grid-cols-2">
           <div>
             <h2 className="text-h3 text-fg">Featured</h2>
-            <ul className="mt-6 space-y-4">
+            <ul className="mt-6 space-y-6">
               {featured.map((f) => (
                 <li key={`${f.year}-${f.what}`} className="flex items-baseline gap-6">
-                  {/* Mono earns its place here only: years sit in a column and
-                      should align. Same text-body size as the description
-                      now (was text-caption) — the mismatched size and
-                      line-height was what threw the two off the same
-                      baseline whenever a longer entry like "Starbucks
-                      Technology" was next to it; items-baseline plus a
-                      matching size fixes it regardless of line length. */}
-                  <span className="font-mono text-body tabular-nums text-fg-tertiary">{f.year}</span>
+                  {/* Dropped font-mono/tabular-nums, at Alex's direction —
+                      Plus Jakarta Sans like the rest of the page. Same
+                      text-body size as the description (was text-caption) —
+                      the mismatched size and line-height was what threw the
+                      two off the same baseline whenever a longer entry like
+                      "Starbucks Technology" was next to it; items-baseline
+                      plus a matching size fixes it regardless of line
+                      length. space-y-6 (was space-y-4), matching Experience/
+                      Education's own item spacing exactly. */}
+                  <span className="text-body text-fg-tertiary">{f.year}</span>
                   <span className="text-body text-fg-secondary">{f.what}</span>
                 </li>
               ))}
@@ -172,7 +177,9 @@ export default function Home() {
                 direction — the underlying data (content/site.ts's `clients`
                 export) is unchanged, only what the heading calls it. */}
             <h2 className="text-h3 text-fg">Worked with</h2>
-            <ul className="mt-6 space-y-4">
+            {/* space-y-6 (was space-y-4), matching Experience/Education's
+                own item spacing, at Alex's direction. */}
+            <ul className="mt-6 space-y-6">
               {clients.map((c) => (
                 <li key={c} className="text-body text-fg-secondary">{c}</li>
               ))}
