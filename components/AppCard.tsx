@@ -77,8 +77,26 @@ import { WAITLIST_FORM_URL, type App } from '@/content/apps';
  * DepthCarousel actually needs it) and this effect explicitly play()s/
  * pause()s as the prop flips, same reasoning as hoverPlay above for why
  * that has to be imperative rather than toggling the attribute.
+ *
+ * `hoverZoom`: defaults on (the /apps grid's own behavior — `.card-press`'s
+ * 2% hover grow). DepthCarousel.tsx sets it false, at Alex's direction
+ * ("remove the zoom in on hover") — the carousel's own scale/tilt/translate
+ * is already the card's hover-equivalent motion there, so a second,
+ * independent grow on top of it read as fighting itself. `shadow-e1` ->
+ * `shadow-e2` on hover and the active-press scale still apply either way,
+ * matching the /apps grid's own hover shadow exactly.
  */
-export function AppCard({ app, hoverPlay = false, playing }: { app: App; hoverPlay?: boolean; playing?: boolean }) {
+export function AppCard({
+  app,
+  hoverPlay = false,
+  playing,
+  hoverZoom = true,
+}: {
+  app: App;
+  hoverPlay?: boolean;
+  playing?: boolean;
+  hoverZoom?: boolean;
+}) {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
@@ -94,7 +112,8 @@ export function AppCard({ app, hoverPlay = false, playing }: { app: App; hoverPl
       onMouseLeave={playing === undefined && hoverPlay ? () => videoRef.current?.pause() : undefined}
       className={
         'group relative flex flex-col overflow-hidden rounded-xl border border-line-subtle ' +
-        'bg-raised shadow-e1 card-press can-hover:hover:border-line can-hover:hover:shadow-e2'
+        'bg-raised shadow-e1 card-press can-hover:hover:border-line can-hover:hover:shadow-e2' +
+        (hoverZoom ? '' : ' no-hover-zoom')
       }
     >
       <div className="skeleton-shimmer relative aspect-square overflow-hidden">

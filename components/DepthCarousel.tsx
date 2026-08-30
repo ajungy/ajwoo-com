@@ -25,16 +25,26 @@ import { useEffect, useRef, useState, type ReactNode } from 'react';
  * should autoplay [when] the card is on top of the stack").
  *
  * RESPONSIVE SCALING, at Alex's direction ("optimize on all window sizes
- * and mobile... reduce the size of the cards"): `cardWidth`/`cardHeight`
- * describe the stack's DESKTOP size; a ResizeObserver on the wrapper reads
- * the actual space available and computes a uniform `scale` (never above
- * 1) so the whole stack — cards, spread, depth, tilt geometry — shrinks
- * together and never overflows its container, down to a `compact` (320px)
- * phone width. A single `transform: scale()` on the unscaled stack (kept
- * at its native pixel geometry so the 3D transforms inside it stay
- * correct) is simpler and more robust than re-deriving every dimension in
- * JS, and it scales the AppCard content proportionally too rather than
- * reflowing it at a size AppCard was never designed for.
+ * and mobile... reduce the size of the cards" then, in a second pass,
+ * "make sure... the scale of the cards [is] bigger now on mobile and
+ * smaller windows"): `cardWidth`/`cardHeight` describe the stack's DESKTOP
+ * size; a ResizeObserver on the wrapper reads the actual space available
+ * and computes a uniform `scale` (never above 1) applied to the whole
+ * stack via a single `transform: scale()`. The scale is sized against the
+ * FRONT CARD ALONE (`cardWidth`), not the full multi-card stack footprint
+ * (`cardWidth + spread * (visibleCards-1) * 2`) — sizing against the full
+ * footprint (the first pass) meant a 4-visible-card stack had to shrink
+ * enough that its widest possible extent fit the viewport, which crushed
+ * the front card far smaller than it needed to be on a phone. The wrapper
+ * clips horizontal overflow (`overflow-hidden`), so the fanned-out side
+ * cards that now spill past the viewport at this larger scale are cropped
+ * symmetrically rather than causing page-level horizontal scroll — the
+ * front card (the only one meant to be fully readable at rest) stays
+ * centered and large. A single transform (kept at native pixel geometry
+ * so the 3D transforms inside it stay correct) is simpler and more robust
+ * than re-deriving every dimension in JS, and it scales the AppCard
+ * content proportionally too rather than reflowing it at a size AppCard
+ * was never designed for.
  *
  * CONTROLS, at Alex's direction: previously prev/next sat as bordered,
  * filled circular buttons floating over the card stack's left/right edges,
@@ -45,7 +55,35 @@ import { useEffect, useRef, useState, type ReactNode } from 'react';
  * "plain icon" treatment ThemeToggle.tsx/HeaderMenu.tsx use elsewhere in
  * the chrome (text-fg-tertiary, hover:text-fg, no border/background),
  * sized up from the header's 28px to 32px since these have more room and
- * are the row's only content.
+ * are the row's only content. A second pass adds the SAME `bg-tertiary-hover`
+ * hover fill ThemeToggle.tsx/the TopBar nav links use, at Alex's direction
+ * ("add hover button highlights like the darkmode button").
+ *
+ * CARD CHROME: the per-card wrapper no longer paints its own background,
+ * radius, or box-shadow — those clipped/flattened AppCard's own border,
+ * corner radius, and `shadow-e1`→`shadow-e2` hover shadow (the same shadow
+ * the /apps grid cards use), which is exactly the effect Alex asked this
+ * carousel match ("add the shadow effect of hover like the other cards in
+ * the apps page"). AppCard is already fully self-clipping (its own
+ * `rounded-xl overflow-hidden`), so the wrapper only needs to carry
+ * position/transform/opacity/filter — see `hoverZoom` on AppCard.tsx for
+ * the other half of this (removing the carousel's own redundant zoom).
+ *
+ * `cardHeight` IS MEASURED, NOT TAKEN LITERALLY: AppCard's own height is a
+ * function of its width (a 1:1 square media block plus a fixed-height
+ * icon/title/button footer row, ~80px, independent of card width) — it
+ * isn't a value this component gets to pick. A `cardHeight` prop that
+ * disagrees with what AppCard actually renders at `cardWidth` used to mean
+ * either the footer got clipped (when the wrapper was `overflow: hidden`)
+ * or the card silently overflowed its box (once that was removed for the
+ * hover-shadow fix above) — both worse than just finding out the real
+ * number. A ResizeObserver on the active (offset === 0) card's own
+ * rendered box measures its true height once mounted and on every resize,
+ * and that measurement — not the `cardHeight` prop — is what every card's
+ * box and the stack container actually use. `cardHeight` still sets the
+ * FIRST-PAINT estimate (so there's no 0-height flash before the real
+ * measurement lands) and is the fallback if measurement is somehow
+ * unavailable, but once a real number comes back, that wins.
  */
 export interface DepthCarouselProps {
   items: ReactNode[];
@@ -61,7 +99,13 @@ export interface DepthCarouselProps {
   loop?: boolean;
   cardWidth?: number;
   cardHeight?: number;
+  /** @deprecated no longer applied — the per-card wrapper doesn't paint its
+   *  own radius any more; AppCard supplies its own `rounded-xl`. Kept in the
+   *  prop interface so existing callers don't need an edit. */
   radius?: number;
+  /** @deprecated no longer applied — the per-card wrapper doesn't paint its
+   *  own background any more; AppCard supplies its own `bg-raised`. Kept in
+   *  the prop interface so existing callers don't need an edit. */
   tint?: string;
   duration?: number;
   ease?: string;
@@ -90,8 +134,6 @@ export function DepthCarousel({
   loop = true,
   cardWidth = 300,
   cardHeight = 380,
-  radius = 18,
-  tint = '#05060a',
   duration = 700,
   ease = POWER3_OUT,
   autoplayDelay = 3200,
@@ -101,32 +143,50 @@ export function DepthCarousel({
 }: DepthCarouselProps) {
   const [index, setIndex] = useState(0);
   const [scale, setScale] = useState(1);
+  // Starts as the caller's estimate so first paint has no 0-height flash;
+  // replaced with the active card's real measured height once mounted.
+  const [measuredHeight, setMeasuredHeight] = useState(cardHeight);
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const activeCardRef = useRef<HTMLDivElement>(null);
   const count = items.length;
 
   const dirSign = tiltDirection === 'right' ? 1 : -1;
   const stackWidth = cardWidth + spread * Math.max(visibleCards - 1, 0) * 2;
 
-  // Fit the stack to whatever width the wrapper actually has, down to a
-  // floor that keeps cards legible on the smallest phones (compact, 320px)
-  // rather than letting them shrink to nothing. Never scales UP past 1 —
+  // Fit the FRONT CARD to whatever width the wrapper actually has (not the
+  // full fanned-out stack — see the class comment above for why), down to
+  // a floor that keeps it legible on the smallest phones (compact, 320px)
+  // rather than letting it shrink to nothing. Never scales UP past 1 —
   // this shrinks the desktop-sized geometry to fit, it doesn't magnify it
   // on a huge screen.
   useEffect(() => {
     const el = wrapperRef.current;
     if (!el) return;
-    const MIN_SCALE = 0.5;
+    const MIN_SCALE = 0.6;
     const compute = () => {
       const available = el.clientWidth;
       if (!available) return;
-      const next = Math.min(1, Math.max(available / stackWidth, MIN_SCALE));
+      const next = Math.min(1, Math.max(available / cardWidth, MIN_SCALE));
       setScale(next);
     };
     compute();
     const ro = new ResizeObserver(compute);
     ro.observe(el);
     return () => ro.disconnect();
-  }, [stackWidth]);
+  }, [cardWidth]);
+
+  // Measures the active card's own natural (unscaled) height — see the
+  // "cardHeight IS MEASURED" comment above for why this exists at all.
+  useEffect(() => {
+    const el = activeCardRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver(() => {
+      const h = el.scrollHeight;
+      if (h > 0) setMeasuredHeight(h);
+    });
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [index, cardWidth]);
 
   useEffect(() => {
     onActiveChange?.(index);
@@ -149,26 +209,49 @@ export function DepthCarousel({
 
   return (
     <div ref={wrapperRef} className="mx-auto w-full">
-      {/* Scaled stack: kept at its native (desktop) pixel geometry so the
-          translateX/translateZ/rotateY math above stays correct, then
-          shrunk as one unit via `scale`. The wrapping box is sized to the
-          SCALED footprint so layout (and the controls row below) doesn't
-          reserve the full unscaled width/height. */}
-      <div
-        className="relative mx-auto"
-        style={{ width: stackWidth * scale, height: cardHeight * scale }}
-      >
+      {/* Clip region: ONLY the stack lives inside this — `overflow-hidden`
+          here (not on `wrapperRef` above) so the controls row further down
+          stays in normal flow beneath it rather than being clipped by the
+          same box that crops the stack's fanned-out side cards. `relative`
+          + an explicit height gives the stack's `position: absolute` child
+          below a sized containing block (an absolutely positioned child
+          contributes nothing to its parent's own auto height, so without
+          this the clip region would collapse to 0 and the controls row
+          would ride up over the cards). */}
+      <div className="relative overflow-hidden" style={{ height: measuredHeight * scale }}>
+        {/* Scaled stack: kept at its native (desktop) pixel geometry so the
+            translateX/translateZ/rotateY math above stays correct, then
+            shrunk as one unit via `scale`. `left: 50%` + `translateX(-50%)`,
+            not `mx-auto` — `margin: auto` only centers a box that's
+            NARROWER than its container; at this card-based scale (see the
+            class comment above) the stack's scaled footprint is routinely
+            WIDER than the wrapper, and an overflowing block's auto margins
+            just collapse to 0, which left-aligned the whole stack instead
+            of centering it — the front card was landing dead center of the
+            STACK, not of the wrapper/viewport, visibly off-center on every
+            phone width. `left/translateX` centers correctly either way,
+            and this clip region's `overflow-hidden` then crops the
+            fanned-out side cards symmetrically off both edges. */}
         <div
-          className="absolute left-0 top-0"
+          className="absolute top-0"
           style={{
-            width: stackWidth,
-            height: cardHeight,
-            perspective: `${perspective}px`,
-            transform: `scale(${scale})`,
-            transformOrigin: 'top left',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            width: stackWidth * scale,
+            height: measuredHeight * scale,
           }}
         >
-          {items.map((item, i) => {
+          <div
+            className="absolute left-0 top-0"
+            style={{
+              width: stackWidth,
+              height: measuredHeight,
+              perspective: `${perspective}px`,
+              transform: `scale(${scale})`,
+              transformOrigin: 'top left',
+            }}
+          >
+            {items.map((item, i) => {
             let offset = i - index;
             // Shortest-path offset so looping wraps the short way around the
             // stack instead of visibly sliding all the way across it.
@@ -184,13 +267,16 @@ export function DepthCarousel({
             return (
               <div
                 key={i}
+                ref={offset === 0 ? activeCardRef : undefined}
                 aria-hidden={offset !== 0}
                 style={{
                   position: 'absolute',
-                  inset: 0,
-                  margin: 'auto',
+                  left: 0,
+                  right: 0,
+                  top: 0,
+                  margin: '0 auto',
                   width: cardWidth,
-                  height: cardHeight,
+                  height: 'auto',
                   transform:
                     `translateX(${offset * spread * dirSign}px) ` +
                     `translateZ(${-abs * depth}px) ` +
@@ -201,16 +287,20 @@ export function DepthCarousel({
                   filter: cardBlur ? `blur(${cardBlur}px)` : undefined,
                   zIndex: count - abs,
                   pointerEvents: offset === 0 ? 'auto' : 'none',
-                  borderRadius: radius,
-                  overflow: 'hidden',
-                  backgroundColor: tint,
-                  boxShadow: '0 24px 48px -12px rgba(0,0,0,0.35)',
+                  // No radius/background/box-shadow here any more — AppCard
+                  // is fully self-clipping (its own rounded-xl
+                  // overflow-hidden, border, and shadow-e1 -> shadow-e2
+                  // hover shadow), and painting a second, static shadow on
+                  // this wrapper both clipped that hover shadow (this div
+                  // used to be `overflow: hidden`) and flattened it to one
+                  // constant look regardless of hover state.
                 }}
               >
                 {item}
               </div>
             );
           })}
+        </div>
         </div>
       </div>
 
@@ -229,7 +319,8 @@ export function DepthCarousel({
               data-cursor-label="Previous"
               className={
                 'inline-flex h-control-md w-control-md shrink-0 items-center justify-center ' +
-                'text-fg-tertiary transition duration-fast ease-standard ' +
+                'rounded-control border border-transparent text-fg-tertiary transition ' +
+                'duration-fast ease-standard can-hover:hover:bg-tertiary-hover ' +
                 'can-hover:hover:text-fg motion-safe:active:scale-press'
               }
             >
@@ -265,7 +356,8 @@ export function DepthCarousel({
               data-cursor-label="Next"
               className={
                 'inline-flex h-control-md w-control-md shrink-0 items-center justify-center ' +
-                'text-fg-tertiary transition duration-fast ease-standard ' +
+                'rounded-control border border-transparent text-fg-tertiary transition ' +
+                'duration-fast ease-standard can-hover:hover:bg-tertiary-hover ' +
                 'can-hover:hover:text-fg motion-safe:active:scale-press'
               }
             >

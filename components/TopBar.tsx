@@ -22,6 +22,13 @@ import { nav } from '@/content/site';
  * (17-19:1), inactive at --text-tertiary (~4.8-5.6:1). The gap is deliberately
  * large so the state is immediately obvious.
  *
+ * Hover highlight, at Alex's direction ("add hover button highlights like
+ * the darkmode button"): the wordmark and the three nav links now pick up
+ * the same `rounded-control` + `bg-tertiary-hover` fill ThemeToggle.tsx
+ * uses, in addition to the existing text-color step — a padded hit box
+ * (`px-2 -mx-2`, so the extra padding doesn't visibly shift the wordmark/
+ * nav off their existing pixel position) rather than a bare color change.
+ *
  * Layout:
  * - Compact (<600px): Logo left, theme toggle + kebab right. Nav links don't
  *   sit below the bar at rest any more — Design/Coffee/Apps only appear when
@@ -47,7 +54,8 @@ export function TopBar() {
         aria-current={isActive(n.href) ? 'page' : undefined}
         data-cursor-label={n.label}
         className={
-          'text-label transition-colors duration-fast ease-standard ' +
+          'text-label inline-flex items-center rounded-control px-2 -mx-2 py-1.5 -my-1.5 ' +
+          'transition duration-fast ease-standard can-hover:hover:bg-tertiary-hover ' +
           (isActive(n.href) ? 'font-semibold text-fg' : 'text-fg-tertiary can-hover:hover:text-fg') +
           ' ' + extraClassName
         }
@@ -66,7 +74,8 @@ export function TopBar() {
             aria-current={home ? 'page' : undefined}
             data-cursor-label="Home"
             className={
-              'flex items-center transition-colors duration-fast ease-standard shrink-0 ' +
+              'flex items-center rounded-control px-2 -mx-2 py-1.5 -my-1.5 shrink-0 transition ' +
+              'duration-fast ease-standard can-hover:hover:bg-tertiary-hover ' +
               (home ? 'text-fg' : 'text-fg-secondary can-hover:hover:text-fg')
             }
           >

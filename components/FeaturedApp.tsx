@@ -56,38 +56,53 @@ export function FeaturedApp({ apps }: { apps: App[] }) {
         </div>
       </div>
 
-      {/* cardWidth/cardHeight (357x437) are the DESKTOP size, matching the
-          /apps grid's own AppCard exactly — measured directly off a
-          rendered card there at a real desktop width (355px square media
-          + the ~82px icon/title/button footer row). DepthCarousel scales
-          that geometry down to fit whatever width this wrapper actually
-          has, so the numbers below describe the largest size the stack
-          ever renders at, not a fixed size — at Alex's direction ("give me
-          the size of the cards inside the landing page apps cards, the
-          same size as the apps page apps card... trying to be consistent"
-          + "optimize on all window sizes and mobile").
-          px-4 (was px-16): the carousel's own responsive scaling does the
-          real work now; this padding only keeps the stack off the very
-          edge of the viewport on the smallest phones. */}
+      {/* cardWidth/perspective (400, 3000) are Alex's own spec
+          ("style=\"width: 400px; height: 437px; perspective: 3000px;\"")
+          — DESKTOP-ceiling values; DepthCarousel's own responsive scaling
+          (see that file) shrinks them to fit any viewport, sized against
+          the front card alone so it stays comfortably large on mobile
+          rather than the whole 4-card stack's footprint. cardHeight={480}
+          (not the pasted 437): 437 was tuned to a 357px-wide card
+          (355px square media + ~82px footer) from an earlier round; at
+          400px wide, AppCard's own square media alone is already 400px,
+          so 437 would either clip ~43px off the button row or force the
+          video out of its 1:1 crop. DepthCarousel now MEASURES the card's
+          real rendered height itself and uses that over whatever's passed
+          — see its own comment for why — so this 480 is only the
+          first-paint estimate (matches the true measured value almost
+          exactly, so there's no visible resize once the real number
+          lands).
+          hoverZoom={false} on each AppCard: the carousel's own
+          scale/tilt/translate is already this card's hover-equivalent
+          motion, so AppCard's usual 2% hover grow is turned off here — at
+          Alex's direction ("remove the zoom in on hover"). AppCard's
+          shadow-e1 -> shadow-e2 hover shadow (same as the /apps grid)
+          still applies.
+          px-4: the carousel's own responsive scaling does the real work
+          now; this padding only keeps the stack off the very edge of the
+          viewport on the smallest phones. */}
       <div className="mt-12 px-4">
         <DepthCarousel
           items={apps.map((app) => (
-            <AppCard key={app.slug} app={app} playing={apps[activeIndex]?.slug === app.slug} />
+            <AppCard
+              key={app.slug}
+              app={app}
+              playing={apps[activeIndex]?.slug === app.slug}
+              hoverZoom={false}
+            />
           ))}
           depth={220}
           spread={90}
           tilt={22}
           tiltDirection="right"
-          perspective={1400}
+          perspective={3000}
           visibleCards={4}
           falloff={0.2}
           blur={6}
           autoplay={false}
           loop
-          cardWidth={357}
-          cardHeight={437}
-          radius={18}
-          tint="#05060a"
+          cardWidth={400}
+          cardHeight={480}
           duration={700}
           autoplayDelay={3200}
           showControls
