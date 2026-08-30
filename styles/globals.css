@@ -94,28 +94,22 @@
      .cursor-drop-body) rather than centered, so it reads as a highlight
      from a light source rather than a flat glow. */
   --water-sheen: rgba(255, 255, 255, 0.16);
-  /* Iridescent wash — three colour washes (purple, cyan, yellow) layered
-     under the white sheen above, at Alex's direction: an actual soap-bubble
-     film, "saturated colors... applied on top like an actual bubble", not
-     the washed-out white/gray first pass this replaced (pale pink + pale
-     yellow at 0.10 alpha read as grayish haze rather than colour — this
-     version pushes real saturation and higher alpha so the hue reads
-     clearly while the wash stays translucent, same as light actually
-     catching a soap film). Their POSITIONS animate slowly (see
-     .cursor-drop-body's background-position keyframe) so the colour drifts
-     across the surface like a real interference pattern — a deliberate,
-     documented exception to Principle 14 (continuous motion, not driven by
-     the pointer), same category as the landing page's entrance sequence:
-     small, bounded, and stated here rather than silently added. Same
-     values in light and dark — at Alex's direction, this needs to read in
-     both, not just dark ("think about an actual bubble with light making
-     the bubble colors but still being transparent"). */
-  /* Yellow deliberately the strongest of the three (higher alpha AND a
-     wider gradient reach in .cursor-drop-body below) — at Alex's direction,
-     "more yellow gradient... compared to the cyan or the purple". */
-  --water-iris-purple: rgba(178, 110, 255, 0.20);
-  --water-iris-cyan: rgba(70, 220, 255, 0.18);
-  --water-iris-yellow: rgba(255, 210, 70, 0.28);
+  /* Thin-film rim — a real soap bubble's colour lives ONLY in a thin ring at
+     its very edge; the rest of the film is essentially invisible, which is
+     exactly what Alex asked for ("the middle... completely transparent...
+     the inside, the majority, is completely transparent" with the rainbow
+     confined to "only on the outer edges"). Five saturated stops
+     (purple -> navy -> cyan -> yellow -> green) feed a conic-gradient that
+     sweeps all the way around the drop; .cursor-drop-body then masks that
+     gradient down to just the outer few percent of the radius (see the
+     `mask-image`/`-webkit-mask-image` there) so the fill is genuinely
+     transparent everywhere except that rim. Same values in light and
+     dark — at Alex's direction, this needs to read identically in both. */
+  --water-ring-purple: #b46eff;
+  --water-ring-navy: #2b3a8f;
+  --water-ring-cyan: #38d6ff;
+  --water-ring-yellow: #ffd93d;
+  --water-ring-green: #4ade80;
   /* Darker than the drop's original light-mode shadow (0.40/0.22), at
      Alex's direction — the drop was hard to spot at a glance against pale
      surfaces; a stronger cast shadow is the fix rather than a border or a
@@ -164,8 +158,8 @@
        to spot at a glance against near-black surfaces. Still soft (the box-
        shadow blur radius below does the rest of the work), just brighter. */
     --water-shadow-glow: rgba(255, 255, 255, 0.16);
-    /* --water-iris-* deliberately NOT overridden here — same saturated
-       purple/cyan/yellow in both themes, see the :root block above. */
+    /* --water-ring-* deliberately NOT overridden here — same values in
+       both themes, see the :root block above. */
   }
 }
 
@@ -181,7 +175,7 @@
   --water-contact: rgba(0, 0, 0, 0.42);
   --water-rim-dark: rgba(0, 0, 0, 0.22);
   --water-shadow-glow: rgba(255, 255, 255, 0.16);
-  /* --water-iris-* deliberately NOT overridden here either — see :root. */
+  /* --water-ring-* deliberately NOT overridden here either — see :root. */
 }
 
 /* --- Landing-page hero photo, theme-aware (components/HeroPhoto.tsx) -------
@@ -493,33 +487,28 @@ html[data-theme-transition] * {
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  /* Glass sheen: a soft, off-center highlight (light hitting the upper-left
-     of a curved surface) layered over the flat water-body tint. A perfectly
-     flat, evenly-lit fill reads as a sticker; this asymmetric brightness is
-     what makes it read as a curved, glassy surface instead. Kept soft
-     (transparent past 55% of the drop) so it never competes with the two
-     hard specular glints in .cursor-drop-gloss below. */
-  /* Layer order back-to-front: base tint, three slow-drifting iridescent
-     colour washes (purple, cyan, yellow — see --water-iris-* above), then
-     the white sheen on top. Only the three iridescent layers' positions
-     move; the sheen and the base tint stay put at every keyframe stop
-     below, so the drop's own "light source" reads as fixed while the
-     bubble-film colour drifts underneath it. background-size is oversized
-     (220%) on the moving layers so the animated position actually travels
-     across the drop's surface rather than just nudging a gradient that's
-     already covering it edge-to-edge. */
-  background:
-    radial-gradient(circle at 32% 26%, var(--water-sheen), transparent 55%),
-    radial-gradient(circle, var(--water-iris-purple), transparent 60%),
-    radial-gradient(circle, var(--water-iris-cyan), transparent 60%),
-    /* Reaches further (70% vs the other two's 60%) on top of its own higher
-       alpha above — yellow should read as the dominant hue, not an equal
-       third. */
-    radial-gradient(circle, var(--water-iris-yellow), transparent 70%),
-    var(--water-body);
-  background-size: 100% 100%, 220% 220%, 220% 220%, 220% 220%, 100% 100%;
-  background-repeat: no-repeat;
-  animation: water-iridescent 22s ease-in-out infinite alternate;
+  /* Thin-film rim, not a filled disc — at Alex's direction, matching a
+     real soap bubble's own optics: colour lives only in a thin ring right
+     at the edge, and "the inside, the majority, is completely transparent".
+     A conic-gradient sweeps the five ring hues all the way around
+     (purple -> navy -> cyan -> yellow -> green -> back to purple, seamless
+     loop), then `mask-image` cuts everything below ~85% of the radius to
+     fully transparent, leaving only a thin band near the very edge — the
+     mask is alpha-based (transparent = hidden, opaque = shown), so the
+     center is genuinely transparent (you see the real page through it,
+     via the SVG lens filter below), not just painted a low-opacity white.
+     Same values in both themes, per Alex's direction. */
+  background: conic-gradient(
+    from 0deg,
+    var(--water-ring-purple),
+    var(--water-ring-navy),
+    var(--water-ring-cyan),
+    var(--water-ring-yellow),
+    var(--water-ring-green),
+    var(--water-ring-purple)
+  );
+  mask-image: radial-gradient(circle, transparent 0%, transparent 78%, black 90%, black 100%);
+  -webkit-mask-image: radial-gradient(circle, transparent 0%, transparent 78%, black 90%, black 100%);
   backdrop-filter: url(#dropletLens) saturate(1.06);
   /* Safari does not support an SVG filter reference in backdrop-filter, so it
      gets a whisper of blur instead of true refraction. The rim, glints, shadow
@@ -553,23 +542,6 @@ html[data-theme-transition] * {
        spottable at a glance, especially right after the cursor reappears
        (see the visibilitychange fix in Cursor.tsx). */
     0 0 14px 1px var(--water-shadow-glow);
-}
-
-/* Slow drift for the three iridescent colour-wash layers above — three
-   stops, alternating, so the purple/cyan/yellow washes swap which side of
-   the drop they favour rather than just sliding in one direction and
-   snapping back. The sheen/base-tint layers repeat their single position at
-   every stop (comma positions 1 and 5) so only layers 2-4 actually move.
-   22s is deliberately glacial: at Alex's direction this should read as a
-   bubble's own film shifting, not as a loading shimmer — noticeable only
-   if you watch the cursor sit still for a while. */
-@keyframes water-iridescent {
-  0%   { background-position: 32% 26%, 15% 20%, 85% 30%, 50% 85%, 0 0; }
-  50%  { background-position: 32% 26%, 70% 60%, 20% 70%, 80% 20%, 0 0; }
-  100% { background-position: 32% 26%, 45% 85%, 75% 15%, 15% 45%, 0 0; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .cursor-drop-body { animation: none; }
 }
 
 /* Specular glints. Deliberately NOT inside the rotating layer: as the drop
