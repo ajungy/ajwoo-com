@@ -67,12 +67,22 @@ export default function Home() {
                   secondary button treatment like the email button") —
                   same `secondary` Action variant every other button in
                   this row uses, just a square hit box (`w-control-md`
-                  matching its own `h-control-md`, `px-0` overriding the
+                  matching its own `h-control-md`, `!px-0` overriding the
                   variant's usual `px-6`) around the brand glyph instead of
-                  text. `cursorLabel` still carries the real name
-                  ("LinkedIn"/"Instagram") for the custom cursor and for
-                  assistive tech, even though the visible content is now
-                  icon-only. */}
+                  text. `!px-0`, not plain `px-0`: Action.tsx appends this
+                  className string AFTER the variant's own classes in the
+                  DOM, but that tells Tailwind nothing about which wins in
+                  the compiled stylesheet — `.px-0`/`.px-6` are equal
+                  specificity, and generation order (not class-attribute
+                  order) decided it, which meant `.px-6` silently won,
+                  squeezed ~24px of padding into a 40px-wide button, and
+                  crushed the icon down to a sliver. `!` forces this
+                  utility to `!important`, the one reliable way to
+                  override another utility targeting the exact same
+                  property from here. `cursorLabel` still carries the
+                  real name ("LinkedIn"/"Instagram") for the custom cursor
+                  and for assistive tech, even though the visible content
+                  is now icon-only. */}
               {social.map((s) => (
                 <Action
                   key={s.label}
@@ -80,7 +90,7 @@ export default function Home() {
                   external={s.external}
                   variant="secondary"
                   cursorLabel={s.label}
-                  className="w-control-md px-0"
+                  className="w-control-md !px-0"
                 >
                   {s.label === 'LinkedIn' ? (
                     <LinkedInLogo className="h-5 w-5" />

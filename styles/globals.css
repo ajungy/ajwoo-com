@@ -408,8 +408,8 @@ html[data-theme-transition] * {
    differ between them — exactly how this codebase already works (Cursor.tsx
    drives width/height/border-radius per frame; nothing here needs to know
    which state it's in). No conic-gradient, no mask-image: the rim colour
-   comes entirely from seven inset box-shadow layers at fixed pixel offsets,
-   copied byte-for-byte from the Figma dev-mode output. Re-synced THREE
+   comes entirely from inset box-shadow layers at fixed pixel offsets,
+   copied byte-for-byte from the Figma dev-mode output. Re-synced FOUR
    times now (Alex tuned the file's colours/opacities/blur radii after the
    first pass — down from eight layers to seven, the two purple layers
    merged into one, brighter/more saturated across the board; then via
@@ -417,11 +417,17 @@ html[data-theme-transition] * {
    .4→.6, cyan/purple/gold .5→.7, the black contact shadow .2→.4; then a
    third time — Alex: "make the cursor opacity higher for the colors in
    the bubble" — gold/cyan/purple now fully opaque (.7→1), green .6→.8,
-   the black contact shadow .4→.7. Layer order also now matches the
-   Figma output exactly (gold, cyan, purple, green, white, black-contact,
-   black-rim), since these are semi-transparent insets and stacking order
-   changes the blend. Pull get_design_context on this node again if the
-   file changes further. */
+   the black contact shadow .4→.7; then a fourth — Alex: "adjust the
+   colors of the cursor to be close to the figma example" — the file
+   itself had changed since the last pull: cyan's blur tightened
+   2px→1px, gold is now TWO separate inset layers instead of one, green
+   and the black contact shadow are now fully OPAQUE hex/keyword colors
+   rather than semi-transparent rgba(), and there's a second, tighter
+   black contact layer alongside the wider one — eight layers total now,
+   not seven. Layer order matches the Figma output exactly (cyan, purple,
+   gold ×2, green, black-contact ×2, white rim), since these are inset
+   and stacking order changes the blend. Pull get_design_context on this
+   node again if the file changes further. */
 .cursor-drop-body {
   position: absolute;
   inset: 0;
@@ -434,13 +440,14 @@ html[data-theme-transition] * {
      optically accurate one. */
   -webkit-backdrop-filter: saturate(1.06);
   box-shadow:
-    inset 0.5px 0.5px 0.5px 0px #ffcc00,
-    inset 0px -0.5px 2px 0px #00eaff,
+    inset 0px -0.5px 1px 0px #00eaff,
     inset -1px -1.5px 2px 0px #cc00ff,
-    inset -1px 0px 2px 0px rgba(89, 255, 0, 0.8),
-    inset 0px 0px 3px 0px white,
-    inset 0.5px 0.5px 2px 0px rgba(0, 0, 0, 0.7),
-    inset 0px 0px 0.5px 0px black;
+    inset 0.5px 0px 0.5px 0px #ffcc00,
+    inset -1px 0px 2px 0px #59ff00,
+    inset 0.5px 0.5px 0.5px 0px #ffcc00,
+    inset 0px -1px 3px 0px black,
+    inset 0px 0px 1px 0px black,
+    inset 0px 0px 3px 0px white;
 }
 
 /* Specular glints. Deliberately NOT inside the rotating layer: as the drop
