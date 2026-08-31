@@ -23,7 +23,7 @@ export default function AppsPage() {
           edge does; the gap that actually needs to feel generous is the one
           before real content starts. */}
       <section className="pt-12 pb-16">
-        <p className="text-title font-bold text-fg">Local. Functional. Minimal.</p>
+        <p className="text-title font-bold text-fg">On-device. Functional. Minimal.</p>
         <p className="mt-4 max-w-content text-body-lg text-fg-secondary">
           Every app runs entirely on-device, with no cloud connection. Nothing
           ever leaves your machine. That constraint is what keeps them fast,

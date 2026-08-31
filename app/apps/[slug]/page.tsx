@@ -32,29 +32,37 @@ export default function AppPage({ params }: { params: { slug: string } }) {
           other two, so a second back affordance sitting alone above the
           fold wasn't earning its space (same reasoning as the /work pages). */}
       <header className="flex flex-col gap-8 pt-12 pb-12 medium:flex-row medium:items-start">
-        {/* h-24/w-24 (96px), up from 64px — bigger at Alex's direction, now
-            that this is the ONLY visual identity in the header (the
-            platform/trigger caption line that used to sit here is gone). */}
+        {/* h-28/w-28 (112px), up from 96px — bigger again at Alex's
+            direction ("make the logo a little bit larger"). */}
         {app.iconImage ? (
           <img
             src={`/img/${app.iconImage}-256.webp`}
             alt=""
-            width={96}
-            height={96}
-            className="h-24 w-24 shrink-0 rounded-xl border border-line-subtle object-contain"
+            width={112}
+            height={112}
+            className="h-28 w-28 shrink-0 rounded-xl border border-line-subtle object-contain"
           />
         ) : (
-          <span className="flex h-24 w-24 shrink-0 items-center justify-center rounded-xl border border-line-subtle bg-sunken text-fg">
-            <AppIcon name={app.icon} className="h-12 w-12" />
+          <span className="flex h-28 w-28 shrink-0 items-center justify-center rounded-xl border border-line-subtle bg-sunken text-fg">
+            <AppIcon name={app.icon} className="h-14 w-14" />
           </span>
         )}
         {/* Title/description/Waitlist compressed to fit inside the icon's
-            own 96px height, at Alex's direction — text-h2 instead of
-            text-h1 (30px line-height instead of 38px) and tight mt-2 gaps
-            throughout, rather than the looser mt-4/mt-6 this used to use. */}
+            own height, at Alex's direction — text-h2 instead of text-h1
+            (30px line-height instead of 38px), and tighter still (mt-1 on
+            the description, was mt-2) since Alex separately asked for
+            "the top of the title and the... bottom of the button to
+            align and fit the size of the app logo": `medium:items-start`
+            already lines the title's top up with the icon's top, so
+            closing this column's own internal gaps is what brings the
+            button's bottom closer to the icon's bottom too — a beta app
+            appends " Beta" here, matching the same suffix its /apps grid
+            card already shows next to its name, at Alex's direction ("if
+            the card has the beta... tag next to the title, can you also
+            put beta inside the apps pages as well"). */}
         <div className="flex-1">
-          <h1 className="text-h2 text-fg">{app.name}</h1>
-          <p className="mt-2 max-w-content text-body-lg text-fg-secondary">{app.description}</p>
+          <h1 className="text-h2 text-fg">{app.name}{app.beta ? ' Beta' : ''}</h1>
+          <p className="mt-1 max-w-content text-body-lg text-fg-secondary">{app.description}</p>
 
           {/* The platform/trigger caption line that used to sit here is
               gone, at Alex's direction — the smallest, least load-bearing
@@ -69,7 +77,7 @@ export default function AppPage({ params }: { params: { slug: string } }) {
               confident, one-primary-per-view action a real download/
               purchase would be (Principle 9: real separation, never
               default-focused, a plain navigation so it can't double-fire). */}
-          <div className="mt-2">
+          <div className="mt-1.5">
             {app.openUrl ? (
               <Action href={app.openUrl} external variant="secondary" cursorLabel="Open">
                 Open
@@ -154,9 +162,16 @@ export default function AppPage({ params }: { params: { slug: string } }) {
             </div>
           );
         })}
+        {/* bg-raised + a border, not bg-sunken — at Alex's direction
+            ("the tags... are more visible... the dark gray is not
+            visible against the black background"): bg-sunken is a
+            near-black recessed surface in dark mode, close enough to
+            the page's own background that the pill barely read as a
+            pill at all. bg-raised is the same lighter surface AppCard
+            itself uses, with its own border for a clear edge. */}
         <ul className="flex flex-wrap gap-3 pt-2">
           {app.traits.map((t) => (
-            <li key={t} className="rounded-xs bg-sunken px-4 py-2 text-caption text-fg-secondary">
+            <li key={t} className="rounded-xs border border-line-subtle bg-raised px-4 py-2 text-caption text-fg-secondary">
               {t}
             </li>
           ))}

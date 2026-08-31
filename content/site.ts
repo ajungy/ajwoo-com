@@ -89,15 +89,35 @@ export const social = [
 // the most load-bearing and broadly applicable, not the first ten in the
 // file. Full numbering preserved so a reader who wants the rest knows
 // exactly what section to go find.
+// Five bodies reworded at Alex's direction, in place — see each entry's
+// own note. Word counts kept close to the originals throughout.
 export const principles = [
   { n: 1, title: 'Solve the job to be done', body: 'Know what the user needs, and the shortest honest path there. If it doesn\'t serve that, it\'s decoration.' },
   { n: 2, title: 'Achieve the goal', body: 'Name every goal in play and rank them. The user\'s goal leads; nothing else competes with it for attention.' },
   { n: 3, title: 'One hierarchy, one emphasis', body: 'Exactly one thing is the most important thing on a screen, and nothing else fights it for attention.' },
   { n: 4, title: 'Clear start, clear end', body: 'Every experience has one unmistakable starting point and an unambiguous finish. Home is always reachable.' },
-  { n: 5, title: 'Be honest', body: 'Show what\'s actually happening, accurately. Never softened into neutral, never dressed up as a triumph.' },
-  { n: 6, title: 'Respect the gaze', body: 'Identity top-left, global actions top-right. The eye never has to backtrack to find the next step.' },
-  { n: 7, title: 'Everything comprehensible', body: 'Plain words over clever ones. A label describes the outcome, not the mechanism. No jargon the user didn\'t bring.' },
+  // Was "Show what's actually happening, accurately. Never softened into
+  // neutral, never dressed up as a triumph." — simplified: "never lie to
+  // the user" said plainly, "help them understand" instead of "softened/
+  // dressed up", at Alex's direction ("say something like never lie to
+  // the users... hoping users understand what's actually happening, with
+  // honesty").
+  { n: 5, title: 'Be honest', body: 'Never lie to the user. Help them understand what\'s actually happening, with honesty.' },
+  // Was "Identity top-left, global actions top-right. The eye never has to
+  // backtrack to find the next step." — at Alex's direction: state the
+  // actual reading-direction assumption behind the layout rule, note the
+  // exception, and keep "elements follow the user's natural gaze" as the
+  // throughline.
+  { n: 6, title: 'Respect the gaze', body: 'Most people read left to right, top to bottom (some don\'t, so adjust for them). Place elements along that natural gaze, so the eye finds the next step fast.' },
+  // Was "...No jargon the user didn't bring." — at Alex's direction, made
+  // the standard concrete: picture someone trying this for the first time.
+  { n: 7, title: 'Everything comprehensible', body: 'Plain words over clever ones. A label describes the outcome, not the mechanism. No jargon: picture the user trying this for the first time.' },
   { n: 8, title: 'Nothing invisible', body: 'Every interactive thing has a visible affordance at rest, not just a hint that appears on hover.' },
-  { n: 9, title: 'Color carries meaning', body: 'Green succeeded, amber needs attention, red failed. Colors carry intentional meaning, never just decoration.' },
-  { n: 10, title: 'Space is your friend', body: 'Group with distance, not lines. Use the same spacing scale for the same relationship everywhere.' },
+  // "amber" -> "yellow", at Alex's direction.
+  { n: 9, title: 'Color carries meaning', body: 'Green succeeded, yellow needs attention, red failed. Colors carry intentional meaning, never just decoration.' },
+  // Was "Group with distance, not lines. Use the same spacing scale for
+  // the same relationship everywhere." — "not lines" dropped, "spacing is
+  // a language" added, at Alex's direction ("remove not lines... include
+  // spacing is a language... group with distance and clear spacing").
+  { n: 10, title: 'Space is your friend', body: 'Spacing is a language: group with distance and clear spacing. Use the same spacing scale for the same relationship everywhere.' },
 ] as const;

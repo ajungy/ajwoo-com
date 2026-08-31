@@ -1,4 +1,5 @@
 import { StaggerReveal } from './StaggerReveal';
+import { TextAnimate } from './TextAnimate';
 import { principles } from '@/content/site';
 
 /**
@@ -33,7 +34,15 @@ export function DesignPrinciples() {
     <section className="mt-[245px]">
       <div className="grid grid-cols-1 large:grid-cols-4">
         <div className="large:col-start-2 large:col-span-2">
-          <h2 className="text-h3 text-fg">Favorite design principles</h2>
+          {/* Same "blurInUp" TextAnimate the headline uses, at Alex's
+              direction ("use the same animation effect... for the text
+              appearing for favorite design principles") — `trigger="scroll"`
+              since this heading sits well below the fold and needs its
+              own reveal-on-scroll rather than the landing page's one-time
+              load sequence (see TextAnimate.tsx's own comment). */}
+          <h2 className="text-h3 text-fg">
+            <TextAnimate trigger="scroll">Favorite design principles</TextAnimate>
+          </h2>
           <StaggerReveal className="mt-8 flex flex-col gap-6">
             {principles.map((p) => (
               <PrincipleRow key={p.n} n={p.n} title={p.title} body={p.body} />
@@ -48,8 +57,16 @@ export function DesignPrinciples() {
 function PrincipleRow({ n, title, body }: { n: number; title: string; body: string }) {
   return (
     <div className="flex gap-5">
-      {/* Plain 1–10, not 01–10 — no zero-padding. */}
-      <span className="w-6 shrink-0 text-body text-fg-tertiary tabular-nums">
+      {/* Plain 1–10, not 01–10 — no zero-padding. font-sans, not
+          tabular-nums: tabular-nums is only a digit-width feature (for
+          columns of numbers that need to align), but it also swaps in a
+          font's alternate tabular-figure glyphs, which visibly read as a
+          different typeface next to the title/body's own plain digits —
+          at Alex's direction ("the typography for numbering the
+          principles... doesn't match the other typography... use the same
+          font"). These numbers aren't a column that needs alignment, so
+          the feature was buying nothing and costing a mismatch. */}
+      <span className="w-6 shrink-0 font-sans text-body text-fg-tertiary">
         {n}
       </span>
       <div>

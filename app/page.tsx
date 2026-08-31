@@ -1,4 +1,5 @@
 import { Action } from '@/components/Action';
+import { LinkedInLogo, InstagramLogo } from '@/components/Icons';
 import { BookTimeAction } from '@/components/BookTimeAction';
 import { HeroPhoto } from '@/components/HeroPhoto';
 import { FeaturedApp } from '@/components/FeaturedApp';
@@ -60,10 +61,18 @@ export default function Home() {
                   inline. */}
               <BookTimeAction />
               <CopyEmailButton />
-              {/* showExternalIcon dropped, at Alex's direction — the
-                  linkout glyph next to LinkedIn/Instagram is gone; the
-                  label alone plus `external` (which still opens a new
-                  tab) is enough. */}
+              {/* Icon-only, at Alex's direction ("change the LinkedIn and
+                  Instagram buttons into a LinkedIn logo button and an
+                  Instagram logo button... it should also have the
+                  secondary button treatment like the email button") —
+                  same `secondary` Action variant every other button in
+                  this row uses, just a square hit box (`w-control-md`
+                  matching its own `h-control-md`, `px-0` overriding the
+                  variant's usual `px-6`) around the brand glyph instead of
+                  text. `cursorLabel` still carries the real name
+                  ("LinkedIn"/"Instagram") for the custom cursor and for
+                  assistive tech, even though the visible content is now
+                  icon-only. */}
               {social.map((s) => (
                 <Action
                   key={s.label}
@@ -71,8 +80,14 @@ export default function Home() {
                   external={s.external}
                   variant="secondary"
                   cursorLabel={s.label}
+                  className="w-control-md px-0"
                 >
-                  {s.label}
+                  {s.label === 'LinkedIn' ? (
+                    <LinkedInLogo className="h-5 w-5" />
+                  ) : (
+                    <InstagramLogo className="h-5 w-5" />
+                  )}
+                  <span className="sr-only">{s.label}</span>
                 </Action>
               ))}
             </StaggerReveal>
@@ -87,11 +102,24 @@ export default function Home() {
           <div className="mt-3">
             {/* Regular weight throughout except the emphasis clause, which
                 steps up to medium (500) — weight only, same size and family,
-                at Alex's direction. */}
+                at Alex's direction. Same TextAnimate "blurInUp" reveal the
+                headline uses, `by="word"` (not per-character — at ~40
+                words the bio would take several seconds to finish
+                otherwise, see TextAnimate.tsx's own comment), sequenced
+                with `delayMs` to start only once the headline (~1000ms)
+                and the button row beside it have finished, at Alex's
+                direction ("animate the text appearing for hi, I'm Alex...
+                after the motion for enable creativity and the four
+                buttons below... has animated in"). */}
             <p className="text-body-lg text-fg">
-              {site.greeting} <span className="font-medium">{site.greetingEmphasis}</span>
+              <TextAnimate by="word" delayMs={1400}>{site.greeting}</TextAnimate>{' '}
+              <span className="font-medium">
+                <TextAnimate by="word" delayMs={1650}>{site.greetingEmphasis}</TextAnimate>
+              </span>
             </p>
-            <p className="mt-4 max-w-content text-body-lg text-fg-secondary">{site.bio}</p>
+            <p className="mt-4 max-w-content text-body-lg text-fg-secondary">
+              <TextAnimate by="word" delayMs={2200} stepMs={28}>{site.bio}</TextAnimate>
+            </p>
           </div>
         </section>
       </div>

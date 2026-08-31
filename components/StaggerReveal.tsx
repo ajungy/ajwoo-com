@@ -62,6 +62,16 @@ export function StaggerReveal({ className = '', children }: { className?: string
       return;
     }
 
+    // threshold 0 + a POSITIVE bottom rootMargin (was 0.1 / a NEGATIVE
+    // -10%), at Alex's direction ("make the text appear a little bit
+    // sooner... if the page scroll shows the title, animate as that
+    // happens"). The previous negative margin shrank the observed area
+    // above the viewport's bottom edge, which meant a section had to
+    // scroll noticeably PAST the fold before it counted as "intersecting"
+    // — the opposite of "sooner". A positive margin extends the observed
+    // area 150px BELOW the actual viewport, so the reveal fires while the
+    // section is still just approaching the bottom edge, reading as
+    // "appears as it comes into view" rather than "appears after a beat".
     const io = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -70,7 +80,7 @@ export function StaggerReveal({ className = '', children }: { className?: string
           io.disconnect();
         }
       },
-      { threshold: 0.1, rootMargin: '0px 0px -10% 0px' },
+      { threshold: 0, rootMargin: '0px 0px 150px 0px' },
     );
     io.observe(el);
     return () => io.disconnect();

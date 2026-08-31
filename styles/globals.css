@@ -409,14 +409,18 @@ html[data-theme-transition] * {
    drives width/height/border-radius per frame; nothing here needs to know
    which state it's in). No conic-gradient, no mask-image: the rim colour
    comes entirely from seven inset box-shadow layers at fixed pixel offsets,
-   copied byte-for-byte from the Figma dev-mode output. Re-synced TWICE now
-   (Alex tuned the file's colours/opacities/blur radii after the first
-   pass — down from eight layers to seven, the two purple layers merged
-   into one, brighter/more saturated across the board; then again via
-   get_design_context on node 495:2682 — every layer's opacity raised
-   further: green .4→.6, cyan/purple/gold .5→.7, the black contact shadow
-   .2→.4 — same seven offsets/blur radii/hues, just more saturated rim
-   colour throughout). Pull get_design_context on this node again if the
+   copied byte-for-byte from the Figma dev-mode output. Re-synced THREE
+   times now (Alex tuned the file's colours/opacities/blur radii after the
+   first pass — down from eight layers to seven, the two purple layers
+   merged into one, brighter/more saturated across the board; then via
+   get_design_context — every layer's opacity raised further: green
+   .4→.6, cyan/purple/gold .5→.7, the black contact shadow .2→.4; then a
+   third time — Alex: "make the cursor opacity higher for the colors in
+   the bubble" — gold/cyan/purple now fully opaque (.7→1), green .6→.8,
+   the black contact shadow .4→.7. Layer order also now matches the
+   Figma output exactly (gold, cyan, purple, green, white, black-contact,
+   black-rim), since these are semi-transparent insets and stacking order
+   changes the blend. Pull get_design_context on this node again if the
    file changes further. */
 .cursor-drop-body {
   position: absolute;
@@ -430,12 +434,12 @@ html[data-theme-transition] * {
      optically accurate one. */
   -webkit-backdrop-filter: saturate(1.06);
   box-shadow:
-    inset -1px 0px 2px 0px rgba(89, 255, 0, 0.6),
-    inset 0px -0.5px 2px 0px rgba(0, 234, 255, 0.7),
-    inset -1px -1.5px 2px 0px rgba(204, 0, 255, 0.7),
-    inset 0.5px 0.5px 2px 0px rgba(0, 0, 0, 0.4),
-    inset 0.5px 0.5px 0.5px 0px rgba(255, 204, 0, 0.7),
+    inset 0.5px 0.5px 0.5px 0px #ffcc00,
+    inset 0px -0.5px 2px 0px #00eaff,
+    inset -1px -1.5px 2px 0px #cc00ff,
+    inset -1px 0px 2px 0px rgba(89, 255, 0, 0.8),
     inset 0px 0px 3px 0px white,
+    inset 0.5px 0.5px 2px 0px rgba(0, 0, 0, 0.7),
     inset 0px 0px 0.5px 0px black;
 }
 
@@ -522,36 +526,42 @@ html[data-theme-transition] * {
   letter-spacing: -0.01em;
 }
 
-/* --- TextAnimate ("blurInUp", by character) — components/TextAnimate.tsx,
-   used on the "Enable creativity." headline only, at Alex's direction. See
-   that file's comment for why this is plain CSS rather than the actual
-   Magic UI component (which runs on framer-motion, rejected outright by
-   this project's stack decisions) and why reusing the entrance sequence's
-   existing gate isn't a new Principle 14 exception. Default state (no
-   [data-entrance="run"]) is just a plain inline-block glyph, fully
-   visible, no motion — the animation only exists inside the gated rule
-   below. */
+/* --- TextAnimate ("blurInUp", by character or word) — components/
+   TextAnimate.tsx. Started on the "Enable creativity." headline only;
+   reused ("same animation effect") for the greeting/bio paragraph and the
+   "Favorite design principles" heading, at Alex's direction. See that
+   file's comment for why this is plain CSS rather than the actual Magic
+   UI component (which runs on framer-motion, rejected outright by this
+   project's stack decisions), for the `by`/`trigger`/`delayMs` props, and
+   for why reusing the entrance sequence's existing gate isn't a new
+   Principle 14 exception. Default state (neither gate below active) is
+   just a plain inline-block glyph, fully visible, no motion — the
+   animation only exists inside the two gated rules below.
+   --char-delay/--char-step are set per instance by TextAnimate.tsx
+   (`delayMs`/`stepMs` props) — --char-delay sequences a whole block to
+   start after an earlier one finishes (e.g. the bio paragraph starting
+   only once the headline above it has finished); --char-step is the
+   per-unit stagger, smaller for individual characters (the headline, the
+   principles heading) than for whole words (the longer bio paragraph, so
+   a ~40-word sentence doesn't take several seconds to finish revealing). */
 .text-animate-char {
   display: inline-block;
   white-space: pre;
 }
-[data-entrance="run"] .text-animate-char {
+[data-entrance="run"] .text-animate-char,
+.text-animate-visible .text-animate-char {
   opacity: 0;
   filter: blur(10px);
   transform: translateY(20px);
   animation: text-animate-blur-in-up 600ms var(--e-standard) both;
-  /* Staggered per character via the --char-i custom property TextAnimate.tsx
-     sets on each span — 22ms apart, so "Enable creativity." (18 characters)
-     finishes its own reveal in well under half a second on top of each
-     character's own 600ms run, reading as a fast ripple rather than a slow
-     typewriter. */
-  animation-delay: calc(var(--char-i) * 22ms);
+  animation-delay: calc(var(--char-delay, 0ms) + var(--char-i) * var(--char-step, 22ms));
 }
 @keyframes text-animate-blur-in-up {
   to { opacity: 1; filter: blur(0); transform: none; }
 }
 @media (prefers-reduced-motion: reduce) {
-  [data-entrance="run"] .text-animate-char {
+  [data-entrance="run"] .text-animate-char,
+  .text-animate-visible .text-animate-char {
     opacity: 1;
     filter: none;
     transform: none;

@@ -88,6 +88,14 @@ export type App = {
 // Convert leads the array — at Alex's direction, ordering is now
 // Convert, Capture, Dictate, Narrate — so it renders as the /apps grid's
 // first (top-left) card.
+//
+// A later pass removed every em dash from this file's RENDERED copy (Alex:
+// "prevent using em dashes everywhere on the website... not a single em
+// dash"), rewrote Dictate's and Narrate's detail copy from scripts Alex
+// supplied (Narrate's "please edit more" — lightly tightened rather than
+// pasted verbatim), and reworded Convert's "Bulk, not one at a time" label
+// and Capture's closing line. Em dashes inside `//` and `/** */` comments
+// are untouched — they never render on the page, only in this source file.
 export const apps: App[] = [
   {
     slug: 'convert',
@@ -108,10 +116,10 @@ export const apps: App[] = [
     openUrl: 'https://convert.ajwoo.com/',
     detail: [
       { lead: 'A private file converter that never uploads.' },
-      'Drop files, pick a format, download. Everything runs inside the browser tab — nothing is sent to a server, and it still works offline.',
+      'Drop files, pick a format, download. Everything runs inside the browser tab. Nothing is sent to a server, and it still works offline.',
       { label: 'On your device only', body: 'Files never leave your machine. Nothing is uploaded or stored anywhere but that browser tab.' },
-      { label: 'Bulk, not one at a time', body: 'Convert up to 100 files in a batch. It stays responsive and runs several at once.' },
-      { label: 'Nearly any file', body: 'Images, video, audio, documents, spreadsheets, and archives — in and out. Scale, quality, background removal, and batch rename are built in.' },
+      { label: 'Bulk, multiple at a time', body: 'Convert up to 100 files in a batch. It stays responsive and runs several at once.' },
+      { label: 'Nearly any file', body: 'Images, video, audio, documents, spreadsheets, and archives, in and out. Scale, quality, background removal, and batch rename are built in.' },
       'Works in any current browser, on a computer, phone, or tablet. Built in Claude Code, like Capture, Dictate, and Narrate.',
     ],
     iconImage: 'appicon-convert',
@@ -149,7 +157,7 @@ export const apps: App[] = [
       { label: 'Dynamic Subtitles', body: 'Generate subtitles automatically and customize their typography, size, animations, and visual effects.' },
       { label: 'Export and Share', body: 'Make a few tweaks if you want, then export your finished video and share it wherever you like.' },
       'Whether you’re creating product demos, tutorials, educational content, software walkthroughs, presentations, or social videos, Capture helps you go from recording to finished video in seconds.',
-      'Stop spending an hour editing screen recordings. Just Capture it.',
+      'Stop spending hours editing screen recordings, just capture it.',
     ],
     iconImage: 'appicon-capture',
   },
@@ -164,9 +172,11 @@ export const apps: App[] = [
     thumbnail: 'appcard-dictate',
     beta: true,
     detail: [
-      'Dictate puts speech into whatever already has your cursor: a document, a terminal, a message box. There is no window to switch to and nothing to paste.',
-      'The speech model runs on your Mac. Your voice is never uploaded, so it works on a plane and it keeps working if this site disappears.',
-      'Built in Claude Code as a companion to Capture and Narrate — same principle across all three: the model runs locally, nothing you say or select ever leaves the machine.',
+      { lead: 'Dictate listens to your voice, transcribes it to text, cleans up grammar and punctuation, and pastes it anywhere.' },
+      'Notes, docs, Claude, the terminal, you name it. Fast, accurate, and done.',
+      { label: 'Settings', body: 'Remap the activation key, switch languages, pick your voice-to-text model, toggle grammar correction, toggle auto-copy/paste, and set how long the widget stays on screen.' },
+      'Watch it turn any voice recording into clean, clear, professional text on any surface.',
+      'The speech model runs on your Mac. Your voice is never uploaded, so it works on a plane and it keeps working if this site disappears. Built in Claude Code as a companion to Capture and Narrate: same principle across all three, the model runs locally, nothing you say or select ever leaves the machine.',
     ],
     iconImage: 'appicon-dictate',
   },
@@ -181,8 +191,9 @@ export const apps: App[] = [
     thumbnail: 'appcard-narrate',
     beta: true,
     detail: [
-      'Narrate reads whatever you have highlighted in any macOS app out loud, the moment you double-tap a modifier key. No window, no dock icon: it lives in the menu bar and stays out of the way until you need it.',
-      'Voices are neural only, running locally in a sidecar (Kokoro-82M). The built-in macOS voices are not offered as a choice; they only appear as an emergency fallback if the neural engine cannot start.',
+      { lead: 'Narrate reads whatever you have highlighted on your Mac out loud, the moment you double-tap a modifier key.' },
+      'Your browser, the terminal, notes, Claude, a PDF, anything selectable. No window, no dock icon. It lives in the menu bar and stays out of the way until you need it.',
+      'Voices are neural, natural, and professional, running locally in a sidecar (Kokoro-82M). The built-in macOS voices are not offered as a choice; they only appear as an emergency fallback if the neural engine cannot start.',
       'Nothing you select is sent anywhere. The model runs on your Mac. Like Capture and Dictate, this one was built in Claude Code, one conversation at a time.',
     ],
     iconImage: 'appicon-narrate',
