@@ -78,6 +78,22 @@ import { useEffect, useRef, useState, type ReactNode } from 'react';
  * card's position in the stack" without one silently overriding the
  * other.
  *
+ * SIDE-CARD VISIBILITY: at Alex's direction ("I'm unable to see the
+ * cards on the back, and I only see the first card... I want the other
+ * cards... to be slightly visible on the left and right sides"), the
+ * defaults for `spread`/`depth`/`tilt`/`falloff`/`blur` are retuned —
+ * the previous `spread=56` (tuned in an earlier round purely to shrink
+ * the carousel's overall footprint) translated neighboring cards only
+ * 56px, which is nothing against a ~400px-wide card: they sat almost
+ * entirely BEHIND the front card, technically rendered but invisible in
+ * practice. `spread=150` gives them a real, legible peek; `falloff`
+ * lowered (0.2 -> 0.15) and `blur` lowered (6 -> 4) so they read as
+ * "slightly visible neighboring cards" rather than "nearly gone".
+ * `perspective` also raised (callers now pass 10000, Alex's own number) —
+ * a higher perspective value flattens the 3D foreshortening, which keeps
+ * the peeking side cards a consistent, readable size instead of
+ * dramatically shrinking away.
+ *
  * `cardHeight` IS MEASURED, NOT TAKEN LITERALLY: AppCard's own height is a
  * function of its width (a 1:1 square media block plus a fixed-height
  * icon/title/button footer row, ~80px, independent of card width) — it
@@ -128,16 +144,26 @@ export interface DepthCarouselProps {
 // easing curve.
 const POWER3_OUT = 'cubic-bezier(0.215, 0.61, 0.355, 1)';
 
+// Extra room around the front card's clip region, at Alex's direction
+// ("because there's no padding on the top and the bottom, the... zoom
+// gets cropped and cut") — the front card's hover boost (scale(1.02),
+// see `hoverBoost` below) plus its shadow's own blur/spread need real
+// pixels of slack beyond the card's own box, or the clip region's
+// `overflow: hidden` (needed to crop the fanned-out side cards) clips the
+// hover effect too. Vertical only, per Alex's report — horizontal
+// clipping is the intended peek-crop look for the side cards.
+const HOVER_PAD_Y = 48;
+
 export function DepthCarousel({
   items,
-  depth = 220,
-  spread = 90,
-  tilt = 22,
+  depth = 260,
+  spread = 150,
+  tilt = 26,
   tiltDirection = 'right',
   perspective = 1400,
   visibleCards = 4,
-  falloff = 0.2,
-  blur = 6,
+  falloff = 0.15,
+  blur = 4,
   autoplay = false,
   loop = true,
   cardWidth = 300,
@@ -206,13 +232,22 @@ export function DepthCarousel({
     onActiveChange?.(index);
   }, [index, onActiveChange]);
 
+  // Pauses on `frontHovered` (the same hover state driving the front
+  // card's own zoom/shadow boost above) and resumes automatically once it
+  // clears — at Alex's direction ("once the user is hovering over a
+  // card, the automatic moving... pauses so that the user can focus...
+  // but once users stop hovering again, then it also activates"). No
+  // separate pause/resume bookkeeping needed: `frontHovered` flipping to
+  // true fails this effect's guard, whose cleanup already clears the
+  // running interval; flipping back to false re-runs the effect and
+  // starts a fresh one.
   useEffect(() => {
-    if (!autoplay || count < 2) return;
+    if (!autoplay || count < 2 || frontHovered) return;
     const id = setInterval(() => {
       setIndex((i) => (loop ? (i + 1) % count : Math.min(i + 1, count - 1)));
     }, autoplayDelay);
     return () => clearInterval(id);
-  }, [autoplay, autoplayDelay, loop, count]);
+  }, [autoplay, autoplayDelay, loop, count, frontHovered]);
 
   const go = (dir: 1 | -1) => {
     setIndex((i) => {
@@ -232,7 +267,10 @@ export function DepthCarousel({
           contributes nothing to its parent's own auto height, so without
           this the clip region would collapse to 0 and the controls row
           would ride up over the cards). */}
-      <div className="relative overflow-hidden" style={{ height: measuredHeight * scale }}>
+      <div
+        className="relative overflow-hidden"
+        style={{ height: measuredHeight * scale + HOVER_PAD_Y * 2 }}
+      >
         {/* Scaled stack: kept at its native (desktop) pixel geometry so the
             translateX/translateZ/rotateY math above stays correct, then
             shrunk as one unit via `scale`. `left: 50%` + `translateX(-50%)`,
@@ -245,11 +283,16 @@ export function DepthCarousel({
             STACK, not of the wrapper/viewport, visibly off-center on every
             phone width. `left/translateX` centers correctly either way,
             and this clip region's `overflow-hidden` then crops the
-            fanned-out side cards symmetrically off both edges. */}
+            fanned-out side cards symmetrically off both edges. `top:
+            HOVER_PAD_Y`, not 0 — the clip region above is now taller than
+            this box by `HOVER_PAD_Y` on each side, so this offset keeps
+            the stack itself centered within that extra room rather than
+            pinned to the top of it. */}
         <div
-          className="absolute top-0"
+          className="absolute"
           style={{
             left: '50%',
+            top: HOVER_PAD_Y,
             transform: 'translateX(-50%)',
             width: stackWidth * scale,
             height: measuredHeight * scale,

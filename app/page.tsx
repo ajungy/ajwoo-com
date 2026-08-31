@@ -147,11 +147,15 @@ export default function Home() {
           </div>
         </section>
 
-        {/* mt-16 between each of these four — a real but smaller break
-            than the 245px topic change into Experience above; the four
-            read as one cluster of "background" sections, not four
-            unrelated topics. */}
-        <section className="mt-16">
+        {/* mt-[245px] between each of these, matching the same gap above
+            Experience — at Alex's direction ("increase spacing between
+            Experience, Education, Featured, and Worked with to match the
+            other spacing... make the spacing consistent overall"). An
+            earlier pass used a smaller mt-16 here deliberately, reading
+            these four as one cluster rather than four separate topic
+            changes; reversed since a single consistent rhythm throughout
+            the page was the actual ask. */}
+        <section className="mt-[245px]">
           <div className="grid grid-cols-1 large:grid-cols-4">
             <div className="large:col-start-2 large:col-span-2">
               <h2 className="text-h3 text-fg">Education</h2>
@@ -167,7 +171,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="mt-16">
+        <section className="mt-[245px]">
           <div className="grid grid-cols-1 large:grid-cols-4">
             <div className="large:col-start-2 large:col-span-2">
               <h2 className="text-h3 text-fg">Featured</h2>
@@ -183,7 +187,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="mt-16 pb-12">
+        <section className="mt-[245px] pb-12">
           <div className="grid grid-cols-1 large:grid-cols-4">
             <div className="large:col-start-2 large:col-span-2">
               {/* Label changed from "Clients" to "Worked with", at Alex's

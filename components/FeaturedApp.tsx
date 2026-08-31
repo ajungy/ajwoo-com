@@ -75,8 +75,14 @@ export function FeaturedApp({ apps }: { apps: App[] }) {
           (margins, scrollbars) and was itself a plausible source of the
           "shifted right" reports. One real measurement, not two
           disagreeing estimates.
-          spread=56 (was 90): a second round asked to "reduce the width of
-          the carousel" — a tighter fan between cards, at every scale.
+          depth/spread/tilt/falloff/blur/perspective now use
+          DepthCarousel's own retuned defaults (see that file's
+          "SIDE-CARD VISIBILITY" comment) rather than being overridden
+          here — a fifth round asked for the neighboring cards to be
+          "slightly visible on the left and right sides" (the earlier
+          spread=56, tuned purely to shrink the carousel's footprint, hid
+          them almost entirely behind the front card) and for perspective
+          raised to 10000 specifically.
           hoverZoom={false} hoverShadow={false} on each AppCard: the
           carousel's own wrapper now owns the hover zoom + shadow treatment
           directly (see DepthCarousel.tsx's "CARD CHROME, reversed again"),
@@ -100,21 +106,16 @@ export function FeaturedApp({ apps }: { apps: App[] }) {
               hoverShadow={false}
             />
           ))}
-          depth={220}
-          spread={56}
-          tilt={22}
           tiltDirection="right"
-          perspective={3000}
+          perspective={10000}
           visibleCards={4}
-          falloff={0.2}
-          blur={6}
-          autoplay={false}
+          autoplay
           loop
           cardWidth={400}
           cardHeight={480}
           radius={20}
           duration={700}
-          autoplayDelay={3200}
+          autoplayDelay={5000}
           showControls
           showIndicators
           onActiveChange={setActiveIndex}
