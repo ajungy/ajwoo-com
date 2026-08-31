@@ -112,24 +112,30 @@ export default function Home() {
           <div className="mt-3">
             {/* Regular weight throughout except the emphasis clause, which
                 steps up to medium (500) — weight only, same size and family,
-                at Alex's direction. Same TextAnimate "blurInUp" reveal the
-                headline uses, `by="word"` (not per-character — at ~40
-                words the bio would take several seconds to finish
-                otherwise, see TextAnimate.tsx's own comment), sequenced
-                with `delayMs` to start only once the headline (~1000ms)
-                and the button row beside it have finished, at Alex's
-                direction ("animate the text appearing for hi, I'm Alex...
-                after the motion for enable creativity and the four
-                buttons below... has animated in"). */}
-            <p className="text-body-lg text-fg">
-              <TextAnimate by="word" delayMs={1400}>{site.greeting}</TextAnimate>{' '}
-              <span className="font-medium">
-                <TextAnimate by="word" delayMs={1650}>{site.greetingEmphasis}</TextAnimate>
-              </span>
-            </p>
-            <p className="mt-4 max-w-content text-body-lg text-fg-secondary">
-              <TextAnimate by="word" delayMs={2200} stepMs={28}>{site.bio}</TextAnimate>
-            </p>
+                at Alex's direction.
+                A round ago this used TextAnimate's per-word "blurInUp"
+                cascade (same effect as the headline). Alex: "make [the
+                bio] appear faster by applying the animation effect for
+                how text appears for 'Netflix, Product Design Lead...'"
+                — i.e. the SAME StaggerReveal fade-and-rise the Experience
+                list below uses, not the headline's word-by-word blur,
+                which was the slower of the two (a ~40-word paragraph at
+                the word cascade's own pace took nearly 2 seconds just for
+                its own stagger, on top of waiting for the headline+
+                buttons to clear first). Greeting and bio are each one
+                StaggerReveal "row" (two short paragraphs, not a list), so
+                each fades/rises as ONE line instead of many, and finishes
+                well under a second. Reuses the exact same first-visit
+                entrance timing (`[data-entrance="run"] .stagger-grid`'s
+                own 500ms base) the button row beside it already runs on,
+                so this still starts only once the header settles — no
+                bespoke `delayMs` tuning needed any more. */}
+            <StaggerReveal className="flex flex-col gap-4">
+              <p className="text-body-lg text-fg">
+                {site.greeting} <span className="font-medium">{site.greetingEmphasis}</span>
+              </p>
+              <p className="max-w-content text-body-lg text-fg-secondary">{site.bio}</p>
+            </StaggerReveal>
           </div>
         </section>
       </div>
@@ -169,11 +175,22 @@ export default function Home() {
             font-medium + --text-fg for emphasis, at Alex's direction —
             "highlighting the company title is okay" — but title/years
             stay --text-fg-secondary at the SAME size, not a smaller one). */}
+        {/* Headings on all four sections below now use the same TextAnimate
+            "blurInUp" reveal as "Favorite design principles" above, at
+            Alex's direction ("apply the same text intro animation motion
+            effect to the titles for Experience, Education, Featured,
+            Worked with"), and both the heading and its list share the
+            same later scroll trigger (`rootMargin="-80% 0px 0px 0px"` —
+            see DesignPrinciples.tsx's comment on that exact prop for the
+            full reasoning): "make the text animation apply later... when
+            the text hits near the lower 20% of the window area." */}
         <section className="mt-[245px]">
           <div className="grid grid-cols-1 large:grid-cols-4">
             <div className="large:col-start-2 large:col-span-2">
-              <h2 className="text-h3 text-fg">Experience</h2>
-              <StaggerReveal className="mt-6 flex flex-col gap-6">
+              <h2 className="text-h3 text-fg">
+                <TextAnimate trigger="scroll" rootMargin="-80% 0px 0px 0px">Experience</TextAnimate>
+              </h2>
+              <StaggerReveal className="mt-6 flex flex-col gap-6" rootMargin="-80% 0px 0px 0px">
                 {experience.map((x) => (
                   <p key={x.company} className="text-body">
                     <span className="font-medium text-fg">{x.company}</span>
@@ -196,8 +213,10 @@ export default function Home() {
         <section className="mt-[245px]">
           <div className="grid grid-cols-1 large:grid-cols-4">
             <div className="large:col-start-2 large:col-span-2">
-              <h2 className="text-h3 text-fg">Education</h2>
-              <StaggerReveal className="mt-6 flex flex-col gap-6">
+              <h2 className="text-h3 text-fg">
+                <TextAnimate trigger="scroll" rootMargin="-80% 0px 0px 0px">Education</TextAnimate>
+              </h2>
+              <StaggerReveal className="mt-6 flex flex-col gap-6" rootMargin="-80% 0px 0px 0px">
                 {education.map((e) => (
                   <p key={e.school} className="text-body">
                     <span className="font-medium text-fg">{e.school}</span>
@@ -212,8 +231,10 @@ export default function Home() {
         <section className="mt-[245px]">
           <div className="grid grid-cols-1 large:grid-cols-4">
             <div className="large:col-start-2 large:col-span-2">
-              <h2 className="text-h3 text-fg">Featured</h2>
-              <StaggerReveal className="mt-6 flex flex-col gap-6">
+              <h2 className="text-h3 text-fg">
+                <TextAnimate trigger="scroll" rootMargin="-80% 0px 0px 0px">Featured</TextAnimate>
+              </h2>
+              <StaggerReveal className="mt-6 flex flex-col gap-6" rootMargin="-80% 0px 0px 0px">
                 {featured.map((f) => (
                   <p key={`${f.year}-${f.what}`} className="text-body">
                     <span className="text-fg-tertiary">{f.year}</span>
@@ -233,8 +254,10 @@ export default function Home() {
                   `clients` export) is unchanged, only what the heading
                   calls it. Already one name per row, nothing to
                   comma-join. */}
-              <h2 className="text-h3 text-fg">Worked with</h2>
-              <StaggerReveal className="mt-6 flex flex-col gap-6">
+              <h2 className="text-h3 text-fg">
+                <TextAnimate trigger="scroll" rootMargin="-80% 0px 0px 0px">Worked with</TextAnimate>
+              </h2>
+              <StaggerReveal className="mt-6 flex flex-col gap-6" rootMargin="-80% 0px 0px 0px">
                 {clients.map((c) => (
                   <p key={c} className="text-body text-fg-secondary">{c}</p>
                 ))}

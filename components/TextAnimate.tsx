@@ -50,6 +50,7 @@ export function TextAnimate({
   trigger = 'entrance',
   delayMs = 0,
   stepMs,
+  rootMargin = '0px 0px 150px 0px',
 }: {
   children: string;
   className?: string;
@@ -57,6 +58,12 @@ export function TextAnimate({
   trigger?: 'entrance' | 'scroll';
   delayMs?: number;
   stepMs?: number;
+  /** `trigger="scroll"` only — see StaggerReveal.tsx's own `rootMargin`
+   *  prop doc, which this mirrors exactly (same IntersectionObserver
+   *  tuning question, same two call sites: the default fires just before
+   *  the fold, a negative top margin fires later, once the text is near
+   *  the bottom of the window). */
+  rootMargin?: string;
 }) {
   const units = by === 'word' ? children.split(/(\s+)/) : Array.from(children);
   const step = stepMs ?? (by === 'word' ? 45 : 22);
@@ -84,11 +91,11 @@ export function TextAnimate({
           io.disconnect();
         }
       },
-      { threshold: 0, rootMargin: '0px 0px 150px 0px' },
+      { threshold: 0, rootMargin },
     );
     io.observe(el);
     return () => io.disconnect();
-  }, [trigger]);
+  }, [trigger, rootMargin]);
 
   return (
     <span

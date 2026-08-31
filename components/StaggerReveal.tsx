@@ -46,7 +46,22 @@ function assignRowStagger(el: HTMLElement) {
  * the time an effect runs — and if it's already on screen, reveal
  * immediately without ever waiting on the observer at all. Below the fold,
  * this check is false and the observer takes over exactly as before. */
-export function StaggerReveal({ className = '', children }: { className?: string; children: ReactNode }) {
+export function StaggerReveal({
+  className = '',
+  children,
+  rootMargin = '0px 0px 150px 0px',
+}: {
+  className?: string;
+  children: ReactNode;
+  /** IntersectionObserver rootMargin — when the reveal fires relative to
+   *  the viewport. Default (a positive bottom margin) fires just BEFORE a
+   *  section reaches the viewport's bottom edge — see the comment below.
+   *  Callers that want a later trigger (e.g. "only once the text is near
+   *  the bottom 20% of the window") pass a negative TOP margin instead —
+   *  see app/page.tsx's Experience/Education/Featured/Worked-with and
+   *  DesignPrinciples.tsx for that usage. */
+  rootMargin?: string;
+}) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
 
@@ -72,6 +87,8 @@ export function StaggerReveal({ className = '', children }: { className?: string
     // area 150px BELOW the actual viewport, so the reveal fires while the
     // section is still just approaching the bottom edge, reading as
     // "appears as it comes into view" rather than "appears after a beat".
+    // (This is the default; some callers now override it with a later
+    // trigger — see the `rootMargin` prop doc above.)
     const io = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -80,11 +97,11 @@ export function StaggerReveal({ className = '', children }: { className?: string
           io.disconnect();
         }
       },
-      { threshold: 0, rootMargin: '0px 0px 150px 0px' },
+      { threshold: 0, rootMargin },
     );
     io.observe(el);
     return () => io.disconnect();
-  }, []);
+  }, [rootMargin]);
 
   return (
     <div ref={ref} className={`stagger-grid ${visible ? 'is-visible' : ''} ${className}`}>

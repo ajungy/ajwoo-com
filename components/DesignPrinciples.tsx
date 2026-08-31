@@ -39,11 +39,21 @@ export function DesignPrinciples() {
               appearing for favorite design principles") — `trigger="scroll"`
               since this heading sits well below the fold and needs its
               own reveal-on-scroll rather than the landing page's one-time
-              load sequence (see TextAnimate.tsx's own comment). */}
+              load sequence (see TextAnimate.tsx's own comment).
+              `rootMargin="-80% 0px 0px 0px"` on both this and the
+              StaggerReveal below, at Alex's direction ("make the text
+              animation apply later... let's say when the text hits near
+              the lower 20% of the window area") — shrinks the observed
+              area to just the BOTTOM 20% of the viewport (a negative TOP
+              margin excludes everything above it from counting), so the
+              reveal only fires once the heading has scrolled up into that
+              band, later than the site-wide default (see StaggerReveal's
+              own `rootMargin` prop doc for that default and the reasoning
+              behind it). */}
           <h2 className="text-h3 text-fg">
-            <TextAnimate trigger="scroll">Favorite design principles</TextAnimate>
+            <TextAnimate trigger="scroll" rootMargin="-80% 0px 0px 0px">Favorite design principles</TextAnimate>
           </h2>
-          <StaggerReveal className="mt-8 flex flex-col gap-6">
+          <StaggerReveal className="mt-8 flex flex-col gap-6" rootMargin="-80% 0px 0px 0px">
             {principles.map((p) => (
               <PrincipleRow key={p.n} n={p.n} title={p.title} body={p.body} />
             ))}
