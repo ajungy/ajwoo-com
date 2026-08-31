@@ -262,7 +262,17 @@
      noticeably slow, deliberate top-to-bottom pace users can actually
      register, not a quick fade. */
   animation: stagger-in 1000ms var(--e-standard) both;
-  animation-delay: calc(var(--stagger-base, 0ms) + var(--stagger-i) * var(--stagger-step, 45ms));
+  /* --stagger-extra: an explicit per-instance delay (StaggerReveal.tsx's
+     `delayMs` prop), separate from --stagger-base — --stagger-base is the
+     GLOBAL "wait for the header's own entrance" offset (0 or 500ms,
+     session-wide, set by the rule below); --stagger-extra is a LOCAL
+     "wait for something specific above THIS section" offset a caller
+     opts into (e.g. the bio paragraph waiting for the button row above
+     it to finish, or a section's list waiting for its own heading's
+     text-reveal to finish) — composes with --stagger-base rather than
+     replacing it, so it works the same whether or not the session-wide
+     entrance sequence is active. */
+  animation-delay: calc(var(--stagger-base, 0ms) + var(--stagger-extra, 0ms) + var(--stagger-i) * var(--stagger-step, 45ms));
 }
 @keyframes stagger-in {
   from { opacity: 0; transform: translateY(8px); }

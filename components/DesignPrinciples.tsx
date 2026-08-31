@@ -49,11 +49,20 @@ export function DesignPrinciples() {
               reveal only fires once the heading has scrolled up into that
               band, later than the site-wide default (see StaggerReveal's
               own `rootMargin` prop doc for that default and the reasoning
-              behind it). */}
+              behind it).
+              `delayMs={500}` on the heading, at Alex's direction ("delay
+              the animation... by 500ms"). `delayMs={1650}` on the list
+              below sequences it to start only once the heading's own
+              text-reveal has finished, not simultaneously — "the text
+              below should appear after the subtitle animation finishes"
+              — computed by hand: "Favorite design principles" is 26
+              characters, so 500 (the heading's own delay) + 25*22 (its
+              per-character stagger) + 600 (each character's own animation
+              length) = 1650ms. */}
           <h2 className="text-h3 text-fg">
-            <TextAnimate trigger="scroll" rootMargin="-80% 0px 0px 0px">Favorite design principles</TextAnimate>
+            <TextAnimate trigger="scroll" rootMargin="-80% 0px 0px 0px" delayMs={500}>Favorite design principles</TextAnimate>
           </h2>
-          <StaggerReveal className="mt-8 flex flex-col gap-6" rootMargin="-80% 0px 0px 0px">
+          <StaggerReveal className="mt-8 flex flex-col gap-6" rootMargin="-80% 0px 0px 0px" delayMs={1650}>
             {principles.map((p) => (
               <PrincipleRow key={p.n} n={p.n} title={p.title} body={p.body} />
             ))}

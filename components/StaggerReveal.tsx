@@ -50,6 +50,7 @@ export function StaggerReveal({
   className = '',
   children,
   rootMargin = '0px 0px 150px 0px',
+  delayMs = 0,
 }: {
   className?: string;
   children: ReactNode;
@@ -61,6 +62,14 @@ export function StaggerReveal({
    *  see app/page.tsx's Experience/Education/Featured/Worked-with and
    *  DesignPrinciples.tsx for that usage. */
   rootMargin?: string;
+  /** Extra flat delay (ms), layered on top of whatever base delay already
+   *  applies (the session-wide entrance sequence's 500ms, if active) via
+   *  CSS `--stagger-extra` — see that custom property's own comment in
+   *  globals.css. For sequencing one section's reveal to start only once
+   *  something ABOVE it has visibly finished (a button row, a heading's
+   *  own text-reveal), not for the site-wide "fire earlier/later on
+   *  scroll" question `rootMargin` answers. */
+  delayMs?: number;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
@@ -104,7 +113,11 @@ export function StaggerReveal({
   }, [rootMargin]);
 
   return (
-    <div ref={ref} className={`stagger-grid ${visible ? 'is-visible' : ''} ${className}`}>
+    <div
+      ref={ref}
+      className={`stagger-grid ${visible ? 'is-visible' : ''} ${className}`}
+      style={delayMs ? ({ '--stagger-extra': `${delayMs}ms` } as React.CSSProperties) : undefined}
+    >
       {children}
     </div>
   );
