@@ -1407,55 +1407,6 @@
     "height": 618
    },
    {
-    "kind": "text",
-    "value": "Alarm Switch"
-   },
-   {
-    "kind": "text",
-    "value": "The alarm can be switched on and off to make maximum alert towards suspected thief. Or just have fun with the sound."
-   },
-   {
-    "kind": "motion",
-    "base": "mov-coin-lock-33",
-    "hasWebm": true,
-    "width": 570,
-    "height": 570
-   },
-   {
-    "kind": "text",
-    "value": "Theft / Crime Heatmap"
-   },
-   {
-    "kind": "text",
-    "value": "To have right insights and understanding your surroundings, theft/ crime heat map will be shown to help users with their decisions."
-   },
-   {
-    "kind": "image",
-    "base": "img-coin-lock-untitlesd-2-04",
-    "widths": [
-     770,
-     1540
-    ],
-    "fallbackWidth": 1540,
-    "width": 1540,
-    "height": 679
-   },
-   {
-    "kind": "text",
-    "value": "Coin Community"
-   },
-   {
-    "kind": "text",
-    "value": "The app also features a community platform in which users can share opinions and share information."
-   },
-   {
-    "kind": "motion",
-    "base": "mov-coin-lock-22",
-    "hasWebm": true,
-    "width": 570,
-    "height": 570
-   },
-   {
     "kind": "image",
     "base": "img-coin-lock-aaa-02",
     "widths": [
@@ -1535,13 +1486,6 @@
     "height": 550
    },
    {
-    "kind": "motion",
-    "base": "mov-layout-ezgif-2-16a9f28470d2",
-    "hasWebm": true,
-    "width": 600,
-    "height": 338
-   },
-   {
     "kind": "text",
     "value": "My role"
    },
@@ -1560,40 +1504,6 @@
    {
     "kind": "text",
     "value": "Our goal for the product was to evangelize Firstline Workers and bring customer value with Mixed Reality (HoloLens)."
-   },
-   {
-    "kind": "text",
-    "value": "1. Easy process to plan your space."
-   },
-   {
-    "kind": "text",
-    "value": "2. Collaborate with others"
-   },
-   {
-    "kind": "text",
-    "value": "3. Fast design and iteration"
-   },
-   {
-    "kind": "image",
-    "base": "img-layout-van",
-    "widths": [
-     770
-    ],
-    "fallbackWidth": 770,
-    "width": 770,
-    "height": 438
-   },
-   {
-    "kind": "text",
-    "value": "Hypothesis"
-   },
-   {
-    "kind": "text",
-    "value": "”Mixed Reality will allow Space Designers to design with confidence.”"
-   },
-   {
-    "kind": "text",
-    "value": "Full process"
    },
    {
     "kind": "embed",
@@ -1667,16 +1577,6 @@
     "title": "Paintsound.Holohack"
    },
    {
-    "kind": "embed",
-    "src": "https://www.youtube.com/embed/IoDgXK5FpP0",
-    "title": ""
-   },
-   {
-    "kind": "embed",
-    "src": "https://www.youtube.com/embed/pb7tyKW-DOg",
-    "title": ""
-   },
-   {
     "kind": "image",
     "base": "img-paintsound-screen-shot-2018-06-16-at-4-22-45-pm",
     "widths": [
@@ -1717,11 +1617,6 @@
     "kind": "embed",
     "src": "https://www.youtube.com/embed/5Mu9y5WpCNY",
     "title": "Bring It All Together - Frame.io in Premiere Pro"
-   },
-   {
-    "kind": "embed",
-    "src": "https://www.youtube.com/embed/t4uuCuxng3Y",
-    "title": "Finally! Premiere Pro updates we’ve been waiting for… (v23.1)"
    }
   ],
   "product-visualize": [
@@ -1744,18 +1639,6 @@
    {
     "kind": "text",
     "value": "[Dynamics 365 Product Visualize (iOS download)](https://apps.apple.com/us/app/dynamics-365-product-visualize/id1437454781)"
-   },
-   {
-    "kind": "text",
-    "value": "Build buyer confidence in your products"
-   },
-   {
-    "kind": "text",
-    "value": "Accelerate your sales cycle"
-   },
-   {
-    "kind": "text",
-    "value": "Capture and share key sales details"
    },
    {
     "kind": "embed",
@@ -1841,7 +1724,7 @@
    },
    {
     "kind": "text",
-    "value": "The HCDE Team collaborated with the Starbucks Innovation Lab Design Team to redesign the Batch Guidance iPad app. Batch Guidance is a tool for Starbucks retail partners to ensure store specific customer's beverage demand and reduce waste."
+    "value": "Collaborated with the Starbucks Innovation Lab Design Team to redesign the Batch Guidance iPad app. Batch Guidance is a tool for Starbucks retail partners to ensure store specific customer's beverage demand and reduce waste."
    },
    {
     "kind": "text",
