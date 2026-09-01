@@ -555,9 +555,7 @@ html[data-theme-transition] * {
    UI component (which runs on framer-motion, rejected outright by this
    project's stack decisions), for the `by`/`trigger`/`delayMs` props, and
    for why reusing the entrance sequence's existing gate isn't a new
-   Principle 14 exception. Default state (neither gate below active) is
-   just a plain inline-block glyph, fully visible, no motion — the
-   animation only exists inside the two gated rules below.
+   Principle 14 exception.
    --char-delay/--char-step are set per instance by TextAnimate.tsx
    (`delayMs`/`stepMs` props) — --char-delay sequences a whole block to
    start after an earlier one finishes (e.g. the bio paragraph starting
@@ -569,20 +567,61 @@ html[data-theme-transition] * {
   display: inline-block;
   white-space: pre;
 }
-[data-entrance="run"] .text-animate-char,
-.text-animate-visible .text-animate-char {
+
+/* ENTRANCE-triggered instances (the headline, the greeting/bio): default
+   state is fully visible, no motion — only [data-entrance="run"] (set
+   synchronously before first paint by the boot script, see app/layout.tsx
+   — never present at all if JS is disabled) turns on the hidden-then-
+   animate-in state. This is the ONLY safe way to hide text before
+   animating it: the flag is guaranteed to already be correct at the very
+   first paint, so there's no flash of the wrong state either way. */
+[data-entrance="run"] .text-animate-entrance-scope .text-animate-char {
   opacity: 0;
   filter: blur(10px);
   transform: translateY(20px);
   animation: text-animate-blur-in-up 600ms var(--e-standard) both;
   animation-delay: calc(var(--char-delay, 0ms) + var(--char-i) * var(--char-step, 22ms));
 }
+
+/* SCROLL-triggered instances (Favorite design principles/Experience/
+   Education/Featured/Worked-with headings): hidden by default — NOT
+   gated behind a JS-added class the way entrance-triggered text is,
+   because there's no server-known-in-advance signal (like the entrance
+   boot script's synchronous flag) for "will this scroll-reveal actually
+   run" to key a safe default off of. At Alex's direction ("make sure the
+   text is not visible before the animation starts... I see the white
+   text... pop out before it fades in") — that bug's actual root cause
+   was `[data-entrance="run"]` on its own matching EVERY .text-animate-char
+   on the page (it's an ancestor selector on <html>), including these
+   scroll ones — their characters were fading in on a fixed timer tied to
+   PAGE LOAD, fully independent of scroll position, so by the time a
+   visitor actually scrolled to them the animation (or its `both`-fill
+   held end state) had already run. Scoping the entrance rule above to
+   `.text-animate-entrance-scope` only, and giving scroll instances their
+   own unconditional hidden default here, fixes both problems: no more
+   cross-talk, and no more visible-before-revealed flash either.
+   The <noscript> rule right below is the safety net a no-JS visitor
+   needs, mirroring the guarantee the entrance flag gives its own text —
+   without it, this rule would hide these headings PERMANENTLY for
+   anyone without JavaScript, since nothing would ever add
+   .text-animate-visible to lift it. */
+.text-animate-scroll-scope .text-animate-char {
+  opacity: 0;
+  filter: blur(10px);
+  transform: translateY(20px);
+}
+.text-animate-scroll-scope.text-animate-visible .text-animate-char {
+  animation: text-animate-blur-in-up 600ms var(--e-standard) both;
+  animation-delay: calc(var(--char-delay, 0ms) + var(--char-i) * var(--char-step, 22ms));
+}
+
 @keyframes text-animate-blur-in-up {
   to { opacity: 1; filter: blur(0); transform: none; }
 }
 @media (prefers-reduced-motion: reduce) {
-  [data-entrance="run"] .text-animate-char,
-  .text-animate-visible .text-animate-char {
+  [data-entrance="run"] .text-animate-entrance-scope .text-animate-char,
+  .text-animate-scroll-scope .text-animate-char,
+  .text-animate-scroll-scope.text-animate-visible .text-animate-char {
     opacity: 1;
     filter: none;
     transform: none;

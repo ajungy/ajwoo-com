@@ -219,7 +219,12 @@ export default function Home() {
               milliseconds, start the motion to animate in the text
               below" once the heading above it finishes). Computed by
               hand per heading (title lengths differ), not derived at
-              runtime — these are fixed strings, not dynamic content. */}
+              runtime — these are fixed strings, not dynamic content.
+            - `durationMs={400}` on every list (all five, including
+              Worked-with) — was the shared 1000ms default, at Alex's
+              direction ("[the list text] loads very slowly, and I want
+              it to load faster so that it doesn't break the rhythm of
+              reading text"). */}
         <section className="mt-[245px]">
           <div className="grid grid-cols-1 large:grid-cols-4">
             <div className="large:col-start-2 large:col-span-2">
@@ -228,7 +233,7 @@ export default function Home() {
               </h2>
               {/* "Experience" = 10 chars: 500 + 9*22 + 600 = 1298ms, + a
                   100ms gap once it finishes = 1400ms. */}
-              <StaggerReveal className="mt-6 flex flex-col gap-6" rootMargin="-80% 0px 0px 0px" delayMs={1400}>
+              <StaggerReveal className="mt-6 flex flex-col gap-6" rootMargin="-80% 0px 0px 0px" delayMs={1400} durationMs={400}>
                 {experience.map((x) => (
                   <p key={x.company} className="text-body">
                     <span className="font-medium text-fg">{x.company}</span>
@@ -256,7 +261,7 @@ export default function Home() {
               </h2>
               {/* "Education" = 9 chars: 500 + 8*22 + 600 = 1276ms, + a
                   100ms gap once it finishes = 1380ms. */}
-              <StaggerReveal className="mt-6 flex flex-col gap-6" rootMargin="-80% 0px 0px 0px" delayMs={1380}>
+              <StaggerReveal className="mt-6 flex flex-col gap-6" rootMargin="-80% 0px 0px 0px" delayMs={1380} durationMs={400}>
                 {education.map((e) => (
                   <p key={e.school} className="text-body">
                     <span className="font-medium text-fg">{e.school}</span>
@@ -276,7 +281,7 @@ export default function Home() {
               </h2>
               {/* "Featured" = 8 chars: 500 + 7*22 + 600 = 1254ms, + a
                   100ms gap once it finishes = 1360ms. */}
-              <StaggerReveal className="mt-6 flex flex-col gap-6" rootMargin="-80% 0px 0px 0px" delayMs={1360}>
+              <StaggerReveal className="mt-6 flex flex-col gap-6" rootMargin="-80% 0px 0px 0px" delayMs={1360} durationMs={400}>
                 {featured.map((f) => (
                   <p key={`${f.year}-${f.what}`} className="text-body">
                     <span className="text-fg-tertiary">{f.year}</span>
@@ -299,7 +304,7 @@ export default function Home() {
               <h2 className="text-h3 text-fg">
                 <TextAnimate trigger="scroll" rootMargin="-80% 0px 0px 0px">Worked with</TextAnimate>
               </h2>
-              <StaggerReveal className="mt-6 flex flex-col gap-6" rootMargin="-80% 0px 0px 0px">
+              <StaggerReveal className="mt-6 flex flex-col gap-6" rootMargin="-80% 0px 0px 0px" durationMs={400}>
                 {clients.map((c) => (
                   <p key={c} className="text-body text-fg-secondary">{c}</p>
                 ))}

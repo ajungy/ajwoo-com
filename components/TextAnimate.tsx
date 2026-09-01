@@ -55,6 +55,24 @@ function parseVerticalRootMargin(rootMargin: string, viewportH: number) {
  * JS having run — so a no-entrance page view, an out-of-view scroll
  * target that never gets observed, or `prefers-reduced-motion` never sees
  * the effect appear empty or partially rendered.
+ *
+ * REAL BUG, fixed this round: `[data-entrance="run"] .text-animate-char`
+ * in globals.css is an ANCESTOR selector — `data-entrance="run"` lives on
+ * `<html>`, so on a visitor's first load this session that rule matched
+ * EVERY `.text-animate-char` on the page, including `trigger="scroll"`
+ * instances way below the fold, not just the entrance-sequenced ones
+ * above it. Their characters were animating in on a fixed TIME-based
+ * schedule tied to page load, completely independent of scroll position
+ * — by the time a visitor actually scrolled down to "Favorite design
+ * principles" etc., that unrelated animation had usually already
+ * finished (both fill mode holds at opacity 1), so the DEDICATED scroll
+ * reveal had nothing left to reveal: the text just sat there at full
+ * opacity, "popping" into view on a fast scroll instead of fading in — at
+ * Alex's direction ("I see the white text... pop out before it fades
+ * in"). Fixed by giving the outer span a trigger-specific class
+ * (`text-animate-entrance-scope`/`text-animate-scroll-scope`) so
+ * globals.css can scope the entrance rule to ONLY entrance-triggered
+ * instances, leaving scroll-triggered ones solely to `.text-animate-visible`.
  */
 export function TextAnimate({
   children,
@@ -120,7 +138,11 @@ export function TextAnimate({
   return (
     <span
       ref={ref}
-      className={`${className ?? ''} ${trigger === 'scroll' && scrollVisible ? 'text-animate-visible' : ''}`}
+      className={
+        `${className ?? ''} ` +
+        (trigger === 'scroll' ? 'text-animate-scroll-scope' : 'text-animate-entrance-scope') +
+        (trigger === 'scroll' && scrollVisible ? ' text-animate-visible' : '')
+      }
       aria-label={children}
     >
       {units.map((u, i) => (

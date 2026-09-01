@@ -64,11 +64,15 @@ export function DesignPrinciples() {
               hand: "Favorite design principles" is 26 characters, so 500
               (the heading's own delay) + 25*22 (its per-character
               stagger) + 600 (each character's own animation length) +
-              100 (the gap) = 1750ms. */}
+              100 (the gap) = 1750ms.
+              `durationMs={400}` (was the shared 1000ms default) — at
+              Alex's direction ("[the list] loads very slowly, and I want
+              it to load faster... doesn't break the rhythm of reading
+              text"), same fix as the landing page's greeting/bio. */}
           <h2 className="text-h3 text-fg">
             <TextAnimate trigger="scroll" rootMargin="-80% 0px 0px 0px" delayMs={500}>Favorite design principles</TextAnimate>
           </h2>
-          <StaggerReveal className="mt-8 flex flex-col gap-6" rootMargin="-80% 0px 0px 0px" delayMs={1750}>
+          <StaggerReveal className="mt-8 flex flex-col gap-6" rootMargin="-80% 0px 0px 0px" delayMs={1750} durationMs={400}>
             {principles.map((p) => (
               <PrincipleRow key={p.n} n={p.n} title={p.title} body={p.body} />
             ))}

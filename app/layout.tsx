@@ -59,12 +59,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: bootScript }} />
-        {/* Scroll-reveal (.stagger-grid, components/StaggerReveal.tsx) needs
-            JS to add the class that makes content visible. Without this,
-            a no-JS visitor would see permanently-invisible sections —
+        {/* Scroll-reveal (.stagger-grid, components/StaggerReveal.tsx, and
+            now TextAnimate.tsx's scroll-triggered headings — see
+            .text-animate-scroll-scope in globals.css) needs JS to add the
+            class that makes content visible. Without this, a no-JS
+            visitor would see permanently-invisible sections/headings —
             strictly worse than no animation at all. */}
         <noscript>
-          <style>{'.stagger-grid > * { opacity: 1 !important; transform: none !important; }'}</style>
+          <style>{
+            '.stagger-grid > * { opacity: 1 !important; transform: none !important; } ' +
+            '.text-animate-scroll-scope .text-animate-char { opacity: 1 !important; filter: none !important; transform: none !important; }'
+          }</style>
         </noscript>
       </head>
       <body>
