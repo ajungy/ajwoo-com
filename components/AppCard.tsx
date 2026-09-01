@@ -136,8 +136,23 @@ export function AppCard({
     >
       <div className={`relative aspect-square overflow-hidden ${app.thumbnailPlus ? 'bg-sunken' : 'skeleton-shimmer'}`}>
         {app.thumbnailPlus ? (
+          // h-24 (was h-12, doubled) and colored via --action-secondary-border
+          // directly (was text-fg-tertiary), at Alex's direction ("make the
+          // plus icon... bigger... as well as darker to match the outline
+          // of the request button") — that CSS var is the exact same token
+          // the "Request" button's own border resolves from (Action.tsx's
+          // `secondary` variant), so this isn't an approximate color match,
+          // it's the same value.
           <div className="card-thumb-media flex h-full items-center justify-center">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" aria-hidden="true" className="h-12 w-12 text-fg-tertiary">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="var(--action-secondary-border)"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              aria-hidden="true"
+              className="h-24 w-24"
+            >
               <path d="M12 5v14" />
               <path d="M5 12h14" />
             </svg>
