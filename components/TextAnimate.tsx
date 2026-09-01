@@ -2,6 +2,19 @@
 
 import { useEffect, useRef, useState } from 'react';
 
+// Same helper StaggerReveal.tsx defines (and needs for the same reason —
+// see that file's comment on it) — kept as a small local duplicate rather
+// than a shared module, since it's ~10 lines and this is the only other
+// call site.
+function parseVerticalRootMargin(rootMargin: string, viewportH: number) {
+  const [top, , bottom] = rootMargin.trim().split(/\s+/);
+  const toPx = (v: string | undefined) => {
+    if (!v) return 0;
+    return v.endsWith('%') ? viewportH * (parseFloat(v) / 100) : parseFloat(v);
+  };
+  return { top: toPx(top), bottom: toPx(bottom) };
+}
+
 /**
  * A trimmed, CSS-only port of Magic UI's TextAnimate ("blurInUp", by
  * character or by word) — at Alex's direction, for the landing page's
@@ -76,7 +89,14 @@ export function TextAnimate({
     const el = ref.current;
     if (!el) return;
     const rect = el.getBoundingClientRect();
-    if (rect.top < window.innerHeight && rect.bottom > 0) {
+    // Derived from the ACTUAL rootMargin, not a fixed "anywhere on
+    // screen" check — see StaggerReveal.tsx's identical fix for why: a
+    // late-trigger rootMargin (e.g. "-80% 0px 0px 0px") needs this sync
+    // bypass to respect that same late threshold, or it fires the
+    // instant the heading is anywhere in the initial viewport regardless
+    // of the configured margin.
+    const { top: topMargin, bottom: bottomMargin } = parseVerticalRootMargin(rootMargin, window.innerHeight);
+    if (rect.bottom > -topMargin && rect.top < window.innerHeight + bottomMargin) {
       setScrollVisible(true);
       return;
     }

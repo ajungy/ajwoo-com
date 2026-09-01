@@ -140,8 +140,14 @@ export default function Home() {
                 composing correctly with the shared base via CSS
                 `--stagger-extra` whether or not the session-wide entrance
                 sequence is active (see StaggerReveal.tsx's `delayMs` prop
-                doc) — no need to know or duplicate whichever base applies. */}
-            <StaggerReveal className="flex flex-col gap-4" delayMs={1000}>
+                doc) — no need to know or duplicate whichever base applies.
+                `durationMs={450}` (was the shared 1000ms default), a
+                second round: even starting in the right place, waiting a
+                full extra second on TOP of that for the bio's own reveal
+                to finish still read as "appearing too slow" — a faster
+                reveal for this one short block reads as prompt without
+                losing the fade/rise motion itself. */}
+            <StaggerReveal className="flex flex-col gap-4" delayMs={1000} durationMs={450}>
               <p className="text-body-lg text-fg">
                 {site.greeting} <span className="font-medium">{site.greetingEmphasis}</span>
               </p>
@@ -196,28 +202,33 @@ export default function Home() {
             untouched now). Heading and list share the same later scroll
             trigger (`rootMargin="-80% 0px 0px 0px"`, i.e. "around 20% of
             the bottom window" — see DesignPrinciples.tsx's comment on
-            that prop). Two things added THIS round, at Alex's direction
-            ("delay the animation... by 500ms and have it appear only
-            after it reaches around 20% of the bottom window... the text
-            below should appear after the subtitle animation finishes"):
-            - `delayMs={500}` on the heading's TextAnimate — the extra
-              500ms, on top of the scroll trigger.
+            that prop and, THIS round, on the real bug that trigger had:
+            the "already on screen at mount" bypass ignored rootMargin
+            entirely, which is almost certainly why Alex reported "the
+            motion... happens too soon, I never see it" — fixed in
+            StaggerReveal.tsx/TextAnimate.tsx, not by changing this -80%
+            value itself).
+            - `delayMs={500}` on the heading's TextAnimate — an explicit
+              extra 500ms on top of the scroll trigger, at Alex's
+              direction ("delay the animation... by 500ms").
             - `delayMs={N}` on the list's StaggerReveal, where N is that
-              same 500ms plus however long the heading's own text-reveal
+              same 500ms, plus however long the heading's own text-reveal
               takes to finish (word count × TextAnimate's per-character
-              step + its 600ms per-character animation) — so the list
-              only starts once the heading has visibly finished animating,
-              not simultaneously with it. Computed by hand per heading
-              (title lengths differ), not derived at runtime — these are
-              fixed strings, not dynamic content. */}
+              step + its 600ms per-character animation), PLUS a further
+              100ms gap — at Alex's direction ("within one hundred
+              milliseconds, start the motion to animate in the text
+              below" once the heading above it finishes). Computed by
+              hand per heading (title lengths differ), not derived at
+              runtime — these are fixed strings, not dynamic content. */}
         <section className="mt-[245px]">
           <div className="grid grid-cols-1 large:grid-cols-4">
             <div className="large:col-start-2 large:col-span-2">
               <h2 className="text-h3 text-fg">
                 <TextAnimate trigger="scroll" rootMargin="-80% 0px 0px 0px" delayMs={500}>Experience</TextAnimate>
               </h2>
-              {/* "Experience" = 10 chars: 500 + 9*22 + 600 = 1298ms. */}
-              <StaggerReveal className="mt-6 flex flex-col gap-6" rootMargin="-80% 0px 0px 0px" delayMs={1300}>
+              {/* "Experience" = 10 chars: 500 + 9*22 + 600 = 1298ms, + a
+                  100ms gap once it finishes = 1400ms. */}
+              <StaggerReveal className="mt-6 flex flex-col gap-6" rootMargin="-80% 0px 0px 0px" delayMs={1400}>
                 {experience.map((x) => (
                   <p key={x.company} className="text-body">
                     <span className="font-medium text-fg">{x.company}</span>
@@ -243,8 +254,9 @@ export default function Home() {
               <h2 className="text-h3 text-fg">
                 <TextAnimate trigger="scroll" rootMargin="-80% 0px 0px 0px" delayMs={500}>Education</TextAnimate>
               </h2>
-              {/* "Education" = 9 chars: 500 + 8*22 + 600 = 1276ms. */}
-              <StaggerReveal className="mt-6 flex flex-col gap-6" rootMargin="-80% 0px 0px 0px" delayMs={1280}>
+              {/* "Education" = 9 chars: 500 + 8*22 + 600 = 1276ms, + a
+                  100ms gap once it finishes = 1380ms. */}
+              <StaggerReveal className="mt-6 flex flex-col gap-6" rootMargin="-80% 0px 0px 0px" delayMs={1380}>
                 {education.map((e) => (
                   <p key={e.school} className="text-body">
                     <span className="font-medium text-fg">{e.school}</span>
@@ -262,8 +274,9 @@ export default function Home() {
               <h2 className="text-h3 text-fg">
                 <TextAnimate trigger="scroll" rootMargin="-80% 0px 0px 0px" delayMs={500}>Featured</TextAnimate>
               </h2>
-              {/* "Featured" = 8 chars: 500 + 7*22 + 600 = 1254ms. */}
-              <StaggerReveal className="mt-6 flex flex-col gap-6" rootMargin="-80% 0px 0px 0px" delayMs={1260}>
+              {/* "Featured" = 8 chars: 500 + 7*22 + 600 = 1254ms, + a
+                  100ms gap once it finishes = 1360ms. */}
+              <StaggerReveal className="mt-6 flex flex-col gap-6" rootMargin="-80% 0px 0px 0px" delayMs={1360}>
                 {featured.map((f) => (
                   <p key={`${f.year}-${f.what}`} className="text-body">
                     <span className="text-fg-tertiary">{f.year}</span>

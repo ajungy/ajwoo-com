@@ -122,7 +122,14 @@ export function FeaturedApp({ apps }: { apps: App[] }) {
         />
       </div>
 
-      <p className="mt-16 text-center">
+      {/* mt-6 (was mt-16 — Tailwind's own default 64px, since 16 isn't in
+          this project's custom 0-15 spacing scale and silently fell back
+          to Tailwind's stock value): far too much air between this link
+          and the chevron/dot controls row directly above it, at Alex's
+          direction ("the all apps arrow button [should be] closer to the
+          navigation row with the left and right chevrons... much
+          closer"). */}
+      <p className="mt-6 text-center">
         <Link
           href="/apps/"
           data-cursor-label="All apps"

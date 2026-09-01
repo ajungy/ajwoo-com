@@ -49,20 +49,26 @@ export function DesignPrinciples() {
               reveal only fires once the heading has scrolled up into that
               band, later than the site-wide default (see StaggerReveal's
               own `rootMargin` prop doc for that default and the reasoning
-              behind it).
+              behind it). The sync-bypass fix in StaggerReveal.tsx/
+              TextAnimate.tsx this round is what actually addresses Alex's
+              "happens too soon, I never see it" report — this -80%
+              value itself is unchanged; the trigger was silently being
+              bypassed on load rather than honoring it. See that fix's own
+              comment.
               `delayMs={500}` on the heading, at Alex's direction ("delay
-              the animation... by 500ms"). `delayMs={1650}` on the list
-              below sequences it to start only once the heading's own
-              text-reveal has finished, not simultaneously — "the text
-              below should appear after the subtitle animation finishes"
-              — computed by hand: "Favorite design principles" is 26
-              characters, so 500 (the heading's own delay) + 25*22 (its
-              per-character stagger) + 600 (each character's own animation
-              length) = 1650ms. */}
+              the animation... by 500ms"). `delayMs={1750}` on the list
+              below sequences it to start once the heading's own
+              text-reveal has finished, plus a further 100ms gap — at
+              Alex's direction ("within one hundred milliseconds, start
+              the motion to animate in the text below") — computed by
+              hand: "Favorite design principles" is 26 characters, so 500
+              (the heading's own delay) + 25*22 (its per-character
+              stagger) + 600 (each character's own animation length) +
+              100 (the gap) = 1750ms. */}
           <h2 className="text-h3 text-fg">
             <TextAnimate trigger="scroll" rootMargin="-80% 0px 0px 0px" delayMs={500}>Favorite design principles</TextAnimate>
           </h2>
-          <StaggerReveal className="mt-8 flex flex-col gap-6" rootMargin="-80% 0px 0px 0px" delayMs={1650}>
+          <StaggerReveal className="mt-8 flex flex-col gap-6" rootMargin="-80% 0px 0px 0px" delayMs={1750}>
             {principles.map((p) => (
               <PrincipleRow key={p.n} n={p.n} title={p.title} body={p.body} />
             ))}

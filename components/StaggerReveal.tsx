@@ -2,6 +2,22 @@
 
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 
+/* Parses an IntersectionObserver rootMargin string's vertical (top/bottom)
+   components into actual pixel offsets against the current viewport, so
+   the synchronous "already on screen?" check below (see its own comment)
+   can answer the SAME question the async IntersectionObserver would —
+   just computed immediately instead of waiting for a callback. Handles
+   only the two forms this codebase's rootMargin values actually use
+   ("Npx" and "N%"), not the full CSS margin grammar. */
+function parseVerticalRootMargin(rootMargin: string, viewportH: number) {
+  const [top, , bottom] = rootMargin.trim().split(/\s+/);
+  const toPx = (v: string | undefined) => {
+    if (!v) return 0;
+    return v.endsWith('%') ? viewportH * (parseFloat(v) / 100) : parseFloat(v);
+  };
+  return { top: toPx(top), bottom: toPx(bottom) };
+}
+
 /* Groups direct children by visual row (matching offsetTop, 2px tolerance)
    and assigns each row a shared --stagger-i, so a multi-column grid staggers
    top-to-bottom only — no left-to-right offset within a row. Column count
@@ -45,12 +61,26 @@ function assignRowStagger(el: HTMLElement) {
  * `getBoundingClientRect()` — cheap, and DOM layout is already committed by
  * the time an effect runs — and if it's already on screen, reveal
  * immediately without ever waiting on the observer at all. Below the fold,
- * this check is false and the observer takes over exactly as before. */
+ * this check is false and the observer takes over exactly as before.
+ *
+ * That sync check MUST answer the same question the configured
+ * `rootMargin` would (via `parseVerticalRootMargin` above), not a fixed
+ * "anywhere on screen" test — a caller using a late-trigger rootMargin
+ * (e.g. "-80% 0px 0px 0px", only the bottom 20% of the viewport) had this
+ * check firing the instant the section was ANYWHERE in the initial
+ * viewport, completely ignoring that margin. On a tall page where a
+ * "below the fold" section was still technically within the loaded
+ * viewport's bottom sliver at mount, that meant the reveal had already
+ * finished before a visitor ever scrolled toward it — Alex: "the motion
+ * animation... happens too soon, I never see it." Fixed by deriving the
+ * exact same effective top/bottom bounds this sync check uses from the
+ * real rootMargin, so both paths agree. */
 export function StaggerReveal({
   className = '',
   children,
   rootMargin = '0px 0px 150px 0px',
   delayMs = 0,
+  durationMs,
 }: {
   className?: string;
   children: ReactNode;
@@ -70,6 +100,14 @@ export function StaggerReveal({
    *  own text-reveal), not for the site-wide "fire earlier/later on
    *  scroll" question `rootMargin` answers. */
   delayMs?: number;
+  /** Per-instance override for the reveal's own animation length (CSS
+   *  `--stagger-duration`, default 1000ms — see .stagger-grid.is-visible
+   *  in globals.css). The 1000ms default is deliberately slow/deliberate
+   *  for a multi-row LIST; a two-paragraph block like the landing page's
+   *  greeting/bio reads as sluggish at that same pace once it's already
+   *  sequenced to start after the button row above it, at Alex's
+   *  direction ("[the bio] is appearing a little too slow"). */
+  durationMs?: number;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
@@ -79,7 +117,8 @@ export function StaggerReveal({
     if (!el) return;
 
     const rect = el.getBoundingClientRect();
-    const alreadyOnScreen = rect.top < window.innerHeight && rect.bottom > 0;
+    const { top: topMargin, bottom: bottomMargin } = parseVerticalRootMargin(rootMargin, window.innerHeight);
+    const alreadyOnScreen = rect.bottom > -topMargin && rect.top < window.innerHeight + bottomMargin;
     if (alreadyOnScreen) {
       assignRowStagger(el);
       setVisible(true);
@@ -112,11 +151,16 @@ export function StaggerReveal({
     return () => io.disconnect();
   }, [rootMargin]);
 
+  const style = {
+    ...(delayMs ? { '--stagger-extra': `${delayMs}ms` } : {}),
+    ...(durationMs ? { '--stagger-duration': `${durationMs}ms` } : {}),
+  } as React.CSSProperties;
+
   return (
     <div
       ref={ref}
       className={`stagger-grid ${visible ? 'is-visible' : ''} ${className}`}
-      style={delayMs ? ({ '--stagger-extra': `${delayMs}ms` } as React.CSSProperties) : undefined}
+      style={delayMs || durationMs ? style : undefined}
     >
       {children}
     </div>

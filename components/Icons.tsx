@@ -94,14 +94,20 @@ export function ExternalLink({ className = 'w-5 h-5', strokeWidth = '2' }: { cla
  *
  * LinkedIn is a SELF-CONTAINED two-color badge in the Figma source — a
  * white rounded-square background with a black "in" mark baked into the
- * same asset, not a single-color glyph that inherits the button's text
- * color. Reproduced as two fixed-color paths (never `currentColor`) so it
- * matches Figma exactly in both themes, same as a real brand badge would
- * (LinkedIn/Instagram's own brand marks aren't theme-aware either) — a
- * `border-line-subtle` ring around the white square (not in the Figma
- * asset, whose reference is dark-mode only) keeps it legible in light
- * mode too, where the secondary button it sits in has a transparent
- * background and a white-on-white badge would otherwise nearly vanish.
+ * same asset. A first pass reproduced that literally (fixed white/black,
+ * in every theme) reasoning that a brand mark isn't theme-aware — Alex
+ * caught the actual problem with that: fixed WHITE stayed white in light
+ * mode too, which is illegible/invisible against this project's own
+ * light-mode surfaces (a light background painted on top of the
+ * secondary button's own transparent one). Reversed: the badge now
+ * INVERTS with the theme via CSS `light-dark()` — white square + black
+ * mark in dark mode (still pixel-identical to the Figma reference,
+ * which is dark-mode only), black square + white mark in light mode —
+ * same two-color badge concept Figma specifies, just correctly adapted
+ * to a theme Figma's own single-mode reference never had to answer for.
+ * The `border-subtle` ring stays in both themes as a hairline edge —
+ * useful now that the square's own fill matches, rather than fights,
+ * the button surface it sits on in either theme.
  *
  * Instagram in the same Figma node is a complete pre-built 40px button
  * (its own border + corner radius already baked into the asset) rather
@@ -116,10 +122,17 @@ export function ExternalLink({ className = 'w-5 h-5', strokeWidth = '2' }: { cla
 export function LinkedInLogo({ className = 'h-5 w-5' }: { className?: string }) {
   return (
     <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true" className={className}>
-      <rect width="20" height="20" rx="4.7" fill="white" stroke="var(--border-subtle)" strokeWidth="1" />
+      <rect
+        width="20"
+        height="20"
+        rx="4.7"
+        style={{ fill: 'light-dark(black, white)' }}
+        stroke="var(--border-subtle)"
+        strokeWidth="1"
+      />
       <path
         d="M7.25 15H5.125V8.3125H7.25V15ZM6.1875 7.375C5.5 7.375 5 6.875 5 6.1875C5 5.5 5.5625 5 6.1875 5C6.875 5 7.375 5.5 7.375 6.1875C7.375 6.875 6.875 7.375 6.1875 7.375ZM15 15H12.875V11.375C12.875 10.3125 12.4375 10 11.8125 10C11.1875 10 10.5625 10.5 10.5625 11.4375V15H8.4375V8.3125H10.4375V9.25C10.625 8.8125 11.375 8.125 12.4375 8.125C13.625 8.125 14.875 8.8125 14.875 10.875V15H15Z"
-        fill="black"
+        style={{ fill: 'light-dark(white, black)' }}
       />
     </svg>
   );

@@ -258,10 +258,14 @@
   transform: translateY(8px);
 }
 .stagger-grid.is-visible > * {
-  /* 1000ms, up from 500ms then 300ms, at Alex's direction — wants a
-     noticeably slow, deliberate top-to-bottom pace users can actually
-     register, not a quick fade. */
-  animation: stagger-in 1000ms var(--e-standard) both;
+  /* 1000ms default, up from 500ms then 300ms, at Alex's direction —
+     wants a noticeably slow, deliberate top-to-bottom pace users can
+     actually register, not a quick fade. `--stagger-duration` lets one
+     instance override that (StaggerReveal.tsx's `durationMs` prop) — the
+     landing page's greeting/bio uses a faster one, since by the time
+     it's sequenced to start after the button row above it, the full
+     1000ms on top of that read as sluggish rather than deliberate. */
+  animation: stagger-in var(--stagger-duration, 1000ms) var(--e-standard) both;
   /* --stagger-extra: an explicit per-instance delay (StaggerReveal.tsx's
      `delayMs` prop), separate from --stagger-base — --stagger-base is the
      GLOBAL "wait for the header's own entrance" offset (0 or 500ms,
