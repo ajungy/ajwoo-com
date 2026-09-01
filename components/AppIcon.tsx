@@ -32,6 +32,18 @@ const glyphs: Record<string, React.ReactNode> = {
       <path d="M20 5.5a7.5 7.5 0 0 1 0 13" />
     </>
   ),
+  // Request Alex — a plain plus, matching the Figma reference's own glyph
+  // (node 516:2907, "icon/plus"). Only used as a fallback: the card
+  // always supplies a real `iconImage` (the uploaded logo), so this never
+  // actually renders in practice — kept for consistency with every other
+  // entry having a drawn glyph and as a safety net if iconImage is ever
+  // removed.
+  plus: (
+    <>
+      <path d="M12 5v14" />
+      <path d="M5 12h14" />
+    </>
+  ),
 };
 
 export function AppIcon({ name, className = 'h-7 w-7' }: { name: string; className?: string }) {

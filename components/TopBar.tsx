@@ -105,7 +105,20 @@ export function TopBar() {
             <div className="hidden medium:block">
               <ShareButton />
             </div>
-            <div className="medium:hidden">
+            {/* `flex` on this wrapper (not just `medium:hidden`), at Alex's
+                direction ("the hamburger button is slightly above the
+                light dark mode button") — real bug: a plain block `<div>`
+                wrapping an inline-flex `<button>` gets its own height from
+                normal inline line-box rules (the button's line-height
+                contributes "phantom" leading above/below it), which was a
+                couple pixels TALLER than the button's own 44px box. The
+                row's `items-center` then centered THAT taller wrapper,
+                nudging the actual button off-center relative to
+                ThemeToggle right next to it (which has no such wrapper,
+                so nothing shifts it). `flex` makes the wrapper's own box
+                shrink exactly to the button's real height, matching
+                ThemeToggle's box exactly and centering identically. */}
+            <div className="medium:hidden flex">
               <HeaderMenu open={menuOpen} onToggle={() => setMenuOpen((v) => !v)} />
             </div>
           </div>

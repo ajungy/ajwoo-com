@@ -168,10 +168,21 @@ export default function Home() {
       )}
 
       <div className="mx-auto max-w-app px-page">
-        <FeaturedApp apps={apps} />
+        {/* Request Alex excluded here — the carousel is "Alex's choice"
+            showcasing the four real products; a card whose whole job is
+            "ask Alex for something else" doesn't belong in that lineup.
+            It still appears on /apps itself (content/apps.ts keeps it
+            last in the array), just not in this featured rotation. */}
+        <FeaturedApp apps={apps.filter((a) => a.slug !== 'request')} />
 
-        <DesignPrinciples />
+        {/* SkillsSection ("Try Alex's SKILL.md") now BEFORE DesignPrinciples
+            (was after), at Alex's direction ("put try Alex's skill.md
+            section above the favorite design principles... between the
+            [all apps] button and favorite design principles"). Both
+            sections carry their own mt-[245px] regardless of what precedes
+            them, so reordering doesn't touch spacing. */}
         <SkillsSection />
+        <DesignPrinciples />
 
         {/* Four stacked sections now, not two 2-column rows — Experience,
             Education, Featured, and "Worked with" each on their own

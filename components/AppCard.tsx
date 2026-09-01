@@ -88,6 +88,18 @@ import { WAITLIST_FORM_URL, type App } from '@/content/apps';
  * place at a time rather than fighting each other or double-stacking two
  * shadows. Outside the carousel (the /apps grid, the only other caller),
  * both stay on and this is a no-op.
+ *
+ * `app.thumbnailPlus`/`cardHref`/`ctaLabel` — the "Request Alex" card
+ * only, at Alex's direction ("make a fifth apps card... behave the same
+ * way as any other app card, but... asking for additional apps or
+ * features"). `thumbnailPlus` swaps the usual screenshot/video media for
+ * a plain static square + centered "+" (no `.skeleton-shimmer` — that
+ * class loops forever, meant only as a brief loading placeholder before
+ * real media arrives, which never happens here, a Principle 14 problem).
+ * `cardHref` overrides BOTH the stretched card-link and the footer button
+ * to the same external URL (this card has no detail page worth having);
+ * `ctaLabel` overrides just the button's word in the Waitlist-fallback
+ * branch ("Request" instead of "Waitlist").
  */
 export function AppCard({
   app,
@@ -122,8 +134,15 @@ export function AppCard({
         (hoverZoom ? '' : ' no-hover-zoom')
       }
     >
-      <div className="skeleton-shimmer relative aspect-square overflow-hidden">
-        {app.thumbnailVideo ? (
+      <div className={`relative aspect-square overflow-hidden ${app.thumbnailPlus ? 'bg-sunken' : 'skeleton-shimmer'}`}>
+        {app.thumbnailPlus ? (
+          <div className="card-thumb-media flex h-full items-center justify-center">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" aria-hidden="true" className="h-12 w-12 text-fg-tertiary">
+              <path d="M12 5v14" />
+              <path d="M5 12h14" />
+            </svg>
+          </div>
+        ) : app.thumbnailVideo ? (
           <video
             ref={videoRef}
             autoPlay={playing === undefined && !hoverPlay}
@@ -182,8 +201,15 @@ export function AppCard({
         <div className="min-w-0 flex-1">
           <h3 className="truncate text-label font-medium text-fg">
             {/* The stretched link: the whole card is clickable and the app
-                name (plus "Beta" when set) is its accessible label. */}
-            <Link href={`/apps/${app.slug}/`} className="card-link">
+                name (plus "Beta" when set) is its accessible label.
+                `cardHref` (Request Alex only) sends this straight to the
+                external form instead of a `/apps/<slug>/` detail page
+                that doesn't exist for it. */}
+            <Link
+              href={app.cardHref ?? `/apps/${app.slug}/`}
+              {...(app.cardHref ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+              className="card-link"
+            >
               {app.name}{app.beta ? ' Beta' : ''}
             </Link>
           </h3>
@@ -196,7 +222,9 @@ export function AppCard({
             downloads that file directly, labeled "Install" — a plain
             anchor with the `download` attribute, same pattern as
             CopySkillButton.tsx, not an Action (which only ever navigates,
-            never downloads). Everything else still reads "Waitlist". */}
+            never downloads). Everything else reads "Waitlist" -> the
+            waitlist form, except Request Alex, which sets `cardHref` to
+            that same form and `ctaLabel` to override just the word. */}
         <div className="relative z-10 shrink-0">
           {app.openUrl ? (
             <Action href={app.openUrl} external variant="secondary" cursorLabel="Open">
@@ -218,8 +246,13 @@ export function AppCard({
               Install
             </a>
           ) : (
-            <Action href={WAITLIST_FORM_URL} external variant="secondary" cursorLabel="Join waitlist">
-              Waitlist
+            <Action
+              href={app.cardHref ?? WAITLIST_FORM_URL}
+              external
+              variant="secondary"
+              cursorLabel={app.ctaLabel ?? 'Join waitlist'}
+            >
+              {app.ctaLabel ?? 'Waitlist'}
             </Action>
           )}
         </div>

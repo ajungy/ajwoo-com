@@ -83,6 +83,22 @@ export type App = {
    *  the detail page's own h1) — at Alex's direction, for apps that are
    *  functional but not yet a finished v1. */
   beta?: boolean;
+  /** The "Request Alex" card only: a plain static square (theme-adaptive
+   *  background, a centered "+" glyph) instead of a real screenshot/demo
+   *  — there's nothing to show a preview OF. Matches the Figma reference
+   *  (node 516:2907) rather than this card's usual skeleton-shimmer
+   *  loading treatment, which would otherwise loop forever since no real
+   *  media ever arrives to replace it (a Principle 14 problem). */
+  thumbnailPlus?: boolean;
+  /** The "Request Alex" card only: overrides BOTH the stretched card-link
+   *  and the footer button to point here (external) instead of the
+   *  usual `/apps/<slug>/` detail page — there's no detail page worth
+   *  having for a card whose entire job is "click through to a form". */
+  cardHref?: string;
+  /** Overrides the footer button's label in the Waitlist fallback branch
+   *  (still `WAITLIST_FORM_URL`/`cardHref`, just different words) — used
+   *  by "Request Alex" to read "Request" instead of "Waitlist". */
+  ctaLabel?: string;
 };
 
 // Convert leads the array — at Alex's direction, ordering is now
@@ -198,9 +214,39 @@ export const apps: App[] = [
     ],
     iconImage: 'appicon-narrate',
   },
+  // "Request Alex" — deliberately LAST in this array, always, at Alex's
+  // direction ("this card should be the last card, always the last card
+  // inside the apps page on the bottom right"). Not a real app: a card
+  // that behaves like every other one (same AppCard component, same grid
+  // slot, same hover/press treatment) but both its stretched card-link
+  // and its footer button point straight at the same waitlist form the
+  // other cards use as their pre-release fallback, asking for feature/app
+  // requests instead of joining a waitlist for something specific.
+  // Because it's last, the /apps/[slug]/page.tsx "More apps" section
+  // (which shows the first 3 OTHER entries in array order) never surfaces
+  // it on any of the four real apps' own detail pages — it only shows up
+  // on the main /apps grid, which is the one place Alex wants it.
+  {
+    slug: 'request',
+    icon: 'plus',
+    name: 'Request Alex',
+    description: 'Ask Alex for features or apps',
+    trigger: 'Tell Alex what you want built',
+    platform: 'Web',
+    traits: ['Feature requests', 'New app ideas', 'Direct to Alex'],
+    thumbnailPlus: true,
+    cardHref: WAITLIST_FORM_URL,
+    ctaLabel: 'Request',
+    detail: [
+      { lead: 'Have an idea for a feature, or a whole app you wish existed?' },
+      'This form goes straight to Alex — not a support queue, not a backlog. Missing something from Convert, Capture, Dictate, or Narrate, or want something new entirely? Say so here.',
+    ],
+    iconImage: 'appicon-request',
+  },
 ];
 
 // Deliberately no groups. reference/disclosure.md caps a group at 7 and says a
-// group of one is not a group — at four apps, grouping is still an unearned
-// control and the flat grid is the simpler thing that works (Principle 12).
-// Introduce outcome-named groups when this list passes about seven.
+// group of one is not a group — at four apps (five with Request Alex), grouping
+// is still an unearned control and the flat grid is the simpler thing that
+// works (Principle 12). Introduce outcome-named groups when this list passes
+// about seven.
