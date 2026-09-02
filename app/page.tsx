@@ -203,22 +203,18 @@ export default function Home() {
             font-medium + --text-fg for emphasis, at Alex's direction —
             "highlighting the company title is okay" — but title/years
             stay --text-fg-secondary at the SAME size, not a smaller one). */}
-        {/* Headings on Experience/Education/Featured (not Worked-with —
-            Alex's most recent direction named only these three plus
-            "Favorite design principles") use the same TextAnimate
-            "blurInUp" reveal as that heading above, at Alex's direction
-            ("apply the same text intro animation motion effect to the
-            titles for Experience, Education, Featured, Worked with" —
-            an earlier round; Worked-with already got this then and is
-            untouched now). Heading and list share the same later scroll
+        {/* Headings on all four sections below (Experience/Education/
+            Featured/Worked-with) use the same TextAnimate "blurInUp"
+            reveal as "Favorite design principles" above, at Alex's
+            direction. Heading and list share the same later scroll
             trigger (`rootMargin="-80% 0px 0px 0px"`, i.e. "around 20% of
             the bottom window" — see DesignPrinciples.tsx's comment on
-            that prop and, THIS round, on the real bug that trigger had:
-            the "already on screen at mount" bypass ignored rootMargin
-            entirely, which is almost certainly why Alex reported "the
-            motion... happens too soon, I never see it" — fixed in
-            StaggerReveal.tsx/TextAnimate.tsx, not by changing this -80%
-            value itself).
+            that prop and, an earlier round, on the real bug that trigger
+            had: the "already on screen at mount" bypass ignored
+            rootMargin entirely, which is almost certainly why Alex
+            reported "the motion... happens too soon, I never see it" —
+            fixed in StaggerReveal.tsx/TextAnimate.tsx, not by changing
+            this -80% value itself).
             - `delayMs={500}` on the heading's TextAnimate — an explicit
               extra 500ms on top of the scroll trigger, at Alex's
               direction ("delay the animation... by 500ms").
@@ -231,11 +227,16 @@ export default function Home() {
               below" once the heading above it finishes). Computed by
               hand per heading (title lengths differ), not derived at
               runtime — these are fixed strings, not dynamic content.
-            - `durationMs={400}` on every list (all five, including
-              Worked-with) — was the shared 1000ms default, at Alex's
-              direction ("[the list text] loads very slowly, and I want
-              it to load faster so that it doesn't break the rhythm of
-              reading text"). */}
+            - `durationMs={400}` on every list (all five) — was the
+              shared 1000ms default, at Alex's direction ("[the list
+              text] loads very slowly, and I want it to load faster so
+              that it doesn't break the rhythm of reading text").
+            Worked-with was the one holdout missing the delayMs sequencing
+            (an earlier round named only Experience/Education/Featured) —
+            it now gets the identical treatment, at Alex's direction
+            ("make sure Worked with Kikkerland Design follows the motion
+            patterns and timing of the other subtitle and body
+            animations... so that we have a system for all"). */}
         <section className="mt-[245px]">
           <div className="grid grid-cols-1 large:grid-cols-4">
             <div className="large:col-start-2 large:col-span-2">
@@ -313,9 +314,19 @@ export default function Home() {
                   calls it. Already one name per row, nothing to
                   comma-join. */}
               <h2 className="text-h3 text-fg">
-                <TextAnimate trigger="scroll" rootMargin="-80% 0px 0px 0px">Worked with</TextAnimate>
+                <TextAnimate trigger="scroll" rootMargin="-80% 0px 0px 0px" delayMs={500}>Worked with</TextAnimate>
               </h2>
-              <StaggerReveal className="mt-6 flex flex-col gap-6" rootMargin="-80% 0px 0px 0px" durationMs={400}>
+              {/* "Worked with" = 11 chars: 500 + 10*22 + 600 = 1320ms, + a
+                  100ms gap once it finishes = 1420ms. Worked-with now gets
+                  the exact same delayMs={500}/sequenced-delay/durationMs
+                  treatment the other three sections already had — at
+                  Alex's direction ("make sure Worked with Kikkerland
+                  Design follows the motion patterns and timing of the
+                  other subtitle and body animations... so that we have a
+                  system for all"). Previously the only section left out,
+                  from an earlier round that named just Experience/
+                  Education/Featured. */}
+              <StaggerReveal className="mt-6 flex flex-col gap-6" rootMargin="-80% 0px 0px 0px" delayMs={1420} durationMs={400}>
                 {clients.map((c) => (
                   <p key={c} className="text-body text-fg-secondary">{c}</p>
                 ))}

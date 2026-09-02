@@ -60,7 +60,11 @@ const BIG_MIN = 80;
 const BIG_SIZE = 80; // the capped size once a target crosses that line
 
 // Click spring. Grip swells it, release rings and settles inside ~1s.
-const GRIP = 0.34;
+// GRIP 0.34 -> 0.24 (30% smaller peak swell — was 1.34x the drop's own
+// size at full grip, now 1.24x), at Alex's direction ("I like how... the
+// bubble gets slightly bigger [on click], but... the click size getting
+// bigger is too big... reduce the... expand amount by thirty percent").
+const GRIP = 0.24;
 const SPRING = 0.20;
 const DAMPING = 0.86;
 
