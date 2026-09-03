@@ -91,17 +91,23 @@ export function TopBar() {
             {navLinks('')}
           </nav>
 
-          {/* Right cluster: theme toggle, Share on medium+; kebab menu on compact.
-              Neither ThemeToggle nor HeaderMenu sits inside a scale wrapper —
-              an earlier scale-125 around HeaderMenu made it visibly bigger
-              than ThemeToggle on compact despite both using the same
-              h/w-control-md token, which is exactly the mismatch Alex flagged
-              (button size, icon size, and line weight all need to match
-              between the two). Removing it makes them match natively, with
-              no token override needed. 4px gap between them at medium+, at
-              Alex's direction (gap-4 at compact is unrelated — that's the
-              toggle-to-kebab gap, untouched). */}
-          <div className="flex items-center gap-4 medium:gap-2 shrink-0 ml-auto">
+          {/* Right cluster: theme toggle, cursor toggle, Share on medium+;
+              kebab menu on compact. Neither ThemeToggle nor HeaderMenu sits
+              inside a scale wrapper — an earlier scale-125 around HeaderMenu
+              made it visibly bigger than ThemeToggle on compact despite
+              both using the same h/w-control-md token, which is exactly the
+              mismatch Alex flagged (button size, icon size, and line weight
+              all need to match between the two). Removing it makes them
+              match natively, with no token override needed.
+              gap-4 (8px) at EVERY breakpoint now, not gap-4/medium:gap-2 —
+              at Alex's direction ("keep the button distance consistent
+              between the darkmode button, bubble button, and share
+              button... 8px apart"): medium:gap-2 was only 4px (this
+              project's custom spacing scale, where index 2 = 4px), half of
+              compact's own gap-4 (8px) — the two breakpoints disagreed with
+              each other, not just with the 8px target. One value now
+              satisfies both. */}
+          <div className="flex items-center gap-4 shrink-0 ml-auto">
             {/* CursorToggle right next to ThemeToggle, at Alex's direction
                 ("make a toggle... next to the dark and light mode
                 button... where it'll show you the effects of the bubble

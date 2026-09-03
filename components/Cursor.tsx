@@ -462,6 +462,19 @@ export function Cursor() {
     // FOLLOW lerp as everything else, the moment a move event arrives.
     // Touch is unaffected: there's no persistent OS cursor concept to stand
     // in for on a touchscreen, so it still only appears on contact.
+    //
+    // This same path is what makes the drop appear immediately (not on the
+    // next hover) after CursorToggle.tsx turns it on, at Alex's direction
+    // ("when clicking on the bubble cursor toggle can you make the bubble
+    // appear immediately and rapidly? I don't see it until I hover on
+    // another element"): CursorGate mounting <Cursor/> in response to the
+    // toggle runs this exact effect from scratch, so `setVisible(true)`
+    // fires unconditionally on the very next frame regardless of whether
+    // the pointer happens to be sitting over the toggle button itself — no
+    // separate mount-time hover check is needed (an earlier attempt at one
+    // here was dead code: it ran synchronously, before this same effect's
+    // refs are committed, so it silently no-opped for the same reason this
+    // comment already describes above).
     raf = requestAnimationFrame(() => {
       if (!touchMode) {
         // Also seed the target SHAPE, not just position, if the pointer

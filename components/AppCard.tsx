@@ -122,6 +122,26 @@ export function AppCard({
     else videoRef.current?.pause();
   }, [playing]);
 
+  // `thumbnailStartAtEnd` (Dictate only): seek to just before the clip's
+  // own last frame the moment its metadata is available, so whichever
+  // trigger starts playback (hoverPlay's onMouseEnter, or the `playing`
+  // prop's effect above) begins there — the loop plays that final sliver,
+  // then wraps back to 0 and runs normally from then on. `loadedmetadata`
+  // is when `duration` first becomes a real number; if it's already
+  // loaded by the time this effect runs (readyState >= 1), seek right
+  // away instead of waiting for an event that already fired.
+  useEffect(() => {
+    if (!app.thumbnailStartAtEnd) return;
+    const v = videoRef.current;
+    if (!v) return;
+    const seekToEnd = () => {
+      if (v.duration && Number.isFinite(v.duration)) v.currentTime = Math.max(v.duration - 0.05, 0);
+    };
+    if (v.readyState >= 1) seekToEnd();
+    else v.addEventListener('loadedmetadata', seekToEnd, { once: true });
+    return () => v.removeEventListener('loadedmetadata', seekToEnd);
+  }, [app.thumbnailStartAtEnd]);
+
   return (
     <article
       data-cursor-label={app.name}

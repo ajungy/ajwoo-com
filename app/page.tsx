@@ -219,14 +219,17 @@ export default function Home() {
               extra 500ms on top of the scroll trigger, at Alex's
               direction ("delay the animation... by 500ms").
             - `delayMs={N}` on the list's StaggerReveal, where N is that
-              same 500ms, plus however long the heading's own text-reveal
+              same 500ms plus however long the heading's own text-reveal
               takes to finish (word count × TextAnimate's per-character
-              step + its 600ms per-character animation), PLUS a further
-              100ms gap — at Alex's direction ("within one hundred
-              milliseconds, start the motion to animate in the text
-              below" once the heading above it finishes). Computed by
-              hand per heading (title lengths differ), not derived at
-              runtime — these are fixed strings, not dynamic content.
+              step + its 600ms per-character animation) — the list starts
+              the INSTANT the heading finishes, no extra buffer. A
+              previous round added an explicit 100ms gap here ("within one
+              hundred milliseconds, start the motion..."); dropped this
+              round, at Alex's direction ("make the text appear sooner, as
+              soon as the blur effect title and subtitle finished
+              appearing"). Computed by hand per heading (title lengths
+              differ), not derived at runtime — these are fixed strings,
+              not dynamic content.
             - `durationMs={400}` on every list (all five) — was the
               shared 1000ms default, at Alex's direction ("[the list
               text] loads very slowly, and I want it to load faster so
@@ -243,9 +246,8 @@ export default function Home() {
               <h2 className="text-h3 text-fg">
                 <TextAnimate trigger="scroll" rootMargin="-80% 0px 0px 0px" delayMs={500}>Experience</TextAnimate>
               </h2>
-              {/* "Experience" = 10 chars: 500 + 9*22 + 600 = 1298ms, + a
-                  100ms gap once it finishes = 1400ms. */}
-              <StaggerReveal className="mt-6 flex flex-col gap-6" rootMargin="-80% 0px 0px 0px" delayMs={1400} durationMs={400}>
+              {/* "Experience" = 10 chars: 500 + 9*22 + 600 = 1298ms. */}
+              <StaggerReveal className="mt-6 flex flex-col gap-6" rootMargin="-80% 0px 0px 0px" delayMs={1298} durationMs={400}>
                 {experience.map((x) => (
                   <p key={x.company} className="text-body">
                     <span className="font-medium text-fg">{x.company}</span>
@@ -271,9 +273,8 @@ export default function Home() {
               <h2 className="text-h3 text-fg">
                 <TextAnimate trigger="scroll" rootMargin="-80% 0px 0px 0px" delayMs={500}>Education</TextAnimate>
               </h2>
-              {/* "Education" = 9 chars: 500 + 8*22 + 600 = 1276ms, + a
-                  100ms gap once it finishes = 1380ms. */}
-              <StaggerReveal className="mt-6 flex flex-col gap-6" rootMargin="-80% 0px 0px 0px" delayMs={1380} durationMs={400}>
+              {/* "Education" = 9 chars: 500 + 8*22 + 600 = 1276ms. */}
+              <StaggerReveal className="mt-6 flex flex-col gap-6" rootMargin="-80% 0px 0px 0px" delayMs={1276} durationMs={400}>
                 {education.map((e) => (
                   <p key={e.school} className="text-body">
                     <span className="font-medium text-fg">{e.school}</span>
@@ -291,9 +292,8 @@ export default function Home() {
               <h2 className="text-h3 text-fg">
                 <TextAnimate trigger="scroll" rootMargin="-80% 0px 0px 0px" delayMs={500}>Featured</TextAnimate>
               </h2>
-              {/* "Featured" = 8 chars: 500 + 7*22 + 600 = 1254ms, + a
-                  100ms gap once it finishes = 1360ms. */}
-              <StaggerReveal className="mt-6 flex flex-col gap-6" rootMargin="-80% 0px 0px 0px" delayMs={1360} durationMs={400}>
+              {/* "Featured" = 8 chars: 500 + 7*22 + 600 = 1254ms. */}
+              <StaggerReveal className="mt-6 flex flex-col gap-6" rootMargin="-80% 0px 0px 0px" delayMs={1254} durationMs={400}>
                 {featured.map((f) => (
                   <p key={`${f.year}-${f.what}`} className="text-body">
                     <span className="text-fg-tertiary">{f.year}</span>
@@ -316,17 +316,17 @@ export default function Home() {
               <h2 className="text-h3 text-fg">
                 <TextAnimate trigger="scroll" rootMargin="-80% 0px 0px 0px" delayMs={500}>Worked with</TextAnimate>
               </h2>
-              {/* "Worked with" = 11 chars: 500 + 10*22 + 600 = 1320ms, + a
-                  100ms gap once it finishes = 1420ms. Worked-with now gets
-                  the exact same delayMs={500}/sequenced-delay/durationMs
-                  treatment the other three sections already had — at
+              {/* "Worked with" = 11 chars: 500 + 10*22 + 600 = 1320ms.
+                  Worked-with now gets the exact same delayMs={500}/
+                  sequenced-delay/durationMs treatment the other three
+                  sections already had — at
                   Alex's direction ("make sure Worked with Kikkerland
                   Design follows the motion patterns and timing of the
                   other subtitle and body animations... so that we have a
                   system for all"). Previously the only section left out,
                   from an earlier round that named just Experience/
                   Education/Featured. */}
-              <StaggerReveal className="mt-6 flex flex-col gap-6" rootMargin="-80% 0px 0px 0px" delayMs={1420} durationMs={400}>
+              <StaggerReveal className="mt-6 flex flex-col gap-6" rootMargin="-80% 0px 0px 0px" delayMs={1320} durationMs={400}>
                 {clients.map((c) => (
                   <p key={c} className="text-body text-fg-secondary">{c}</p>
                 ))}

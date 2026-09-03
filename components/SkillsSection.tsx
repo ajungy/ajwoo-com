@@ -43,10 +43,12 @@ import { TextAnimate } from './TextAnimate';
  * at text-title — not one plain string, so each gets its OWN TextAnimate
  * instance (same rootMargin/delayMs, so they read as one reveal) rather
  * than trying to force mismatched sizes through a single call.
- * `delayMs={1600}` on the body: 500 (the heading's own delay) + 18*22
+ * `delayMs={1496}` on the body: 500 (the heading's own delay) + 18*22
  * (SKILL.md's own per-character stagger, the longest of the three
- * pieces) + 600 (that character's animation length) + 100 (the same gap
- * every other section uses) = 1596, rounded to 1600.
+ * pieces) + 600 (that character's animation length) = 1496 — no extra
+ * buffer on top, at Alex's direction ("make the text appear sooner, as
+ * soon as the blur effect title and subtitle finished appearing"); a
+ * previous round's explicit 100ms gap is dropped here.
  */
 export function SkillsSection() {
   return (
@@ -66,7 +68,7 @@ export function SkillsSection() {
         <StaggerReveal
           className="mt-4 flex flex-col items-center gap-8"
           rootMargin="-80% 0px 0px 0px"
-          delayMs={1600}
+          delayMs={1496}
           durationMs={400}
         >
           <p className="max-w-content text-body text-fg-secondary">

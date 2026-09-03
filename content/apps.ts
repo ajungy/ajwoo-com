@@ -99,6 +99,12 @@ export type App = {
    *  (still `WAITLIST_FORM_URL`/`cardHref`, just different words) — used
    *  by "Request Alex" to read "Request" instead of "Waitlist". */
   ctaLabel?: string;
+  /** `thumbnailVideo` only: seeks to (just before) the clip's own last
+   *  frame once its metadata loads, so playback genuinely BEGINS there —
+   *  it plays that final sliver, then `loop` wraps it back to the start
+   *  and it runs normally from then on. Used by Dictate, at Alex's
+   *  direction ("start the video from the last frame of the video"). */
+  thumbnailStartAtEnd?: boolean;
 };
 
 // Convert leads the array — at Alex's direction, ordering is now
@@ -185,9 +191,12 @@ export const apps: App[] = [
     trigger: 'Double-tap Command to start talking',
     platform: 'macOS',
     traits: ['Native macOS app', 'Runs fully on-device'],
-    // Real screen recording (Alex's "Dictate thumbnail.mov"), same
+    // Real screen recording (Alex's "Dictate Beta Thumbnail.mov"), same
     // pattern as Capture's card — was a static `thumbnail` before.
     thumbnailVideo: 'appcard-dictate',
+    // This card only, at Alex's direction ("just for this Dictate Beta
+    // thumbnail can you start the video from the last frame").
+    thumbnailStartAtEnd: true,
     // Renders between the header (icon/name/Waitlist) and the body copy
     // below — the same slot Convert/Capture's demoVideoYoutube already
     // uses (see app/apps/[slug]/page.tsx) — at Alex's direction ("between
