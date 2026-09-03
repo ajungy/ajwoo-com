@@ -185,7 +185,15 @@ export const apps: App[] = [
     trigger: 'Double-tap Command to start talking',
     platform: 'macOS',
     traits: ['Native macOS app', 'Runs fully on-device'],
-    thumbnail: 'appcard-dictate',
+    // Real screen recording (Alex's "Dictate thumbnail.mov"), same
+    // pattern as Capture's card — was a static `thumbnail` before.
+    thumbnailVideo: 'appcard-dictate',
+    // Renders between the header (icon/name/Waitlist) and the body copy
+    // below — the same slot Convert/Capture's demoVideoYoutube already
+    // uses (see app/apps/[slug]/page.tsx) — at Alex's direction ("between
+    // waitlist button and the body text... include this YouTube video
+    // link").
+    demoVideoYoutube: 'w6eWPNnpNyE',
     beta: true,
     detail: [
       { lead: 'Dictate listens to your voice, transcribes it to text, cleans up grammar and punctuation, and pastes it anywhere.' },
