@@ -19,7 +19,7 @@
 // action on the grid and every detail page points here instead of a real
 // download or checkout — one honest next step (Principle 9), not a
 // disabled button with no explanation.
-export const WAITLIST_FORM_URL = 'https://forms.gle/WsvMej7L7Y2uf6fB6';
+export const WAITLIST_FORM_URL = 'https://forms.gle/xRYzjMdBYaYmYWix5';
 
 export type App = {
   slug: string;
