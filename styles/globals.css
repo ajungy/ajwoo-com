@@ -500,14 +500,15 @@ html[data-theme-transition] * {
 }
 
 
-/* The custom cursor replaces the native one only where it actually runs. */
-@media (any-pointer: fine) and (prefers-reduced-motion: no-preference) {
-  html[data-cursor="on"],
-  html[data-cursor="on"] a,
-  html[data-cursor="on"] button {
-    cursor: none;
-  }
-}
+/* The bubble is an added affordance on top of the real pointer now, not a
+   replacement for it — at Alex's direction ("the default cursor would be
+   the normal OS cursor even when the bubble mode is toggled on"). The
+   native `cursor: none` hiding this rule used to apply is gone; the OS
+   arrow stays visible at all times, on or off, and the bubble only ever
+   adds a second affordance over clickable targets (see Cursor.tsx's
+   onOver/tick — it now only shows and moves on a genuine
+   `data-cursor-label` hover, and freezes at its last position otherwise). */
+
 /* Reduced-motion users get the native cursor, untouched, on any pointer type.
    Coarse pointers with motion on get the tap-relocate drop instead (see
    Cursor.tsx's touchMode) — `data-cursor="touch"` is the JS-side gate for

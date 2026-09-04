@@ -13,19 +13,22 @@ import { useRouter } from 'next/navigation';
  * visible affordance underneath the drop, so the water reads as decoration
  * riding on top of the real UI rather than replacing it.
  *
- * Two objects:
- *   DOT   the truth. Exactly under the pointer, zero lag. Painted with
- *         `mix-blend-mode: difference` and rendered as a SIBLING of the water
- *         drop's root, not a descendant of it (see the CSS comment on
- *         .cursor-dot in globals.css) — nesting it inside the drop's own
- *         fixed/z-indexed wrapper silently trapped its blending against that
- *         wrapper's own near-empty local paint group instead of the real
- *         page, which is why the inversion looked broken before this fix.
- *         Inverts whatever is under it: white on black, black on white, blue
- *         on orange, unconditionally, at rest, hovering, gripped, or mid-pop.
- *   DROP  the physics. Chases the dot and arrives late, deforms with speed,
- *         settles when it stops, and takes the shape of small targets it is
- *         over. Large targets are capped, not morphed — see BIG_MIN below.
+ * REVISED, at Alex's direction ("only appear when the user is hovering on a
+ * clickable element like a button or a link... the default cursor would be
+ * the normal OS cursor even when the bubble mode is toggled on... always
+ * stationary at the last time position... and only moves when users hover
+ * over a clickable element"). The drop no longer stands in for the OS
+ * pointer — the native arrow stays visible at all times bubble mode is on
+ * (globals.css no longer sets `cursor: none`) — and it no longer chases the
+ * raw pointer across empty page or over big targets either. It is purely an
+ * affordance layer now: invisible until a genuine `data-cursor-label`
+ * element is hovered, at which point it appears/moves/reshapes to that
+ * target, and then holds there — position, size, and shape all frozen —
+ * until the pointer lands on a *different* labelled element. Leaving a
+ * labelled element for plain page does nothing; the bubble just stays put.
+ * A near-invisible inversion dot (`.cursor-dot`, ~2% opacity) still tracks
+ * the raw pointer underneath for its `mix-blend-mode: difference` effect,
+ * but it is no longer the "real" cursor stand-in — the OS arrow is.
  *
  * The optics are deliberately weak. A thin film of water is a *slight* zoom
  * lens, not a fisheye: the displacement is small and negative (magnifying), so
@@ -218,19 +221,30 @@ export function Cursor() {
       want.r = REST_SIZE / 2;
     };
 
+    // Fine pointer: the bubble is only an affordance for clickable things
+    // now, not a cursor replacement, at Alex's direction ("only appear when
+    // the user is hovering on a clickable element like a button or a
+    // link... the default cursor would be the normal OS cursor even when
+    // the bubble mode is toggled on... always stationary at the last
+    // position... and only moves when users hover over a clickable
+    // element"). So leaving a labelled element to plain page (`el` not
+    // found) does nothing at all — no release(), no hide, no reposition —
+    // the bubble just stays exactly where and how it last was. Only landing
+    // on a NEW labelled element moves and reshapes it. `release()` still
+    // exists for touchMode's onMove branch below, which has its own reasons
+    // to reset to a resting dot.
     const onOver = (e: PointerEvent) => {
       if (popping) return;
       const el = (e.target as Element | null)?.closest?.('[data-cursor-label]');
-      if (!el) { if (active) release(); return; }
-      if (el === active) return;
+      if (!el || el === active) return;
       active = el;
       measure();
+      if (!visible) setVisible(true);
     };
 
     const onMove = (e: PointerEvent) => {
       pointer.x = e.clientX;
       pointer.y = e.clientY;
-      if (!visible) setVisible(true);
       // Touch has no hover, but it DOES fire pointermove while a finger is
       // actively dragging across the screen — that's exactly the gesture
       // Alex asked the drop to follow, so a touch move re-targets whatever
@@ -245,21 +259,25 @@ export function Cursor() {
     };
     const onLeave = () => setVisible(false);
 
-    // The real bug behind "the bubble disappears when I come back to this
-    // tab": switching tabs (or apps) usually moves the real pointer up out
-    // of the page into browser chrome first, which fires the pointerleave
-    // above and hides the drop — correctly, at that instant. The problem is
-    // what happens on RETURN: if the user doesn't happen to jiggle the
-    // mouse over the page content again, nothing ever calls setVisible(true)
-    // — onMove only runs on an actual pointermove, and there isn't
-    // necessarily one. The drop stays invisible indefinitely with a real
-    // cursor sitting right there on the page. `visibilitychange` (tab
-    // switch) and `focus` (window/app switch) are both events that fire
-    // reliably on return, with no dependency on the mouse having moved, so
-    // both re-show the drop immediately rather than waiting for movement
-    // that might not come.
+    // Switching tabs (or apps) usually moves the real pointer up out of the
+    // page into browser chrome first, which fires the pointerleave above
+    // and hides the bubble — correctly, at that instant. The problem is
+    // what happens on RETURN: if the user doesn't jiggle the mouse over the
+    // page again, nothing ever re-shows it — onOver only runs on a genuine
+    // pointerover, and there isn't necessarily one. `visibilitychange` (tab
+    // switch) and `focus` (window/app switch) both fire reliably on return
+    // with no dependency on the mouse having moved, so both re-check
+    // `:hover` the same way the mount-time seed below does: if the pointer
+    // is still genuinely sitting over a labelled element, the bubble
+    // reappears there; otherwise it stays hidden, since there's nothing
+    // clickable under the pointer to show it for.
     const onReturn = () => {
-      if (!touchMode && document.visibilityState !== 'hidden') setVisible(true);
+      if (touchMode || document.visibilityState === 'hidden') return;
+      const nowHovered = document.querySelectorAll(':hover');
+      const el = nowHovered.length
+        ? (nowHovered[nowHovered.length - 1] as Element).closest('[data-cursor-label]')
+        : null;
+      if (el) { active = el; measure(); setVisible(true); }
     };
     document.addEventListener('visibilitychange', onReturn);
     addEventListener('focus', onReturn);
@@ -383,12 +401,19 @@ export function Cursor() {
 
     const tick = () => {
       if (popping) return;
-      // Where the drop wants to be: the pointer itself at rest, over a large
-      // target (bigTarget), or covering the exact target for a small one.
-      const followPointer = !active || bigTarget;
-      want.x = followPointer ? pointer.x : rect!.left + rect!.width / 2;
-      // For small targets, center on the bbox center exactly.
-      want.y = followPointer ? pointer.y : rect!.top + rect!.height / 2;
+      // Where the bubble wants to be: the active target's own center,
+      // whether capped (bigTarget) or exact-shape (small target) — and
+      // nothing at all when nothing is active, at Alex's direction ("always
+      // stationary at the last time position... only moves when users hover
+      // over a clickable element"). `want.x/y` simply isn't touched in that
+      // case, so it stays frozen at wherever the last active target left it
+      // (or the mount-time seed, if nothing has been hovered yet) rather
+      // than chasing the raw pointer the way it used to for empty space and
+      // big targets alike.
+      if (active && rect) {
+        want.x = rect.left + rect.width / 2;
+        want.y = rect.top + rect.height / 2;
+      }
 
       // Hidden: collapse toward a point rather than just fading the finished
       // shape out. Reusing the same MORPH interpolation that already handles
@@ -448,44 +473,25 @@ export function Cursor() {
       }
       raf = requestAnimationFrame(tick);
     };
-    // Fine pointer: the drop is standing in for the OS cursor, so it should
-    // be there from the first frame, not only once the mouse first moves —
-    // a stationary mouse (the common case right after a page load) would
-    // otherwise never fire a pointermove to trigger it. Deferred one frame
+    // Fine pointer: only show the bubble at mount if the pointer already
+    // happens to be sitting over a labelled (clickable) element — e.g.
+    // right after CursorToggle.tsx turns bubble mode on while hovering a
+    // button. Otherwise it stays hidden until the first genuine qualifying
+    // hover, at Alex's direction ("only appear when the user is hovering on
+    // a clickable element like a button or a link"). Deferred one frame
     // rather than called synchronously here: `enabled` (the state flip that
     // actually mounts rootRef/dotRef's DOM nodes) hasn't committed yet at
     // this point in the effect, so the refs setVisible relies on are still
     // null and the call would silently no-op. By the first rAF callback,
-    // React has committed that render and the refs are live. Starts at the
-    // real `:hover`-derived position seeded above (or viewport center if
-    // nothing was hovered) and glides the rest of the way via the same
-    // FOLLOW lerp as everything else, the moment a move event arrives.
-    // Touch is unaffected: there's no persistent OS cursor concept to stand
-    // in for on a touchscreen, so it still only appears on contact.
-    //
-    // This same path is what makes the drop appear immediately (not on the
-    // next hover) after CursorToggle.tsx turns it on, at Alex's direction
-    // ("when clicking on the bubble cursor toggle can you make the bubble
-    // appear immediately and rapidly? I don't see it until I hover on
-    // another element"): CursorGate mounting <Cursor/> in response to the
-    // toggle runs this exact effect from scratch, so `setVisible(true)`
-    // fires unconditionally on the very next frame regardless of whether
-    // the pointer happens to be sitting over the toggle button itself — no
-    // separate mount-time hover check is needed (an earlier attempt at one
-    // here was dead code: it ran synchronously, before this same effect's
-    // refs are committed, so it silently no-opped for the same reason this
-    // comment already describes above).
+    // React has committed that render and the refs are live. Touch is
+    // unaffected: there's no persistent OS cursor concept to stand in for
+    // on a touchscreen, so it still only appears on contact.
     raf = requestAnimationFrame(() => {
       if (!touchMode) {
-        // Also seed the target SHAPE, not just position, if the pointer
-        // happened to already be sitting over a labelled target at mount —
-        // otherwise the drop briefly shows as a plain circle at that
-        // target's center before snapping to its shape a frame later.
         const label = hovered.length
           ? (hovered[hovered.length - 1] as Element).closest('[data-cursor-label]')
           : null;
-        if (label) { active = label; measure(); }
-        setVisible(true);
+        if (label) { active = label; measure(); setVisible(true); }
       }
       tick();
     });

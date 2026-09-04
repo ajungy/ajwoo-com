@@ -32,6 +32,13 @@ const glyphs: Record<string, React.ReactNode> = {
       <path d="M20 5.5a7.5 7.5 0 0 1 0 13" />
     </>
   ),
+  // Draw — a pencil, mirroring the uploaded logo's own mark.
+  draw: (
+    <>
+      <path d="M17.5 3.5l3 3L9 18l-4 1 1-4L17.5 3.5z" />
+      <path d="M14.5 6.5l3 3" />
+    </>
+  ),
   // Request Alex — a plain plus, matching the Figma reference's own glyph
   // (node 516:2907, "icon/plus"). Only used as a fallback: the card
   // always supplies a real `iconImage` (the uploaded logo), so this never

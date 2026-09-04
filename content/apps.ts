@@ -108,8 +108,13 @@ export type App = {
 };
 
 // Convert leads the array — at Alex's direction, ordering is now
-// Convert, Capture, Dictate, Narrate — so it renders as the /apps grid's
-// first (top-left) card.
+// Convert, Draw, Capture, Dictate, Narrate — so it renders as the /apps
+// grid's first (top-left) card. Draw is the second real, already-shipped
+// web app (like Convert): a local-first browser drawing tool at
+// draw.ajwoo.com, added at Alex's direction ("add another card between the
+// convert card and capture beta card"). Its copy is pulled from that
+// project's own README (ajwoo-draw/README.md) rather than invented, the
+// same sourcing rule Convert's copy follows.
 //
 // A later pass removed every em dash from this file's RENDERED copy (Alex:
 // "prevent using em dashes everywhere on the website... not a single em
@@ -145,6 +150,26 @@ export const apps: App[] = [
       'Works in any current browser, on a computer, phone, or tablet. Built in Claude Code, like Capture, Dictate, and Narrate.',
     ],
     iconImage: 'appicon-convert',
+  },
+  {
+    slug: 'draw',
+    icon: 'draw',
+    name: 'Draw',
+    description: 'Quickly draw on web',
+    trigger: 'Open the link, pick a tool, draw',
+    platform: 'Web',
+    traits: ['Runs in your browser', 'No account', 'Works offline', 'Nothing uploaded', 'Share via link, no server'],
+    thumbnail: 'appcard-draw',
+    openUrl: 'https://draw.ajwoo.com/',
+    detail: [
+      { lead: 'A drawing app that opens in a browser tab and never leaves it.' },
+      'Pick a tool from the bottom toolbar and draw, on a phone or a laptop. There is no account, no backend, and nothing to set up.',
+      { label: 'Nothing uploaded', body: 'The drawing is saved to this browser, on this device, in IndexedDB. It leaves only when you explicitly export or share it.' },
+      { label: 'Share without a server', body: 'A share link carries the whole drawing, compressed, inside the URL itself. Nothing is uploaded, so there is no database row and no link that can expire out from under you.' },
+      { label: 'Pen, shapes, and text', body: 'Freehand strokes with stylus pressure where the device reports it, lines and connectors that snap to shapes and stay attached as they move, rectangles, ellipses, triangles, stars, and sticky notes, and text.' },
+      'Works offline after the first visit, in any current browser. Built in Claude Code, like Convert, Capture, Dictate, and Narrate.',
+    ],
+    iconImage: 'appicon-draw',
   },
   {
     slug: 'capture',
