@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import '@/styles/globals.css';
 import { TopBar } from '@/components/TopBar';
-import { CursorGate } from '@/components/CursorGate';
+import { AnalyticsSettingsLink } from '@/lib/analytics/AnalyticsConsent';
 import { site } from '@/content/site';
 import { SiteAnalytics } from '@/components/SiteAnalytics';
 
@@ -48,21 +48,6 @@ try {
   }
 } catch (e) {}
 try {
-  // The bubble cursor's own on/off preference (components/CursorToggle.tsx,
-  // CursorGate.tsx) — read synchronously here, same pattern as the theme
-  // attribute above, so CursorGate's very first client render already
-  // knows the right answer instead of guessing "off" for a frame and then
-  // correcting, which would flash the real OS cursor briefly replaced (or
-  // vice versa) on every load for a returning visitor who turned it on.
-  // Default OFF site-wide, at Alex's direction — nothing is written to
-  // localStorage here, only read, so a visitor who never opens the toggle
-  // just gets the plain OS cursor, permanently, with no flash either way.
-  document.documentElement.setAttribute(
-    'data-cursor-pref',
-    localStorage.getItem('cursor-enabled') === 'true' ? 'on' : 'off',
-  );
-} catch (e) {}
-try {
   if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
   if (location.pathname === '/') window.scrollTo(0, 0);
 } catch (e) {}
@@ -90,14 +75,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body>
         <SiteAnalytics />
-        {/* Site-wide, at Alex's direction — was landing-page-only.
-            CursorGate (not Cursor directly): mounts/unmounts the actual
-            cursor based on the on/off preference read synchronously above
-            — off by default, at Alex's direction ("by default on this
-            website, can you turn off this bubble cursor"). See
-            CursorToggle.tsx (the button next to ThemeToggle) and
-            CursorGate.tsx for the rest of this. */}
-        <CursorGate />
         <a
           href="#main"
           className="sr-only focus:not-sr-only focus:absolute focus:z-modal focus:m-6 focus:rounded-control focus:bg-raised focus:px-6 focus:py-4 focus:text-label focus:shadow-e2"
@@ -114,6 +91,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <footer className="mt-15">
           <div className="mx-auto max-w-app px-page py-9 text-caption text-fg-tertiary">
             &copy; {site.fullName}
+            <span className="ml-6"><AnalyticsSettingsLink /></span>
           </div>
         </footer>
       </body>

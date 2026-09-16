@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Logo } from './Logo';
 import { ThemeToggle } from './ThemeToggle';
-import { CursorToggle } from './CursorToggle';
 import { ShareButton } from './ShareButton';
 import { HeaderMenu } from './HeaderMenu';
 import { nav } from '@/content/site';
@@ -108,14 +107,7 @@ export function TopBar() {
               each other, not just with the 8px target. One value now
               satisfies both. */}
           <div className="flex items-center gap-4 shrink-0 ml-auto">
-            {/* CursorToggle right next to ThemeToggle, at Alex's direction
-                ("make a toggle... next to the dark and light mode
-                button... where it'll show you the effects of the bubble
-                cursor") — same visibility as ThemeToggle (always shown,
-                not gated behind medium:block/hidden), same chrome, so it
-                reads as one more member of that icon-button family. */}
             <ThemeToggle />
-            <CursorToggle />
             <div className="hidden medium:block">
               <ShareButton />
             </div>
