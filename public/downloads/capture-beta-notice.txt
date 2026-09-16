@@ -1,0 +1,40 @@
+ajwoo capture — Beta
+Publisher: GG Creative Studios, LLC
+Release notices: September 13, 2026
+Support and security reports: alex@ajwoo.com
+
+INSTALL
+Apple silicon Mac (M1 or later), macOS 14 or later.
+Unzip the download, drag ajwoo capture.app to Applications, then open it.
+Allow Screen Recording when asked. Enable camera and microphone only if needed.
+Normal first-open and privacy prompts may appear. Keep macOS security enabled.
+
+TEST BEFORE IMPORTANT WORK
+This app is still in development and is offered for beta testing and evaluation,
+including educational use. Recording, editing, transcription and export may have
+errors, interruptions or compatibility issues. Keep separate backups of important
+files. Make a short test recording and check the exported picture and sound before
+relying on Capture for important work. Review automatic cuts and subtitles.
+No guarantee of uninterrupted operation, perfect accuracy or zero data loss is made.
+These notices do not limit rights or remedies that applicable law does not allow
+us to limit. Beta or educational labeling is not a blanket exemption from liability.
+
+RECORD RESPONSIBLY
+Record only content you have permission to record. Obtain any legally required
+consent from participants, and avoid exposing passwords, private messages or
+confidential information. Review the whole export before sharing it.
+
+PRIVACY
+Read PRIVACY-NOTICE.txt in this folder. The app does not upload your recordings.
+Apple may download speech-language resources when needed.
+
+SUPPORT
+Email alex@ajwoo.com with your macOS version, app version and a description of the
+problem. Do not send passwords, payment details or private recordings. For a
+security issue, share a minimal reproduction privately; do not access others' data.
+No fixed response time or future feature/update schedule is promised.
+
+This beta download does not start a subscription or collect payment. Any future
+paid offer must disclose its price, license and refund terms before purchase.
+Apple notarization checks the submitted software; it is not Apple product approval
+or a guarantee that the app is error-free.

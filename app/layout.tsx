@@ -3,6 +3,7 @@ import '@/styles/globals.css';
 import { TopBar } from '@/components/TopBar';
 import { CursorGate } from '@/components/CursorGate';
 import { site } from '@/content/site';
+import { SiteAnalytics } from '@/components/SiteAnalytics';
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:4321';
 
@@ -88,6 +89,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </noscript>
       </head>
       <body>
+        <SiteAnalytics />
         {/* Site-wide, at Alex's direction — was landing-page-only.
             CursorGate (not Cursor directly): mounts/unmounts the actual
             cursor based on the on/off preference read synchronously above

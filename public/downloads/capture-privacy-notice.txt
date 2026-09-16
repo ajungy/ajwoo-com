@@ -1,0 +1,40 @@
+ajwoo capture — App privacy notice
+September 13, 2026 | GG Creative Studios, LLC | alex@ajwoo.com
+
+Scope: the installed Capture app. Website hosting, download requests, embedded
+videos and any future checkout are separate services and are not covered by a
+claim that the app works locally.
+
+On your Mac
+Screen, camera and microphone recordings, cursor positions/clicks, editing data,
+transcripts and generated caches are stored locally. Recording packages are saved
+under ~/Movies/ajwoo capture. Imported background images and app settings may also
+be stored in your Library/Application Support and preferences folders. You control
+these files and can delete them. Keep backups before deleting recording packages.
+Favorites must be unfavorited before the app's delete action will remove them.
+
+Recording permissions
+macOS asks for Screen Recording access and, when enabled, camera and microphone
+access. You can change these in System Settings > Privacy & Security. Disabling a
+permission prevents the corresponding capture feature from working.
+
+Connections and speech
+The app has no account system, built-in analytics or automatic crash-upload service.
+It does not upload recordings or transcripts to the publisher. Transcription uses
+Apple's on-device speech APIs; Apple may download required language/model resources
+if they are missing. Apple controls the delivery of those resources and macOS
+security/signature checks. If on-device recognition is unavailable, the feature may
+not work. Exporting to a file or copying to your clipboard remains local until you
+or another application shares that content.
+
+If you contact us
+Your email and anything you choose to include will be available to the publisher
+and its email provider for responding to your request. Do not attach sensitive
+recordings. Contact alex@ajwoo.com to request deletion of support correspondence;
+necessary legal or security records may need to be retained.
+
+Downloading from the website
+The website/CDN receives connection information such as your IP address and browser
+request information to deliver the site and ZIP. Embedded third-party videos can
+make requests to their providers. This app privacy notice does not promise that the
+website or operating system makes no network connections.

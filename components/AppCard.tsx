@@ -1,5 +1,6 @@
 'use client';
 
+import { CaptureInstallButton } from '@/components/CaptureInstallButton';
 import { useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { Action } from './Action';
@@ -266,6 +267,7 @@ export function AppCard({
               Open
             </Action>
           ) : app.downloadZip ? (
+            app.slug === 'capture' ? <CaptureInstallButton href={app.downloadZip} /> : (
             <a
               href={app.downloadZip}
               download
@@ -280,6 +282,7 @@ export function AppCard({
             >
               Install
             </a>
+            )
           ) : (
             <Action
               href={app.cardHref ?? WAITLIST_FORM_URL}

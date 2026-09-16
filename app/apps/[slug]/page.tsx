@@ -1,3 +1,4 @@
+import { CaptureInstallButton } from '@/components/CaptureInstallButton';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { Action } from '@/components/Action';
@@ -83,7 +84,8 @@ export default function AppPage({ params }: { params: { slug: string } }) {
                 Open
               </Action>
             ) : app.downloadZip ? (
-              <a
+              app.slug === 'capture' ? <CaptureInstallButton href={app.downloadZip} /> : (
+            <a
                 href={app.downloadZip}
                 download
                 data-cursor-label="Install"
@@ -97,6 +99,7 @@ export default function AppPage({ params }: { params: { slug: string } }) {
               >
                 Install
               </a>
+            )
             ) : (
               <Action href={WAITLIST_FORM_URL} external variant="secondary" cursorLabel="Join waitlist">
                 Waitlist
