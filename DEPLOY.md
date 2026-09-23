@@ -110,3 +110,6 @@ TTL wait — nothing to restore. **This is why step 6 waits two weeks.**
       `html5shim.googlecode.com` appears in the network panel.
 - [ ] Lighthouse on `/` and `/design/`.
 - [ ] Re-run `reference/checklist.md`.
+
+## Mirror support pages — September 23, 2026
+User authorized publishing support, privacy and terms pages on ajwoo.com for App Store launch. Standalone /mirror/, /mirror/support/, /mirror/privacy/ and /mirror/terms/ pages have no analytics or contact form. Public contact alex@ajwoo.com confirmed. Existing website behavior preserved.
