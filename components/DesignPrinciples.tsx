@@ -1,5 +1,3 @@
-import { StaggerReveal } from './StaggerReveal';
-import { TextAnimate } from './TextAnimate';
 import { principles } from '@/content/site';
 
 /**
@@ -34,49 +32,14 @@ export function DesignPrinciples() {
     <section className="mt-[245px]">
       <div className="grid grid-cols-1 large:grid-cols-4">
         <div className="large:col-start-2 large:col-span-2">
-          {/* Same "blurInUp" TextAnimate the headline uses, at Alex's
-              direction ("use the same animation effect... for the text
-              appearing for favorite design principles") — `trigger="scroll"`
-              since this heading sits well below the fold and needs its
-              own reveal-on-scroll rather than the landing page's one-time
-              load sequence (see TextAnimate.tsx's own comment).
-              `rootMargin="-80% 0px 0px 0px"` on both this and the
-              StaggerReveal below, at Alex's direction ("make the text
-              animation apply later... let's say when the text hits near
-              the lower 20% of the window area") — shrinks the observed
-              area to just the BOTTOM 20% of the viewport (a negative TOP
-              margin excludes everything above it from counting), so the
-              reveal only fires once the heading has scrolled up into that
-              band, later than the site-wide default (see StaggerReveal's
-              own `rootMargin` prop doc for that default and the reasoning
-              behind it). The sync-bypass fix in StaggerReveal.tsx/
-              TextAnimate.tsx this round is what actually addresses Alex's
-              "happens too soon, I never see it" report — this -80%
-              value itself is unchanged; the trigger was silently being
-              bypassed on load rather than honoring it. See that fix's own
-              comment.
-              `delayMs={500}` on the heading, at Alex's direction ("delay
-              the animation... by 500ms"). `delayMs={1650}` on the list
-              below sequences it to start the INSTANT the heading's own
-              text-reveal finishes — no extra buffer — at Alex's direction
-              ("make the text appear sooner, as soon as the blur effect
-              title and subtitle finished appearing"; a previous round's
-              explicit 100ms gap is dropped here). Computed by hand:
-              "Favorite design principles" is 26 characters, so 500 (the
-              heading's own delay) + 25*22 (its per-character stagger) +
-              600 (each character's own animation length) = 1650ms.
-              `durationMs={400}` (was the shared 1000ms default) — at
-              Alex's direction ("[the list] loads very slowly, and I want
-              it to load faster... doesn't break the rhythm of reading
-              text"), same fix as the landing page's greeting/bio. */}
           <h2 className="text-h3 text-fg">
-            <TextAnimate trigger="scroll" rootMargin="-80% 0px 0px 0px" delayMs={500}>Favorite design principles</TextAnimate>
+            Favorite design principles
           </h2>
-          <StaggerReveal className="mt-8 flex flex-col gap-6" rootMargin="-80% 0px 0px 0px" delayMs={1650} durationMs={400}>
+          <div className="mt-8 flex flex-col gap-6">
             {principles.map((p) => (
               <PrincipleRow key={p.n} n={p.n} title={p.title} body={p.body} />
             ))}
-          </StaggerReveal>
+          </div>
         </div>
       </div>
     </section>
