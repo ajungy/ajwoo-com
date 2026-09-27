@@ -228,9 +228,14 @@ export const apps: App[] = [
     // waitlist button and the body text... include this YouTube video
     // link").
     demoVideoYoutube: 'w6eWPNnpNyE',
+    // Notarized Developer ID build (GG Creative Studios, LLC), version 1.5.
+    // Versioned filename so a new release never collides with a cached old
+    // one; the app itself replaces older installed copies when opened.
+    downloadZip: '/downloads/ajwoo-dictate-1.5.zip',
     beta: true,
     detail: [
       { lead: 'Dictate listens to your voice, transcribes it to text, cleans up grammar and punctuation, and pastes it anywhere.' },
+      'Requires a Mac with Apple silicon (M1 or later) and macOS 13 or later. On first launch it downloads its speech models once, about 3 GB.',
       'Notes, docs, Claude, the terminal, you name it. Fast, accurate, and done.',
       { label: 'Settings', body: 'Remap the activation key, switch languages, pick your voice-to-text model, toggle grammar correction, toggle auto-copy/paste, and set how long the widget stays on screen.' },
       'Watch it turn any voice recording into clean, clear, professional text on any surface.',
