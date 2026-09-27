@@ -26,7 +26,7 @@ export function CaptureInstallButton({ href }: { href: string }) {
       }} aria-labelledby={titleId} onClose={() => setMounted(false)}
         className="m-auto w-[calc(100%_-_32px)] max-w-lg max-h-[85dvh] overflow-y-auto rounded-lg border border-line-subtle bg-raised p-6 text-fg backdrop:bg-black/50">
         <h2 id={titleId} className="text-h3">Install Capture Beta</h2>
-        <p className="mt-2 text-caption text-fg-secondary">Free beta · Apple silicon · macOS 14 or later</p>
+        <p className="mt-2 text-caption text-fg-secondary">Free beta · Apple silicon or Intel · macOS 14 or later</p>
         <p className="mt-4 text-body text-fg-secondary">Still in development. Recording and editing can have errors. Back up important files and test a short recording before relying on Capture.</p>
         <p className="mt-3 text-body text-fg-secondary">Unzip the download, drag Capture to Applications, then open it. Capture saves recordings on your Mac; it does not create automatic backups. Apple may download speech-language files.</p>
         <div className="mt-4 flex flex-wrap gap-4 text-caption">

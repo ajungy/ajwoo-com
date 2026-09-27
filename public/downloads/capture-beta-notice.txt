@@ -1,10 +1,10 @@
 ajwoo capture — Beta
 Publisher: GG Creative Studios, LLC
-Release notices: September 13, 2026
+Release notices: September 26, 2026
 Support and security reports: alex@ajwoo.com
 
 INSTALL
-Apple silicon Mac (M1 or later), macOS 14 or later.
+Any Mac with Apple silicon or an Intel processor, running macOS 14 (Sonoma) or later.
 Unzip the download, drag ajwoo capture.app to Applications, then open it.
 Allow Screen Recording when asked. Enable camera and microphone only if needed.
 Normal first-open and privacy prompts may appear. Keep macOS security enabled.

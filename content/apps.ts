@@ -180,7 +180,7 @@ export const apps: App[] = [
     platform: 'macOS',
     traits: ['macOS', 'Auto video edit', 'Subtitle', 'Screen record', 'Local', 'Fully on-device', 'No cloud'],
     thumbnailVideo: 'appcard-capture',
-    downloadZip: '/downloads/capture-beta-20260913-120655.zip',
+    downloadZip: '/downloads/capture-beta-20260926-221935.zip',
     beta: true,
     demoVideo: 'capture-demo',
     // Detail-page demo replaced with a YouTube video, at Alex's direction —

@@ -1,3 +1,20 @@
+# Capture beta release — 2026-09-26
+
+Authorized by Alex: replace the Install download with the new build and deploy. Root card, Apps cards and Capture detail page share one versioned URL via `content/apps.ts` `downloadZip`; the stable `capture-beta.zip` alias serves the same bytes for older links. The 2026-09-13 versioned file stays in place so previously shared links keep working.
+
+Artifact: capture-beta-20260926-221935.zip
+SHA-256: 8577bb7c6e9dcc7f54dc88f30123a497dd535a173ff68319879c57533cbcda47
+Desktop original: ~/Desktop/ajwoo-capture-20260926-221935.zip
+Notarization: Accepted, stapled; Gatekeeper `accepted / source=Notarized Developer ID` on the extracted ZIP with the download quarantine flag applied.
+
+What changed: universal binary (Apple silicon + Intel) — earlier releases were arm64-only and would not open on Intel Macs. Install dialog and beta notice now say "Apple silicon or Intel" (both previously said Apple silicon only; the notice inside the signed app was corrected before notarizing, so the shipped notice matches the site). Icon toolbar, hover states, idle/scrub performance, H.264 default.
+
+Checks: static export build; browser-tested Capture detail page: Install opens notice with corrected requirements, Download disabled until acknowledgment, then links to the new versioned ZIP; served ZIP SHA-256 matches the notarized original.
+
+Deploy: direct upload of `.next-build` to Cloudflare Pages project `ajwoo-com`, branch `main` (not the stale `out` directory).
+
+---
+
 # Capture beta release — 2026-09-13
 
 Authorized by Alex in the Capture task: publish the latest notarized ZIP through both Install buttons. Shared CaptureInstallButton provides a beta-risk acknowledgment (not a license agreement and not server-recorded consent), system requirements, download instructions and privacy/support links. Root card, Apps cards and Capture detail page share the same versioned download URL. Older capture-beta.zip link also serves the new release.
