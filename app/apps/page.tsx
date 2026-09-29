@@ -23,11 +23,11 @@ export default function AppsPage() {
           edge does; the gap that actually needs to feel generous is the one
           before real content starts. */}
       <section className="pt-12 pb-16">
-        <p className="text-title font-bold text-fg">On-device. Functional. Minimal.</p>
+        <p className="text-title font-bold text-fg">Useful. Personal. Minimal.</p>
         <p className="mt-4 max-w-content text-body-lg text-fg-secondary">
-          Every app runs entirely on-device, with no cloud connection. Nothing
-          ever leaves your machine. That constraint is what keeps them fast,
-          capable, and affordable.
+          Thoughtful tools for everyday things, from creating and converting
+          to sending someone a beautiful letter. Explore each app to see how
+          it works and where your data stays.
         </p>
       </section>
 
