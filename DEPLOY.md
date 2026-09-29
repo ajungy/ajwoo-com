@@ -113,3 +113,13 @@ TTL wait — nothing to restore. **This is why step 6 waits two weeks.**
 
 ## Mirror support pages — September 23, 2026
 User authorized publishing support, privacy and terms pages on ajwoo.com for App Store launch. Standalone /mirror/, /mirror/support/, /mirror/privacy/ and /mirror/terms/ pages have no analytics or contact form. Public contact alex@ajwoo.com confirmed. Existing website behavior preserved.
+
+## Letter listing — September 29, 2026
+
+Alex authorized publishing Letter on the landing page, Apps page, and new
+/apps/letter/ detail page. Reuses AppCard, the home carousel, and an optional
+static screenshot in the app detail layout. New outlined “le” app icon and
+sample-letter thumbnail come from Letter. Production build and type checks pass.
+Prepared from current origin/main in /tmp/ajwoo-letter-release, preserving the
+older working checkout. Publish through the existing main-branch Cloudflare
+Pages integration (ajwoo-com). No DNS or environment changes are needed.

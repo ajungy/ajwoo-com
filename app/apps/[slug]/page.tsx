@@ -139,6 +139,10 @@ export default function AppPage({ params }: { params: { slug: string } }) {
             <source src={`/img/${app.demoVideo}.mp4`} type="video/mp4" />
           </video>
         </div>
+      ) : app.demoImage ? (
+        <figure className="mb-12 overflow-hidden rounded-lg border border-line-subtle bg-sunken">
+          <img src={app.demoImage.src} alt={app.demoImage.alt} width={app.demoImage.width} height={app.demoImage.height} className="block h-auto w-full" />
+        </figure>
       ) : null}
 
       <article className="max-w-content space-y-8 pb-12">

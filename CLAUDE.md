@@ -561,3 +561,10 @@ modifies a component, and **asks before writing to any Figma file.**
 
 **Nothing has been deployed, pushed, or published. Nothing has been written to
 Figma. No code has been written. Live ajwoo.com is untouched.**
+
+## Letter listing — September 29, 2026
+Alex requested publishing Letter on the home carousel, Apps grid, and its own
+product page. Reuse AppCard and the existing detail layout, adding an optional
+static screenshot slot. Use the supplied lowercase name and description,
+existing app features, and the app's Lora-based “le” icon. Open links go to
+https://letter.ajwoo.com/; card links go to /apps/letter/. No pricing changes.

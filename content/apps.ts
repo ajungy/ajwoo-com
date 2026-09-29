@@ -59,6 +59,8 @@ export type App = {
    *  autoplays: carries a poster and controls, same as every other video
    *  on this site (Principle 14 — nothing moves until the reader asks). */
   demoVideo?: string;
+  /** Actual app screenshot, used when no demo video is supplied. */
+  demoImage?: { src: string; width: number; height: number; alt: string };
   /** Same slot as `demoVideo` (full-width, between the header and the body
    *  copy) but a YouTube video instead of a self-hosted file — a YouTube
    *  video ID, e.g. the "tyNCdZQMKMA" in youtu.be/tyNCdZQMKMA. Takes
@@ -124,6 +126,27 @@ export type App = {
 // and Capture's closing line. Em dashes inside `//` and `/** */` comments
 // are untouched — they never render on the page, only in this source file.
 export const apps: App[] = [
+  {
+    slug: 'letter',
+    icon: 'letter',
+    name: 'letter',
+    description: 'beautiful letters in seconds',
+    trigger: 'Choose a template, write a letter, share a link',
+    platform: 'Web',
+    traits: ['No account needed', 'Eight templates', 'Custom typography', 'Animated envelopes', 'Share with a link'],
+    thumbnail: 'appcard-letter',
+    demoImage: { src: '/img/letter-preview.webp', width: 1265, height: 712, alt: 'A birthday letter made with Letter, with warm paper, colorful confetti, and a personal message.' },
+    iconImage: 'appicon-letter',
+    openUrl: 'https://letter.ajwoo.com/',
+    detail: [
+      { lead: 'A few words can make someone’s day.' },
+      'Make a birthday wish, send a thank you, celebrate a wedding, or write just because. Pick a template, add your words, and share a link. No account needed.',
+      { label: 'Make it yours', body: 'Choose fonts, colors, paper textures, and decorations. Add your own images or GIFs, or start with a clean custom template.' },
+      { label: 'A little anticipation', body: 'Send a letter inside an animated envelope, a book, or a playful digital opening. Add confetti, snow, stars, or music to set the mood.' },
+      { label: 'Send a link', body: 'Preview what your recipient will see, then share. A regular link carries the letter and its design. Optional short links are saved for one year. Anyone with the link can read the letter.' },
+      { label: 'Keep the conversation going', body: 'Recipients can choose Write back to create a new letter. Works on phones, tablets, and computers.' },
+    ],
+  },
   {
     slug: 'convert',
     icon: 'convert',

@@ -9,3 +9,9 @@
 - Preserve package license notices when distributing the bundled site.
 
 This entry covers the analytics addition, not an audit of earlier assets.
+
+## Letter listing
+
+Letter screenshots and icon supplied from the Letter application. The lowercase
+“le” icon uses outlined Lora Medium glyphs (SIL Open Font License 1.1); the font
+and license remain available at https://letter.ajwoo.com/fonts/lora-OFL.txt.
