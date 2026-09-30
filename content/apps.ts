@@ -129,6 +129,26 @@ export type App = {
 // are untouched — they never render on the page, only in this source file.
 export const apps: App[] = [
   {
+    slug: 'mbti-test',
+    icon: 'mbti',
+    name: 'MBTI Test',
+    description: 'Get your MBTI in 10 seconds',
+    trigger: 'Answer four questions, see your personality guess',
+    platform: 'Web',
+    traits: ['Four questions', 'Six languages', 'No account', 'Runs in your browser'],
+    thumbnail: 'appcard-mbti',
+    iconImage: 'appicon-mbti',
+    demoImage: { src: '/img/mbti-preview.webp', width: 620, height: 540, alt: 'MBTI Test interface showing the ENTJ answer diagram, a short summary, strengths and weaknesses.' },
+    openUrl: 'https://mbti.ajwoo.com/',
+    detail: [
+      { lead: 'Get a personality guess in about 10 seconds.' },
+      'Answer four simple questions with six-position sliders. See your four-letter type and a diagram of your answers.',
+      { label: 'Explore your result', body: 'Read a short summary, strengths, weaknesses, famous people and playful friendship and romantic suggestions.' },
+      { label: 'Share your result', body: 'Send a link that recreates your answers and diagram. No account is needed.' },
+      'Available in English, Korean, Simplified Chinese, French, Japanese and Spanish. An independent personality game, not the official MBTI assessment.',
+    ],
+  },
+  {
     slug: 'letter',
     icon: 'letter',
     name: 'letter',

@@ -568,3 +568,10 @@ product page. Reuse AppCard and the existing detail layout, adding an optional
 static screenshot slot. Use the supplied lowercase name and description,
 existing app features, and the app's Lora-based “le” icon. Open links go to
 https://letter.ajwoo.com/; card links go to /apps/letter/. No pricing changes.
+
+
+## MBTI Test listing — September 29, 2026
+Alex requested adding MBTI Test to the Apps catalog with a screenshot of its
+header, result diagram and profile text, a concise ten-second description and
+an Open action to https://mbti.ajwoo.com/. Reuse AppCard and the existing app
+detail page, preserving existing apps. Publish this requested listing.

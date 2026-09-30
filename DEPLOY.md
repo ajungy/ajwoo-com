@@ -123,3 +123,11 @@ sample-letter thumbnail come from Letter. Production build and type checks pass.
 Prepared from current origin/main in /tmp/ajwoo-letter-release, preserving the
 older working checkout. Publish through the existing main-branch Cloudflare
 Pages integration (ajwoo-com). No DNS or environment changes are needed.
+
+## MBTI Test listing — September 29, 2026
+
+Alex requested publishing MBTI Test in the Apps catalog. Added its existing
+live interface screenshot, concise description, Open link, and product page.
+Uses the current origin/main checkout in /tmp/ajwoo-mbti-release; older working
+folders are preserved. Production build/type checking pass. Existing main-branch
+Cloudflare Pages integration publishes this change; no DNS changes.
