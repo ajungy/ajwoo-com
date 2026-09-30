@@ -111,14 +111,8 @@ export type App = {
   thumbnailStartAtEnd?: boolean;
 };
 
-// Convert leads the array — at Alex's direction, ordering is now
-// Convert, Draw, Capture, Dictate, Narrate — so it renders as the /apps
-// grid's first (top-left) card. Draw is the second real, already-shipped
-// web app (like Convert): a local-first browser drawing tool at
-// draw.ajwoo.com, added at Alex's direction ("add another card between the
-// convert card and capture beta card"). Its copy is pulled from that
-// project's own README (ajwoo-draw/README.md) rather than invented, the
-// same sourcing rule Convert's copy follows.
+// Apps grid order: Convert, Letter, Draw, MBTI Test, Capture, Dictate,
+// Narrate, then Request Alex. The home carousel is curated separately.
 //
 // A later pass removed every em dash from this file's RENDERED copy (Alex:
 // "prevent using em dashes everywhere on the website... not a single em
@@ -128,48 +122,6 @@ export type App = {
 // and Capture's closing line. Em dashes inside `//` and `/** */` comments
 // are untouched — they never render on the page, only in this source file.
 export const apps: App[] = [
-  {
-    slug: 'mbti-test',
-    icon: 'mbti',
-    name: 'MBTI Test',
-    description: 'Get your MBTI in 10 seconds',
-    trigger: 'Answer four questions, see your personality guess',
-    platform: 'Web',
-    traits: ['Four questions', 'Six languages', 'No account', 'Runs in your browser'],
-    thumbnail: 'appcard-mbti',
-    iconImage: 'appicon-mbti',
-    demoImage: { src: '/img/mbti-preview.webp', width: 620, height: 540, alt: 'MBTI Test interface showing the ENTJ answer diagram, a short summary, strengths and weaknesses.' },
-    openUrl: 'https://mbti.ajwoo.com/',
-    detail: [
-      { lead: 'Get a personality guess in about 10 seconds.' },
-      'Answer four simple questions with six-position sliders. See your four-letter type and a diagram of your answers.',
-      { label: 'Explore your result', body: 'Read a short summary, strengths, weaknesses, famous people and playful friendship and romantic suggestions.' },
-      { label: 'Share your result', body: 'Send a link that recreates your answers and diagram. No account is needed.' },
-      'Available in English, Korean, Simplified Chinese, French, Japanese and Spanish. An independent personality game, not the official MBTI assessment.',
-    ],
-  },
-  {
-    slug: 'letter',
-    icon: 'letter',
-    name: 'letter',
-    description: 'beautiful letters in seconds',
-    trigger: 'Choose a template, write a letter, share a link',
-    platform: 'Web',
-    traits: ['No account needed', 'Eight templates', 'Custom typography', 'Animated envelopes', 'Share with a link'],
-    thumbnailVideo: 'appcard-letter',
-    thumbnailVideoFit: 'contain',
-    demoImage: { src: '/img/letter-preview.webp', width: 1265, height: 712, alt: 'A birthday letter made with Letter, with warm paper, colorful confetti, and a personal message.' },
-    iconImage: 'appicon-letter',
-    openUrl: 'https://letter.ajwoo.com/',
-    detail: [
-      { lead: 'A few words can make someone’s day.' },
-      'Make a birthday wish, send a thank you, celebrate a wedding, or write just because. Pick a template, add your words, and share a link. No account needed.',
-      { label: 'Make it yours', body: 'Choose fonts, colors, paper textures, and decorations. Add your own images or GIFs, or start with a clean custom template.' },
-      { label: 'A little anticipation', body: 'Send a letter inside an animated envelope, a book, or a playful digital opening. Add confetti, snow, stars, or music to set the mood.' },
-      { label: 'Send a link', body: 'Preview what your recipient will see, then share. A regular link carries the letter and its design. Optional short links are saved for one year. Anyone with the link can read the letter.' },
-      { label: 'Keep the conversation going', body: 'Recipients can choose Write back to create a new letter. Works on phones, tablets, and computers.' },
-    ],
-  },
   {
     slug: 'convert',
     icon: 'convert',
@@ -198,6 +150,28 @@ export const apps: App[] = [
     iconImage: 'appicon-convert',
   },
   {
+    slug: 'letter',
+    icon: 'letter',
+    name: 'letter',
+    description: 'beautiful letters in seconds',
+    trigger: 'Choose a template, write a letter, share a link',
+    platform: 'Web',
+    traits: ['No account needed', 'Eight templates', 'Custom typography', 'Animated envelopes', 'Share with a link'],
+    thumbnailVideo: 'appcard-letter',
+    thumbnailVideoFit: 'contain',
+    demoImage: { src: '/img/letter-preview.webp', width: 1265, height: 712, alt: 'A birthday letter made with Letter, with warm paper, colorful confetti, and a personal message.' },
+    iconImage: 'appicon-letter',
+    openUrl: 'https://letter.ajwoo.com/',
+    detail: [
+      { lead: 'A few words can make someone’s day.' },
+      'Make a birthday wish, send a thank you, celebrate a wedding, or write just because. Pick a template, add your words, and share a link. No account needed.',
+      { label: 'Make it yours', body: 'Choose fonts, colors, paper textures, and decorations. Add your own images or GIFs, or start with a clean custom template.' },
+      { label: 'A little anticipation', body: 'Send a letter inside an animated envelope, a book, or a playful digital opening. Add confetti, snow, stars, or music to set the mood.' },
+      { label: 'Send a link', body: 'Preview what your recipient will see, then share. A regular link carries the letter and its design. Optional short links are saved for one year. Anyone with the link can read the letter.' },
+      { label: 'Keep the conversation going', body: 'Recipients can choose Write back to create a new letter. Works on phones, tablets, and computers.' },
+    ],
+  },
+  {
     slug: 'draw',
     icon: 'draw',
     name: 'Draw',
@@ -216,6 +190,26 @@ export const apps: App[] = [
       'Works offline after the first visit, in any current browser. Built in Claude Code, like Convert, Capture, Dictate, and Narrate.',
     ],
     iconImage: 'appicon-draw',
+  },
+  {
+    slug: 'mbti-test',
+    icon: 'mbti',
+    name: 'MBTI Test',
+    description: 'Get your MBTI in 10 seconds',
+    trigger: 'Answer four questions, see your personality guess',
+    platform: 'Web',
+    traits: ['Four questions', 'Six languages', 'No account', 'Runs in your browser'],
+    thumbnail: 'appcard-mbti',
+    iconImage: 'appicon-mbti',
+    demoImage: { src: '/img/mbti-preview.webp', width: 620, height: 540, alt: 'MBTI Test interface showing the ENTJ answer diagram, a short summary, strengths and weaknesses.' },
+    openUrl: 'https://mbti.ajwoo.com/',
+    detail: [
+      { lead: 'Get a personality guess in about 10 seconds.' },
+      'Answer four simple questions with six-position sliders. See your four-letter type and a diagram of your answers.',
+      { label: 'Explore your result', body: 'Read a short summary, strengths, weaknesses, famous people and playful friendship and romantic suggestions.' },
+      { label: 'Share your result', body: 'Send a link that recreates your answers and diagram. No account is needed.' },
+      'Available in English, Korean, Simplified Chinese, French, Japanese and Spanish. An independent personality game, not the official MBTI assessment.',
+    ],
   },
   {
     slug: 'capture',

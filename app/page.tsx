@@ -168,12 +168,10 @@ export default function Home() {
       )}
 
       <div className="mx-auto max-w-app px-page">
-        {/* Request Alex excluded here — the carousel is "Alex's choice"
-            showcasing the four real products; a card whose whole job is
-            "ask Alex for something else" doesn't belong in that lineup.
-            It still appears on /apps itself (content/apps.ts keeps it
-            last in the array), just not in this featured rotation. */}
-        <FeaturedApp apps={apps.filter((a) => a.slug !== 'request')} />
+        {/* Curated featured apps, ordered independently of the Apps grid. */}
+        <FeaturedApp apps={['convert', 'capture', 'dictate', 'letter'].flatMap(
+          (slug) => apps.filter((app) => app.slug === slug)
+        )} />
 
         {/* SkillsSection ("Try Alex's SKILL.md") now BEFORE DesignPrinciples
             (was after), at Alex's direction ("put try Alex's skill.md
