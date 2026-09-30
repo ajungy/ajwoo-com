@@ -53,6 +53,8 @@ export type App = {
    *  `${thumbnailVideo}.mp4`/`.webm` with a `${thumbnailVideo}-poster.webp`
    *  poster frame. Takes priority over `thumbnail` when both are present. */
   thumbnailVideo?: string;
+  /** Preserve a full app interface within the square card. */
+  thumbnailVideoFit?: 'cover' | 'contain';
   /** Full-width demo video on the app's own detail page, between the
    *  header (icon/name/Waitlist) and the body copy — base filename with no
    *  extension, resolved the same way as `thumbnailVideo`. Never
@@ -134,7 +136,8 @@ export const apps: App[] = [
     trigger: 'Choose a template, write a letter, share a link',
     platform: 'Web',
     traits: ['No account needed', 'Eight templates', 'Custom typography', 'Animated envelopes', 'Share with a link'],
-    thumbnail: 'appcard-letter',
+    thumbnailVideo: 'appcard-letter',
+    thumbnailVideoFit: 'contain',
     demoImage: { src: '/img/letter-preview.webp', width: 1265, height: 712, alt: 'A birthday letter made with Letter, with warm paper, colorful confetti, and a personal message.' },
     iconImage: 'appicon-letter',
     openUrl: 'https://letter.ajwoo.com/',

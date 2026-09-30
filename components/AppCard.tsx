@@ -187,7 +187,7 @@ export function AppCard({
             playsInline
             preload={playing !== undefined || hoverPlay ? 'metadata' : 'auto'}
             poster={`/img/${app.thumbnailVideo}-poster.webp`}
-            className="card-thumb-media block h-full w-full object-cover"
+            className={`card-thumb-media block h-full w-full ${app.thumbnailVideoFit === 'contain' ? 'object-contain bg-sunken' : 'object-cover'}`}
           >
             <source src={`/img/${app.thumbnailVideo}.webm`} type="video/webm" />
             <source src={`/img/${app.thumbnailVideo}.mp4`} type="video/mp4" />
