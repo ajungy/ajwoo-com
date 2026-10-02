@@ -101,7 +101,8 @@ export function FeaturedApp({ apps }: { apps: App[] }) {
             <AppCard
               key={app.slug}
               app={app}
-              playing={apps[activeIndex]?.slug === app.slug}
+              playing={['letter', 'mbti-test'].includes(app.slug) ? undefined : apps[activeIndex]?.slug === app.slug}
+              hoverPlay={['letter', 'mbti-test'].includes(app.slug)}
               hoverZoom={false}
               hoverShadow={false}
             />

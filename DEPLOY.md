@@ -131,3 +131,13 @@ live interface screenshot, concise description, Open link, and product page.
 Uses the current origin/main checkout in /tmp/ajwoo-mbti-release; older working
 folders are preserved. Production build/type checking pass. Existing main-branch
 Cloudflare Pages integration publishes this change; no DNS changes.
+
+## Letter and MBTI video update — October 2, 2026
+
+Alex authorized pushing these media updates to www.ajwoo.com. Letter now uses
+the supplied video, is named Letter, and keeps its detail image at a maximum
+448px width. MBTI Test uses the supplied video as a hover-only card preview
+and a controls-only detail demo capped at 448px. MP4/WebM and static posters
+are served locally by the site; no new dependencies or external embeds.
+Production build and type checks passed. Publish through the existing
+origin/main Cloudflare Pages integration. Rollback by reverting this commit.

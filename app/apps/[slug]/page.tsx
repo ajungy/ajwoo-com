@@ -128,9 +128,11 @@ export default function AppPage({ params }: { params: { slug: string } }) {
           />
         </div>
       ) : app.demoVideo ? (
-        <div className="mb-12">
+        <div className={`mb-12${app.slug === 'mbti-test' ? ' max-w-md' : ''}`}>
           <video
             controls
+            playsInline
+            aria-label={`${app.name} demo`}
             preload="none"
             poster={`/img/${app.demoVideo}-poster.webp`}
             className="block h-auto w-full rounded-lg border border-line-subtle bg-sunken"
@@ -140,7 +142,7 @@ export default function AppPage({ params }: { params: { slug: string } }) {
           </video>
         </div>
       ) : app.demoImage ? (
-        <figure className="mb-12 overflow-hidden rounded-lg border border-line-subtle bg-sunken">
+        <figure className={`mb-12 overflow-hidden rounded-lg border border-line-subtle bg-sunken${app.slug === 'letter' ? ' max-w-md' : ''}`}>
           <img src={app.demoImage.src} alt={app.demoImage.alt} width={app.demoImage.width} height={app.demoImage.height} className="block h-auto w-full" />
         </figure>
       ) : null}

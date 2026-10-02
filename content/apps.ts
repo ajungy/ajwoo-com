@@ -152,7 +152,7 @@ export const apps: App[] = [
   {
     slug: 'letter',
     icon: 'letter',
-    name: 'letter',
+    name: 'Letter',
     description: 'beautiful letters in seconds',
     trigger: 'Choose a template, write a letter, share a link',
     platform: 'Web',
@@ -199,9 +199,10 @@ export const apps: App[] = [
     trigger: 'Answer four questions, see your personality guess',
     platform: 'Web',
     traits: ['Four questions', 'Six languages', 'No account', 'Runs in your browser'],
-    thumbnail: 'appcard-mbti',
+    thumbnailVideo: 'appcard-mbti',
+    thumbnailVideoFit: 'contain',
     iconImage: 'appicon-mbti',
-    demoImage: { src: '/img/mbti-preview.webp', width: 620, height: 540, alt: 'MBTI Test interface showing the ENTJ answer diagram, a short summary, strengths and weaknesses.' },
+    demoVideo: 'appcard-mbti',
     openUrl: 'https://mbti.ajwoo.com/',
     detail: [
       { lead: 'Get a personality guess in about 10 seconds.' },
