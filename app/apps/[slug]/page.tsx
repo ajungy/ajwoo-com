@@ -37,7 +37,7 @@ export default function AppPage({ params }: { params: { slug: string } }) {
             direction ("make the logo a little bit larger"). */}
         {app.iconImage ? (
           <img
-            src={`/img/${app.iconImage}-256.webp`}
+            src={`/img/${app.iconImage}-${app.slug === 'mbti-test' ? 128 : 256}.webp`}
             alt=""
             width={112}
             height={112}
