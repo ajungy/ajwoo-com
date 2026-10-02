@@ -128,7 +128,7 @@ export default function AppPage({ params }: { params: { slug: string } }) {
           />
         </div>
       ) : app.demoVideo ? (
-        <div className={`mb-12${app.slug === 'mbti-test' ? ' max-w-md' : ''}`}>
+        <div className={`mb-12${['letter', 'mbti-test'].includes(app.slug) ? ' max-w-md' : ''}`}>
           <video
             controls
             playsInline

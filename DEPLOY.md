@@ -141,3 +141,10 @@ and a controls-only detail demo capped at 448px. MP4/WebM and static posters
 are served locally by the site; no new dependencies or external embeds.
 Production build and type checks passed. Publish through the existing
 origin/main Cloudflare Pages integration. Rollback by reverting this commit.
+
+## Letter full preview and detail demo — October 2, 2026
+
+Letter hover previews restart at the beginning of the full 15.7-second clip.
+New media URLs prevent reuse of the previous short cached preview. The Letter
+detail page uses the same full clip with controls and a 448px maximum width,
+matching MBTI Test.

@@ -109,6 +109,8 @@ export type App = {
    *  and it runs normally from then on. Used by Dictate, at Alex's
    *  direction ("start the video from the last frame of the video"). */
   thumbnailStartAtEnd?: boolean;
+  /** Start the full preview from the beginning on each hover. */
+  thumbnailRestartOnHover?: boolean;
 };
 
 // Apps grid order: Convert, Letter, Draw, MBTI Test, Capture, Dictate,
@@ -157,9 +159,10 @@ export const apps: App[] = [
     trigger: 'Choose a template, write a letter, share a link',
     platform: 'Web',
     traits: ['No account needed', 'Eight templates', 'Custom typography', 'Animated envelopes', 'Share with a link'],
-    thumbnailVideo: 'appcard-letter',
+    thumbnailVideo: 'appcard-letter-full',
+    thumbnailRestartOnHover: true,
     thumbnailVideoFit: 'contain',
-    demoImage: { src: '/img/letter-preview.webp', width: 1265, height: 712, alt: 'A birthday letter made with Letter, with warm paper, colorful confetti, and a personal message.' },
+    demoVideo: 'appcard-letter-full',
     iconImage: 'appicon-letter',
     openUrl: 'https://letter.ajwoo.com/',
     detail: [

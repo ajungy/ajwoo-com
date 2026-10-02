@@ -146,7 +146,12 @@ export function AppCard({
   return (
     <article
       data-cursor-label={app.name}
-      onMouseEnter={playing === undefined && hoverPlay ? () => videoRef.current?.play() : undefined}
+      onMouseEnter={playing === undefined && hoverPlay ? () => {
+        const video = videoRef.current;
+        if (!video) return;
+        if (app.thumbnailRestartOnHover) video.currentTime = 0;
+        video.play().catch(() => {});
+      } : undefined}
       onMouseLeave={playing === undefined && hoverPlay ? () => videoRef.current?.pause() : undefined}
       className={
         'group relative flex flex-col overflow-hidden rounded-xl border border-line-subtle ' +
