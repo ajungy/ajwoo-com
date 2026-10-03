@@ -148,3 +148,12 @@ Letter hover previews restart at the beginning of the full 15.7-second clip.
 New media URLs prevent reuse of the previous short cached preview. The Letter
 detail page uses the same full clip with controls and a 448px maximum width,
 matching MBTI Test.
+
+## Consistent app icons — October 3, 2026
+
+Alex authorized replacing Letter, MBTI Test, and Bookcover icons on ajwoo.com.
+Only these three icon references change. Each uses a centered white symbol on
+Convert’s charcoal gradient (#363638 to #1c1c1e), with the existing tile radius.
+Versioned 128px and 256px WebP URLs avoid stale browser caches.
+Publish through the existing origin/main Cloudflare Pages integration.
+Rollback by reverting the icon replacement commit.

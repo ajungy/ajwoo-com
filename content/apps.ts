@@ -163,7 +163,7 @@ export const apps: App[] = [
     thumbnailRestartOnHover: true,
     thumbnailVideoFit: 'contain',
     demoVideo: 'appcard-letter-full',
-    iconImage: 'appicon-letter',
+    iconImage: 'appicon-letter-consistent-v2',
     openUrl: 'https://letter.ajwoo.com/',
     detail: [
       { lead: 'A few words can make someone’s day.' },
@@ -204,7 +204,7 @@ export const apps: App[] = [
     traits: ['Four questions', 'Six languages', 'No account', 'Runs in your browser'],
     thumbnailVideo: 'appcard-mbti',
     thumbnailVideoFit: 'contain',
-    iconImage: 'appicon-mbti',
+    iconImage: 'appicon-mbti-consistent-v2',
     demoVideo: 'appcard-mbti',
     openUrl: 'https://mbti.ajwoo.com/',
     detail: [
@@ -315,7 +315,7 @@ export const apps: App[] = [
     platform: 'Web',
     traits: ['No account', 'Six styles', 'Phone and foldable sizes', 'Custom dimensions', 'PNG export'],
     thumbnail: 'appcard-bookcover',
-    iconImage: 'appicon-bookcover',
+    iconImage: 'appicon-bookcover-consistent-v2',
     demoImage: { src: '/img/bookcover-preview.webp', width: 1280, height: 720, alt: 'Bookcover editor with a gold title on a classic leather cover, style presets, and a PNG download button' },
     openUrl: 'https://bookcover.ajwoo.com/',
     detail: [
