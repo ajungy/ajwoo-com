@@ -172,6 +172,6 @@ spans and filter: none after the first-load reveal. Publish via origin/main.
 
 User requested restoring the original smooth reveal. Reverted the post-animation
 text-node replacement and its settleToText option. The original character spans,
-layout, 600ms duration, easing, stagger, and triggers are unchanged. The only
-rendering fix retained is the final keyframe filter: none instead of blur(0),
-which releases the blur layer without swapping text or changing font shaping.
+layout, 600ms duration, easing, stagger, and triggers are unchanged. Each character releases its completed animation and filter in animationend,
+without swapping text or changing font shaping. The original keyframes are
+unchanged; cleanup sets opacity: 1, filter: none, and transform: none.

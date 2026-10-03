@@ -150,6 +150,13 @@ export function TextAnimate({
           key={i}
           aria-hidden="true"
           className="text-animate-char"
+          onAnimationEnd={(event) => {
+            if (event.target !== event.currentTarget || event.animationName !== 'text-animate-blur-in-up') return;
+            // Release the finished filter without replacing glyphs or changing layout.
+            Object.assign(event.currentTarget.style, {
+              animation: 'none', opacity: '1', filter: 'none', transform: 'none',
+            });
+          }}
           style={{ '--char-i': i, '--char-delay': `${delayMs}ms`, '--char-step': `${step}ms` } as React.CSSProperties}
         >
           {u === ' ' ? ' ' : u}
