@@ -167,3 +167,11 @@ and restores normal font shaping. Repeat visits and reduced motion render
 continuous text directly after hydration. Font and reveal timing are preserved.
 Production build/type checks passed; browser verified zero animated-letter
 spans and filter: none after the first-load reveal. Publish via origin/main.
+
+## Preserve original headline animation — October 3, 2026
+
+User requested restoring the original smooth reveal. Reverted the post-animation
+text-node replacement and its settleToText option. The original character spans,
+layout, 600ms duration, easing, stagger, and triggers are unchanged. The only
+rendering fix retained is the final keyframe filter: none instead of blur(0),
+which releases the blur layer without swapping text or changing font shaping.
