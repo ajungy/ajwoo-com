@@ -114,7 +114,7 @@ export type App = {
 };
 
 // Apps grid order: Convert, Letter, Draw, MBTI Test, Capture, Dictate,
-// Narrate, then Request Alex. The home carousel is curated separately.
+// Narrate, Bookcover, then Request Alex. The home carousel is curated separately.
 //
 // A later pass removed every em dash from this file's RENDERED copy (Alex:
 // "prevent using em dashes everywhere on the website... not a single em
@@ -305,6 +305,27 @@ export const apps: App[] = [
       'Nothing you select is sent anywhere. The model runs on your Mac. Like Capture and Dictate, this one was built in Claude Code, one conversation at a time.',
     ],
     iconImage: 'appicon-narrate',
+  },
+  {
+    slug: 'bookcover',
+    icon: 'bookcover',
+    name: 'Bookcover',
+    description: 'Design a book cover for your lock screen',
+    trigger: 'Pick a style, add your words, download a PNG',
+    platform: 'Web',
+    traits: ['No account', 'Six styles', 'Phone and foldable sizes', 'Custom dimensions', 'PNG export'],
+    thumbnail: 'appcard-bookcover',
+    iconImage: 'appicon-bookcover',
+    demoImage: { src: '/img/bookcover-preview.webp', width: 1280, height: 720, alt: 'Bookcover editor with a gold title on a classic leather cover, style presets, and a PNG download button' },
+    openUrl: 'https://bookcover.ajwoo.com/',
+    detail: [
+      { lead: 'Put your next favorite book on your lock screen.' },
+      'Turn any title, a few words, or your own image into a front cover. Pick a style, make it yours, and download a full-resolution PNG. No account needed.',
+      { label: 'Start with a style', body: 'Choose Classic, Modern, Hyper, Playful, Minimal, or Custom. Adjust the background, texture, typography, and colors, or add a photo and drag it into place.' },
+      { label: 'Made for your screen', body: 'Choose phone and foldable screen sizes, preview your design as a lock screen, or enter custom dimensions. Print-size presets are available too.' },
+      { label: 'Download your cover', body: 'Export a PNG at your selected size. On supported mobile browsers, use the share menu to save the image or send it to another app. The clock and phone frame are preview guides and are not included in the image.' },
+      { label: 'Your design stays with you', body: 'Your text and images are processed in your browser, with your draft saved on this device. Works on phones, tablets, and computers.' },
+    ],
   },
   // "Request Alex" — deliberately LAST in this array, always, at Alex's
   // direction ("this card should be the last card, always the last card
