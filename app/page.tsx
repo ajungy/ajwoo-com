@@ -43,7 +43,7 @@ export default function Home() {
                 sequence uses rather than adding a new exception. See that
                 component's own comment for the full reasoning. */}
             <h1 className="hero-serif text-fg">
-              <TextAnimate>{site.headline}</TextAnimate>
+              <TextAnimate settleToText>{site.headline}</TextAnimate>
             </h1>
 
             {/* These are the same actions that used to sit under the old

@@ -80,6 +80,7 @@ export function TextAnimate({
   by = 'character',
   trigger = 'entrance',
   delayMs = 0,
+  settleToText = false,
   stepMs,
   rootMargin = '0px 0px 150px 0px',
 }: {
@@ -88,6 +89,8 @@ export function TextAnimate({
   by?: 'character' | 'word';
   trigger?: 'entrance' | 'scroll';
   delayMs?: number;
+  /** Restore continuous font shaping after the last unit finishes revealing. */
+  settleToText?: boolean;
   stepMs?: number;
   /** `trigger="scroll"` only — see StaggerReveal.tsx's own `rootMargin`
    *  prop doc, which this mirrors exactly (same IntersectionObserver
@@ -101,6 +104,16 @@ export function TextAnimate({
 
   const ref = useRef<HTMLSpanElement>(null);
   const [scrollVisible, setScrollVisible] = useState(false);
+  const [settled, setSettled] = useState(false);
+
+  useEffect(() => {
+    if (settleToText && (
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
+      (trigger === 'entrance' && document.documentElement.dataset.entrance !== 'run')
+    )) {
+      setSettled(true);
+    }
+  }, [settleToText, trigger]);
 
   useEffect(() => {
     if (trigger !== 'scroll') return;
@@ -145,11 +158,16 @@ export function TextAnimate({
       }
       aria-label={children}
     >
-      {units.map((u, i) => (
+      {settleToText && settled ? children : units.map((u, i) => (
         <span
           key={i}
           aria-hidden="true"
           className="text-animate-char"
+          onAnimationEnd={settleToText && i === units.length - 1 ? (event) => {
+            if (event.target === event.currentTarget && event.animationName === 'text-animate-blur-in-up') {
+              setSettled(true);
+            }
+          } : undefined}
           style={{ '--char-i': i, '--char-delay': `${delayMs}ms`, '--char-step': `${step}ms` } as React.CSSProperties}
         >
           {u === ' ' ? ' ' : u}

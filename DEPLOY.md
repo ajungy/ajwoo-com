@@ -157,3 +157,13 @@ Convert’s charcoal gradient (#363638 to #1c1c1e), with the existing tile radiu
 Versioned 128px and 256px WebP URLs avoid stale browser caches.
 Publish through the existing origin/main Cloudflare Pages integration.
 Rollback by reverting the icon replacement commit.
+
+## Sharp headline after reveal — October 3, 2026
+
+User requested fixing blurred letters in “Enable creativity.” after arrival.
+The reveal ends at filter: none, and the headline restores one continuous text
+run after its final character finishes. This releases per-glyph compositing
+and restores normal font shaping. Repeat visits and reduced motion render
+continuous text directly after hydration. Font and reveal timing are preserved.
+Production build/type checks passed; browser verified zero animated-letter
+spans and filter: none after the first-load reveal. Publish via origin/main.

@@ -617,7 +617,8 @@ html[data-theme-transition] * {
 }
 
 @keyframes text-animate-blur-in-up {
-  to { opacity: 1; filter: blur(0); transform: none; }
+  /* Release the filter layer entirely; blur(0) still composites glyphs. */
+  to { opacity: 1; filter: none; transform: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   [data-entrance="run"] .text-animate-entrance-scope .text-animate-char,
