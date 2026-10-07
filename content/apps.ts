@@ -272,11 +272,11 @@ export const apps: App[] = [
     // waitlist button and the body text... include this YouTube video
     // link").
     demoVideoYoutube: 'w6eWPNnpNyE',
-    // Notarized Developer ID build (GG Creative Studios, LLC), version 1.6.
+    // Notarized Developer ID build (GG Creative Studios, LLC), version 1.7.
     // Versioned filename so a new release never collides with a cached old
     // one; the app itself replaces older installed copies when opened. The
-    // 1.5 file stays published so existing links keep working.
-    downloadZip: '/downloads/ajwoo-dictate-1.6.zip',
+    // 1.5 and 1.6 files stay published so existing links keep working.
+    downloadZip: '/downloads/ajwoo-dictate-1.7.zip',
     beta: true,
     detail: [
       { lead: 'Dictate listens to your voice, transcribes it to text, cleans up grammar and punctuation, and pastes it anywhere.' },
