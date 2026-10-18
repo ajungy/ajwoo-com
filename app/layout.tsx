@@ -4,11 +4,10 @@ import { TopBar } from '@/components/TopBar';
 import { AnalyticsSettingsLink } from '@/lib/analytics/AnalyticsConsent';
 import { site } from '@/content/site';
 import { SiteAnalytics } from '@/components/SiteAnalytics';
-
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:4321';
+import { SITE_URL } from '@/lib/metadata';
 
 export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
+  metadataBase: new URL(SITE_URL),
   title: { default: 'Alex Woo', template: '%s, Alex Woo' },
   description: site.identity,
   openGraph: { title: 'Alex Woo', description: site.identity, url: '/', siteName: 'Alex Woo' },

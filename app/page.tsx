@@ -1,3 +1,4 @@
+import { pageMetadata } from '@/lib/metadata';
 import { Action } from '@/components/Action';
 import { LinkedInLogo, InstagramLogo } from '@/components/Icons';
 import { BookTimeAction } from '@/components/BookTimeAction';
@@ -11,6 +12,11 @@ import { TextAnimate } from '@/components/TextAnimate';
 import { siteData } from '@/content/projects';
 import { site, experience, education, clients, featured, social } from '@/content/site';
 import { apps } from '@/content/apps';
+
+export const metadata = {
+  ...pageMetadata('/', 'Alex Woo'),
+  title: { absolute: 'Alex Woo' },
+};
 
 /**
  * The job: a visitor deciding whether Alex is worth their time reaches that

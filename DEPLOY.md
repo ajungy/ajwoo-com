@@ -175,3 +175,12 @@ text-node replacement and its settleToText option. The original character spans,
 layout, 600ms duration, easing, stagger, and triggers are unchanged. Each character releases its completed animation and filter in animationend,
 without swapping text or changing font shaping. The original keyframes are
 unchanged; cleanup sets opacity: 1, filter: none, and transform: none.
+
+## Production metadata URLs — October 18, 2026
+
+The site uses Next.js static export, not Astro. Canonical and Open Graph URLs
+use https://www.ajwoo.com from lib/metadata.ts, independent of local/preview
+environment settings (NEXT_PUBLIC_SITE_URL is no longer used). Every generated
+content page declares its own path. Publish via the existing origin/main
+Cloudflare Pages integration after build and exported-HTML verification.
+Rollback by reverting this metadata fix.

@@ -1,11 +1,11 @@
-import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/metadata';
 import { Action } from '@/components/Action';
 import { AppCard } from '@/components/AppCard';
 import { StaggerReveal } from '@/components/StaggerReveal';
 import { apps } from '@/content/apps';
 import { site } from '@/content/site';
 
-export const metadata: Metadata = { title: 'Apps' };
+export const metadata = pageMetadata('/apps/', 'Apps');
 
 export default function AppsPage() {
   return (

@@ -1,3 +1,4 @@
+import { pageMetadata } from '@/lib/metadata';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { Picture } from '@/components/Picture';
@@ -13,7 +14,7 @@ export function generateStaticParams() {
 
 export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
   const p = getProject(params.slug);
-  return { title: p?.title ?? 'Work' };
+  return pageMetadata(`/work/${params.slug}/`, p?.title ?? 'Work');
 }
 
 /**

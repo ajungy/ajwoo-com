@@ -1,3 +1,4 @@
+import { pageMetadata } from '@/lib/metadata';
 import { CaptureInstallButton } from '@/components/CaptureInstallButton';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
@@ -12,7 +13,7 @@ export function generateStaticParams() {
 
 export function generateMetadata({ params }: { params: { slug: string } }): Metadata {
   const a = apps.find((x) => x.slug === params.slug);
-  return { title: a?.name ?? 'Apps', description: a?.description };
+  return pageMetadata(`/apps/${params.slug}/`, a?.name ?? 'Apps', a?.description);
 }
 
 export default function AppPage({ params }: { params: { slug: string } }) {

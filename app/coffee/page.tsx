@@ -1,9 +1,9 @@
-import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/metadata';
 import { ProjectCard } from '@/components/ProjectCard';
 import { StaggerReveal } from '@/components/StaggerReveal';
 import { coffeeProjects } from '@/content/projects';
 
-export const metadata: Metadata = { title: 'Coffee' };
+export const metadata = pageMetadata('/coffee/', 'Coffee');
 
 export default function CoffeePage() {
   return (

@@ -1,9 +1,9 @@
-import type { Metadata } from 'next';
+import { pageMetadata } from '@/lib/metadata';
 import { ProjectCard } from '@/components/ProjectCard';
 import { StaggerReveal } from '@/components/StaggerReveal';
 import { designProjects } from '@/content/projects';
 
-export const metadata: Metadata = { title: 'Design' };
+export const metadata = pageMetadata('/design/', 'Design');
 
 export default function DesignPage() {
   return (
