@@ -155,7 +155,7 @@ export default function Home() {
                 losing the fade/rise motion itself. */}
             <StaggerReveal className="flex flex-col gap-4" delayMs={1000} durationMs={450}>
               <p className="text-body-lg text-fg">
-                {site.greeting} <span className="font-medium">{site.greetingEmphasis}</span>
+                {site.greeting} {site.greetingEmphasis}
               </p>
               <p className="max-w-content text-body-lg text-fg-secondary">{site.bio}</p>
             </StaggerReveal>
