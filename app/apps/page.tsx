@@ -1,7 +1,6 @@
 import { pageMetadata } from '@/lib/metadata';
 import { Action } from '@/components/Action';
-import { AppCard } from '@/components/AppCard';
-import { StaggerReveal } from '@/components/StaggerReveal';
+import { AppsCatalog } from '@/components/AppsCatalog';
 import { apps } from '@/content/apps';
 import { site } from '@/content/site';
 
@@ -47,14 +46,7 @@ export default function AppsPage() {
         </section>
       ) : (
         <section className="pb-12">
-          {/* Back to 3 columns at Alex's direction — a brief 2-column pass
-              made cards bigger but 3 across matches the Design/Coffee grids'
-              own density, which won out. */}
-          <StaggerReveal className="grid grid-cols-1 gap-8 medium:grid-cols-2 expanded:grid-cols-3">
-            {apps.map((a) => (
-              <AppCard key={a.slug} app={a} hoverPlay />
-            ))}
-          </StaggerReveal>
+          <AppsCatalog apps={apps} />
         </section>
       )}
     </div>
