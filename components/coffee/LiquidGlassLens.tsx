@@ -92,7 +92,7 @@ export function LiquidGlassLens({ rail }: { rail: RefObject<HTMLDivElement> }) {
       motion += (speed - motion) * (speed > motion ? 0.35 : 0.10);
       if (motion < 0.001 || reducedMotion.matches) motion = 0;
       for (const card of Array.from(track.children) as HTMLElement[]) {
-        card.style.transform = motion ? `scale(${1 - motion * 0.16})` : '';
+        card.style.transform = motion ? `scale(${1 - motion * 0.08})` : '';
       }
       const ratio = Math.min(window.devicePixelRatio || 1, 2);
       const width = Math.round(bounds.width * ratio);
