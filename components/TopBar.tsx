@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Logo } from './Logo';
@@ -46,11 +46,14 @@ export function TopBar() {
   const home = norm(pathname) === '/';
   const [menuOpen, setMenuOpen] = useState(false);
 
+  useEffect(() => { setMenuOpen(false); }, [pathname]);
+
   const navLinks = (extraClassName: string) =>
     nav.map((n) => (
       <Link
         key={n.href}
         href={n.href}
+        onClick={() => setMenuOpen(false)}
         aria-current={isActive(n.href) ? 'page' : undefined}
         data-cursor-label={n.label}
         className={
@@ -71,6 +74,7 @@ export function TopBar() {
           {/* Logo — top-left, always visible */}
           <Link
             href="/"
+            onClick={() => setMenuOpen(false)}
             aria-current={home ? 'page' : undefined}
             data-cursor-label="Home"
             className={
@@ -134,14 +138,17 @@ export function TopBar() {
             is opened, rather than a menu popping over the page. Design,
             Coffee, Apps on the left; Share on the right, matching the
             medium+ layout's right-cluster position. */}
-        {menuOpen && (
-          <div className="flex items-center justify-between pb-4 medium:hidden">
+        <div className="mobile-header-disclosure medium:hidden" data-open={menuOpen} aria-hidden={!menuOpen}
+          ref={(element) => { if (element) element.inert = !menuOpen; }}>
+          <div className="mobile-header-clip">
+          <div className="mobile-header-content flex items-center justify-between pb-4">
             <nav aria-label="Sections" className="flex items-center gap-6">
               {navLinks('')}
             </nav>
             <ShareButton />
           </div>
-        )}
+          </div>
+        </div>
       </div>
     </header>
   );

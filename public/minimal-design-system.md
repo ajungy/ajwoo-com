@@ -101,18 +101,33 @@ attention, not yet broken. Red = failed, destructive, or genuinely urgent.
 Nothing else is colored. A red thing must always be a real problem, or red stops
 working.
 
-**10. Space is your friend.** Group with distance, not lines: things placed
-close together read as related, things placed apart read as unrelated. A
-hairline divider is a fixed-cost fallback for when spacing alone would be
-ambiguous — reach for one only inside genuinely dense content (a table, a
-settings list), never to decorate a gap that already reads as a gap. The same
-goes for containers: a bordered box is for one real object (a record, a card, a
-message), not a wrapper around otherwise-independent controls — increase the
-gap between clusters and close the gap within one instead. Used well, spacing
-gives an interface breathing room: it lets the eye rest on the one thing that
-matters, makes hierarchy and grouping legible without spending a single pixel
-of ink, and keeps a screen from overwhelming the user with information they
-didn't ask for. When in doubt, add space before you add a line.
+**10. Space is your friend.** Group with distance first: things placed close
+together read as related, things placed apart read as unrelated — this is the
+default tool, because it costs nothing and never goes stale. Two other tools
+exist alongside it, both used deliberately, never by default:
+
+A **line** — a hairline divider — earns its place when the separation is
+genuinely purposeful and worth stating outright: a table's rows, a dense
+settings list, the boundary between a form and its footer. Used with real
+intent, a divider is a legitimate, permanent part of this system; used to
+decorate a gap that spacing already communicates, it's noise. The test doesn't
+change: if the groups are still readable with the line hidden, the line wasn't
+doing the separating — remove it.
+
+A **solid box** — a card or panel with a rounded corner and a filled
+background, not an outline — earns its place when several elements genuinely
+belong to one object: a record, a message, a product, a settings section with
+its own name. Show that boundary with a fill difference, or — over dynamic
+background content — a subtle blur; reach for an outlined box only when you
+deliberately want the grouping itself to draw the eye. A box wrapped around a
+cluster of otherwise-independent controls "to be safe" is the same mistake as
+a decorative divider: increase the gap around the cluster instead.
+
+Used well, spacing gives an interface breathing room: it lets the eye rest on
+the one thing that matters, makes hierarchy and grouping legible without
+spending a single pixel of ink, and keeps a screen from overwhelming the user
+with information they didn't ask for. When in doubt, reach for space before a
+line or a box.
 
 Spacing is also a language, and like any language it only works if it's spoken
 consistently. A user learns, without ever being told, that this app groups
@@ -230,20 +245,34 @@ a semantic token, the design is wrong or the system needs a considered addition.
 | | Light | Dark |
 |---|---|---|
 | Page | `#FFFFFF` — the brightest white | `#0E0E10` — very dark gray, never pure black |
-| Raised (cards) | `#FFFFFF` + 1px border + `e1` | `#18181B` + 1px border |
+| Raised (cards, grouping boxes) | `#FFFFFF` + `e1` shadow, no border | `#18181B` + hairline |
 | Sunken (wells) | `#F7F7F8` | `#09090B` |
-| Overlay (menus, modals) | `#FFFFFF` + `e2`/`e3` | `#1C1C20` + border |
+| Control (inputs, selects, search) | `#F7F7F8`, no border at rest | `#09090B`–ish, no border at rest |
+| Overlay (menus, modals) | `#FFFFFF` + `e2`/`e3` shadow | `#1C1C20` + hairline |
 
 Light mode expresses depth with **shadow**. Dark mode expresses depth with
 **surface lightness plus a hairline** — shadows barely read on dark, so a raised
-thing gets lighter, not shadowier.
+thing gets lighter, and it's the one place a border is genuinely doing a job a
+fill can't: without it, a raised surface at nearly the same lightness as the
+page behind it would be unreadable in the one theme where shadow can't help.
+This is the model for every border exception in the system — a line earns its
+place only where fill and shadow together can't carry the boundary alone.
+
+**Grouping boxes use this same language.** A card or panel that groups several
+elements together (Principle 10) is a Raised surface: shown by its fill and
+shadow in light mode, by its lightness and hairline in dark — never by an
+outline layered on top for emphasis. Reserve an actual outlined box for the
+rare moment the grouping itself should draw the eye, not as the default way a
+card reads as a card.
 
 **Materials.** The system is opaque, with exactly one exception:
 `--surface-chrome`, a 72% translucent surface over a 24px background blur, used
 only for OS-level chrome — sidebars, toolbars, sheets. 72% is the floor at which
 text on top still clears 4.5:1 over arbitrary scrolling content; don't lower it.
-Everything else stays opaque, because contrast should never be a function of what
-happens to be underneath.
+This is also the answer whenever a grouping box sits over dynamic background
+content instead of the flat page: reach for `--surface-chrome`'s blur rather
+than a border to separate it. Everything else stays opaque, because contrast
+should never be a function of what happens to be underneath.
 
 ### Type
 
@@ -268,6 +297,23 @@ throws on first write.
 
 Body copy caps at ~72 characters per line. Never center more than two lines of text.
 
+**No orphans.** Never leave a single word — or worse, a single letter — alone
+on the last line of a paragraph, heading, button label, or table cell. Adjust
+the container width, the line length, or the copy itself rather than shipping
+a dangling word; it reads as sloppy even when nobody can say exactly why.
+The same care applies to headings and card titles that wrap: a two-word
+heading breaking 1-word/1-word should almost always break 2/0 instead — check
+the wrap at your actual breakpoints, not just the widest one.
+
+**One typographic system, applied consistently.** Every screen draws from the
+same ten named steps (display through micro) and only those steps — never a
+bracket value, never a size invented for one screen. The same discipline
+applies to weight (only 400/500/600 exist), color (text always comes from
+`--text-primary/secondary/tertiary/disabled`, never a one-off gray), and
+typeface (Plus Jakarta Sans everywhere, no per-feature substitutions).
+Consistency here isn't a style preference — it's what lets a user's eye parse
+"this is a heading" or "this is secondary text" instantly, without rereading.
+
 **Never all caps.** Sentence case everywhere — headings, labels, buttons, nav
 items, table headers. Use `text-label` weight (500) or `text-caption` size to
 signal "this is a category/meta label," not capitals. See Principle 17.
@@ -277,17 +323,36 @@ signal "this is a category/meta label," not capitals. See Principle 17.
 4px base scale. **8px grid for layout** — every gap, pad, and offset is a
 multiple of 4, and preferably of 8.
 
-Radius: `6` chips · **`10` all controls** · `14` cards · `20` modals/sheets ·
-`9999` pills and avatars. A child's radius = parent radius − its padding.
+Radius: `4` chips, badges, checkboxes, small indicators · **`8` all
+controls** — buttons, inputs, selects, menu items · `16` cards, popovers,
+modals, and sheets · `9999` pills and avatars. Three steps, each double the
+last — chosen because every one of them divides cleanly by the 4px grid. `10`,
+the old default, didn't, and it was the one number in the system that never
+quite felt settled. A child's radius sits one step down this scale from its
+parent's — a 16px card holds children at 8, an 8px control at 4 — which the
+doubling makes automatic instead of a calculation.
 
 **One line weight: 1px.** Every border, divider, and outline in every project.
 Two weights make a system look assembled by committee.
 
-Four border strengths, all 1px: `--border-subtle` dividers · `--border-default`
-card edges · **`--border-control`** the resting outline of any control
-identified *only* by its boundary — text fields, checkboxes, radios, switch
-tracks — which is deliberately darker so it clears 3:1 · `--border-strong`
-hovered control.
+**Controls are filled, not outlined.** A control's edge is defined by a
+visible difference in fill against its background — `--surface-control` sits
+a clear, deliberate step off `--surface-page` — not by a line around it. That
+fill difference has to clear the same ≥3:1 boundary contrast a border used to
+carry; it's a different technique for the same accessibility requirement, not
+a relaxation of it. Reserve `--border-control` for the short list of cases
+where fill alone genuinely can't do the job: an unchecked checkbox or radio
+(too small for fill contrast to read reliably) and a control that has to sit
+directly on a surface sharing its own fill. Secondary buttons keep their
+border by design — it's their entire affordance, since they carry no fill at
+rest. Full exception list and the reasoning behind each one is in
+`reference/components.md`.
+
+Three border strengths remain for the cases that do call for a line:
+`--border-subtle` dividers, used sparingly (Principle 10) · `--border-default`
+the rare card-on-card edge · `--border-strong` a hovered control that already
+has a border. `--border-control` is the function-only exception above, not a
+default.
 
 ### Motion
 
@@ -374,22 +439,33 @@ Two non-negotiables:
 - Density: prefer whitespace over borders, and grouping over dividers. If a
   screen feels busy, the fix is almost always fewer elements, not smaller ones.
 
-### Grouping without lines or boxes
+### Grouping: space first, then lines and boxes with intent
 
-Default tool for grouping is the gap, not a line. Step the gap in discrete
-jumps — 8 inside a group, 16 between related groups, 32 between sections —
-and never draw a divider whose only job is to mark a gap that's already
-visibly different. Reach for a hairline divider only inside genuinely dense,
-line-item content (a table, a settings list) where two adjacent rows would
-otherwise be ambiguous, and never as decoration between sections that are
-already 32px+ apart.
+Default tool for grouping is the gap. Step the gap in discrete jumps — 8
+inside a group, 16 between related groups, 32 between sections — so the size
+of a gap is always legible as a statement about the relationship, not a random
+value that happened to fit.
 
-Same logic applies to containers: a bordered box or card is for one object
-(a record, a message, an item), not a wrapper around several unrelated
-controls. A toolbar of five buttons doesn't need a panel behind it — the gap
-before and after the toolbar already says "these five belong together, and
-nothing else does." Before adding a container, ask whether increasing the
-surrounding gap would do the same job for free. It usually does.
+A hairline divider is not banned — it's a tool for when the separation is
+genuinely purposeful and worth stating outright: a table's rows, a dense
+settings list, the line between a form and its footer actions. Use it there
+without hesitation. What it isn't for is decorating a gap that's already
+visibly a gap — a divider between two sections already 32px apart adds a line
+without adding information. Before placing one, name the reason in a sentence;
+if you can't, it's decoration.
+
+A solid box — a card or panel, rounded corner, filled background — is the
+other purposeful grouping tool, and the one to reach for when several elements
+are genuinely one object: a record, a message, an item in a list, a named
+settings section. Show the box's edge with a fill difference against its
+background (or a subtle blur if it sits over dynamic content — see Materials
+in §2), not an outline; save an outlined box for the rare moment you want the
+grouping itself to be the thing that draws the eye. A toolbar of five buttons
+doesn't need a panel behind it — the gap before and after it already says
+"these five belong together, and nothing else does." Before adding a box, ask
+whether a fill difference and the surrounding gap would do the same job. It
+usually does; when it doesn't, that's exactly when a box or a line is earning
+its place rather than decorating one.
 
 ### Alignment and consistency within one page
 

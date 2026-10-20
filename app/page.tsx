@@ -157,7 +157,9 @@ export default function Home() {
               <p className="text-body-lg text-fg">
                 {site.greeting} {site.greetingEmphasis}
               </p>
-              <p className="max-w-content text-body-lg text-fg-secondary">{site.bio}</p>
+              <p className="max-w-content text-body-lg text-fg-secondary">{site.bio}{' '}
+                <a href="/work/" className="underline underline-offset-4 text-fg-secondary transition-colors duration-fast can-hover:hover:text-fg" data-cursor-label="See work">See work →</a>
+              </p>
             </StaggerReveal>
           </div>
         </section>
@@ -175,7 +177,7 @@ export default function Home() {
 
       <div className="mx-auto max-w-app px-page">
         {/* Curated featured apps, ordered independently of the Apps grid. */}
-        <FeaturedApp apps={['convert', 'capture', 'dictate', 'letter'].flatMap(
+        <FeaturedApp apps={['convert', 'capture', 'dictate', 'narrate', 'letter'].flatMap(
           (slug) => apps.filter((app) => app.slug === slug)
         )} />
 

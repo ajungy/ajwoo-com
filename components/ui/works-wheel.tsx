@@ -178,7 +178,7 @@ export function WorksWheel({ items }: { items: WorksWheelItem[] }) {
 
 
   return (
-    <section ref={stageRef} className={styles.stage} tabIndex={0} aria-label="Work projects" aria-roledescription="carousel"
+    <section ref={stageRef} className={`${styles.stage} work-entrance`} data-ready={stage.w > 0 ? "true" : undefined} tabIndex={0} aria-label="Work projects" aria-roledescription="carousel"
       style={{ perspective: `${geometry.depth || 1000}px` }}
       onKeyDown={(event) => {
         if (event.target !== event.currentTarget && (event.target as Element).closest('button')) return;
@@ -208,7 +208,7 @@ export function WorksWheel({ items }: { items: WorksWheelItem[] }) {
       }}
       onPointerCancel={() => { dragging.current = null; to(Math.round(target.current)); }}
       onClickCapture={(event) => { if (suppressClick.current) { event.preventDefault(); event.stopPropagation(); suppressClick.current = false; } }}>
-      <div ref={wheelRef} className={styles.wheel}>
+      <div ref={wheelRef} className={`${styles.wheel} work-wheel-arrival`}>
         {items.map((item, i) => (
           <Link key={item.href} href={item.href} ref={(el) => { cards.current[i] = el; }}
             className={`${styles.card} ${active === i ? styles.selectedCard : ''}`} aria-label={`View ${item.title}`} tabIndex={opened && active === i ? 0 : -1}
@@ -219,19 +219,19 @@ export function WorksWheel({ items }: { items: WorksWheelItem[] }) {
             <span ref={(el) => { faces.current[i] = el; }} className={styles.face}>
               {item.video ? <video ref={(el) => { videos.current[i] = el; }} autoPlay muted loop playsInline
                 preload="auto" onCanPlay={(event) => { const video = event.currentTarget; if (Math.abs(active - i) <= 1 && !document.hidden) { video.muted = true; void video.play().catch(() => {}); } }} poster={`/img/${item.video.base}-poster.webp`}
-                width={item.video.width} height={item.video.height} className={styles.media}>
+                width={item.video.width} height={item.video.height} className={`${styles.media} route-media`}>
                 <source src={`/img/${item.video.base}.mp4`} type="video/mp4" />
                 {item.video.hasWebm && <source src={`/img/${item.video.base}.webm`} type="video/webm" />}
-              </video> : <Picture img={item.image} alt={item.title} priority={i === 0} sizes="(max-width: 699px) 68vw, 32vw" className={styles.media} />}
+              </video> : <Picture img={item.image} alt={item.title} priority={i === 0} sizes="(max-width: 699px) 68vw, 32vw" className={`${styles.media} route-media`} />}
             </span>
           </Link>
         ))}
       </div>
-      <div ref={titleRef} className={styles.title} aria-live="polite" aria-atomic="true">
+      <div ref={titleRef} className={`${styles.title} route-intro`} aria-live="polite" aria-atomic="true">
         <Link href={selected?.href ?? '/work/'} tabIndex={opened ? 0 : -1} className={styles.projectTitle}>{selected?.title}</Link>
         <p className="mt-4 text-body text-fg-secondary">{selected?.subtitle}</p>
       </div>
-      <nav className={styles.yearShell} aria-label="Project navigation">
+      <nav className={`${styles.yearShell} route-navigation`} aria-label="Project navigation">
         <button type="button" className={styles.yearChevron} aria-label="Previous project" disabled={active === 0} onClick={() => select(-1)}><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="m7 14 5-5 5 5" fill="none" stroke="currentColor" strokeWidth="1.5" /></svg></button>
         <div ref={yearRef} className={styles.year} aria-label="Project years">
         {Array.from({ length: 12 }, (_, i) => 2026 - i).map((year) => {

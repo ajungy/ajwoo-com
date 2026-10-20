@@ -77,18 +77,17 @@ export function CoffeeCarousel({ slides }: { slides: CoffeeSlide[] }) {
   moveRef.current = move;
 
   return (
-    <section aria-label="Coffee reviews" aria-roledescription="carousel" className={styles.gallery}
+    <section aria-label="Coffee reviews" aria-roledescription="carousel" className={`${styles.gallery} coffee-entrance`}
       onKeyDown={(event) => {
         if (['ArrowDown', 'ArrowRight', 'ArrowUp', 'ArrowLeft'].includes(event.key)) {
           event.preventDefault();
           move(event.key === 'ArrowDown' || event.key === 'ArrowRight' ? 1 : -1);
         }
       }}>
-      <div className={styles.caption} aria-live="polite" aria-atomic="true">
-        <p className="text-caption text-fg-secondary">{slides[active]?.category}</p>
-        <h2 className="mt-2 text-title text-fg">{slides[active]?.title}</h2>
+      <div className={`${styles.caption} route-intro`} aria-live="polite" aria-atomic="true">
+        <h2 className="text-title text-fg">{slides[active]?.title}</h2>
       </div>
-      <div className={styles.stage}>
+      <div className={`${styles.stage} route-media`}>
       <div
         ref={rail}
         className={styles.rail}
@@ -132,7 +131,7 @@ export function CoffeeCarousel({ slides }: { slides: CoffeeSlide[] }) {
       </div>
       <LiquidGlassLens rail={rail} />
       </div>
-      <div className={styles.controls}>
+      <div className={`${styles.controls} route-navigation`}>
         <button type="button" onClick={() => move(-1)} className={styles.arrow} aria-label="Previous coffee review" title="Previous coffee review">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m14 6-6 6 6 6" stroke="currentColor" strokeWidth="1.5" /></svg>
         </button>

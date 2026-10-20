@@ -8,7 +8,7 @@ export const metadata = pageMetadata('/apps/', 'Apps');
 
 export default function AppsPage() {
   return (
-    <div className="mx-auto max-w-app px-page">
+    <div className="apps-entrance mx-auto max-w-app px-page">
       {/* h1 is sr-only, matching /design and /coffee: the nav already marks
           "Apps" as current. The subtitle stays visible here, unlike the
           other two: it's not restating the page's name, it's the one claim
@@ -21,7 +21,7 @@ export default function AppsPage() {
           the page here, so it doesn't read as a boundary the way the cards'
           edge does; the gap that actually needs to feel generous is the one
           before real content starts. */}
-      <section className="pt-12 pb-16">
+      <section className="route-intro pt-12 pb-16">
         <p className="text-title font-bold text-fg">Useful. Personal. Minimal.</p>
         <p className="mt-4 max-w-content text-body-lg text-fg-secondary">
           Thoughtful tools for everyday things, from creating and converting

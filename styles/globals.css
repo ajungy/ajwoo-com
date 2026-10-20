@@ -752,3 +752,55 @@ html[data-theme-transition] * {
   inset: 0;
   z-index: 0;
 }
+
+/* Route entrances use separate layers from carousel transforms. Content stays
+   visible without JS; reduced motion skips the sequence entirely. */
+@keyframes route-content-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes route-media-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .apps-entrance .route-intro > *,
+  .coffee-entrance .route-intro > *,
+  .work-entrance[data-ready="true"] .route-intro > * {
+    animation: route-content-in 400ms var(--e-entrance, cubic-bezier(0.16, 1, 0.3, 1)) both;
+  }
+  .apps-entrance .route-intro > :nth-child(2),
+  .work-entrance[data-ready="true"] .route-intro > :nth-child(2) { animation-delay: 45ms; }
+  .coffee-entrance .route-media,
+  .work-entrance[data-ready="true"] .route-media {
+    animation: route-media-in 400ms var(--e-entrance, cubic-bezier(0.16, 1, 0.3, 1)) 90ms both;
+  }
+  .coffee-entrance .route-navigation,
+  .work-entrance[data-ready="true"] .route-navigation {
+    animation: route-media-in 400ms var(--e-entrance, cubic-bezier(0.16, 1, 0.3, 1)) 150ms both;
+  }
+  .apps-entrance .stagger-grid { --stagger-base: 0ms; --stagger-step: 45ms; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .work-entrance[data-ready="true"] .route-intro > *,
+  .coffee-entrance .route-intro > * { animation-duration: 1000ms; }
+}
+
+/* A persistent disclosure lets the header shrink as smoothly as it opens. */
+.mobile-header-disclosure { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 500ms var(--e-standard); }
+.mobile-header-disclosure[data-open="true"] { grid-template-rows: 1fr; }
+.mobile-header-clip { min-height: 0; overflow: hidden; }
+.mobile-header-content { opacity: 0; transform: translateY(-6px); transition: opacity 500ms var(--e-standard), transform 500ms var(--e-standard); }
+.mobile-header-disclosure[data-open="true"] .mobile-header-content { opacity: 1; transform: translateY(0); }
+@media (min-width: 600px) { .mobile-header-disclosure { display: none; } }
+@keyframes work-wheel-arrival {
+  from { translate: 0 calc(50svh + 40vw); }
+  to { translate: 0 0; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .work-entrance[data-ready="true"] .work-wheel-arrival { animation: work-wheel-arrival 1000ms var(--e-entrance, cubic-bezier(0.16, 1, 0.3, 1)) both; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mobile-header-disclosure, .mobile-header-content { transition: none; }
+}

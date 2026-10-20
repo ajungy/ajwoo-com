@@ -51,7 +51,7 @@ export function FeaturedApp({ apps }: { apps: App[] }) {
             text. `flip` sits on the left one to match. */}
         <div className="flex items-center gap-2 text-fg">
           <Laurel flip className="h-[38.6276px] w-auto" />
-          <p className="text-title font-bold text-fg whitespace-nowrap">Alex's choice</p>
+          <p className="text-title font-bold text-fg whitespace-nowrap">Alex's Apps</p>
           <Laurel className="h-[38.6276px] w-auto" />
         </div>
       </div>
@@ -101,8 +101,7 @@ export function FeaturedApp({ apps }: { apps: App[] }) {
             <AppCard
               key={app.slug}
               app={app}
-              playing={['letter', 'mbti-test'].includes(app.slug) ? undefined : apps[activeIndex]?.slug === app.slug}
-              hoverPlay={['letter', 'mbti-test'].includes(app.slug)}
+              playing={apps[activeIndex]?.slug === app.slug}
               hoverZoom={false}
               hoverShadow={false}
             />

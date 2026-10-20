@@ -15,7 +15,7 @@ export function AppsCatalog({ apps }: { apps: App[] }) {
 
   return (
     <>
-      <StaggerReveal className={gridClassName}>
+      <StaggerReveal className={gridClassName} durationMs={400} delayMs={100}>
         {featured.map((app) => <AppCard key={app.slug} app={app} hoverPlay />)}
       </StaggerReveal>
       {remaining.length > 0 && (
@@ -38,7 +38,7 @@ export function AppsCatalog({ apps }: { apps: App[] }) {
           <div id="more-apps" hidden={!expanded}>
             {expanded && (
               <div className="mt-10 border-t border-line pt-10">
-                <StaggerReveal className={gridClassName}>
+                <StaggerReveal className={gridClassName} durationMs={400} delayMs={100}>
                   {remaining.map((app) => <AppCard key={app.slug} app={app} hoverPlay />)}
                 </StaggerReveal>
               </div>
