@@ -1,4 +1,9 @@
 import { pageMetadata } from '@/lib/metadata';
+import { caseStudies } from '@/content/case-studies';
+import { NetflixPasswordGate } from '@/components/netflix/NetflixPasswordGate';
+import { encryptNetflixProject } from '@/lib/netflix/encrypt';
+import { Action } from '@/components/Action';
+import { site } from '@/content/site';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { Picture } from '@/components/Picture';
@@ -43,6 +48,7 @@ const YEAR_SUBTITLE = /^.{0,60}?[\s,-]+((?:19|20)\d{2})\s*$/;
 export default function WorkPage({ params }: { params: { slug: string } }) {
   const project = getProject(params.slug);
   if (!project) notFound();
+  if (project.slug === 'netflix-creative-tools') return <NetflixPasswordGate project={project} encrypted={encryptNetflixProject()} />;
 
   const all = blocksFor(project.slug);
   const firstBlock = all[0];
@@ -60,6 +66,7 @@ export default function WorkPage({ params }: { params: { slug: string } }) {
   const hero = withoutTitle[0]?.kind === 'image' ? withoutTitle[0] : null;
   const blocks = hero ? withoutTitle.slice(1) : withoutTitle;
 
+  const study = caseStudies[project.slug];
   const isCoffee = project.kind === 'coffee';
 
   // No dead ends: every project offers the next one (Principle 7).
@@ -80,12 +87,23 @@ export default function WorkPage({ params }: { params: { slug: string } }) {
 
       <div className="mx-auto max-w-app px-page">
         <header className="pt-12 pb-12">
-          <h1 className="text-h1 text-fg">{project.title}{year ? `, ${year}` : ''}</h1>
-          <p className="mt-4 text-body-lg text-fg-secondary">{project.category}</p>
+          <h1 className="text-h1 text-fg">{project.title}{project.kind === 'coffee' && year ? `, ${year}` : ''}</h1>
+          <p className={`mt-4 ${project.kind === 'design' ? 'text-body' : 'text-body-lg'} text-fg-secondary`}>{project.category}{project.kind === 'design' && year ? ` - ${year}` : ''}</p>
         </header>
 
         <article className="pb-12">
-          <Blocks blocks={blocks} alt={project.title} />
+          {study && <section className="max-w-content mb-12">
+            <h2 className="text-h3">The challenge</h2>
+            <p className="mt-6 text-body-lg text-fg-secondary">{study.problem}</p>
+            <h2 className="mt-9 text-h3">My contribution</h2>
+            <p className="mt-6 text-body">{study.scope}</p>
+            <h2 className="mt-9 text-h3">Collaboration</h2>
+            <p className="mt-6 text-body">{study.collaboration}</p>
+            <h2 className="mt-9 text-h3">Public work</h2>
+            <p className="mt-6 text-body">{study.outcome}</p>
+          </section>}
+          <Blocks blocks={study ? blocks.filter((b) => b.kind !== 'text') : blocks} alt={project.title} />
+          {study && <div className="mt-12 flex flex-wrap gap-4"><Action href="/#selected-work">← Selected work</Action><Action href={site.calendlyUrl} external>Discuss a role</Action></div>}
         </article>
 
         {next.length > 0 && (

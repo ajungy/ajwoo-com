@@ -3,7 +3,13 @@
 
 import data from './images.json';
 
-export type Project = { slug: string; title: string; category: string; kind: 'design' | 'coffee' };
+export type Project = {
+  slug: string;
+  title: string;
+  category: string;
+  kind: 'design' | 'coffee';
+  thumbnail?: { base: string; width: number; height: number };
+};
 
 export type Block =
   | { kind: 'text'; value: string }
@@ -12,17 +18,24 @@ export type Block =
   | { kind: 'embed'; src: string; title: string };
 
 export const projects: Project[] = [
-  { slug: '704', title: 'GenAI in Premiere Pro', category: 'Video / AI', kind: 'design' },
-  { slug: 'pr-ae-frame', title: 'Pr Ae Frame', category: 'Video / Cloud', kind: 'design' },
-  { slug: 'layout', title: 'Layout', category: 'HoloLens', kind: 'design' },
-  { slug: 'product-visualize', title: 'Product Visualize', category: 'AR / CRM', kind: 'design' },
-  { slug: 'dynamics-365-customer-voice', title: 'Dynamics 365 Customer Voice', category: 'Forms / CRM', kind: 'design' },
-  { slug: 'seeing-ai', title: 'Seeing AI', category: 'AI', kind: 'design' },
-  { slug: 'netmarble', title: 'Netmarble', category: 'Branding / UX', kind: 'design' },
+  {
+    slug: 'netflix-creative-tools',
+    title: 'Netflix: Creative Tools',
+    category: 'Video / Artwork / Copy / Analytics / AI',
+    kind: 'design',
+    thumbnail: { base: 'tile-netflix-creative-tools', width: 1024, height: 1024 },
+  },
+  { slug: '704', title: 'Adobe: Premiere Generative AI', category: 'Video / AI', kind: 'design' },
+  { slug: 'pr-ae-frame', title: 'Adobe: Frame.io for Premiere & After Effects', category: 'Video / Cloud', kind: 'design' },
+  { slug: 'layout', title: 'Microsoft: Layout', category: 'AR / MR / HoloLens', kind: 'design' },
+  { slug: 'product-visualize', title: 'Microsoft: Product Visualize', category: 'AR / CRM', kind: 'design' },
+  { slug: 'dynamics-365-customer-voice', title: 'Microsoft: Dynamics Customer Voice', category: 'Forms / CRM', kind: 'design' },
+  { slug: 'seeing-ai', title: 'Microsoft: Seeing AI', category: 'Accessibility / AI', kind: 'design' },
+  { slug: 'netmarble', title: 'Netmarble: Games', category: 'Brand / UX', kind: 'design' },
   { slug: 'starbucks-technology', title: 'Starbucks Technology', category: 'User Research / iPad', kind: 'design' },
-  { slug: 'wrap-and-charge', title: 'Wrap and Charge', category: 'Industrial Design', kind: 'design' },
+  { slug: 'wrap-and-charge', title: 'Kikkerland: Warp and Charge', category: 'Industrial Design', kind: 'design' },
   { slug: 'coin-lock', title: 'Coin Lock', category: 'Industrial Design', kind: 'design' },
-  { slug: '10-borders', title: '10 Borders', category: 'Poster', kind: 'design' },
+  { slug: '10-borders', title: '10 Borders', category: 'Graphic Design', kind: 'design' },
   { slug: 'paintsound', title: 'Paint Sound', category: 'Hololens', kind: 'design' },
   { slug: '3-coffee-shops-in-tokyo', title: '3 Coffee Shops in Tokyo', category: 'Japan', kind: 'coffee' },
   { slug: '5-coffee-shops-in-seattle', title: '5 Coffee Shops in Seattle', category: 'USA', kind: 'coffee' },
@@ -52,7 +65,7 @@ export const siteData = data as {
   blocks: Record<string, Block[]>;
 };
 
-export const tileFor = (slug: string): Tile | undefined => siteData.tiles[slug];
+export const tileFor = (slug: string): Tile | undefined => getProject(slug)?.thumbnail ?? siteData.tiles[slug];
 export const blocksFor = (slug: string): Block[] => siteData.blocks[slug] ?? [];
 
 /**
@@ -75,7 +88,7 @@ export const blocksFor = (slug: string): Block[] => siteData.blocks[slug] ?? [];
  *     renders in the grid.
  *   - Layout's grid tile is `layout33333d.gif`, not the `ezgif-2-...gif` that
  *     lives in Layout's own page body — different asset, same project.
- * Only GenAI (704) and Layout actually animate in the live grid. Seeing AI
+ * GenAI (704) and Layout animate in the original live grid. Seeing AI
  * and Netmarble render their existing static tiles (siteData.tiles) via the
  * normal Picture path below — no motionTiles entry means no video.
  *
@@ -85,6 +98,8 @@ export const blocksFor = (slug: string): Block[] => siteData.blocks[slug] ?? [];
  */
 type MotionTile = { base: string; width: number; height: number; hasWebm: boolean };
 const motionTiles: Record<string, MotionTile> = {
+  // Alex supplied this 5-second loop for the local Netflix portfolio draft.
+  'netflix-creative-tools': { base: 'mov-netflix-animals', width: 1080, height: 1080, hasWebm: true },
   '704': { base: 'mov-704-genai', width: 570, height: 570, hasWebm: true },
   layout: { base: 'mov-layout-33333d', width: 864, height: 864, hasWebm: true },
 };

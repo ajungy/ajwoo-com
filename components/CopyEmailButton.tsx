@@ -9,7 +9,7 @@ import { site } from '@/content/site';
  * on a <button> rather than an <a> — Alex asked for Email to copy the address
  * to the clipboard and confirm with a toast, rather than open a mailto: link.
  */
-export function CopyEmailButton() {
+export function CopyEmailButton({ label = 'Email' }: { label?: string }) {
   const [showToast, setShowToast] = useState(false);
 
   const handleCopy = async () => {
@@ -26,7 +26,7 @@ export function CopyEmailButton() {
     <>
       <button
         onClick={handleCopy}
-        data-cursor-label="Email"
+        data-cursor-label={label}
         className={
           'inline-flex items-center justify-center h-control-md rounded-control border ' +
           'text-label font-medium transition duration-fast ease-standard motion-safe:active:scale-press ' +
@@ -34,7 +34,7 @@ export function CopyEmailButton() {
           'can-hover:hover:bg-secondary-hover can-hover:hover:border-secondary-line-hover active:bg-secondary-active'
         }
       >
-        Email
+        {label}
       </button>
       {showToast && <Toast message="Alex's email copied to clipboard" duration={3000} />}
     </>

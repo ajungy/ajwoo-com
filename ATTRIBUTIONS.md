@@ -25,3 +25,7 @@ Copyright (c) 2026 Harsh Jadhav. MIT licensed; commercial use permitted.
 Full copyright, permission and warranty notice is distributed at
 /licenses/componentry-MIT.txt. Native React/WebGL integration; no new packages
 or reference demo photography added. Existing site photos are unchanged.
+
+## Work wheel and Netflix portfolio
+
+Work wheel adapted from CrafterUI Works Wheel (https://21st.dev/@crafterui/components/works-wheel), MIT / Copyright (c) 2026 CrafterUI. Full notice: /licenses/crafterui-MIT.txt. No demo artwork copied. Netflix media supplied by Alex; public diagrams credited as related ecosystem examples with source links on the page, not individual design deliverables.

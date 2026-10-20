@@ -1,0 +1,134 @@
+.stage { position: relative; height: 100%; min-height: 0; width: 100%; overflow: clip; background: var(--surface-page); color: var(--text-primary); touch-action: pan-x; user-select: none; cursor: grab; }
+.stage:active { cursor: grabbing; }
+.stage:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: -4px; }
+.wheel { position: absolute; left: 50%; top: 50%; transform-style: preserve-3d; }
+.card { position: absolute; display: block; backface-visibility: hidden; transform-style: preserve-3d; }
+.face { position: relative; display: block; width: 100%; height: 100%; overflow: hidden; border-radius: var(--r-control); background: var(--surface-raised); }
+.face picture { display: block; width: 100%; height: 100%; }
+.media { display: block; width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+.ringLabel { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; pointer-events: none; font-size: 24px; }
+.explore { pointer-events: auto; font-size: 14px; color: var(--text-secondary); text-decoration: underline; text-underline-offset: 5px; min-height: 44px; }
+.title { z-index: 200; position: absolute; left: max(32px, calc((100% - 1120px) / 2)); top: 50%; transform: translateY(-50%); width: 25%; max-width: 330px; opacity: 0; }
+.projectTitle { font-size: clamp(20px, 2vw, 30px); line-height: 1.25; font-weight: 500; text-wrap: balance; }
+.projectTitle span { font-size: 18px; white-space: nowrap; }
+.year { z-index: 200; position: absolute; right: max(32px, calc((100% - 1120px) / 2)); top: 50%; transform: translateY(-50%); font-size: 18px; color: var(--text-secondary); font-variant-numeric: tabular-nums; opacity: 0; }
+.controls { z-index: 200; position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 24px; }
+.arrow { display: grid; place-items: center; width: 44px; height: 44px; border-radius: var(--r-control); font-size: 22px; color: var(--text-secondary); }
+.fallback { position: absolute; inset: 0; overflow: auto; padding: 32px; background: var(--surface-page); }
+@media (hover: hover) and (pointer: fine) { .arrow:hover { background: var(--action-tertiary-bg-hover); } .projectTitle:hover { text-decoration: underline; text-underline-offset: 5px; } }
+@media (max-width: 699px) {
+ .stage::before { content: ""; position: absolute; inset: 0 0 auto; height: 120px; background: var(--surface-page); z-index: 150; pointer-events: none; }
+ .controls { background: var(--surface-page); border-radius: var(--r-control); padding: 0 8px; }
+ .title { top: 24px; left: 16px; width: calc(100% - 105px); max-width: none; transform: none; }
+ .projectTitle { font-size: 20px; }
+ .title p { font-size: 13px; line-height: 1.5; margin-top: 8px; }
+ .year { top: 27px; right: 16px; transform: none; font-size: 13px; max-width: 78px; text-align: right; }
+ .ringLabel { font-size: 20px; }
+}
+:global(body):has(.stage) { height: 100svh; overflow: hidden; display: grid; grid-template-rows: auto minmax(0, 1fr); grid-template-columns: minmax(0, 1fr); }
+:global(body):has(.stage) :global(main) { min-height: 0; min-width: 0; }
+:global(body):has(.stage) :global(main) > div { height: 100%; }
+:global(body):has(.stage) :global(footer) { display: none; }
+
+/* The selected work and its navigation share the left-hand reading column. */
+.controls { position: static; transform: none; margin-bottom: 16px; gap: 12px; justify-content: flex-start; }
+.year { display: flex; flex-direction: column; gap: 8px; font-size: 13px; line-height: 1.4; }
+.year button { color: var(--text-tertiary); min-width: 44px; text-align: right; }
+.year button.activeYear { color: var(--text-primary); font-weight: 600; }
+.year button:disabled { cursor: default; }
+.media { transition: transform 240ms ease; }
+@media (hover: hover) and (pointer: fine) { .selectedCard:hover .media { transform: scale(1.07); } }
+@media (prefers-reduced-motion: reduce) { .media { transition: none; } }
+@media (max-width: 699px) {
+ .stage::before { height: 170px; }
+ .title { top: 8px; width: calc(100% - 90px); }
+ .controls { padding: 0; margin-bottom: 8px; background: none; }
+ .year { top: 50%; transform: translateY(-50%); gap: 10px; right: 12px; }
+ .wheel { left: 44%; top: 56%; }
+}
+
+.face { transition: transform 240ms ease; }
+@media (hover: hover) and (pointer: fine) { .selectedCard:hover .face { transform: scale(1.06) !important; } .selectedCard:hover .media { transform: none; } }
+@media (prefers-reduced-motion: reduce) { .face { transition: none; } }
+
+.year button:disabled { color: var(--text-tertiary); opacity: .3; cursor: default; }
+@media (max-width: 699px) {
+ .stage::before { height: 120px; }
+ .title { top: 24px; width: calc(100% - 32px); }
+ .wheel { left: 50%; top: 51%; }
+ .year { inset: auto 0 0; transform: none; max-width: none; width: 100%; box-sizing: border-box; flex-direction: row; align-items: center; gap: 20px; overflow-x: auto; overflow-y: hidden; white-space: nowrap; padding: 16px 24px; background: var(--surface-page); scrollbar-width: none; scroll-padding-inline: 24px; }
+ .year::-webkit-scrollbar { display: none; }
+ .year button { flex: 0 0 auto; text-align: center; min-height: 44px; }
+}
+
+/* Compact chrome leaves the wheel visible close to both viewport edges. */
+@media (min-width: 700px) {
+ .title { width: 22%; max-width: 280px; }
+ .year { gap: 6px; }
+}
+@media (max-width: 699px) {
+ .stage::before { height: 88px; }
+ .title { top: 10px; }
+ .projectTitle { font-size: 18px; line-height: 1.2; }
+ .title p { font-size: 12px; line-height: 1.4; margin-top: 4px; }
+ .year { padding: 2px 16px max(2px, env(safe-area-inset-bottom)); }
+ .wheel { top: 50%; }
+}
+
+/* Lightweight translucent chrome belongs to this full-screen Design view. */
+:global(body):has(.stage) { grid-template-rows: minmax(0, 1fr); }
+:global(body):has(.stage) :global(header.chrome) { position: fixed; inset: 0 0 auto; background: color-mix(in srgb, var(--surface-page) 65%, transparent); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+.yearShell { z-index: 200; position: absolute; right: max(24px, calc((100% - 1120px) / 2)); top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; align-items: center; }
+.year { position: static; inset: auto; transform: none; opacity: 1; width: auto; max-width: none; }
+.yearChevron { display: grid; place-items: center; width: 44px; height: 36px; color: var(--text-secondary); }
+.yearChevron:disabled { opacity: .25; cursor: default; }
+.projectTitle { font-size: clamp(14px, 1.35vw, 20px); line-height: 1.25; text-wrap: initial; }
+.title { width: 30%; max-width: 370px; }
+.title p { margin-top: 6px; font-size: 13px; }
+@media (max-width: 699px) {
+ .stage::before { display: none; }
+ .title { top: 64px; left: 0; width: 100%; max-width: none; padding: 6px 16px; background: color-mix(in srgb, var(--surface-page) 65%, transparent); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+ .projectTitle { font-size: clamp(12px, 3.5vw, 16px); line-height: 1.15; }
+ .projectTitle span { font-size: 12px; }
+ .title p { font-size: 11px; line-height: 1.25; margin-top: 3px; }
+ .yearShell { inset: auto 0 0; transform: none; flex-direction: row; background: color-mix(in srgb, var(--surface-page) 65%, transparent); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); padding-bottom: env(safe-area-inset-bottom); }
+ .year { flex: 1; min-width: 0; width: auto; padding: 0 4px; background: transparent; gap: 16px; }
+ .yearChevron { flex: 0 0 36px; height: 44px; }
+ .yearChevron svg { transform: rotate(-90deg); }
+ .wheel { top: 52%; }
+}
+
+/* One continuous mobile glass surface spans the navigation and project copy. */
+@media (max-width: 699px) {
+ :global(body):has(.stage) :global(header.chrome) { background: transparent; backdrop-filter: none; -webkit-backdrop-filter: none; }
+ .stage::before { display: block; content: ""; position: absolute; inset: 0 0 auto; height: 112px; z-index: 150; pointer-events: none; background: color-mix(in srgb, var(--surface-page) 65%, transparent); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+ .title { background: transparent; backdrop-filter: none; -webkit-backdrop-filter: none; }
+}
+
+/* Reserve the front card's enlarged footprint before allocating title space. */
+@media (min-width: 700px) {
+ .title { width: max(140px, calc(50% - min(27svh, 18vw) - max(32px, (100vw - 1120px) / 2) - 40px)); max-width: 330px; }
+ .projectTitle { white-space: normal; overflow-wrap: anywhere; text-wrap: balance; }
+}
+@media (max-width: 699px) {
+ .projectTitle { white-space: normal; overflow-wrap: anywhere; }
+}
+
+@media (max-width: 699px) {
+ .title { top: var(--wheel-header-height, 64px); }
+ .stage::before { height: calc(var(--wheel-header-height, 64px) + var(--wheel-title-height, 48px)); }
+}
+
+.year button.activeYear:disabled { color: var(--text-primary); opacity: 1; font-weight: 600; }
+
+/* Fixed-width numerals keep every year and both chevrons on one axis. */
+.year button { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 13px; font-weight: 400; font-variant-numeric: lining-nums tabular-nums; font-feature-settings: "tnum" 1, "lnum" 1; text-align: center; transition: color 160ms ease; }
+.year button.activeYear { font-weight: 400; }
+.yearChevron { transition: color 160ms ease; }
+@media (hover: hover) and (pointer: fine) {
+ .year button:hover, .yearChevron:not(:disabled):hover { color: var(--text-primary); }
+ .projectTitle:hover { color: var(--text-primary); }
+}
+.year button:focus-visible, .yearChevron:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
+
+.year button.projectYear { font-weight: 700; }
