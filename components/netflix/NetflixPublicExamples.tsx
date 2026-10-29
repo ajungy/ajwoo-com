@@ -47,11 +47,13 @@ export function NetflixPublicExamples({ examples: netflixPublicExamples }: Pick<
             )}
             <figcaption className="mt-6 max-w-content text-body text-fg-secondary">
               <p>Related example / Source: {example.credit}</p>
+              {example.kind !== 'embed' && (
               <a href={example.sourceHref} target="_blank" rel="noopener noreferrer"
-                aria-label={`${example.kind === 'embed' ? 'Watch on YouTube' : 'Public image / source article'}: ${example.title}`}
+                aria-label={`Public image / source article: ${example.title}`}
                 className="mt-3 inline-block text-fg underline underline-offset-4 can-hover:hover:text-fg-secondary">
-                {example.kind === 'embed' ? 'Watch on YouTube ↗' : 'Public image / source article ↗'}
+                Public image / source article ↗
               </a>
+              )}
             </figcaption>
           </figure>
         ))}

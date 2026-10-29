@@ -804,3 +804,14 @@ html[data-theme-transition] * {
 @media (prefers-reduced-motion: reduce) {
   .mobile-header-disclosure, .mobile-header-content { transition: none; }
 }
+
+/* Keep project actions close to the shared copyright footer. */
+body:has([data-work-actions]) main article:has([data-work-actions]) {
+  padding-bottom: 0;
+}
+body:has([data-work-actions]) > footer {
+  margin-top: 0;
+}
+body:has([data-work-actions]) > footer > div {
+  padding-top: 8px;
+}

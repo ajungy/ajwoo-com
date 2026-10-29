@@ -92,9 +92,9 @@ export const netflixPublicExamples = [
     kind: 'embed',
     title: 'Visual search / Finding the right clip and frame',
     description: 'My contributions also included designing workflows that help creatives find the right clip or frame using different algorithms, AI, and media-understanding technologies. At the product, UX, and UI layers, I worked to make these capabilities easier to use in creative work, helping teams explore relevant moments and choose assets that fit the use case. The public video below, Visual Search @ Netflix, provides context for the technology behind these workflows.',
-    src: 'https://www.youtube-nocookie.com/embed/I9VGd4JYshc?start=140',
+    src: 'https://www.youtube-nocookie.com/embed/I9VGd4JYshc?start=0',
     videoTitle: 'Visual Search @ Netflix',
     credit: 'WeAreNetflix / YouTube',
-    sourceHref: 'https://www.youtube.com/watch?v=I9VGd4JYshc&t=140s',
+    sourceHref: 'https://www.youtube.com/watch?v=I9VGd4JYshc',
   },
 ] as const;
