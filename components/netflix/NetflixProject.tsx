@@ -49,6 +49,36 @@ export function NetflixProject({ project, work: netflixWork, examples }: { proje
                         </figcaption>
                       </figure>
                     )}
+                    {area.title === 'Video' && (
+                      <div className="mt-12 grid max-w-content grid-cols-2 gap-6">
+            <figure>
+              <video autoPlay loop muted playsInline preload="metadata"
+                poster="/img/netflix-wednesday-marketing-poster.webp"
+                width={552} height={1200}
+                aria-label="Wednesday vertical marketing video example"
+                className="block aspect-[1465/1666] h-auto w-full object-contain">
+                <source src="/img/netflix-wednesday-marketing-hdr.mp4" type='video/mp4; codecs="hvc1"' media="(dynamic-range: high)" />
+                <source src="/img/netflix-wednesday-marketing.mp4?v=sdr2" type="video/mp4" />
+              </video>
+              <figcaption className="mt-6 text-body text-fg-secondary">
+                Wednesday / Marketing channel example: vertical video for Instagram Reels.
+              </figcaption>
+            </figure>
+            <figure>
+              <video autoPlay loop muted playsInline preload="metadata"
+                poster="/img/netflix-onepiece-clips-poster.webp"
+                width={552} height={1200}
+                aria-label="ONE PIECE Netflix Clips mobile video example"
+                className="block aspect-[1465/1666] h-auto w-full object-contain">
+                <source src="/img/netflix-onepiece-clips-hdr.mp4" type='video/mp4; codecs="hvc1"' media="(dynamic-range: high)" />
+                <source src="/img/netflix-onepiece-clips.mp4?v=sdr2" type="video/mp4" />
+              </video>
+              <figcaption className="mt-6 text-body text-fg-secondary">
+                ONE PIECE / Netflix member experience: subtitled vertical video for Netflix Clips.
+              </figcaption>
+            </figure>
+          </div>
+                    )}
                   </dd>
                 </div>
               ))}

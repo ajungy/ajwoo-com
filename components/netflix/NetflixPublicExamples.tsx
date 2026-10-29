@@ -39,17 +39,25 @@ export function NetflixPublicExamples({ examples: netflixPublicExamples }: Pick<
               <h3 className="text-title text-fg">{example.title}</h3>
               <p className="mt-4 text-body text-fg-secondary">{example.description}</p>
             </div>
+            {example.kind === 'embed' ? (
+              <div className="overflow-hidden rounded-lg border border-line-subtle bg-sunken">
+                <iframe src={example.src} title={example.videoTitle} loading="lazy"
+                  allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen className="aspect-video w-full" />
+              </div>
+            ) : (
             <picture>
               <source srcSet={example.src} type="image/webp" />
               <img src={example.fallback} alt={example.alt} width={example.width} height={example.height}
                 loading="lazy" decoding="async" className="block h-auto w-full" />
             </picture>
+            )}
             <figcaption className="mt-6 max-w-content text-body text-fg-secondary">
               <p>Related example / Source: {example.credit}</p>
               <a href={example.sourceHref} target="_blank" rel="noopener noreferrer"
-                aria-label={`Public image / source article: ${example.title}`}
+                aria-label={`${example.kind === 'embed' ? 'Watch on YouTube' : 'Public image / source article'}: ${example.title}`}
                 className="mt-3 inline-block text-fg underline underline-offset-4 can-hover:hover:text-fg-secondary">
-                Public image / source article ↗
+                {example.kind === 'embed' ? 'Watch on YouTube ↗' : 'Public image / source article ↗'}
               </a>
             </figcaption>
           </figure>

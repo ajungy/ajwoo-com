@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { Project } from '@/content/projects';
 import type { EncryptedNetflixProject, NetflixPayload } from '@/lib/netflix/types';
 import { NetflixProject } from './NetflixProject';
@@ -26,7 +26,6 @@ export function NetflixPasswordGate({ project, encrypted }: { project: Project; 
   const [accepted, setAccepted] = useState(false);
   const [error, setError] = useState('');
   const [submission, setSubmission] = useState(0);
-  const content = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!password || payload) return;
@@ -48,13 +47,10 @@ export function NetflixPasswordGate({ project, encrypted }: { project: Project; 
 
   useEffect(() => {
     if (!payload) return;
-    const heading = content.current?.querySelector('h1');
-    heading?.setAttribute('tabindex', '-1');
-    heading?.focus({ preventScroll: true });
     window.scrollTo(0, 0);
   }, [payload]);
 
-  if (payload) return <div ref={content} className="ph-no-capture" data-private><NetflixProject project={project} {...payload} /></div>;
+  if (payload) return <div className="ph-no-capture" data-private><NetflixProject project={project} {...payload} /></div>;
 
   return (
     <section className={`${styles.gate} ph-no-capture`} data-private aria-labelledby="netflix-password-title">
