@@ -2,15 +2,19 @@
 
 ## Current status
 
-Local integrations installed in the website, ../ajwoo-draw and ../ajwoo-convert.
-Connected to US Cloud project 610209. The public token is configured locally in
-all three apps. Free plan verified: 1 million product events per monthly cycle,
-with no paid upgrade. Discard client IP data is enabled. A labeled setup-test
-pageview and app launch were received and inspected in PostHog. The AJWOO overview
-dashboard and pageview-to-app-launch funnel are configured. Server retention
-was not changed; no retention control was exposed on the inspected settings pages. Nothing was deployed. A blank project token disables both tracking
-and the consent UI. Production rollout remains pending, so existing visitor traffic is not yet collected.
-Dashboard: https://app.posthog.com/project/610209/dashboard/2098006
+Website update, October 28, 2026: consent-gated session replay and automatic
+link/button click events are enabled in the SDK. The public remote project
+configuration confirms replay is already enabled server-side. No PostHog project
+or billing settings were changed. Existing app integrations in Draw and Convert
+continue to use their earlier, event-only configuration.
+
+The compact prompt is “Help improve ajwoo with cookies and session replay?”
+with equal Decline/Allow actions and a Details link to `/privacy/`. The website's
+version-2 consent cookie requires a fresh choice from prior opt-ins; prior
+version-1 declines remain respected. Replay starts only after the new Allow.
+
+Dashboard: https://us.posthog.com/project/610209/dashboard/2098006
+Recordings: https://us.posthog.com/project/610209/replay
 
 ## Connect the account
 
@@ -35,14 +39,25 @@ consent can be connected across AJWOO subdomains via the SDK's shared cookie.
 The SDK is only active on the application's exact production hostname(s), never
 localhost, preview deployments, or alternate domains. It creates no person profiles.
 
-Allowlisted events/properties only. No replay, DOM autocapture, surveys, feature
-flags, exception capture, file contents, filenames, drawings, inputs or messages.
-URLs omit query and hash; referrers are domains only. Only utm_source, utm_medium,
-and utm_campaign are retained for attribution; never put personal data in these.
+Product events retain allowlisted metadata, query/hash-free page URLs, and
+structural click information (element tag and position, without text or attributes).
+Replay uses the bundled `posthog-js/full/no-external` recorder after opt-in, and
+loads project configuration via JSON. Replay snapshots use their own SDK masking
+pipeline and must bypass the scalar product-event sanitizer to remain playable.
+
+Inputs are masked; hidden/file inputs, canvases, iframes, `[data-private]` and
+`.ph-no-capture` subtrees are blocked. Both locked and unlocked Netflix portfolio
+views are marked private before content renders. Editable text is masked, URL
+attributes lose query/hash, and value/title/alt/placeholder/aria-label attributes
+are removed. Console logging, network bodies/headers, canvas recording, surveys,
+feature flag evaluation, and person profiles are disabled. Browser privacy signals
+and withdrawing consent stop capture and recording. The network masker strips
+headers and bodies even if remote project settings enable them later.
+
 PostHog receives browser/device metadata and a pseudonymous identifier; receiving
-servers necessarily see the network IP. Configure retention in the account rather
-than assuming SDK options determine server retention. Withdrawal stops future
-tracking; deleting earlier events requires the operator's PostHog deletion workflow.
+servers necessarily see the network IP. Server-side retention is governed by the
+project; this change does not alter it. Withdrawal stops future collection, not
+previously collected data. Privacy questions and deletion requests go to Alex.
 
 ## Initial dashboard plan
 
@@ -62,26 +77,22 @@ cross-app journey reports cover consenting browsers only; blockers can prevent d
 
 ## Maintenance
 
-lib/analytics is copied into src/analytics in Draw and Convert. Keep core.ts,
-AnalyticsConsent.tsx and analytics.css synchronized. Convert's prior no-telemetry
-rule now has a documented opt-in exception; conversion files remain local.
-Any production CSP must allow the chosen ingestion host in connect-src. The SDK
-is bundled locally; recording scripts and remote extensions are disabled.
+Website analytics now differs intentionally from the earlier event-only copies in
+Draw/Convert. Do not copy replay configuration into those apps without auditing
+file previews, drawings, documents, and their consent notices first. This website
+records app launches, not interactions inside separate apps.
+
+A production CSP must allow the configured ingestion and asset/config hosts in
+connect-src. The recorder is bundled locally; remote extension scripts stay off.
 
 Official docs: https://posthog.com/docs/libraries/next-js
-https://posthog.com/docs/privacy/data-collection
-https://posthog.com/docs/billing/limits-alerts
+https://posthog.com/docs/session-replay/privacy
+https://posthog.com/docs/libraries/js/config
 
 ## Verification
 
-Website, Draw and Convert production builds pass. Draw: 78 tests pass; Convert:
-76 tests, typecheck, lint, license audit and updated origin audit pass. Shared
-analytics checks pass via `node scripts/test-analytics.cjs`. Consent was visually
-checked and accept/decline exercised in a temporary localhost:4333 harness.
-Synthetic events use app=setup-test. Exclude them from real traffic reports.
-Cross-subdomain identity requires final production verification after deployment.
-
-Project renamed AJWOO; reporting timezone set to America/Los_Angeles.
-Overview default filter excludes app=setup-test. Live app conversion/export
-events are instrumented; detailed per-app outcome charts can be configured once
-real traffic arrives. No user data was used in the synthetic verification.
+`node scripts/test-analytics.cjs` covers default-off behavior, old-consent
+migration, withdrawal and resume, GPC/DNT, event filtering, snapshot preservation,
+URL masking, network body/header stripping, and click metadata filtering.
+Production build and TypeScript checks pass. Verify a fresh consenting browser
+session in PostHog after rollout; old sessions cannot gain recordings retroactively.

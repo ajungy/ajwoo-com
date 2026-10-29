@@ -7,6 +7,8 @@ const js = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind
 const moduleValue = { exports: {} };
 let settings;
 let initializations = 0;
+let stopped = 0;
+let started = 0;
 const sent = [];
 const sdk = {
   init: (_key, options) => { initializations++; settings = options; },
@@ -14,6 +16,7 @@ const sdk = {
     const value = settings.before_send({ event, properties: { ...properties, '$initial_current_url': 'https://draw.ajwoo.com/#private-drawing', '$set': { email: 'secret@example.com' } } });
     if (value) sent.push(value);
   },
+  stopSessionRecording: () => { stopped++; }, startSessionRecording: () => { started++; },
   opt_in_capturing: () => {}, opt_out_capturing: () => {}, reset: () => {},
 };
 const documentMock = { cookie: '', referrer: 'https://search.example/search?q=private' };
@@ -29,9 +32,33 @@ const a = moduleValue.exports;
   assert.equal(a.configureAnalytics({ key: 'phc_test', host: 'https://attacker.example', app: 'draw', enabled: true }), false);
   assert.equal(a.configureAnalytics({ key: 'phc_test', host: 'https://us.i.posthog.com', app: 'draw', enabled: true }), true);
   await a.startAnalytics(); assert.equal(initializations, 0, 'No SDK before consent');
+  documentMock.cookie = 'ajwoo_analytics_consent_v1=yes';
+  await a.startAnalytics(); assert.equal(initializations, 0, 'Old analytics consent cannot enable replay');
+  documentMock.cookie = 'ajwoo_analytics_consent_v1=no';
+  assert.equal(a.consent(), 'no', 'Respect previous declines');
   a.setConsent('no'); await a.startAnalytics(); assert.equal(initializations, 0);
   a.setConsent('yes'); await a.startAnalytics(); assert.equal(initializations, 1);
-  assert.equal(settings.autocapture, false); assert.equal(settings.disable_session_recording, true);
+  assert.equal(settings.autocapture.dom_event_allowlist.join(','), 'click');
+  assert.equal(settings.disable_session_recording, false);
+  assert.equal(settings.advanced_disable_flags, false, 'Replay remote config must load');
+  assert.equal(settings.disable_external_dependency_loading, true, 'Replay ships in the bundled SDK');
+  assert.equal(settings.session_recording.maskAllInputs, true);
+  assert.equal(settings.session_recording.captureCanvas.recordCanvas, false);
+  assert.equal(settings.get_current_url(), 'https://draw.ajwoo.com/');
+  const maskedRequest = settings.session_recording.maskCapturedNetworkRequestFn({ name: locationMock.href, duration: 1, entryType: 'fetch', startTime: 0, requestBody: 'secret', requestHeaders: { Authorization: 'secret' }, responseBody: 'secret' });
+  assert.equal(maskedRequest.name, 'https://draw.ajwoo.com/');
+  assert.equal(maskedRequest.requestBody, undefined);
+  assert.equal(maskedRequest.requestHeaders, undefined);
+  assert.equal(maskedRequest.responseBody, undefined);
+  assert.equal(settings.session_recording.maskAttributeFn('href', '/?token=secret#private'), 'https://draw.ajwoo.com/');
+  assert.equal(settings.session_recording.maskAttributeFn('value', 'secret'), '');
+  const snapshot = { event: '$snapshot', properties: { $snapshot_data: [{ type: 2, data: { masked: true } }], $session_id: 'test-session' } };
+  assert.equal(settings.before_send(snapshot), snapshot, 'Preserve replay payload after recorder masking');
+  const click = settings.before_send({ event: '$autocapture', properties: { $event_type: 'click', $elements: [{ tag_name: 'button', nth_child: 2, $el_text: 'private', 'attr__value': 'secret' }] } });
+  assert.equal(click.properties.$elements[0].tag_name, 'button');
+  assert.equal(click.properties.$elements[0].$el_text, undefined);
+  assert.equal(click.properties.$elements[0].attr__value, undefined);
+  assert.equal(click.properties.app, 'draw');
   a.trackPage(); a.trackPage(); assert.equal(sent.length, 1, 'One pageview per route');
   assert.equal(sent[0].properties.$current_url, 'https://draw.ajwoo.com/');
   assert.equal(sent[0].properties.$referring_domain, 'search.example');
@@ -46,7 +73,11 @@ const a = moduleValue.exports;
   locationMock.pathname = '/another/'; locationMock.href = 'https://draw.ajwoo.com/another/?token=secret';
   a.trackPage(); assert.equal(sent.length, 3);
   a.setConsent('no'); a.track('conversion_failed'); assert.equal(sent.length, 3, 'Withdrawal stops capture');
-  a.setConsent('yes'); navigatorMock.globalPrivacyControl = true;
+  assert.ok(stopped > 0, 'Withdrawal stops recording');
+  assert.equal(settings.before_send({ event: '$snapshot', properties: {} }), null, 'No replay after decline');
+  a.setConsent('yes'); await a.startAnalytics();
+  assert.equal(started, 1, 'Opting in again resumes recording');
+  navigatorMock.globalPrivacyControl = true;
   a.track('conversion_failed'); assert.equal(sent.length, 3, 'GPC overrides saved opt-in');
   assert.equal(a.consent(), 'no');
   navigatorMock.globalPrivacyControl = false; navigatorMock.doNotTrack = '1';

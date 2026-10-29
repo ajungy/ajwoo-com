@@ -54,10 +54,10 @@ export function NetflixPasswordGate({ project, encrypted }: { project: Project; 
     window.scrollTo(0, 0);
   }, [payload]);
 
-  if (payload) return <div ref={content}><NetflixProject project={project} {...payload} /></div>;
+  if (payload) return <div ref={content} className="ph-no-capture" data-private><NetflixProject project={project} {...payload} /></div>;
 
   return (
-    <section className={styles.gate} aria-labelledby="netflix-password-title">
+    <section className={`${styles.gate} ph-no-capture`} data-private aria-labelledby="netflix-password-title">
       <div className={styles.panel}>
         <h1 id="netflix-password-title" className="text-title text-fg">{project.title}</h1>
         <p className="mt-4 text-body text-fg-secondary">Enter the password to view this project.</p>
