@@ -1,5 +1,5 @@
 .aj-analytics { position: fixed; bottom: 16px; left: 16px; z-index: 80; font-family: var(--font-sans); font-size: 13px; color: var(--text-primary); }
-.aj-analytics-panel { box-sizing: border-box; width: fit-content; max-width: calc(100vw - 32px); display: flex; flex-wrap: wrap; align-items: center; gap: 12px; max-height: calc(100dvh - 32px); overflow: auto; padding: 16px; border-radius: var(--radius-control, 10px); background: var(--surface-page, var(--surface-raised)); box-shadow: none; border: 1px solid var(--border-default); }
+.aj-analytics-panel { box-sizing: border-box; width: fit-content; max-width: calc(100vw - 32px); display: flex; flex-wrap: wrap; align-items: center; gap: 8px; max-height: calc(100dvh - 32px); overflow: auto; padding: 8px; border-radius: var(--radius-control, 10px); background: var(--surface-page, var(--surface-raised)); box-shadow: none; border: 1px solid var(--border-default); }
 .aj-analytics-panel p { margin: 0; line-height: 1.5; color: var(--text-secondary); }
 .aj-analytics-copy { flex: 1 1 auto; }
 .aj-analytics-copy a { text-decoration: underline; text-underline-offset: 3px; }
