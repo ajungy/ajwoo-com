@@ -1,13 +1,7 @@
 import type { Metadata } from 'next';
+import { SHARE_IMAGE } from '@/lib/metadata';
 import { WorksWheel } from '@/components/ui/works-wheel';
 import { blocksFor, designProjects, motionTileFor, tileFor } from '@/content/projects';
-
-const shareImage = {
-  url: 'https://www.ajwoo.com/img/tile-netflix-creative-tools.jpg',
-  width: 1024,
-  height: 1024,
-  alt: 'Netflix: Creative Tools — Alex Woo',
-};
 
 export const metadata: Metadata = {
   title: 'Work',
@@ -15,12 +9,12 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Work — Alex Woo',
     url: 'https://www.ajwoo.com/work/',
-    images: [shareImage],
+    images: [SHARE_IMAGE],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Work — Alex Woo',
-    images: [shareImage],
+    images: [SHARE_IMAGE],
   },
 };
 

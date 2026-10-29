@@ -4,13 +4,14 @@ import { TopBar } from '@/components/TopBar';
 import { AnalyticsSettingsLink } from '@/lib/analytics/AnalyticsConsent';
 import { site } from '@/content/site';
 import { SiteAnalytics } from '@/components/SiteAnalytics';
-import { SITE_URL } from '@/lib/metadata';
+import { SHARE_IMAGE, SITE_URL } from '@/lib/metadata';
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: { default: 'Alex Woo', template: '%s, Alex Woo' },
   description: site.identity,
-  openGraph: { title: 'Alex Woo', description: site.identity, url: '/', siteName: 'Alex Woo' },
+  openGraph: { title: 'Alex Woo', description: site.identity, url: '/', siteName: 'Alex Woo', images: [SHARE_IMAGE] },
+  twitter: { card: 'summary_large_image', images: [SHARE_IMAGE] },
 };
 
 // Runs BEFORE first paint. Three jobs: apply a saved theme so a chosen theme
