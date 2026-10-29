@@ -58,8 +58,8 @@ export function AnalyticsConsent({ config, path }: { config: AnalyticsConfig; pa
     setOpen(false);
     settings.current?.focus();
   }
-  return <aside className="aj-analytics" data-closing={closing ? "true" : undefined} aria-label="Analytics preferences">
-    <section ref={panel} tabIndex={-1} className="aj-analytics-panel chrome" aria-label="Help improve ajwoo" onKeyDown={(event) => { if (event.key === 'Escape') { if (!choice) choose('no'); else dismiss(); } }}>
+  return <aside className="aj-analytics chrome" data-closing={closing ? "true" : undefined} aria-label="Analytics preferences">
+    <section ref={panel} tabIndex={-1} className="aj-analytics-panel" aria-label="Help improve ajwoo" onKeyDown={(event) => { if (event.key === 'Escape') { if (!choice) choose('no'); else dismiss(); } }}>
       <p className="aj-analytics-copy">Allow analytics cookies and interaction recordings to improve ajwoo? <a href="/privacy/" tabIndex={closing ? -1 : undefined}>Privacy details</a></p>
       {navigator.doNotTrack === '1' || (navigator as Navigator & { globalPrivacyControl?: boolean }).globalPrivacyControl
         ? <><p>Your browser keeps analytics off.</p><button type="button" disabled={closing} onClick={() => choose('no')}>Close</button></>

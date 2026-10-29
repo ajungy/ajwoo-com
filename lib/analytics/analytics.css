@@ -1,4 +1,4 @@
-.aj-analytics { position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%); width: max-content; max-width: calc(100vw - 32px); z-index: 80; font-family: var(--font-sans); font-size: 13px; color: var(--text-primary); }
+.aj-analytics { position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%); width: max-content; max-width: calc(100vw - 32px); z-index: 80; border-radius: var(--radius-control, 10px); font-family: var(--font-sans); font-size: 13px; color: var(--text-primary); }
 .aj-analytics-panel { box-sizing: border-box; width: fit-content; max-width: calc(100vw - 32px); display: flex; flex-wrap: wrap; align-items: center; gap: 8px; max-height: calc(100dvh - 32px); overflow: auto; padding: 8px 8px 8px 12px; border-radius: var(--radius-control, 10px); box-shadow: none; border: 1px solid var(--border-default); }
 .aj-analytics-panel p { margin: 0; line-height: 1.5; color: var(--text-secondary); }
 .aj-analytics-copy { flex: 1 1 auto; }
@@ -14,9 +14,11 @@
 }
 .aj-analytics-copy a:active, .aj-analytics button:active { background: var(--action-tertiary-bg-active); color: var(--text-primary); }
 
-@media (prefers-reduced-transparency: reduce) { .aj-analytics-panel.chrome { background: var(--surface-page); -webkit-backdrop-filter: none; backdrop-filter: none; } }
+@media (prefers-reduced-transparency: reduce) { .aj-analytics.chrome { background: var(--surface-page); -webkit-backdrop-filter: none; backdrop-filter: none; } }
 
-/* Keep the banner mounted while it slides completely below the viewport. */
+/* Blur belongs on the animated layer: an opacity animation on an ancestor
+   creates a backdrop root that prevents a child from blurring page content.
+   Keep the banner mounted while it slides below the viewport. */
 .aj-analytics { animation: aj-analytics-enter 300ms var(--e-standard) both; }
 .aj-analytics[data-closing="true"] { pointer-events: none; animation: aj-analytics-exit 250ms var(--e-standard) both; }
 @keyframes aj-analytics-enter {
