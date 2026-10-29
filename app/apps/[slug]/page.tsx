@@ -37,13 +37,15 @@ export default function AppPage({ params }: { params: { slug: string } }) {
         {/* h-28/w-28 (112px), up from 96px — bigger again at Alex's
             direction ("make the logo a little bit larger"). */}
         {app.iconImage ? (
+          <span className={`relative block h-28 w-28 shrink-0 overflow-hidden rounded-xl ${['capture', 'narrate'].includes(app.slug) ? '' : 'border border-line-subtle'}`}>
           <img
-            src={`/img/${app.iconImage}-${app.slug === 'mbti-test' ? 128 : 256}.webp`}
+            src={`/img/${app.iconImage}-${app.slug === 'mbti-test' ? 128 : 256}.${['capture', 'narrate'].includes(app.slug) ? 'png' : 'webp'}`}
             alt=""
             width={112}
             height={112}
-            className="h-28 w-28 shrink-0 rounded-xl border border-line-subtle object-contain"
+            className={`h-full w-full object-contain ${app.slug === 'narrate' ? 'scale-[1.2]' : ''}`}
           />
+          </span>
         ) : (
           <span className="flex h-28 w-28 shrink-0 items-center justify-center rounded-xl border border-line-subtle bg-sunken text-fg">
             <AppIcon name={app.icon} className="h-14 w-14" />

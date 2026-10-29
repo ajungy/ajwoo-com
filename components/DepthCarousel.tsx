@@ -183,11 +183,14 @@ export function DepthCarousel({
   // "CARD CHROME, reversed again" comment above for why this is JS state
   // rather than a CSS :hover rule.
   const [frontHovered, setFrontHovered] = useState(false);
+  const [interacting, setInteracting] = useState(false);
   // Starts as the caller's estimate so first paint has no 0-height flash;
   // replaced with the active card's real measured height once mounted.
   const [measuredHeight, setMeasuredHeight] = useState(cardHeight);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const activeCardRef = useRef<HTMLDivElement>(null);
+  const gesture = useRef<{ id: number; x: number; y: number; horizontal: boolean } | null>(null);
+  const suppressClick = useRef(false);
   const count = items.length;
 
   const dirSign = tiltDirection === 'right' ? 1 : -1;
@@ -242,12 +245,12 @@ export function DepthCarousel({
   // running interval; flipping back to false re-runs the effect and
   // starts a fresh one.
   useEffect(() => {
-    if (!autoplay || count < 2 || frontHovered) return;
+    if (!autoplay || count < 2 || frontHovered || interacting) return;
     const id = setInterval(() => {
       setIndex((i) => (loop ? (i + 1) % count : Math.min(i + 1, count - 1)));
     }, autoplayDelay);
     return () => clearInterval(id);
-  }, [autoplay, autoplayDelay, loop, count, frontHovered]);
+  }, [autoplay, autoplayDelay, loop, count, frontHovered, interacting]);
 
   const go = (dir: 1 | -1) => {
     setIndex((i) => {
@@ -269,7 +272,39 @@ export function DepthCarousel({
           would ride up over the cards). */}
       <div
         className="relative overflow-hidden"
-        style={{ height: measuredHeight * scale + HOVER_PAD_Y * 2 }}
+        style={{ height: measuredHeight * scale + HOVER_PAD_Y * 2, touchAction: 'pan-y pinch-zoom' }}
+        onPointerDown={(event) => {
+          if (!event.isPrimary || event.button !== 0) return;
+          setInteracting(true);
+          suppressClick.current = false;
+          gesture.current = { id: event.pointerId, x: event.clientX, y: event.clientY, horizontal: false };
+        }}
+        onPointerMove={(event) => {
+          const drag = gesture.current;
+          if (!drag || drag.id !== event.pointerId) return;
+          const dx = event.clientX - drag.x;
+          const dy = event.clientY - drag.y;
+          if (!drag.horizontal && Math.abs(dy) > 10 && Math.abs(dy) > Math.abs(dx)) { gesture.current = null; setInteracting(false); return; }
+          if (Math.abs(dx) > 10 && Math.abs(dx) > Math.abs(dy) * 1.2) {
+            drag.horizontal = true;
+            suppressClick.current = true;
+            event.currentTarget.setPointerCapture(event.pointerId);
+          }
+        }}
+        onPointerUp={(event) => {
+          const drag = gesture.current;
+          if (!drag || drag.id !== event.pointerId) return;
+          gesture.current = null;
+          setInteracting(false);
+          const dx = event.clientX - drag.x;
+          if (drag.horizontal && Math.abs(dx) >= 32 && count > 1) go(dx < 0 ? 1 : -1);
+          if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId);
+        }}
+        onPointerCancel={() => { gesture.current = null; setInteracting(false); }}
+        onDragStart={(event) => event.preventDefault()}
+        onClickCapture={(event) => {
+          if (suppressClick.current) { event.preventDefault(); event.stopPropagation(); suppressClick.current = false; }
+        }}
       >
         {/* Scaled stack: kept at its native (desktop) pixel geometry so the
             translateX/translateZ/rotateY math above stays correct, then

@@ -20,7 +20,7 @@
 .rail {
   position: relative;
   display: flex;
-  gap: 32px;
+  gap: clamp(8px, calc(var(--coffee-card) * 0.075), 32px);
   height: 100%;
   align-items: center;
   overflow-x: auto;
@@ -59,10 +59,17 @@
 .arrow:focus-visible { outline: 2px solid var(--text-primary); outline-offset: 2px; }
 @media (max-width: 599px) {
   .gallery { --coffee-card: min(72vw, calc((100svh - 240px) * 0.52)); }
-  .rail { gap: 16px; }
+
 }
 @media (prefers-reduced-motion: reduce) {
   .rail { scroll-behavior: auto; }
 }
 
 .arrow:disabled { opacity: 0.3; cursor: default; }
+
+/* Short landscape screens need the available height, not half of a small remainder. */
+@media (orientation: landscape) and (max-height: 600px) {
+  .gallery { --coffee-card: min(420px, 50vw, max(100px, calc(100svh - 190px))); }
+  .caption { bottom: calc(50% + var(--coffee-card) / 2 + 8px); }
+  .controls { top: calc(50% + var(--coffee-card) / 2 + 4px); }
+}

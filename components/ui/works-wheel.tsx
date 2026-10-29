@@ -188,7 +188,7 @@ export function WorksWheel({ items }: { items: WorksWheelItem[] }) {
         else if (event.key === 'End') { event.preventDefault(); to(count); }
       }}
       onPointerDown={(event) => {
-        if (event.button !== 0 || (event.target as Element).closest('button')) return;
+        if (!event.isPrimary || event.button !== 0 || (event.target as Element).closest('button')) return;
         dragging.current = { y: event.clientY, total: 0 };
         suppressClick.current = false;
       }}
@@ -198,7 +198,7 @@ export function WorksWheel({ items }: { items: WorksWheelItem[] }) {
         const delta = drag.y - event.clientY;
         drag.total += Math.abs(delta);
         drag.y = event.clientY;
-        if (drag.total > 6) { suppressClick.current = true; event.currentTarget.setPointerCapture(event.pointerId); to(target.current + delta / (stage.w < 700 ? 520 : 320)); }
+        if (drag.total > 6) { suppressClick.current = true; event.currentTarget.setPointerCapture(event.pointerId); to(target.current + delta / (event.pointerType === 'touch' ? 120 : 240)); }
       }}
       onPointerUp={(event) => {
         if (!dragging.current) return;
