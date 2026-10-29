@@ -44,7 +44,8 @@ export function AnalyticsConsent({ config, path }: { config: AnalyticsConfig; pa
     return () => clearTimeout(timer);
   }, [closing]);
   const route = path ?? (typeof location === 'undefined' ? '/' : location.pathname);
-  const visible = open || (!choice && route !== '/');
+  const appsRoute = route === '/apps' || route.startsWith('/apps/');
+  const visible = open || (!choice && appsRoute);
   if (!available || (!visible && !closing)) return null;
   function dismiss() {
     setClosing(true);
