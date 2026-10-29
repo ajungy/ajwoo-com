@@ -17,6 +17,8 @@ type CoffeeSlide = {
 export function CoffeeCarousel({ slides }: { slides: CoffeeSlide[] }) {
   const rail = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
+  const drag = useRef<{ id: number; x: number; y: number } | null>(null);
+  const suppressClick = useRef(false);
   const requestedIndex = useRef(slides.length);
   const loopSlides = [...slides, ...slides, ...slides];
   const moveRef = useRef<(direction: number) => void>(() => {});
@@ -91,6 +93,39 @@ export function CoffeeCarousel({ slides }: { slides: CoffeeSlide[] }) {
       <div
         ref={rail}
         className={styles.rail}
+        onDragStart={(event) => event.preventDefault()}
+        onPointerDown={(event) => {
+          // Touch keeps the rail's native scrolling and snap behavior.
+          suppressClick.current = false;
+          if (event.pointerType === 'touch' || event.button !== 0 || !event.isPrimary) return;
+          drag.current = { id: event.pointerId, x: event.clientX, y: event.clientY };
+        }}
+        onPointerMove={(event) => {
+          const start = drag.current;
+          if (!start || start.id !== event.pointerId) return;
+          const dx = event.clientX - start.x;
+          const dy = event.clientY - start.y;
+          if (Math.abs(dx) < 10 || Math.abs(dx) <= Math.abs(dy) * 1.2) return;
+          event.preventDefault();
+          suppressClick.current = true;
+          event.currentTarget.setPointerCapture(event.pointerId);
+        }}
+        onPointerUp={(event) => {
+          const start = drag.current;
+          if (!start || start.id !== event.pointerId) return;
+          drag.current = null;
+          if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId);
+          const dx = event.clientX - start.x;
+          if (suppressClick.current && Math.abs(dx) >= 32) move(dx < 0 ? 1 : -1);
+        }}
+        onPointerCancel={() => { drag.current = null; }}
+        onLostPointerCapture={() => { drag.current = null; }}
+        onClickCapture={(event) => {
+          if (!suppressClick.current) return;
+          event.preventDefault();
+          event.stopPropagation();
+          suppressClick.current = false;
+        }}
         onScroll={() => {
           const el = rail.current;
           if (!el) return;

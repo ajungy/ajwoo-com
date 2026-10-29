@@ -1,13 +1,10 @@
-import { Action } from '@/components/Action';
+import { WorkProjectActions } from '@/components/WorkProjectActions';
 import { ExternalLink } from '@/components/Icons';
-import { ProjectCard } from '@/components/ProjectCard';
 import type { NetflixPayload } from '@/lib/netflix/types';
-import { designProjects, type Project } from '@/content/projects';
-import { site } from '@/content/site';
+import { type Project } from '@/content/projects';
 import { NetflixMuseExample, NetflixPublicExamples } from './NetflixPublicExamples';
 
 export function NetflixProject({ project, work: netflixWork, examples }: { project: Project } & NetflixPayload) {
-  const moreWork = designProjects.filter((item) => item.slug !== project.slug).slice(0, 3);
 
   return (
     <>
@@ -47,8 +44,8 @@ export function NetflixProject({ project, work: netflixWork, examples }: { proje
                       <figure className="mt-8">
                         <img src={area.image.src} alt={area.image.alt} width={1465} height={833}
                           loading="lazy" decoding="async" className="block h-auto w-full" />
-                        <figcaption className="mt-4 text-caption text-fg-secondary">
-                          Netflix member experience / Annotated example of where {area.title.split(' / ')[0].toLowerCase()} appears.
+                        <figcaption className="mt-4 text-body text-fg-secondary">
+                          Public Netflix member experience / Annotated example of where {area.title.split(' / ')[0].toLowerCase()} appears / October 14, 2026
                         </figcaption>
                       </figure>
                     )}
@@ -78,7 +75,7 @@ export function NetflixProject({ project, work: netflixWork, examples }: { proje
                   <a href={link.href} target="_blank" rel="noopener noreferrer"
                     data-cursor-label="Read public resource"
                     className="-mx-6 block rounded-lg px-6 py-7 transition-colors duration-fast ease-standard can-hover:hover:bg-hover">
-                    <p className="text-caption text-fg-secondary">{link.source}</p>
+                    <p className="text-body text-fg-secondary">{link.source}</p>
                     <h3 className="mt-3 flex items-start justify-between gap-6 text-title text-fg">
                       <span className="underline decoration-line underline-offset-4">{link.title}</span>
                       <ExternalLink className="mt-1 h-7 w-7 shrink-0" />
@@ -90,18 +87,10 @@ export function NetflixProject({ project, work: netflixWork, examples }: { proje
             </ul>
           </section>
 
-          <div className="mt-12 flex flex-wrap gap-4">
-            <Action href="/work/">← Work</Action>
-            <Action href={site.calendlyUrl} external>Let’s talk about creative tools</Action>
-          </div>
+          <WorkProjectActions />
         </article>
 
-        <section className="border-t border-line-subtle pt-12 pb-12" aria-labelledby="netflix-more-work">
-          <h2 id="netflix-more-work" className="text-title text-fg">More work</h2>
-          <div className="mt-8 grid grid-cols-1 gap-8 medium:grid-cols-2 expanded:grid-cols-3">
-            {moreWork.map((item) => <ProjectCard key={item.slug} project={item} />)}
-          </div>
-        </section>
+
       </div>
     </>
   );

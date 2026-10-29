@@ -25,7 +25,7 @@ export const projects: Project[] = [
     kind: 'design',
     thumbnail: { base: 'tile-netflix-creative-tools', width: 1024, height: 1024 },
   },
-  { slug: '704', title: 'Adobe: Premiere Generative AI', category: 'Video / AI', kind: 'design' },
+  { slug: 'premiere-generative-ai', title: 'Adobe: Premiere Generative AI', category: 'Video / AI', kind: 'design' },
   { slug: 'pr-ae-frame', title: 'Adobe: Frame.io for Premiere & After Effects', category: 'Video / Cloud', kind: 'design' },
   { slug: 'layout', title: 'Microsoft: Layout', category: 'AR / MR / HoloLens', kind: 'design' },
   { slug: 'product-visualize', title: 'Microsoft: Product Visualize', category: 'AR / CRM', kind: 'design' },
@@ -65,8 +65,8 @@ export const siteData = data as {
   blocks: Record<string, Block[]>;
 };
 
-export const tileFor = (slug: string): Tile | undefined => getProject(slug)?.thumbnail ?? siteData.tiles[slug];
-export const blocksFor = (slug: string): Block[] => siteData.blocks[slug] ?? [];
+export const tileFor = (slug: string): Tile | undefined => getProject(slug)?.thumbnail ?? siteData.tiles[slug === 'premiere-generative-ai' ? '704' : slug];
+export const blocksFor = (slug: string): Block[] => siteData.blocks[slug === 'premiere-generative-ai' ? '704' : slug] ?? [];
 
 /**
  * Grid-tile motion — a deliberate, curated exception to the rest of the site.
@@ -100,7 +100,7 @@ type MotionTile = { base: string; width: number; height: number; hasWebm: boolea
 const motionTiles: Record<string, MotionTile> = {
   // Alex supplied this 5-second loop for the local Netflix portfolio draft.
   'netflix-creative-tools': { base: 'mov-netflix-animals', width: 1080, height: 1080, hasWebm: true },
-  '704': { base: 'mov-704-genai', width: 570, height: 570, hasWebm: true },
+  'premiere-generative-ai': { base: 'mov-704-genai', width: 570, height: 570, hasWebm: true },
   layout: { base: 'mov-layout-33333d', width: 864, height: 864, hasWebm: true },
 };
 export const motionTileFor = (slug: string): MotionTile | undefined => motionTiles[slug];

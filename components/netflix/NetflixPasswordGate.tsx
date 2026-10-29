@@ -38,7 +38,7 @@ export function NetflixPasswordGate({ project, encrypted }: { project: Project; 
         if (cancelled) return;
         setAccepted(true);
         setError('');
-        entryTimer = setTimeout(() => { if (!cancelled) setPayload(result); }, 450);
+        entryTimer = setTimeout(() => { if (!cancelled) setPayload(result); }, 650);
       } catch {
         if (!cancelled && submission > 0) setError('That password doesn’t match.');
       }
@@ -72,8 +72,8 @@ export function NetflixPasswordGate({ project, encrypted }: { project: Project; 
             <button type="submit" className={styles.button} disabled={accepted}
               aria-label={accepted ? 'Password accepted' : 'Unlock project'}>
               {accepted ? (
-                <svg className={`${styles.check} text-success`} viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                  <path d="m5 12 4 4L19 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                <svg className="text-success" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path className={styles.checkStroke} pathLength="1" d="m5 12 4 4L19 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               ) : (
                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -88,7 +88,7 @@ export function NetflixPasswordGate({ project, encrypted }: { project: Project; 
         </form>
         <div className="mt-4 flex flex-wrap items-center gap-4">
           <CopyEmailButton label="Email Alex" />
-          <Action href="/work/#704" variant="tertiary">See other work</Action>
+          <Action href="/work/#premiere-generative-ai" variant="tertiary">See other work</Action>
         </div>
       </div>
     </section>

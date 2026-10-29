@@ -2,8 +2,7 @@ import { pageMetadata } from '@/lib/metadata';
 import { caseStudies } from '@/content/case-studies';
 import { NetflixPasswordGate } from '@/components/netflix/NetflixPasswordGate';
 import { encryptNetflixProject } from '@/lib/netflix/encrypt';
-import { Action } from '@/components/Action';
-import { site } from '@/content/site';
+import { WorkProjectActions } from '@/components/WorkProjectActions';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { Picture } from '@/components/Picture';
@@ -93,20 +92,20 @@ export default function WorkPage({ params }: { params: { slug: string } }) {
 
         <article className="pb-12">
           {study && <section className="max-w-content mb-12">
-            <h2 className="text-h3">The challenge</h2>
-            <p className="mt-6 text-body-lg text-fg-secondary">{study.problem}</p>
-            <h2 className="mt-9 text-h3">My contribution</h2>
-            <p className="mt-6 text-body">{study.scope}</p>
-            <h2 className="mt-9 text-h3">Collaboration</h2>
-            <p className="mt-6 text-body">{study.collaboration}</p>
-            <h2 className="mt-9 text-h3">Public work</h2>
-            <p className="mt-6 text-body">{study.outcome}</p>
+            <h2 className="text-body font-semibold text-fg leading-relaxed">The challenge</h2>
+            <p className="mt-6 text-body text-fg-secondary leading-relaxed">{study.problem}</p>
+            <h2 className="mt-9 text-body font-semibold text-fg leading-relaxed">My contribution</h2>
+            <p className="mt-6 text-body text-fg-secondary leading-relaxed">{study.scope}</p>
+            <h2 className="mt-9 text-body font-semibold text-fg leading-relaxed">Collaboration</h2>
+            <p className="mt-6 text-body text-fg-secondary leading-relaxed">{study.collaboration}</p>
+            <h2 className="mt-9 text-body font-semibold text-fg leading-relaxed">Public work</h2>
+            <p className="mt-6 text-body text-fg-secondary leading-relaxed">{study.outcome}</p>
           </section>}
-          <Blocks blocks={study ? blocks.filter((b) => b.kind !== 'text') : blocks} alt={project.title} />
-          {study && <div className="mt-12 flex flex-wrap gap-4"><Action href="/#selected-work">← Selected work</Action><Action href={site.calendlyUrl} external>Discuss a role</Action></div>}
+          <Blocks blocks={study ? [...blocks.filter((b) => b.kind !== 'text'), ...(study.additionalBlocks ?? [])] : blocks} alt={project.title} compactMedia={!isCoffee} />
+          {!isCoffee && <WorkProjectActions />}
         </article>
 
-        {next.length > 0 && (
+        {isCoffee && next.length > 0 && (
           <section className="border-t border-line-subtle pt-12 pb-12">
             <h2 className="text-h3 text-fg">More {isCoffee ? 'reviews' : 'work'}</h2>
             <div className="mt-8 grid grid-cols-1 gap-8 medium:grid-cols-2 expanded:grid-cols-3">

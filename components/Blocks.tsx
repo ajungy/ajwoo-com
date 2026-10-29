@@ -149,7 +149,7 @@ function Embed({ block }: { block: Extract<Block, { kind: 'embed' }> }) {
   );
 }
 
-export function Blocks({ blocks, alt }: { blocks: Block[]; alt: string }) {
+export function Blocks({ blocks, alt, compactMedia = false }: { blocks: Block[]; alt: string; compactMedia?: boolean }) {
   // Multi-shop posts (e.g. "3 Coffee Shops in Tokyo") list each shop's name
   // once as a plain intro line ("1. Supreme Coffee"), then repeat the exact
   // same numbered name as that shop's own section heading further down —
@@ -183,7 +183,8 @@ export function Blocks({ blocks, alt }: { blocks: Block[]; alt: string }) {
   // below made plain text-to-text pairs feel disproportionately loose by
   // comparison.
   const TEXT = 'mt-9';    // 32px — paragraph to paragraph, heading to paragraph
-  const MEDIA = 'mt-15';  // 128px — anything touching a photo, video, or embed
+  // Work projects match the 64px gap after their introductory text.
+  const MEDIA = compactMedia ? 'mt-12' : 'mt-15';
 
   let prevKind: 'text' | 'rating' | 'media' | null = null;
 

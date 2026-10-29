@@ -10,7 +10,7 @@ export function NetflixMuseExample({ examples: netflixPublicExamples }: Pick<Net
         <img src={example.fallback} alt={example.alt} width={example.width} height={example.height}
           loading="lazy" decoding="async" className="block h-auto w-full" />
       </picture>
-      <figcaption className="mt-6 text-caption text-fg-secondary">
+      <figcaption className="mt-6 text-body text-fg-secondary">
         <p>Related example / Source: {example.credit}</p>
         <a href={example.sourceHref} target="_blank" rel="noopener noreferrer"
           aria-label={`Public image / source article: ${example.title}`}
@@ -44,7 +44,7 @@ export function NetflixPublicExamples({ examples: netflixPublicExamples }: Pick<
               <img src={example.fallback} alt={example.alt} width={example.width} height={example.height}
                 loading="lazy" decoding="async" className="block h-auto w-full" />
             </picture>
-            <figcaption className="mt-6 max-w-content text-caption text-fg-secondary">
+            <figcaption className="mt-6 max-w-content text-body text-fg-secondary">
               <p>Related example / Source: {example.credit}</p>
               <a href={example.sourceHref} target="_blank" rel="noopener noreferrer"
                 aria-label={`Public image / source article: ${example.title}`}
