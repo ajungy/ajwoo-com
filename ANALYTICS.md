@@ -96,3 +96,8 @@ migration, withdrawal and resume, GPC/DNT, event filtering, snapshot preservatio
 URL masking, network body/header stripping, and click metadata filtering.
 Production build and TypeScript checks pass. Verify a fresh consenting browser
 session in PostHog after rollout; old sessions cannot gain recordings retroactively.
+
+Automatic consent prompting starts on the first interior route, including direct
+interior visits. The homepage stays free of automatic prompts; Privacy settings
+can open the panel on any route. No optional collection starts before Allow.
+The banner slides in/out and respects reduced motion.

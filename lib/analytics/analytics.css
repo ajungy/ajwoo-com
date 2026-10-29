@@ -15,3 +15,16 @@
 .aj-analytics-copy a:active, .aj-analytics button:active { background: var(--action-tertiary-bg-active); color: var(--text-primary); }
 
 @media (prefers-reduced-transparency: reduce) { .aj-analytics-panel.chrome { background: var(--surface-page); -webkit-backdrop-filter: none; backdrop-filter: none; } }
+
+/* Keep the banner mounted while it slides completely below the viewport. */
+.aj-analytics { animation: aj-analytics-enter 300ms var(--e-standard) both; }
+.aj-analytics[data-closing="true"] { pointer-events: none; animation: aj-analytics-exit 250ms var(--e-standard) both; }
+@keyframes aj-analytics-enter {
+  from { opacity: 0; transform: translate(-50%, calc(100% + 32px)); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
+@keyframes aj-analytics-exit {
+  from { opacity: 1; transform: translate(-50%, 0); }
+  to { opacity: 0; transform: translate(-50%, calc(100% + 32px)); }
+}
+@media (prefers-reduced-motion: reduce) { .aj-analytics, .aj-analytics[data-closing="true"] { animation: none; } }
