@@ -179,6 +179,7 @@ export function DepthCarousel({
 }: DepthCarouselProps) {
   const [index, setIndex] = useState(0);
   const [scale, setScale] = useState(1);
+  const [verticalPad, setVerticalPad] = useState(HOVER_PAD_Y);
   // Hover state for the front card's own zoom+shadow boost — see the
   // "CARD CHROME, reversed again" comment above for why this is JS state
   // rather than a CSS :hover rule.
@@ -196,27 +197,38 @@ export function DepthCarousel({
   const dirSign = tiltDirection === 'right' ? 1 : -1;
   const stackWidth = cardWidth + spread * Math.max(visibleCards - 1, 0) * 2;
 
-  // Fit the FRONT CARD to whatever width the wrapper actually has (not the
-  // full fanned-out stack — see the class comment above for why), down to
-  // a floor that keeps it legible on the smallest phones (compact, 320px)
-  // rather than letting it shrink to nothing. Never scales UP past 1 —
-  // this shrinks the desktop-sized geometry to fit, it doesn't magnify it
-  // on a huge screen.
+  // Fit width normally; on short landscape screens also fit the whole card
+  // beneath the sticky header, leaving room for padding and navigation.
   useEffect(() => {
     const el = wrapperRef.current;
     if (!el) return;
-    const MIN_SCALE = 0.6;
     const compute = () => {
       const available = el.clientWidth;
       if (!available) return;
-      const next = Math.min(1, Math.max(available / cardWidth, MIN_SCALE));
-      setScale(next);
+      const viewportHeight = window.visualViewport?.height ?? window.innerHeight;
+      const shortLandscape = window.innerWidth > viewportHeight && viewportHeight <= 600;
+      const pad = shortLandscape ? 12 : HOVER_PAD_Y;
+      const headerHeight = document.querySelector('header')?.getBoundingClientRect().height ?? 64;
+      const navigationHeight = showControls || showIndicators ? 56 : 0;
+      const heightScale = shortLandscape
+        ? Math.max(1, viewportHeight - headerHeight - navigationHeight - pad * 2 - 32) / measuredHeight
+        : 1;
+      setVerticalPad(pad);
+      setScale(Math.min(1, available / cardWidth, heightScale));
     };
     compute();
     const ro = new ResizeObserver(compute);
     ro.observe(el);
-    return () => ro.disconnect();
-  }, [cardWidth]);
+    const header = document.querySelector('header');
+    if (header) ro.observe(header);
+    window.addEventListener('resize', compute);
+    window.visualViewport?.addEventListener('resize', compute);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener('resize', compute);
+      window.visualViewport?.removeEventListener('resize', compute);
+    };
+  }, [cardWidth, measuredHeight, showControls, showIndicators]);
 
   // Measures the active card's own natural (unscaled) height — see the
   // "cardHeight IS MEASURED" comment above for why this exists at all.
@@ -272,7 +284,7 @@ export function DepthCarousel({
           would ride up over the cards). */}
       <div
         className="relative overflow-hidden"
-        style={{ height: measuredHeight * scale + HOVER_PAD_Y * 2, touchAction: 'pan-y pinch-zoom' }}
+        style={{ height: measuredHeight * scale + verticalPad * 2, touchAction: 'pan-y pinch-zoom' }}
         onPointerDown={(event) => {
           if (!event.isPrimary || event.button !== 0) return;
           setInteracting(true);
@@ -327,7 +339,7 @@ export function DepthCarousel({
           className="absolute"
           style={{
             left: '50%',
-            top: HOVER_PAD_Y,
+            top: verticalPad,
             transform: 'translateX(-50%)',
             width: stackWidth * scale,
             height: measuredHeight * scale,
