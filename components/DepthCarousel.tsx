@@ -198,7 +198,7 @@ export function DepthCarousel({
   const stackWidth = cardWidth + spread * Math.max(visibleCards - 1, 0) * 2;
 
   // Fit width normally; on short landscape screens also fit the whole card
-  // beneath the sticky header, leaving room for padding and navigation.
+  // beneath the sticky header with an 8px margin above and below.
   useEffect(() => {
     const el = wrapperRef.current;
     if (!el) return;
@@ -207,11 +207,10 @@ export function DepthCarousel({
       if (!available) return;
       const viewportHeight = window.visualViewport?.height ?? window.innerHeight;
       const shortLandscape = window.innerWidth > viewportHeight && viewportHeight <= 600;
-      const pad = shortLandscape ? 12 : HOVER_PAD_Y;
+      const pad = shortLandscape ? 8 : HOVER_PAD_Y;
       const headerHeight = document.querySelector('header')?.getBoundingClientRect().height ?? 64;
-      const navigationHeight = showControls || showIndicators ? 56 : 0;
       const heightScale = shortLandscape
-        ? Math.max(1, viewportHeight - headerHeight - navigationHeight - pad * 2 - 32) / measuredHeight
+        ? Math.max(1, viewportHeight - headerHeight - pad * 2) / measuredHeight
         : 1;
       setVerticalPad(pad);
       setScale(Math.min(1, available / cardWidth, heightScale));
