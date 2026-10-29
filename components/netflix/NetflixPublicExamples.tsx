@@ -24,15 +24,8 @@ export function NetflixMuseExample({ examples: netflixPublicExamples }: Pick<Net
 
 export function NetflixPublicExamples({ examples: netflixPublicExamples }: Pick<NetflixPayload, 'examples'>) {
   return (
-    <section className="mt-12 scroll-mt-[88px]" aria-labelledby="netflix-public-examples">
-      <div className="max-w-content">
-        <h2 id="netflix-public-examples" className="text-title text-fg">Related public examples</h2>
-        <p className="mt-6 text-body text-fg-secondary">
-          Published examples from Netflix’s teams, shared as context for the creative tools ecosystem.
-          These are not presented as my individual design deliverables.
-        </p>
-      </div>
-      <div className="mt-9 space-y-12">
+    <section className="mt-12 scroll-mt-[88px]" aria-label="Public creative tools examples">
+      <div className="space-y-12">
         {netflixPublicExamples.slice(1).map((example) => (
           <figure key={example.title} className="max-w-content">
             <div className="mb-6 max-w-content">
