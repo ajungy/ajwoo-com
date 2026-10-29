@@ -87,18 +87,7 @@ export const netflixPublicExamples = [
     credit: 'Netflix Technology Blog / 2025',
     sourceHref: 'https://netflixtechblog.com/scaling-muse-how-netflix-powers-data-driven-creative-insights-at-trillion-row-scale-aa9ad326fd77',
   },
-  {
-    kind: 'image',
-    title: 'AVA / Discovery View Plugin Architecture',
-    description: 'AVA was one of the tools I led as the sole designer, alongside work across Clips, Nutshell, and Muse applications with publicly documented workflows. My design work focused on enabling and improving creative workflows, tooling, and automation at the product, UX, and UI layers. AVA Discovery View helps creatives find still frames that reflect a title’s storylines, tones, characters, and environments. This publicly published diagram illustrates the underlying system that supports that experience; my contribution focused on how creatives interact with these capabilities, rather than the technical architecture itself.',
-    alt: 'Netflix’s published Discovery View Plugin Architecture diagram showing the discovery services and their connections to creative tools.',
-    src: '/img/netflix-public/ava-plugin-architecture.webp',
-    fallback: '/img/netflix-public/ava-plugin-architecture.png',
-    width: 890,
-    height: 680,
-    credit: 'Netflix Technology Blog / 2023',
-    sourceHref: 'https://netflixtechblog.com/ava-discovery-view-surfacing-authentic-moments-b8cd145491cc',
-  },
+
   {
     kind: 'embed',
     title: 'Visual search / Finding the right clip and frame',
