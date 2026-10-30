@@ -132,3 +132,29 @@
 .year button:focus-visible, .yearChevron:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
 
 .year button.projectYear { font-weight: 700; }
+
+.backgroundCopy {
+ display: flex;
+ flex-direction: column;
+ justify-content: center;
+ gap: 10px;
+ height: 100%;
+ padding: 12px;
+ text-align: left;
+ font-size: clamp(11px, 1vw, 13px);
+ line-height: 1.5;
+ color: var(--text-secondary);
+ cursor: auto;
+ user-select: text;
+}
+.backgroundCopy:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: -2px; }
+.selectedCard:has(.backgroundCopy):hover .face { transform: scale(1) !important; }
+@media (max-width: 699px) {
+ .backgroundCopy { font-size: 11px; line-height: 1.4; gap: 8px; padding: 8px; }
+}
+@media (max-height: 500px) {
+ .backgroundCopy { font-size: 10px; line-height: 1.3; gap: 6px; padding: 6px; }
+}
+
+/* The Background message sits directly on the page, without a card fill. */
+.card:has(.backgroundCopy) .face { background: transparent; }

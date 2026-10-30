@@ -12,7 +12,8 @@ export type WorksWheelItem = {
   subtitle: string;
   year: string;
   href: string;
-  image: { base: string; width: number; height: number };
+  paragraphs?: string[];
+  image?: { base: string; width: number; height: number };
   video?: { base: string; width: number; height: number; hasWebm: boolean };
 };
 
@@ -22,7 +23,7 @@ const rad = (v: number) => v * Math.PI / 180;
 export function WorksWheel({ items }: { items: WorksWheelItem[] }) {
   const stageRef = useRef<HTMLElement>(null);
   const wheelRef = useRef<HTMLDivElement>(null);
-  const cards = useRef<(HTMLAnchorElement | null)[]>([]);
+  const cards = useRef<(HTMLElement | null)[]>([]);
   const faces = useRef<(HTMLSpanElement | null)[]>([]);
   const videos = useRef<(HTMLVideoElement | null)[]>([]);
   const titleRef = useRef<HTMLDivElement>(null);
@@ -43,7 +44,7 @@ export function WorksWheel({ items }: { items: WorksWheelItem[] }) {
     const selectLinkedProject = () => {
       let slug: string;
       try { slug = decodeURIComponent(window.location.hash.slice(1)); } catch { return; }
-      const index = items.findIndex((item) => item.href === `/work/${slug}/`);
+      const index = items.findIndex((item) => item.href === `/work/${slug}/` || item.href === `/work/#${slug}`);
       if (index < 0) return;
       target.current = index + 1;
       turn.current = index + 1;
@@ -181,14 +182,14 @@ export function WorksWheel({ items }: { items: WorksWheelItem[] }) {
     <section ref={stageRef} className={`${styles.stage} work-entrance`} data-ready={stage.w > 0 ? "true" : undefined} tabIndex={0} aria-label="Work projects" aria-roledescription="carousel"
       style={{ perspective: `${geometry.depth || 1000}px` }}
       onKeyDown={(event) => {
-        if (event.target !== event.currentTarget && (event.target as Element).closest('button')) return;
+        if (event.target !== event.currentTarget && (event.target as Element).closest('button, [data-background-copy]')) return;
         if (['ArrowDown', 'ArrowRight', 'ArrowUp', 'ArrowLeft'].includes(event.key)) {
           event.preventDefault(); select(event.key === 'ArrowDown' || event.key === 'ArrowRight' ? 1 : -1);
         } else if (event.key === 'Home') { event.preventDefault(); to(1); }
         else if (event.key === 'End') { event.preventDefault(); to(count); }
       }}
       onPointerDown={(event) => {
-        if (!event.isPrimary || event.button !== 0 || (event.target as Element).closest('button')) return;
+        if (!event.isPrimary || event.button !== 0 || (event.target as Element).closest('button, [data-background-copy]')) return;
         dragging.current = { y: event.clientY, total: 0 };
         suppressClick.current = false;
       }}
@@ -209,32 +210,37 @@ export function WorksWheel({ items }: { items: WorksWheelItem[] }) {
       onPointerCancel={() => { dragging.current = null; to(Math.round(target.current)); }}
       onClickCapture={(event) => { if (suppressClick.current) { event.preventDefault(); event.stopPropagation(); suppressClick.current = false; } }}>
       <div ref={wheelRef} className={`${styles.wheel} work-wheel-arrival`}>
-        {items.map((item, i) => (
-          <Link key={item.href} href={item.href} ref={(el) => { cards.current[i] = el; }}
-            className={`${styles.card} ${active === i ? styles.selectedCard : ''}`} aria-label={`View ${item.title}`} tabIndex={opened && active === i ? 0 : -1}
+        {items.map((item, i) => {
+          const Card = item.paragraphs ? 'div' : Link;
+          const cardWidth = geometry.side;
+          const cardHeight = geometry.side;
+          return <Card key={item.href} href={item.href} ref={(el: HTMLElement | null) => { cards.current[i] = el; }}
+            className={`${styles.card} ${active === i ? styles.selectedCard : ''}`} aria-label={item.paragraphs ? item.title : `View ${item.title}`} tabIndex={opened && active === i ? 0 : -1}
             aria-hidden={opened && Math.abs(active - i) > 1 ? true : undefined}
-            style={{ width: geometry.side, height: geometry.side, marginLeft: -geometry.side / 2, marginTop: -geometry.side / 2 }}
-            onDragStart={(event) => event.preventDefault()}
-            onClick={(event) => { if (!opened || active !== i) { event.preventDefault(); to(i + 1); } }}>
+            style={{ width: cardWidth, height: cardHeight, marginLeft: -cardWidth / 2, marginTop: -cardHeight / 2 }}
+            onDragStart={(event: React.DragEvent<HTMLElement>) => event.preventDefault()}
+            onClick={(event: React.MouseEvent<HTMLElement>) => { if (!opened || active !== i) { event.preventDefault(); to(i + 1); } }}>
             <span ref={(el) => { faces.current[i] = el; }} className={styles.face}>
-              {item.video ? <video ref={(el) => { videos.current[i] = el; }} autoPlay muted loop playsInline
+              {item.paragraphs ? <span data-background-copy className={styles.backgroundCopy} style={{ fontSize: clamp(geometry.side / 25, 8, 13) }} tabIndex={active === i ? 0 : -1} onClick={(event) => event.preventDefault()}>
+                {item.paragraphs.map((paragraph) => <span key={paragraph}>{paragraph}</span>)}
+              </span> : item.video ? <video ref={(el) => { videos.current[i] = el; }} autoPlay muted loop playsInline
                 preload="auto" onCanPlay={(event) => { const video = event.currentTarget; if (Math.abs(active - i) <= 1 && !document.hidden) { video.muted = true; void video.play().catch(() => {}); } }} poster={`/img/${item.video.base}-poster.webp`}
                 width={item.video.width} height={item.video.height} className={`${styles.media} route-media`}>
                 <source src={`/img/${item.video.base}.mp4`} type="video/mp4" />
                 {item.video.hasWebm && <source src={`/img/${item.video.base}.webm`} type="video/webm" />}
-              </video> : <Picture img={item.image} alt={item.title} priority={i === 0} sizes="(max-width: 699px) 68vw, 32vw" className={`${styles.media} route-media`} />}
+              </video> : item.image ? <Picture img={item.image} alt={item.title} priority={i === 0} sizes="(max-width: 699px) 68vw, 32vw" className={`${styles.media} route-media`} /> : null}
             </span>
-          </Link>
-        ))}
+          </Card>;
+        })}
       </div>
       <div ref={titleRef} className={`${styles.title} route-intro`} aria-live="polite" aria-atomic="true">
-        <Link href={selected?.href ?? '/work/'} tabIndex={opened ? 0 : -1} className={styles.projectTitle}>{selected?.title}</Link>
+        {selected?.paragraphs ? <span className={styles.projectTitle}>{selected.title}</span> : <Link href={selected?.href ?? '/work/'} tabIndex={opened ? 0 : -1} className={styles.projectTitle}>{selected?.title}</Link>}
         <p className="mt-4 text-body text-fg-secondary">{selected?.subtitle}</p>
       </div>
       <nav className={`${styles.yearShell} route-navigation`} aria-label="Project navigation">
         <button type="button" className={styles.yearChevron} aria-label="Previous project" disabled={active === 0} onClick={() => select(-1)}><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="m7 14 5-5 5 5" fill="none" stroke="currentColor" strokeWidth="1.5" /></svg></button>
         <div ref={yearRef} className={styles.year} aria-label="Project years">
-        {Array.from({ length: 12 }, (_, i) => 2026 - i).map((year) => {
+        {Array.from({ length: 13 }, (_, i) => 2026 - i).map((year) => {
           const current = highlightedYears.includes(String(year));
           const availableYears = items.flatMap((item) => (item.year.match(/\d{4}/g) ?? []).map(Number));
           const destinationYear = Math.min(...availableYears.filter((available) => available >= year));
