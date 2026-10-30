@@ -3,7 +3,7 @@ import { CaptureInstallButton } from '@/components/CaptureInstallButton';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { Action } from '@/components/Action';
-import { AppCard } from '@/components/AppCard';
+import { WorkProjectActions } from '@/components/WorkProjectActions';
 import { AppIcon } from '@/components/AppIcon';
 import { apps, WAITLIST_FORM_URL } from '@/content/apps';
 
@@ -24,7 +24,6 @@ export default function AppPage({ params }: { params: { slug: string } }) {
   // list) take real space, and three is the /apps grid's own row width
   // (expanded:grid-cols-3), so this reads as "the rest of that same grid"
   // rather than an open-ended list.
-  const others = apps.filter((a) => a.slug !== app.slug).slice(0, 3);
 
   return (
     <div className="mx-auto max-w-app px-page">
@@ -39,11 +38,11 @@ export default function AppPage({ params }: { params: { slug: string } }) {
         {app.iconImage ? (
           <span className={`relative block h-28 w-28 shrink-0 overflow-hidden rounded-xl ${['capture', 'narrate'].includes(app.slug) ? '' : 'border border-line-subtle'}`}>
           <img
-            src={`/img/${app.iconImage}-${app.slug === 'mbti-test' ? 128 : 256}.${['capture', 'narrate'].includes(app.slug) ? 'png' : 'webp'}`}
+            src={['capture', 'narrate'].includes(app.slug) ? `/img/appicon-${app.slug}-square.svg` : `/img/${app.iconImage}-${app.slug === 'mbti-test' ? 128 : 256}.webp`}
             alt=""
             width={112}
             height={112}
-            className={`h-full w-full object-contain ${app.slug === 'narrate' ? 'scale-[1.2]' : ''}`}
+            className="h-full w-full object-contain"
           />
           </span>
         ) : (
@@ -150,7 +149,7 @@ export default function AppPage({ params }: { params: { slug: string } }) {
         </figure>
       ) : null}
 
-      <article className="max-w-content space-y-8 pb-12">
+      <article className="max-w-content space-y-8">
         {app.detail.map((para, i) => {
           if (typeof para === 'string') {
             return <p key={i} className="text-body-lg text-fg-secondary">{para}</p>;
@@ -190,20 +189,7 @@ export default function AppPage({ params }: { params: { slug: string } }) {
         </ul>
       </article>
 
-      {others.length > 0 && (
-        <section className="border-t border-line-subtle pt-12 pb-12">
-          <h2 className="text-h3 text-fg">More apps</h2>
-          {/* Full cards — same grid as /apps itself (components/AppCard.tsx),
-              not the old plain-link list, at Alex's direction: the demo
-              video/thumbnail and the real Waitlist/Open action should both
-              be visible here, not just a name. */}
-          <div className="mt-8 grid grid-cols-1 gap-8 medium:grid-cols-2 expanded:grid-cols-3">
-            {others.map((a) => (
-              <AppCard key={a.slug} app={a} hoverPlay />
-            ))}
-          </div>
-        </section>
-      )}
+      <WorkProjectActions section="Apps" />
     </div>
   );
 }

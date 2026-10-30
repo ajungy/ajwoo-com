@@ -42,6 +42,7 @@ export const experience = [
 
 export const education = [
   { school: 'Rhode Island School of Design', detail: 'BFA Industrial Design' },
+  { school: 'University of Washington', detail: 'Graduate coursework in HCDE' },
   { school: 'Brown University', detail: 'Cross-registered student' },
   { school: 'Le Cordon Bleu Paris', detail: 'Pâtisserie de Base, Certifié' },
 ] as const;

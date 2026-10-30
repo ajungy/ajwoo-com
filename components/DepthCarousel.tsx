@@ -213,7 +213,7 @@ export function DepthCarousel({
         ? Math.max(1, viewportHeight - headerHeight - pad * 2) / measuredHeight
         : 1;
       setVerticalPad(pad);
-      setScale(Math.min(1, available / cardWidth, heightScale));
+      setScale(Math.min(1, Math.max(1, available - 48) / cardWidth, heightScale));
     };
     compute();
     const ro = new ResizeObserver(compute);
@@ -282,8 +282,8 @@ export function DepthCarousel({
           this the clip region would collapse to 0 and the controls row
           would ride up over the cards). */}
       <div
-        className="relative overflow-hidden"
-        style={{ height: measuredHeight * scale + verticalPad * 2, touchAction: 'pan-y pinch-zoom' }}
+        className="relative"
+        style={{ width: '100vw', marginLeft: 'calc(50% - 50vw)', overflowX: 'clip', overflowY: 'visible', height: measuredHeight * scale + verticalPad * 2, touchAction: 'pan-y pinch-zoom' }}
         onPointerDown={(event) => {
           if (!event.isPrimary || event.button !== 0) return;
           setInteracting(true);

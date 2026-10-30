@@ -7,9 +7,8 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { Picture } from '@/components/Picture';
 import { Blocks } from '@/components/Blocks';
-import { ProjectCard } from '@/components/ProjectCard';
 import {
-  projects, getProject, blocksFor, designProjects, coffeeProjects,
+  projects, getProject, blocksFor,
 } from '@/content/projects';
 
 export function generateStaticParams() {
@@ -68,9 +67,6 @@ export default function WorkPage({ params }: { params: { slug: string } }) {
   const study = caseStudies[project.slug];
   const isCoffee = project.kind === 'coffee';
 
-  // No dead ends: every project offers the next one (Principle 7).
-  const siblings = (isCoffee ? coffeeProjects : designProjects).filter((p) => p.slug !== project.slug);
-  const next = siblings.slice(0, 3);
 
   return (
     <>
@@ -102,19 +98,10 @@ export default function WorkPage({ params }: { params: { slug: string } }) {
             <p className="mt-6 text-body text-fg-secondary leading-relaxed">{study.outcome}</p>
           </section>}
           <Blocks blocks={study ? [...blocks.filter((b) => b.kind !== 'text'), ...(study.additionalBlocks ?? [])] : blocks} alt={project.title} compactMedia={!isCoffee} />
-          {!isCoffee && <WorkProjectActions />}
+          <WorkProjectActions section={isCoffee ? 'Coffee' : 'Work'} />
         </article>
 
-        {isCoffee && next.length > 0 && (
-          <section className="border-t border-line-subtle pt-12 pb-12">
-            <h2 className="text-h3 text-fg">More {isCoffee ? 'reviews' : 'work'}</h2>
-            <div className="mt-8 grid grid-cols-1 gap-8 medium:grid-cols-2 expanded:grid-cols-3">
-              {next.map((p) => (
-                <ProjectCard key={p.slug} project={p} />
-              ))}
-            </div>
-          </section>
-        )}
+
       </div>
     </>
   );

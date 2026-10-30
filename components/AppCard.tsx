@@ -224,13 +224,15 @@ export function AppCard({
             grows on coarse pointers/TV — see tokens.css §6), not just match
             it at the default 40px and drift apart everywhere else. */}
         {app.iconImage ? (
-          <img
-            src={`/img/${app.iconImage}-128.webp`}
-            alt=""
-            width={40}
-            height={40}
-            className="h-control-md w-control-md shrink-0 rounded-control border border-line-subtle object-contain"
-          />
+          <span className="h-control-md w-control-md shrink-0 overflow-hidden rounded-control border border-line-subtle">
+            <img
+              src={['capture', 'narrate'].includes(app.slug) ? `/img/appicon-${app.slug}-square.svg` : `/img/${app.iconImage}-128.webp`}
+              alt=""
+              width={40}
+              height={40}
+              className="h-full w-full object-contain"
+            />
+          </span>
         ) : (
           <span className="flex h-control-md w-control-md shrink-0 items-center justify-center rounded-control border border-line-subtle bg-sunken text-fg">
             <AppIcon name={app.icon} className="h-5 w-5" />
