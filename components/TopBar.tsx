@@ -80,10 +80,10 @@ export function TopBar() {
             className={
               'flex items-center rounded-control px-2 -mx-2 py-1.5 -my-1.5 shrink-0 transition ' +
               'duration-fast ease-standard can-hover:hover:bg-tertiary-hover ' +
-              (home ? 'text-fg' : 'text-fg-secondary can-hover:hover:text-fg')
+              (home ? 'text-fg' : 'text-fg-tertiary can-hover:hover:text-fg')
             }
           >
-            <Logo className="h-6 w-auto" />
+            <Logo home={home} className="h-8 w-auto" />
           </Link>
 
           {/* Centered nav — hidden on compact, visible on medium+ */}

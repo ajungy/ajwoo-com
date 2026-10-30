@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { SolarSwitch } from './ui/animated-theme-toggle';
 
@@ -9,6 +9,8 @@ const FADE_MS = 500;
 
 export function ThemeToggle() {
   const [theme, setTheme] = useState<'light' | 'dark' | null>(null);
+  const fadeTimer = useRef<ReturnType<typeof setTimeout>>();
+  useEffect(() => () => clearTimeout(fadeTimer.current), []);
   useEffect(() => {
     // The actual APPLIED theme (set by the boot script in app/layout.tsx,
     // which defaults new visitors to dark) is the source of truth, not a
@@ -31,9 +33,12 @@ export function ThemeToggle() {
 
   const next = theme === 'dark' ? 'light' : 'dark';
   const apply = () => {
+    clearTimeout(fadeTimer.current);
     if (window.matchMedia('(prefers-reduced-motion: no-preference)').matches) {
       document.documentElement.setAttribute('data-theme-transition', 'true');
-      setTimeout(() => document.documentElement.removeAttribute('data-theme-transition'), FADE_MS);
+      // Install the shared transition before changing any theme colors.
+      void document.documentElement.offsetWidth;
+      fadeTimer.current = setTimeout(() => document.documentElement.removeAttribute('data-theme-transition'), FADE_MS + 34);
     }
     document.documentElement.setAttribute('data-theme', next);
     localStorage.setItem('theme', next);

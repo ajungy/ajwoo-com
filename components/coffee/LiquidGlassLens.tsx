@@ -125,14 +125,13 @@ export function LiquidGlassLens({ rail }: { rail: RefObject<HTMLDivElement> }) {
       // the persistent header/footer. Cropping the enlarged ellipse keeps its
       // curved rims at the ends instead of displaying a complete central disc.
       const lensScale = 1.95;
-      const theme = document.documentElement.dataset.theme;
-      const dark = theme === 'dark' || (!theme && colorScheme.matches);
+      const brightness = (channels[0] + channels[1] + channels[2]) / (3 * 255);
       // Keep spectral separation in the photo samples, but never draw a
       // luminous oval over the page. Dark backgrounds need no additive glow.
       gl.uniform1f(uniform('uBlueRing'), 0);
       gl.uniform1f(uniform('uRimLine'), 0);
-      gl.uniform1f(uniform('uWhiteGlow'), dark ? 0 : 0.04);
-      gl.uniform1f(uniform('uGlow'), dark ? 0 : 1.2);
+      gl.uniform1f(uniform('uWhiteGlow'), brightness * 0.04);
+      gl.uniform1f(uniform('uGlow'), brightness * 1.2);
       gl.uniform1f(uniform('uEdgeStretch'), bounds.width < 600 ? 0.12 : 0.16);
       gl.uniform1f(uniform('uAspect'), Math.max(1.9, aspect));
       gl.uniform1f(uniform('uSizeX'), 0.565 * lensScale);
@@ -140,7 +139,7 @@ export function LiquidGlassLens({ rail }: { rail: RefObject<HTMLDivElement> }) {
       gl.drawArrays(gl.TRIANGLES, 0, 6);
       output.style.opacity = '1';
       track.dataset.lensReady = 'true';
-      if (motion > 0) schedule();
+      if (motion > 0 || document.documentElement.hasAttribute('data-theme-transition')) schedule();
     }
     function schedule() { if (!disposed && !frame) frame = requestAnimationFrame(draw); }
     function lost(event: Event) { event.preventDefault(); output!.style.opacity = '0'; delete track!.dataset.lensReady; }
@@ -151,7 +150,7 @@ export function LiquidGlassLens({ rail }: { rail: RefObject<HTMLDivElement> }) {
     const resize = new ResizeObserver(schedule);
     resize.observe(track);
     const theme = new MutationObserver(schedule);
-    theme.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme', 'style', 'class'] });
+    theme.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme', 'data-theme-transition', 'style', 'class'] });
     const colorScheme = matchMedia('(prefers-color-scheme: dark)');
     colorScheme.addEventListener('change', schedule);
     schedule();
