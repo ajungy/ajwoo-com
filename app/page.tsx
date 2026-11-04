@@ -170,7 +170,7 @@ export default function Home() {
           up into the header block above. Theme-aware: a separate dark-mode
           photo swaps in via CSS (see HeroPhoto.tsx) rather than a filter. */}
       {siteData.hero && (
-        <section className="mb-12">
+        <section>
           <HeroPhoto light={siteData.hero} dark={siteData.heroDark} />
         </section>
       )}

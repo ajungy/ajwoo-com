@@ -8,11 +8,6 @@ import { EmailMeLink } from './EmailMeLink';
  * angle brackets, `< >` in mono, the same visual grammar a real tag or a
  * template placeholder uses, flanking the label instead of laurels.
  *
- * No bounding border, at Alex's direction: no card, just type and space,
- * matching the rest of the page. mt-[245px], no pb: every major section on
- * this page is spaced from the next by that same 245px (144px increased
- * ~70%, at Alex's direction), so the gap language stays consistent
- * (Principle 10 in the sidebar above: spacing is a language).
  *
  * "Download SKILL.md" downloads the actual file this whole site is built
  * from (public/minimal-design-system.md), not a summary of it: a visitor
@@ -34,7 +29,7 @@ import { EmailMeLink } from './EmailMeLink';
  */
 export function SkillsSection() {
   return (
-    <section className="mt-[245px]">
+    <section className="mt-7">
       <div className="flex flex-col items-center px-9 text-center">
         <div className="flex items-center gap-3 text-fg-tertiary">
           <span aria-hidden="true" className="font-mono text-h1 font-bold text-fg">
