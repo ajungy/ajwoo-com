@@ -7,26 +7,7 @@ import { AppCard } from './AppCard';
 import { DepthCarousel } from './DepthCarousel';
 import type { App } from '@/content/apps';
 
-/**
- * The featured-apps row on the landing page, announced between laurels —
- * now a stacked depth carousel over all four apps (Convert, Capture Beta,
- * Dictate Beta, Narrate Beta), at Alex's direction, replacing the single
- * static Capture card this used to show. See components/DepthCarousel.tsx
- * for the carousel mechanics themselves; this file wires it to real
- * AppCard content and to which card's demo video autoplays.
- *
- * The laurels are the only ornament on the site, and they are load-bearing
- * rather than decorative: they say "these are the things being singled
- * out", which is what lets a small set of cards sit alone without reading
- * as an accident. Everything inside is the same Card the /apps grid uses,
- * so the pattern is learned once (Principle 16).
- *
- * "Video should autoplay [when] the card is on top of the stack": handled
- * via AppCard's `playing` prop (new — see that file) rather than its
- * existing `hoverPlay`, since this needs to react to the carousel's own
- * active index, not the pointer. `onActiveChange` from DepthCarousel keeps
- * local state in sync with whichever card is currently centered/on top.
- */
+/** Independent products, presented after the homepage design principles. */
 export function FeaturedApp({ apps }: { apps: App[] }) {
   const [activeIndex, setActiveIndex] = useState(0);
 
@@ -34,26 +15,14 @@ export function FeaturedApp({ apps }: { apps: App[] }) {
   // (the Experience/Education/Featured/Worked-with sections on `/`) is
   // that consumer's call, not this component's.
   return (
-    <section>
-      <div className="flex flex-col items-center">
-        {/* Single row — leaves, text, leaves — matching Alex's Figma reference
-            (node 300:253) as closely as the system's tokens allow: gap-2
-            (8px) mirrors the source's gap-[8px], text-title/bold
-            approximates its 18px Plus Jakarta Sans Bold (17px is the
-            system's nearest token), and the leaves are set to their native
-            38.6276px height (this reference's leaves are shorter and
-            proportionally fuller than the previous one) rather than rounded
-            to a token, since Figma's own size is itself the spec here.
-            FLIP SIDES, not orientation: in the source, the LEFT copy is the
-            one built from `scaleY(-1) rotate(180deg)` (Group 2) and the
-            RIGHT copy is the plain, untransformed artwork (Group 4) — i.e.
-            the rounded ends point outward on both sides, away from the
-            text. `flip` sits on the left one to match. */}
-        <div className="flex items-center gap-2 text-fg">
+    <section className="mt-[245px]" aria-labelledby="independent-apps">
+      <div className="text-center">
+        <div className="flex items-center justify-center gap-2 text-fg">
           <Laurel flip className="h-[38.6276px] w-auto" />
-          <p className="text-title font-bold text-fg whitespace-nowrap">Alex's Apps</p>
+          <h2 id="independent-apps" className="text-h3">Personal Apps</h2>
           <Laurel className="h-[38.6276px] w-auto" />
         </div>
+        <p className="mt-4 text-body text-fg-secondary">Small tools I design and build to make everyday tasks easier.</p>
       </div>
 
       {/* cardWidth={400}/perspective={3000} are Alex's own spec
@@ -95,7 +64,7 @@ export function FeaturedApp({ apps }: { apps: App[] }) {
           ancestor `mx-auto max-w-app px-page` in page.tsx) is the only
           edge margin now; every pixel of it goes to DepthCarousel's own
           ResizeObserver-measured `available` width, maximizing scale. */}
-      <div className="mt-12">
+      <div className="mt-6">
         <DepthCarousel
           items={apps.map((app) => (
             <AppCard
@@ -109,7 +78,7 @@ export function FeaturedApp({ apps }: { apps: App[] }) {
           tiltDirection="right"
           perspective={10000}
           visibleCards={4}
-          autoplay
+          autoplay={false}
           loop
           cardWidth={400}
           cardHeight={480}

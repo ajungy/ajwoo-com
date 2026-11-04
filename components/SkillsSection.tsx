@@ -49,8 +49,7 @@ export function SkillsSection() {
         </div>
         <div className="mt-4 flex flex-col items-center gap-8">
           <p className="max-w-content text-body text-fg-secondary">
-            The single file this site and several apps are built from, every
-            rule in one drop.
+            The SKILL.md this site and several apps are built from.
             <br />
             Want more? <EmailMeLink />.
           </p>

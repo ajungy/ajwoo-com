@@ -176,19 +176,13 @@ export default function Home() {
       )}
 
       <div className="mx-auto max-w-app px-page">
-        {/* Curated featured apps, ordered independently of the Apps grid. */}
+        <SkillsSection />
+        <DesignPrinciples />
+
+        {/* Independent products support the professional story after principles. */}
         <FeaturedApp apps={['convert', 'capture', 'dictate', 'narrate', 'letter'].flatMap(
           (slug) => apps.filter((app) => app.slug === slug)
         )} />
-
-        {/* SkillsSection ("Try Alex's SKILL.md") now BEFORE DesignPrinciples
-            (was after), at Alex's direction ("put try Alex's skill.md
-            section above the favorite design principles... between the
-            [all apps] button and favorite design principles"). Both
-            sections carry their own mt-[245px] regardless of what precedes
-            them, so reordering doesn't touch spacing. */}
-        <SkillsSection />
-        <DesignPrinciples />
 
         {/* Four stacked sections now, not two 2-column rows — Experience,
             Education, Featured, and "Worked with" each on their own
