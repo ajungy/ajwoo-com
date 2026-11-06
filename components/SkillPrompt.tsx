@@ -34,7 +34,7 @@ export function SkillPrompt() {
               aria-label="Download SKILL.md"
               className="underline underline-offset-4 can-hover:hover:text-fg">
               SKILL.md
-            </a>{' '}this site and apps are built from. Paste into your coding tool to get started.{' '}
+            </a>{' '}behind this site and apps. Paste into your coding tool. Follow safeguards; review before publishing.{' '}
             <button type="button" aria-expanded={showPrompt} aria-controls="minimal-prompt-preview"
               onClick={() => setShowPrompt((visible) => !visible)}
               className="underline underline-offset-4 can-hover:hover:text-fg">

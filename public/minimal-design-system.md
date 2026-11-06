@@ -5,10 +5,32 @@ description: Minimal design system — the house style for every product, UI, Fi
 
 # Minimal
 
+## Public-use scope and product identity
+
+This is reusable design guidance, not a portfolio template. Preserve the user's
+product name, logo, domain, content, metadata, and existing brand requirements.
+Do not add Alex Woo, AJWOO, Minimal branding, author biographies, portfolio
+content, source-repository links, credits, analytics, or promotional copy to
+what the user is building unless explicitly requested. Author names and URLs
+in this package identify the source only; they are not product requirements.
+Example text and links demonstrate components and must be replaced with the
+user's real content. Do not add a "Built with" badge or attribution footer.
+Retain any required third-party license notices in distributed source/assets;
+this is separate from adding visible branding to the product.
+
 ## Start here when applying the system
 
+Source repository: https://github.com/ajungy/minimal-design-system
+
+Confirm a recoverable checkpoint without overwriting existing work. Preserve
+platform conventions and accessibility. Ask before changing dependencies,
+authentication, payments, stored data, or publishing. Test affected flows,
+disclose unverified behavior, and explain how to undo only your changes.
+
+
 When the user asks to apply Minimal to a product, implement the changes on the
-requested screen. If no screen is named, start with the existing main screen.
+requested scope. For a whole project, audit shared components first and apply
+changes across screens in reviewable batches.
 Use the project's framework and working components.
 
 No AJWOO account, paid service, Figma access, or prior skill installation is
@@ -63,7 +85,7 @@ self-contained SKILL.md download instead. You can replace
 
 <!-- recommended-prompt:start -->
 
-Download and read https://www.ajwoo.com/minimal-design-system.md (fetch the raw file if your web reader cannot open Markdown). Verify it includes the bundled tokens/tokens.css, reference/token-usage.md, and examples/components.html before editing. Apply the system to this project’s main screen: improve layout, typography, spacing, and controls while preserving content and functionality. Implement and verify on mobile and desktop. If the file is unavailable or incomplete, ask me to upload the complete SKILL.md; do not invent missing resources. If no project is open, ask which project to update.
+Read SKILL.md and its references, tokens, and examples from https://github.com/ajungy/minimal-design-system. Apply the system across this project in reviewable batches, using its existing framework and native accessibility conventions. Confirm a recovery point without overwriting existing work. Preserve content and functionality; test affected flows and explain how to undo your changes. Ask before changing dependencies, authentication, payments, stored data, or publishing. If files are unavailable, ask me for the complete skill; do not invent missing resources. If no project is open, ask which project to update. Keep the user’s own product identity. Do not add Alex Woo, AJWOO, Minimal branding, source links, credits, or demo content to the product unless requested.
 
 <!-- recommended-prompt:end -->
 
