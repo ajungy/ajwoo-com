@@ -28,7 +28,7 @@ export function SkillPrompt() {
   }
 
   return (
-    <div className="flex w-full max-w-content flex-col items-center">
+    <div className="relative flex w-full max-w-content flex-col items-center">
           <p id="minimal-prompt-help" className="max-w-content text-body text-fg-secondary">
             <a href="/minimal-design-system.md" download="SKILL.md"
               aria-label="Download SKILL.md"
@@ -58,7 +58,7 @@ export function SkillPrompt() {
           className="mt-8 inline-flex h-control-md items-center justify-center rounded-control border border-secondary-line bg-secondary px-6 text-label font-medium text-secondary-fg transition duration-fast ease-standard motion-safe:active:scale-press can-hover:hover:bg-secondary-hover can-hover:hover:border-secondary-line-hover active:bg-secondary-active">
           Copy prompt + skill link
         </button>
-        <p role="status" aria-live="polite" className="mt-4 flex min-h-[24px] items-center gap-4 text-body text-fg-secondary">
+        <p role="status" aria-live="polite" className="absolute top-full mt-4 flex items-center gap-4 text-body text-fg-secondary">
           {status === 'Copied' && (
             <svg key={copyCount} className="h-[20px] w-[20px] shrink-0 text-success" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path className={styles.checkStroke} pathLength="1" d="m5 12 4 4L19 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />

@@ -28,6 +28,7 @@ export const metadata: Metadata = {
 // for `/` specifically. Other pages keep the browser's normal restore
 // behavior; only the landing page has this requirement.
 const bootScript = `
+document.documentElement.setAttribute('data-hero-motion', 'ready');
 try {
   var t = localStorage.getItem('theme');
   if (t === 'light' || t === 'dark') {
@@ -59,6 +60,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     // already knows, and compact chrome is at its density ceiling.
     <html lang="en" suppressHydrationWarning>
       <head>
+        <link rel="preload" href="/fonts/EBGaramond-Italic-Variable-latin.woff2" as="font" type="font/woff2" crossOrigin="anonymous" />
         <script dangerouslySetInnerHTML={{ __html: bootScript }} />
         {/* Scroll-reveal (.stagger-grid, components/StaggerReveal.tsx, and
             now TextAnimate.tsx's scroll-triggered headings — see

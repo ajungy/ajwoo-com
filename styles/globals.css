@@ -470,6 +470,18 @@ html[data-theme-transition] *::after {
 .hero-col {
   container-type: inline-size;
 }
+.hero-headline { min-height: 1.05em; }
+[data-hero-motion] .hero-headline[data-ready="false"] { opacity: 0; }
+[data-hero-motion] .hero-headline[data-ready="true"] {
+  animation: hero-headline-in 1000ms var(--e-standard) both;
+}
+@keyframes hero-headline-in {
+  from { opacity: 0; filter: blur(10px); transform: translateY(12px); }
+  to { opacity: 1; filter: blur(0); transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-hero-motion] .hero-headline[data-ready="true"] { animation: none; }
+}
 .hero-serif {
   font-family: "EB Garamond", Georgia, "Times New Roman", serif;
   font-style: italic;

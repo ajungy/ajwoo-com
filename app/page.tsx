@@ -2,6 +2,7 @@ import { pageMetadata } from '@/lib/metadata';
 import { Action } from '@/components/Action';
 import { LinkedInLogo, InstagramLogo } from '@/components/Icons';
 import { BookTimeAction } from '@/components/BookTimeAction';
+import { HeroHeadline } from '@/components/HeroHeadline';
 import { HeroPhoto } from '@/components/HeroPhoto';
 import { FeaturedApp } from '@/components/FeaturedApp';
 import { CopyEmailButton } from '@/components/CopyEmailButton';
@@ -36,21 +37,10 @@ export default function Home() {
             between the button row and the "Hi, I'm Alex" column once they
             stack on mobile. medium:gap-16 (side-by-side layout) is
             unaffected — that gap is horizontal, not the one Alex meant. */}
-        <section className="entrance-target grid grid-cols-1 gap-14 pt-20 pb-9 medium:grid-cols-2 medium:gap-16">
+        <section className="grid grid-cols-1 gap-14 pt-20 pb-9 medium:grid-cols-2 medium:gap-16">
           <div className="hero-col">
-            {/* Sizing lives entirely in .hero-serif (globals.css), fluid
-                against the column's own width via a container query — see
-                the comment there. This is the fourth pass at motion on this
-                exact headline (CLAUDE.md §6(d) logs two superseded ones,
-                a typing-verb loop then ParticleText, both reverted back to
-                plain static text) — TextAnimate.tsx's per-character
-                "blurInUp" reveal, at Alex's direction, reusing the SAME
-                session-gated entrance flag §6(a)'s already-approved
-                sequence uses rather than adding a new exception. See that
-                component's own comment for the full reasoning. */}
-            <h1 className="hero-serif text-fg">
-              <TextAnimate>{site.headline}</TextAnimate>
-            </h1>
+            {/* Reveal the complete headline after its display font is ready. */}
+            <HeroHeadline>{site.headline}</HeroHeadline>
 
             {/* These are the same actions that used to sit under the old
                 headline. Email copies to clipboard rather than opening a
