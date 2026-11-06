@@ -1,0 +1,15 @@
+/* Match the requested 500ms password-success drawing animation. */
+.checkStroke {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+  animation: drawCheck 500ms ease-in-out both;
+}
+
+@keyframes drawCheck {
+  from { stroke-dashoffset: 1; }
+  to { stroke-dashoffset: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .checkStroke { animation: none; }
+}

@@ -1,32 +1,6 @@
-import { CopySkillButton } from './CopySkillButton';
-import { EmailMeLink } from './EmailMeLink';
+import { SkillPrompt } from './SkillPrompt';
 
-/**
- * "Try Alex's SKILL.md", the code/AI counterpart to the laurel-bracketed
- * "Alex's choice" badge on this same page. Leaves don't make sense as the
- * ornament here (this isn't a favorite, it's a tool), so the brackets are
- * angle brackets, `< >` in mono, the same visual grammar a real tag or a
- * template placeholder uses, flanking the label instead of laurels.
- *
- *
- * "Download SKILL.md" downloads the actual file this whole site is built
- * from (public/minimal-design-system.md), not a summary of it: a visitor
- * can drop it straight into their own AI coding tool. Secondary button, at
- * Alex's direction; "Book 20 minutes" stays the only primary on this page.
- *
- * No "Skills" section heading: the callout's own "Try Alex's SKILL.md"
- * already says what this is, so a heading directly above it restating
- * "Skills" was pure redundancy, at Alex's direction.
- *
- * One combined paragraph rather than a separate description-and-CTA pair —
- * the file's purpose and the offer to reach out are still one thought, just
- * broken onto its own line at Alex's direction, and "Email me" now copies
- * the address to the clipboard (EmailMeLink.tsx) rather than opening a
- * mailto: link, matching the top-of-page Email button's behavior.
- *
- * No motion, at Alex's direction ("remove the animations of text effects"):
- * heading and body are plain static text.
- */
+/** Self-contained design-system download with a quick-start prompt. */
 export function SkillsSection() {
   return (
     <section className="mt-7">
@@ -43,12 +17,7 @@ export function SkillsSection() {
           </span>
         </div>
         <div className="mt-4 flex flex-col items-center gap-8">
-          <p className="max-w-content text-body text-fg-secondary">
-            The SKILL.md this site and several apps are built from.
-            <br />
-            Want more? <EmailMeLink />.
-          </p>
-          <CopySkillButton />
+          <SkillPrompt />
         </div>
       </div>
     </section>

@@ -6,7 +6,8 @@
     "dev": "NEXT_DIST_DIR=.next-dev next dev -p 4321",
     "build": "NEXT_DIST_DIR=.next-build next build",
     "start": "next start -p 4321",
-    "assets": "node scripts/build-assets.mjs"
+    "assets": "node scripts/build-assets.mjs",
+    "prebuild": "python3 scripts/build-design-system.py"
   },
   "dependencies": {
     "next": "14.2.15",

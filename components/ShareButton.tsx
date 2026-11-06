@@ -3,17 +3,7 @@
 import { useState } from 'react';
 import { Toast } from './Toast';
 
-/**
- * Same visual language as Action's "primary" variant (components/Action.tsx),
- * reproduced on a <button> rather than an <a> because Share triggers a JS
- * action (native share sheet or clipboard write), not navigation. Back to
- * primary at Alex's direction — the SpecularButton shine effect moved to
- * "Book 15 min" instead (see app/page.tsx and components/SpecularBorder.tsx),
- * which is this site's actual one primary action (Principle 3/CLAUDE.md §0);
- * Share reverts to its plain original chrome. `--action-primary-bg`/`-fg`
- * already flip per theme via light-dark(), so this is a white button with
- * black text in dark mode for free.
- */
+/** Outlined secondary action for the native share sheet or clipboard fallback. */
 export function ShareButton() {
   const [showToast, setShowToast] = useState(false);
 
@@ -56,8 +46,9 @@ export function ShareButton() {
         className={
           'inline-flex items-center justify-center h-control-md rounded-control border ' +
           'text-label font-medium transition duration-fast ease-standard motion-safe:active:scale-press ' +
-          'bg-primary text-primary-fg border-transparent px-6 ' +
-          'can-hover:hover:bg-primary-hover active:bg-primary-active'
+          'bg-secondary text-secondary-fg border-secondary-line px-6 ' +
+          'can-hover:hover:bg-secondary-hover can-hover:hover:border-secondary-line-hover ' +
+          'active:bg-secondary-active'
         }
       >
         Share

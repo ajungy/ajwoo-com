@@ -1,10 +1,4 @@
-/**
- * Downloads the full minimal design system (public/minimal-design-system.md
- * — the same file this entire site is built from) as SKILL.md, so a visitor
- * can drop it straight into their own AI coding tool. A plain anchor with
- * `download` — the browser handles the save UI itself, no fetch/clipboard
- * round-trip and no toast needed.
- */
+/** Downloads the skill with all of its reference documents and token files. */
 export function CopySkillButton() {
   return (
     <a

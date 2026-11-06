@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Minimal component example</title>
+  <link rel="stylesheet" href="components.css">
+</head>
+<body class="minimal-example">
+  <main>
+    <h1>Create a project</h1>
+    <p>A small working example of Minimal typography, spacing, and controls.</p>
+    <section aria-label="Appearance">
+      <label for="theme">Appearance</label>
+      <select id="theme">
+        <option value="">System</option>
+        <option value="light">Light</option>
+        <option value="dark">Dark</option>
+      </select>
+    </section>
+    <section aria-label="Project details">
+      <form id="project-form">
+        <label for="project-name">Project name</label>
+        <input id="project-name" name="name" required maxlength="80" autocomplete="off">
+        <div class="actions">
+          <button type="submit">Create project</button>
+          <a class="secondary" href="../SKILL.md">Read the skill</a>
+        </div>
+        <output id="result" aria-live="polite"></output>
+      </form>
+    </section>
+  </main>
+  <script>
+    document.getElementById('theme').addEventListener('change', (event) => {
+      if (event.target.value) document.documentElement.dataset.theme = event.target.value;
+      else document.documentElement.removeAttribute('data-theme');
+    });
+    document.getElementById('project-form').addEventListener('submit', (event) => {
+      event.preventDefault();
+      const name = document.getElementById('project-name').value.trim();
+      document.getElementById('result').textContent = name
+        ? 'Preview created for ' + name + '. This example keeps data in this page only.'
+        : 'Enter a project name.';
+    });
+  </script>
+</body>
+</html>
