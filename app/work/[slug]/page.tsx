@@ -1,7 +1,7 @@
 import { pageMetadata } from '@/lib/metadata';
 import { caseStudies } from '@/content/case-studies';
-import { NetflixPasswordGate } from '@/components/netflix/NetflixPasswordGate';
-import { encryptNetflixProject } from '@/lib/netflix/encrypt';
+import { NetflixProject } from '@/components/netflix/NetflixProject';
+import { netflixWork, netflixPublicExamples } from '@/content/netflix';
 import { WorkProjectActions } from '@/components/WorkProjectActions';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
@@ -46,7 +46,11 @@ const YEAR_SUBTITLE = /^.{0,60}?[\s,-]+((?:19|20)\d{2})\s*$/;
 export default function WorkPage({ params }: { params: { slug: string } }) {
   const project = getProject(params.slug);
   if (!project) notFound();
-  if (project.slug === 'netflix-creative-tools') return <NetflixPasswordGate project={project} encrypted={encryptNetflixProject()} />;
+  if (project.slug === 'netflix-creative-tools') return (
+    <div className="ph-no-capture" data-private>
+      <NetflixProject project={project} work={netflixWork} examples={netflixPublicExamples} />
+    </div>
+  );
 
   const all = blocksFor(project.slug);
   const firstBlock = all[0];

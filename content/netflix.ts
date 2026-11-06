@@ -13,7 +13,7 @@ export const netflixWork = {
     { image: { src: '/img/netflix-copy-surface.webp', alt: 'Annotated Netflix homepage showing the synopsis copy for Animals.' }, title: "Copy", description: "Designing workflows for the words that help people understand and discover content, from writing and generating copy to reviewing and publishing it for each story." },
     { image: null, title: "Analytics", description: "Connecting creative work with audience insights. The challenge is making performance information useful for creative decisions." },
   ],
-  impactContext: 'Netflix’s public writing illustrates why this scope matters: Clips supports collaborative moment selection, AVA surfaces imagery for creative exploration, Nutshell coordinates synopsis workflows, and Muse makes audience response available to creative teams. These sources describe the broader ecosystem across multiple teams and years; their results are not attributed to my individual work.',
+  impactContext: 'Netflix’s public writing illustrates why this scope matters: Clips supports collaborative moment selection, Nutshell coordinates synopsis workflows, and Muse makes audience response available to creative teams. These sources describe the broader ecosystem across multiple teams and years; their results are not attributed to my individual work.',
   links: [
     {
       title: 'Creative automation / Workflow strategy and trust',
@@ -26,12 +26,6 @@ export const netflixWork = {
       source: 'Netflix TechBlog / 2022',
       description: 'An earlier public account of Clips, collaborative moment selection, and automation for promotional video production.',
       href: 'https://netflixtechblog.medium.com/from-weeks-to-seconds-building-mega-assets-to-uncover-joyful-moments-b3cedcf37ffc',
-    },
-    {
-      title: 'AVA / Finding authentic moments',
-      source: 'Netflix TechBlog / 2023',
-      description: 'Public interface examples showing how Discovery View surfaces storylines, tones, characters, and environments for artwork exploration.',
-      href: 'https://netflixtechblog.com/ava-discovery-view-surfacing-authentic-moments-b8cd145491cc',
     },
     {
       title: 'Creative insights with Muse',
