@@ -51,7 +51,7 @@ export function SkillPrompt() {
         value={prompt}
         rows={6}
         spellCheck={false}
-        className={`${showPrompt ? 'block' : 'hidden'} mt-8 mb-6 w-full rounded-control border border-line bg-sunken p-6 text-left text-body text-fg`}
+        className={`${showPrompt ? 'block' : 'hidden'} mt-8 w-full rounded-control border border-line bg-sunken p-6 text-left text-body text-fg`}
       />
         <button type="button" onClick={copyPrompt}
           aria-describedby="minimal-prompt-help"
