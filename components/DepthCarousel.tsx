@@ -204,7 +204,12 @@ export function DepthCarousel({
       const maxWidth = cardScale * Math.min(cardWidth, Math.max(1, available - 48));
       // Keep controls at their native size; limit the square artwork on short screens.
       const mediaHeight = viewportHeight - headerHeight - 16 - footerHeight;
-      setLayoutWidth(shortLandscape ? Math.min(maxWidth, Math.max(220, mediaHeight)) : maxWidth);
+      if (window.innerWidth < 600) {
+        // Fill the single-column Apps grid between the shared page gutters.
+        setLayoutWidth(available);
+      } else {
+        setLayoutWidth(shortLandscape ? Math.min(maxWidth, Math.max(220, mediaHeight)) : maxWidth);
+      }
     };
     compute();
     const ro = new ResizeObserver(compute);

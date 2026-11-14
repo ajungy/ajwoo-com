@@ -21,7 +21,7 @@ import { principles } from '@/content/site';
  */
 export function DesignPrinciples() {
   return (
-    <section className="mt-[160px]">
+    <section className="mt-[140px]">
       <div className="grid grid-cols-1 large:grid-cols-4">
         <div className="large:col-start-2 large:col-span-2">
           <h2 className="type-section-heading">

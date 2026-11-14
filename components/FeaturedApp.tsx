@@ -14,7 +14,7 @@ export function FeaturedApp({ apps }: { apps: App[] }) {
   // (the Experience/Education/Featured/Worked-with sections on `/`) is
   // that consumer's call, not this component's.
   return (
-    <section className="mt-[160px]" aria-labelledby="independent-apps">
+    <section className="mt-[140px]" aria-labelledby="independent-apps">
       <div className="text-center">
         <div className="flex items-center justify-center gap-2 text-fg">
           <Laurel flip className="h-[38.6276px] w-auto" />
