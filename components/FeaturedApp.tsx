@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import Link from 'next/link';
 import { Laurel } from './Laurel';
 import { AppCard } from './AppCard';
 import { DepthCarousel } from './DepthCarousel';
@@ -15,14 +14,14 @@ export function FeaturedApp({ apps }: { apps: App[] }) {
   // (the Experience/Education/Featured/Worked-with sections on `/`) is
   // that consumer's call, not this component's.
   return (
-    <section className="mt-[245px]" aria-labelledby="independent-apps">
+    <section className="mt-[160px]" aria-labelledby="independent-apps">
       <div className="text-center">
         <div className="flex items-center justify-center gap-2 text-fg">
           <Laurel flip className="h-[38.6276px] w-auto" />
-          <h2 id="independent-apps" className="text-h3">Personal Apps</h2>
+          <h2 id="independent-apps" className="type-section-heading">Personal Apps</h2>
           <Laurel className="h-[38.6276px] w-auto" />
         </div>
-        <p className="mt-4 text-body text-fg-secondary">Small tools I design and build to make everyday tasks easier.</p>
+        <p className="mt-4 type-subtitle">Tools I build to make life easier.</p>
       </div>
 
       {/* cardWidth={400}/perspective={3000} are Alex's own spec
@@ -81,6 +80,7 @@ export function FeaturedApp({ apps }: { apps: App[] }) {
           autoplay={false}
           loop
           cardWidth={400}
+          cardScale={0.8}
           cardHeight={480}
           radius={20}
           duration={700}
@@ -91,26 +91,6 @@ export function FeaturedApp({ apps }: { apps: App[] }) {
         />
       </div>
 
-      {/* mt-6 (was mt-16 — Tailwind's own default 64px, since 16 isn't in
-          this project's custom 0-15 spacing scale and silently fell back
-          to Tailwind's stock value): far too much air between this link
-          and the chevron/dot controls row directly above it, at Alex's
-          direction ("the all apps arrow button [should be] closer to the
-          navigation row with the left and right chevrons... much
-          closer"). */}
-      <p className="mt-6 text-center">
-        <Link
-          href="/apps/"
-          data-cursor-label="All apps"
-          className={
-            'inline-flex items-center rounded-control px-2 -mx-2 py-1.5 -my-1.5 text-label ' +
-            'font-semibold text-fg-secondary transition duration-fast ease-standard ' +
-            'can-hover:hover:bg-tertiary-hover can-hover:hover:text-fg'
-          }
-        >
-          All apps →
-        </Link>
-      </p>
     </section>
   );
 }

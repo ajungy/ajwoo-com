@@ -91,7 +91,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             every page via the root layout, instead of eleven copies of the
             same fact scattered through the content. */}
         <footer className="mt-15">
-          <div className="mx-auto max-w-app px-page py-9 text-caption text-fg-tertiary">
+          <div className="mx-auto max-w-app px-page py-9 type-caption">
             &copy; {site.fullName}
             <span className="ml-6"><AnalyticsSettingsLink /></span>
           </div>

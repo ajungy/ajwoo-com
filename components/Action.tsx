@@ -31,6 +31,10 @@ const variants: Record<Variant, string> = {
     'can-hover:hover:bg-white/20 can-hover:hover:border-white/60',
 };
 
+export function actionClassName(variant: Variant = 'secondary') {
+  return `${base} ${variants[variant]}`;
+}
+
 /**
  * Every action on this site is a navigation, so the component is an anchor.
  * `cursorLabel` is what the custom cursor echoes — it must never be the ONLY
@@ -48,7 +52,7 @@ export function Action({
   href: string; children: ReactNode; variant?: Variant; external?: boolean;
   cursorLabel?: string; className?: string; showExternalIcon?: boolean;
 }) {
-  const cls = `${base} ${variants[variant]} ${showExternalIcon ? 'gap-1.5' : ''} ${className}`;
+  const cls = `${actionClassName(variant)} ${showExternalIcon ? 'gap-1.5' : ''} ${className}`;
   const label = cursorLabel ?? (typeof children === 'string' ? children : undefined);
   const content = showExternalIcon ? (
     <>

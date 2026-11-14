@@ -4,6 +4,21 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+  .work-reading-column { @apply mx-auto w-full max-w-[560px]; width: calc(100% - 32px); }
+  @screen large {
+    .work-reading-column { width: calc((min(100%, 1200px) - 2 * var(--page-pad)) / 2); max-width: none; }
+  }
+
+  /* Reading hierarchy shared by the landing page, galleries and case studies. */
+  .type-project-title { @apply text-h1 text-fg; }
+  .type-section-heading { @apply text-h3 text-fg; }
+  .type-decision { @apply text-body font-semibold text-fg; }
+  .type-subtitle { @apply text-body text-fg-secondary; }
+  .type-body { @apply text-body text-fg-secondary; }
+  .type-caption { @apply text-caption text-fg-secondary; }
+}
+
 /* ==========================================================================
    Self-hosted type. Plus Jakarta Sans variable, latin subset, 400–600.
    Self-hosted rather than the Google CDN: no third-party request, and the
@@ -475,6 +490,15 @@ html[data-theme-transition] *::after {
 [data-hero-motion] .hero-headline[data-ready="true"] {
   animation: hero-headline-in 1000ms var(--e-standard) both;
 }
+@media (prefers-reduced-motion: no-preference) {
+  [data-hero-motion] .hero-headline[data-finished="false"] ~ .stagger-grid > * {
+    animation: none;
+    visibility: hidden;
+  }
+  [data-hero-motion] .hero-headline ~ .stagger-grid {
+    --stagger-base: 0ms;
+  }
+}
 @keyframes hero-headline-in {
   from { opacity: 0; filter: blur(10px); transform: translateY(12px); }
   to { opacity: 1; filter: blur(0); transform: translateY(0); }
@@ -767,3 +791,21 @@ body:has([data-work-actions]) > footer > div {
 
 /* Connected logo paths animate their endpoints without scaling stroke edges. */
 .logo-morph { display: block; }
+
+@media (prefers-reduced-motion: no-preference) {
+  [data-hero-motion] .landing-sections section {
+    opacity: 0;
+  }
+  [data-hero-motion] .landing-sections section[data-revealed] {
+    animation: stagger-in 450ms var(--e-standard) var(--section-delay, 0ms) both;
+  }
+  [data-hero-motion] .landing-sections section:focus-within {
+    animation: none;
+    opacity: 1;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .work-coverflow-card { transition: scale 220ms var(--e-standard); }
+  .work-coverflow-card[data-focused]:hover { scale: 1.02; }
+}

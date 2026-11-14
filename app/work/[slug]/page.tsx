@@ -73,40 +73,48 @@ export default function WorkPage({ params }: { params: { slug: string } }) {
 
 
   return (
-    <>
+    <div className={isCoffee ? undefined : "work-reading-column"}>
       {hero && (
         <Picture
           img={hero}
           alt={project.title}
           priority
-          sizes="100vw"
+          sizes={isCoffee ? "100vw" : "(max-width: 592px) calc(100vw - 32px), 560px"}
           className="block h-auto w-full"
         />
       )}
 
-      <div className="mx-auto max-w-app px-page">
+      <div className={isCoffee ? "mx-auto max-w-app px-page" : undefined}>
         <header className="pt-12 pb-12">
-          <h1 className="text-h1 text-fg">{project.title}{project.kind === 'coffee' && year ? `, ${year}` : ''}</h1>
-          <p className={`mt-4 ${project.kind === 'design' ? 'text-body' : 'text-body-lg'} text-fg-secondary`}>{project.category}{project.kind === 'design' && year ? ` - ${year}` : ''}</p>
+          <h1 className="type-project-title">{project.title}{project.kind === 'coffee' && year ? `, ${year}` : ''}</h1>
+          <p className="mt-4 type-subtitle">{project.category}{project.kind === 'design' && year ? ` - ${year}` : ''}</p>
         </header>
 
         <article className="pb-12">
+          {project.slug === 'premiere-generative-ai' && (
+            <figure className="mb-9">
+              <blockquote className="type-subtitle text-fg">
+                “Adobe had been absolutely crushing it with new tools that leverage AI to give creators more freedom”
+              </blockquote>
+              <figcaption className="mt-4 type-caption">Ryan Connolly from @FilmRiot</figcaption>
+            </figure>
+          )}
           {study && <section className="max-w-content mb-12">
-            <h2 className="text-body font-semibold text-fg leading-relaxed">The challenge</h2>
-            <p className="mt-6 text-body text-fg-secondary leading-relaxed">{study.problem}</p>
-            <h2 className="mt-9 text-body font-semibold text-fg leading-relaxed">My contribution</h2>
-            <p className="mt-6 text-body text-fg-secondary leading-relaxed">{study.scope}</p>
-            <h2 className="mt-9 text-body font-semibold text-fg leading-relaxed">Collaboration</h2>
-            <p className="mt-6 text-body text-fg-secondary leading-relaxed">{study.collaboration}</p>
-            <h2 className="mt-9 text-body font-semibold text-fg leading-relaxed">Public work</h2>
-            <p className="mt-6 text-body text-fg-secondary leading-relaxed">{study.outcome}</p>
+            <h2 className="type-decision">The challenge</h2>
+            <p className="mt-4 type-body">{study.problem}</p>
+            <h2 className="mt-9 type-decision">My contribution</h2>
+            <p className="mt-4 type-body">{study.scope}</p>
+            <h2 className="mt-9 type-decision">Collaboration</h2>
+            <p className="mt-4 type-body">{study.collaboration}</p>
+            <h2 className="mt-9 type-decision">Public work</h2>
+            <p className="mt-4 type-body">{study.outcome}</p>
           </section>}
-          <Blocks blocks={study ? [...blocks.filter((b) => b.kind !== 'text'), ...(study.additionalBlocks ?? [])] : blocks} alt={project.title} compactMedia={!isCoffee} />
+          <Blocks blocks={study ? [...blocks.filter((b) => b.kind !== 'text' && !(project.slug === 'premiere-generative-ai' && b.kind === 'embed' && b.src.endsWith('/T72C17jVx44'))), ...(study.additionalBlocks ?? [])] : blocks} alt={project.title} compactMedia={!isCoffee} />
           <WorkProjectActions section={isCoffee ? 'Coffee' : 'Work'} />
         </article>
 
 
       </div>
-    </>
+    </div>
   );
 }

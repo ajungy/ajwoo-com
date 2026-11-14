@@ -2,7 +2,7 @@ import { pageMetadata } from '@/lib/metadata';
 import { CaptureInstallButton } from '@/components/CaptureInstallButton';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { Action } from '@/components/Action';
+import { Action, actionClassName } from '@/components/Action';
 import { WorkProjectActions } from '@/components/WorkProjectActions';
 import { AppIcon } from '@/components/AppIcon';
 import { apps, WAITLIST_FORM_URL } from '@/content/apps';
@@ -50,22 +50,9 @@ export default function AppPage({ params }: { params: { slug: string } }) {
             <AppIcon name={app.icon} className="h-14 w-14" />
           </span>
         )}
-        {/* Title/description/Waitlist compressed to fit inside the icon's
-            own height, at Alex's direction — text-h2 instead of text-h1
-            (30px line-height instead of 38px), and tighter still (mt-1 on
-            the description, was mt-2) since Alex separately asked for
-            "the top of the title and the... bottom of the button to
-            align and fit the size of the app logo": `medium:items-start`
-            already lines the title's top up with the icon's top, so
-            closing this column's own internal gaps is what brings the
-            button's bottom closer to the icon's bottom too — a beta app
-            appends " Beta" here, matching the same suffix its /apps grid
-            card already shows next to its name, at Alex's direction ("if
-            the card has the beta... tag next to the title, can you also
-            put beta inside the apps pages as well"). */}
-        <div className="flex-1">
-          <h1 className="text-h2 text-fg">{app.name}{app.beta ? ' Beta' : ''}</h1>
-          <p className="mt-1 max-w-content text-body-lg text-fg-secondary">{app.description}</p>
+        <div className="min-w-0 flex-1">
+          <h1 className="type-project-title">{app.name}{app.beta ? ' Beta' : ''}</h1>
+          <p className="mt-4 max-w-content type-subtitle">{app.description}</p>
 
           {/* The platform/trigger caption line that used to sit here is
               gone, at Alex's direction — the smallest, least load-bearing
@@ -80,28 +67,17 @@ export default function AppPage({ params }: { params: { slug: string } }) {
               confident, one-primary-per-view action a real download/
               purchase would be (Principle 9: real separation, never
               default-focused, a plain navigation so it can't double-fire). */}
-          <div className="mt-1.5">
+          <div className="mt-6">
             {app.openUrl ? (
               <Action href={app.openUrl} external variant="secondary" cursorLabel="Open">
                 Open
               </Action>
             ) : app.downloadZip ? (
               app.slug === 'capture' ? <CaptureInstallButton href={app.downloadZip} /> : (
-            <a
-                href={app.downloadZip}
-                download
-                data-cursor-label="Install"
-                className={
-                  'inline-flex items-center justify-center h-control-md rounded-control border ' +
-                  'text-label font-medium transition duration-fast ease-standard motion-safe:active:scale-press ' +
-                  'bg-secondary text-secondary-fg border-secondary-line px-6 ' +
-                  'can-hover:hover:bg-secondary-hover can-hover:hover:border-secondary-line-hover ' +
-                  'active:bg-secondary-active'
-                }
-              >
-                Install
-              </a>
-            )
+                <a href={app.downloadZip} download data-cursor-label="Install" className={actionClassName()}>
+                  Install
+                </a>
+              )
             ) : (
               <Action href={WAITLIST_FORM_URL} external variant="secondary" cursorLabel="Join waitlist">
                 Waitlist
@@ -152,24 +128,18 @@ export default function AppPage({ params }: { params: { slug: string } }) {
       <article className="max-w-content space-y-8">
         {app.detail.map((para, i) => {
           if (typeof para === 'string') {
-            return <p key={i} className="text-body-lg text-fg-secondary">{para}</p>;
+            return <p key={i} className="type-body">{para}</p>;
           }
           if ('lead' in para) {
             // The opening statement — bolded and set apart from the plain
             // paragraphs that follow, at Alex's direction. Same size/family
             // as everything else, only the weight changes.
-            return <p key={i} className="text-body-lg font-semibold text-fg">{para.lead}</p>;
+            return <p key={i} className="type-decision">{para.lead}</p>;
           }
-          // Feature-list entry: label on its OWN line, bolded, body directly
-          // below it on the next line — not inline in one paragraph, at
-          // Alex's direction. `pt-4` on top of the container's own
-          // `space-y-8` gives each entry a bit more air above it than a
-          // plain paragraph-to-paragraph gap, so the list reads as a run of
-          // small sections rather than one continuous block.
           return (
-            <div key={i} className="pt-4">
-              <p className="text-body-lg font-semibold text-fg">{para.label}</p>
-              <p className="mt-1 text-body-lg text-fg-secondary">{para.body}</p>
+            <div key={i}>
+              <p className="type-decision">{para.label}</p>
+              <p className="mt-4 type-body">{para.body}</p>
             </div>
           );
         })}
@@ -182,7 +152,7 @@ export default function AppPage({ params }: { params: { slug: string } }) {
             itself uses, with its own border for a clear edge. */}
         <ul className="flex flex-wrap gap-3 pt-2">
           {app.traits.map((t) => (
-            <li key={t} className="rounded-xs border border-line-subtle bg-raised px-4 py-2 text-caption text-fg-secondary">
+            <li key={t} className="rounded-xs border border-line-subtle bg-raised px-4 py-2 type-caption">
               {t}
             </li>
           ))}

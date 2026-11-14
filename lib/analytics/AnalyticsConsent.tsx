@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { analyticsAvailable, configureAnalytics, consent, setConsent, startAnalytics, trackLink, trackPage, type AnalyticsConfig } from './core';
+import { actionClassName } from '@/components/Action';
 import './analytics.css';
 
 export function AnalyticsConsent({ config, path }: { config: AnalyticsConfig; path?: string }) {
@@ -61,10 +62,10 @@ export function AnalyticsConsent({ config, path }: { config: AnalyticsConfig; pa
   }
   return <aside className="aj-analytics chrome" data-closing={closing ? "true" : undefined} aria-label="Analytics preferences">
     <section ref={panel} tabIndex={-1} className="aj-analytics-panel" aria-label="Help improve ajwoo" onKeyDown={(event) => { if (event.key === 'Escape') { if (!choice) choose('no'); else dismiss(); } }}>
-      <p className="aj-analytics-copy">Allow analytics cookies and interaction recordings to improve ajwoo? <a href="/privacy/" tabIndex={closing ? -1 : undefined}>Privacy details</a></p>
+      <p className="aj-analytics-copy type-caption">Allow analytics cookies and interaction recordings to improve ajwoo? <a href="/privacy/" tabIndex={closing ? -1 : undefined}>Privacy details</a></p>
       {navigator.doNotTrack === '1' || (navigator as Navigator & { globalPrivacyControl?: boolean }).globalPrivacyControl
-        ? <><p>Your browser keeps analytics off.</p><button type="button" disabled={closing} onClick={() => choose('no')}>Close</button></>
-        : <div className="aj-analytics-actions"><button type="button" disabled={closing} onClick={() => choose('no')}>Decline</button><button type="button" disabled={closing} onClick={() => choose('yes')}>Allow</button></div>}
+        ? <><p className="type-caption">Your browser keeps analytics off.</p><button type="button" className={actionClassName()} disabled={closing} onClick={() => choose('no')}>Close</button></>
+        : <div className="aj-analytics-actions"><button type="button" className={actionClassName()} disabled={closing} onClick={() => choose('no')}>Decline</button><button type="button" className={actionClassName()} disabled={closing} onClick={() => choose('yes')}>Allow</button></div>}
     </section>
   </aside>;
 }

@@ -21,7 +21,47 @@ export function CoffeeCarousel({ slides }: { slides: CoffeeSlide[] }) {
   const suppressClick = useRef(false);
   const requestedIndex = useRef(slides.length);
   const loopSlides = [...slides, ...slides, ...slides];
-  const moveRef = useRef<(direction: number) => void>(() => {});
+  const motion = useRef(0);
+  const idle = useRef<ReturnType<typeof setTimeout>>();
+  function interrupt() {
+    cancelAnimationFrame(motion.current);
+    clearTimeout(idle.current);
+  }
+
+  function settle(track: HTMLDivElement) {
+    interrupt();
+    const start = track.scrollLeft;
+    const center = start + track.clientWidth / 2;
+    const cards = Array.from(track.children) as HTMLElement[];
+    if (!cards.length) return;
+    const distance = (card: HTMLElement) => card.offsetLeft + card.clientWidth / 2 - center;
+    const nearest = cards.reduce((a, b) => Math.abs(distance(a)) <= Math.abs(distance(b)) ? a : b);
+    const delta = distance(nearest);
+    const duration = Math.min(380, Math.max(180, Math.abs(delta) * 2));
+    const began = performance.now();
+    function frame(now: number) {
+      const t = Math.min(1, (now - began) / duration);
+      track.scrollLeft = start + delta * t * t * (3 - 2 * t);
+      if (t < 1) motion.current = requestAnimationFrame(frame);
+      else track.style.scrollSnapType = '';
+    }
+    if (Math.abs(delta) < 1 || matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      track.scrollLeft = start + delta;
+      track.style.scrollSnapType = '';
+    } else motion.current = requestAnimationFrame(frame);
+  }
+
+  function scrollByGesture(track: HTMLDivElement, delta: number) {
+    const first = track.children[0] as HTMLElement;
+    const middle = track.children[slides.length] as HTMLElement;
+    if (!middle) return;
+    const cycle = middle.offsetLeft - first.offsetLeft;
+    if (!cycle) return;
+    track.style.scrollSnapType = 'none';
+    const origin = middle.offsetLeft - (track.clientWidth - middle.clientWidth) / 2;
+    const offset = track.scrollLeft + delta - origin;
+    track.scrollLeft = origin + ((offset % cycle) + cycle) % cycle;
+  }
 
   // Three copies keep both neighbors present across either loop boundary.
   // Rebase to the identical middle copy only after a slide is centered.
@@ -41,32 +81,29 @@ export function CoffeeCarousel({ slides }: { slides: CoffeeSlide[] }) {
   useEffect(() => {
     const track = rail.current;
     if (!track) return;
-    let end: ReturnType<typeof setTimeout>;
-    let handled = false;
-    let distance = 0;
+
     function wheel(event: WheelEvent) {
-      if (event.ctrlKey || (event.target as Element).closest('[role="dialog"], [role="menu"], textarea, input, select')) return;
-      event.preventDefault();
-      clearTimeout(end);
-      end = setTimeout(() => { handled = false; distance = 0; }, 300);
-      if (handled) return;
+      if (!track || event.ctrlKey || (event.target as Element).closest('[role="dialog"], [role="menu"], textarea, input, select')) return;
       const delta = Math.abs(event.deltaY) > Math.abs(event.deltaX) ? event.deltaY : event.deltaX;
-      distance += delta * (event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? track!.clientWidth : 1);
-      if (Math.abs(distance) < 4) return;
-      handled = true;
-      moveRef.current(Math.sign(distance));
-      distance = 0;
+      if (!delta) return;
+      event.preventDefault();
+      interrupt();
+      const unit = event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? track.clientWidth : 1;
+      scrollByGesture(track, delta * unit * 2);
+      idle.current = setTimeout(() => settle(track), 100);
     }
     window.addEventListener('wheel', wheel, { passive: false });
     return () => {
       window.removeEventListener('wheel', wheel);
-      clearTimeout(end);
+      interrupt();
       track.style.scrollSnapType = '';
     };
-  }, []);
+  }, [slides.length]);
 
   function move(direction: number) {
-    const next = requestedIndex.current + direction;
+    interrupt();
+    if (rail.current) rail.current.style.scrollSnapType = '';
+    const next = Math.max(0, Math.min(loopSlides.length - 1, requestedIndex.current + direction));
     requestedIndex.current = next;
     const card = rail.current?.children[next] as HTMLElement | undefined;
     if (!card || !rail.current) return;
@@ -76,7 +113,7 @@ export function CoffeeCarousel({ slides }: { slides: CoffeeSlide[] }) {
     });
   }
 
-  moveRef.current = move;
+
 
   return (
     <section aria-label="Coffee reviews" aria-roledescription="carousel" className={`${styles.gallery} coffee-entrance`}
@@ -86,9 +123,6 @@ export function CoffeeCarousel({ slides }: { slides: CoffeeSlide[] }) {
           move(event.key === 'ArrowDown' || event.key === 'ArrowRight' ? 1 : -1);
         }
       }}>
-      <div className={`${styles.caption} route-intro`} aria-live="polite" aria-atomic="true">
-        <h2 className="text-title text-fg">{slides[active]?.title}</h2>
-      </div>
       <div className={`${styles.stage} route-media`}>
       <div
         ref={rail}
@@ -96,6 +130,8 @@ export function CoffeeCarousel({ slides }: { slides: CoffeeSlide[] }) {
         onDragStart={(event) => event.preventDefault()}
         onPointerDown={(event) => {
           // Touch keeps the rail's native scrolling and snap behavior.
+          interrupt();
+          if (event.pointerType === 'touch') event.currentTarget.style.scrollSnapType = '';
           suppressClick.current = false;
           if (event.pointerType === 'touch' || event.button !== 0 || !event.isPrimary) return;
           drag.current = { id: event.pointerId, x: event.clientX, y: event.clientY };
@@ -105,21 +141,23 @@ export function CoffeeCarousel({ slides }: { slides: CoffeeSlide[] }) {
           if (!start || start.id !== event.pointerId) return;
           const dx = event.clientX - start.x;
           const dy = event.clientY - start.y;
-          if (Math.abs(dx) < 10 || Math.abs(dx) <= Math.abs(dy) * 1.2) return;
+          if (!suppressClick.current && (Math.abs(dx) < 5 || Math.abs(dx) <= Math.abs(dy))) return;
           event.preventDefault();
           suppressClick.current = true;
           event.currentTarget.setPointerCapture(event.pointerId);
+          scrollByGesture(event.currentTarget, -dx * 1.5);
+          start.x = event.clientX;
+          start.y = event.clientY;
         }}
         onPointerUp={(event) => {
           const start = drag.current;
           if (!start || start.id !== event.pointerId) return;
           drag.current = null;
           if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId);
-          const dx = event.clientX - start.x;
-          if (suppressClick.current && Math.abs(dx) >= 32) move(dx < 0 ? 1 : -1);
+          if (event.currentTarget.style.scrollSnapType) settle(event.currentTarget);
         }}
-        onPointerCancel={() => { drag.current = null; }}
-        onLostPointerCapture={() => { drag.current = null; }}
+        onPointerCancel={() => { if (drag.current && rail.current?.style.scrollSnapType) settle(rail.current); drag.current = null; }}
+        onLostPointerCapture={() => { if (drag.current && rail.current?.style.scrollSnapType) settle(rail.current); drag.current = null; }}
         onClickCapture={(event) => {
           if (!suppressClick.current) return;
           event.preventDefault();
@@ -136,7 +174,8 @@ export function CoffeeCarousel({ slides }: { slides: CoffeeSlide[] }) {
             Math.abs(cards[best].offsetLeft + cards[best].clientWidth / 2 - center) ? i : best, 0);
           setActive(nearest % slides.length);
           const centered = cards[nearest].offsetLeft - (el.clientWidth - cards[nearest].clientWidth) / 2;
-          if (Math.abs(el.scrollLeft - centered) < 1 && (nearest < slides.length || nearest >= slides.length * 2)) {
+          if (Math.abs(el.scrollLeft - centered) < 1) requestedIndex.current = nearest;
+          if (!el.style.scrollSnapType && Math.abs(el.scrollLeft - centered) < 1 && (nearest < slides.length || nearest >= slides.length * 2)) {
             const middle = slides.length + nearest % slides.length;
             requestedIndex.current = middle;
             el.scrollTo({ left: cards[middle].offsetLeft - (el.clientWidth - cards[middle].clientWidth) / 2, behavior: 'instant' });
@@ -151,6 +190,9 @@ export function CoffeeCarousel({ slides }: { slides: CoffeeSlide[] }) {
             tabIndex={i >= slides.length && i < slides.length * 2 ? 0 : -1}
             aria-hidden={i < slides.length || i >= slides.length * 2 ? true : undefined}
             onFocus={(event) => {
+              if (!event.currentTarget.matches(':focus-visible')) return;
+              interrupt();
+              if (rail.current) rail.current.style.scrollSnapType = '';
               requestedIndex.current = i;
               const card = event.currentTarget;
               rail.current?.scrollTo({ left: card.offsetLeft - (rail.current.clientWidth - card.clientWidth) / 2, behavior: 'instant' });
@@ -166,14 +208,19 @@ export function CoffeeCarousel({ slides }: { slides: CoffeeSlide[] }) {
       </div>
       <LiquidGlassLens rail={rail} />
       </div>
-      <div className={`${styles.controls} route-navigation`}>
-        <button type="button" onClick={() => move(-1)} className={styles.arrow} aria-label="Previous coffee review" title="Previous coffee review">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m14 6-6 6 6 6" stroke="currentColor" strokeWidth="1.5" /></svg>
-        </button>
-        <p className="text-caption tabular-nums text-fg-secondary" aria-live="polite" aria-atomic="true">{String(active + 1).padStart(2, '0')} / {String(slides.length).padStart(2, '0')}</p>
-        <button type="button" onClick={() => move(1)} className={styles.arrow} aria-label="Next coffee review" title="Next coffee review">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m10 6 6 6-6 6" stroke="currentColor" strokeWidth="1.5" /></svg>
-        </button>
+      <div className={styles.details}>
+        <div className={`${styles.caption} route-intro`} aria-live="polite" aria-atomic="true">
+          <h2 className="type-decision">{slides[active]?.title}</h2>
+        </div>
+        <div className={`${styles.controls} route-navigation`}>
+          <button type="button" onClick={() => move(-1)} className={styles.arrow} aria-label="Previous coffee review" title="Previous coffee review">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m14 6-6 6 6 6" stroke="currentColor" strokeWidth="1.5" /></svg>
+          </button>
+          <p className="type-caption tabular-nums" aria-live="polite" aria-atomic="true">{String(active + 1).padStart(2, '0')} / {String(slides.length).padStart(2, '0')}</p>
+          <button type="button" onClick={() => move(1)} className={styles.arrow} aria-label="Next coffee review" title="Next coffee review">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m10 6 6 6-6 6" stroke="currentColor" strokeWidth="1.5" /></svg>
+          </button>
+        </div>
       </div>
     </section>
   );

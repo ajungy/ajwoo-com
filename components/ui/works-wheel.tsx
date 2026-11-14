@@ -123,7 +123,7 @@ export function WorksWheel({ items }: { items: WorksWheelItem[] }) {
         if (face) face.style.transform = `scale(${geometry.ringScale + (1 - geometry.ringScale) * m})`;
         const video = videos.current[i];
         if (video) {
-          if (visible && !document.hidden) { if (video.paused) void video.play().catch(() => {}); }
+          if (Math.abs(t - (i + 1)) < 0.001 && Math.abs(target.current - (i + 1)) < 0.001 && !document.hidden) { if (video.paused) void video.play().catch(() => {}); }
           else if (!video.paused) video.pause();
         }
       });
@@ -173,23 +173,28 @@ export function WorksWheel({ items }: { items: WorksWheelItem[] }) {
   useEffect(() => {
     const rail = yearRef.current;
     const current = rail?.querySelector<HTMLElement>('[aria-current="date"]');
-    if (!rail || !current || !matchMedia('(max-width: 699px)').matches) return;
-    rail.scrollTo({ left: current.offsetLeft - rail.clientWidth / 2 + current.offsetWidth / 2, behavior: reduced ? 'instant' : 'smooth' });
-  }, [active, reduced, stage.w]);
+    if (!rail || !current) return;
+    const behavior = reduced ? 'instant' : 'smooth';
+    if (rail.scrollWidth > rail.clientWidth) {
+      rail.scrollTo({ left: current.offsetLeft - (rail.clientWidth - current.offsetWidth) / 2, behavior });
+    } else if (rail.scrollHeight > rail.clientHeight) {
+      rail.scrollTo({ top: current.offsetTop - rail.offsetTop - (rail.clientHeight - current.offsetHeight) / 2, behavior });
+    }
+  }, [active, reduced, stage.w, stage.h]);
 
 
   return (
     <section ref={stageRef} className={`${styles.stage} work-entrance`} data-ready={stage.w > 0 ? "true" : undefined} tabIndex={0} aria-label="Work projects" aria-roledescription="carousel"
       style={{ perspective: `${geometry.depth || 1000}px` }}
       onKeyDown={(event) => {
-        if (event.target !== event.currentTarget && (event.target as Element).closest('button, [data-background-copy]')) return;
+        if (event.target !== event.currentTarget && (event.target as Element).closest('button')) return;
         if (['ArrowDown', 'ArrowRight', 'ArrowUp', 'ArrowLeft'].includes(event.key)) {
           event.preventDefault(); select(event.key === 'ArrowDown' || event.key === 'ArrowRight' ? 1 : -1);
         } else if (event.key === 'Home') { event.preventDefault(); to(1); }
         else if (event.key === 'End') { event.preventDefault(); to(count); }
       }}
       onPointerDown={(event) => {
-        if (!event.isPrimary || event.button !== 0 || (event.target as Element).closest('button, [data-background-copy]')) return;
+        if (!event.isPrimary || event.button !== 0 || (event.target as Element).closest('button')) return;
         dragging.current = { y: event.clientY, total: 0 };
         suppressClick.current = false;
       }}
@@ -213,7 +218,7 @@ export function WorksWheel({ items }: { items: WorksWheelItem[] }) {
         {items.map((item, i) => {
           const Card = item.paragraphs ? 'div' : Link;
           const cardWidth = geometry.side;
-          const cardHeight = geometry.side;
+          const cardHeight = item.video ? cardWidth * item.video.height / item.video.width : geometry.side;
           return <Card key={item.href} href={item.href} ref={(el: HTMLElement | null) => { cards.current[i] = el; }}
             className={`${styles.card} ${active === i ? styles.selectedCard : ''}`} aria-label={item.paragraphs ? item.title : `View ${item.title}`} tabIndex={opened && active === i ? 0 : -1}
             aria-hidden={opened && Math.abs(active - i) > 1 ? true : undefined}
@@ -221,10 +226,10 @@ export function WorksWheel({ items }: { items: WorksWheelItem[] }) {
             onDragStart={(event: React.DragEvent<HTMLElement>) => event.preventDefault()}
             onClick={(event: React.MouseEvent<HTMLElement>) => { if (!opened || active !== i) { event.preventDefault(); to(i + 1); } }}>
             <span ref={(el) => { faces.current[i] = el; }} className={styles.face}>
-              {item.paragraphs ? <span data-background-copy className={styles.backgroundCopy} style={{ fontSize: clamp(geometry.side / 25, 8, 13) }} tabIndex={active === i ? 0 : -1} onClick={(event) => event.preventDefault()}>
+              {item.paragraphs ? <span data-background-copy className={styles.backgroundCopy} style={{ fontSize: clamp(geometry.side / 25, 8, 13) }}>
                 {item.paragraphs.map((paragraph) => <span key={paragraph}>{paragraph}</span>)}
-              </span> : item.video ? <video ref={(el) => { videos.current[i] = el; }} autoPlay muted loop playsInline
-                preload="auto" onCanPlay={(event) => { const video = event.currentTarget; if (Math.abs(active - i) <= 1 && !document.hidden) { video.muted = true; void video.play().catch(() => {}); } }} poster={`/img/${item.video.base}-poster.webp`}
+              </span> : item.video ? <video ref={(el) => { videos.current[i] = el; }} muted loop playsInline
+                preload="metadata" poster={`/img/${item.video.base}-poster.webp`}
                 width={item.video.width} height={item.video.height} className={`${styles.media} route-media`}>
                 <source src={`/img/${item.video.base}.mp4`} type="video/mp4" />
                 {item.video.hasWebm && <source src={`/img/${item.video.base}.webm`} type="video/webm" />}
@@ -234,8 +239,8 @@ export function WorksWheel({ items }: { items: WorksWheelItem[] }) {
         })}
       </div>
       <div ref={titleRef} className={`${styles.title} route-intro`} aria-live="polite" aria-atomic="true">
-        {selected?.paragraphs ? <span className={styles.projectTitle}>{selected.title}</span> : <Link href={selected?.href ?? '/work/'} tabIndex={opened ? 0 : -1} className={styles.projectTitle}>{selected?.title}</Link>}
-        <p className="mt-4 text-body text-fg-secondary">{selected?.subtitle}</p>
+        {selected?.paragraphs ? <span className={`type-decision ${styles.projectTitle}`}>{selected.title}</span> : <Link href={selected?.href ?? '/work/'} tabIndex={opened ? 0 : -1} className={`type-decision ${styles.projectTitle}`}>{selected?.title}</Link>}
+        <p className="mt-4 type-subtitle">{selected?.subtitle}</p>
       </div>
       <nav className={`${styles.yearShell} route-navigation`} aria-label="Project navigation">
         <button type="button" className={styles.yearChevron} aria-label="Previous project" disabled={active === 0} onClick={() => select(-1)}><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="m7 14 5-5 5 5" fill="none" stroke="currentColor" strokeWidth="1.5" /></svg></button>
@@ -245,7 +250,7 @@ export function WorksWheel({ items }: { items: WorksWheelItem[] }) {
           const availableYears = items.flatMap((item) => (item.year.match(/\d{4}/g) ?? []).map(Number));
           const destinationYear = Math.min(...availableYears.filter((available) => available >= year));
           const index = items.findIndex((item) => item.year.includes(String(destinationYear)));
-          return <button key={year} type="button" className={`${current ? styles.activeYear : ''} ${year === Math.max(...(selected?.year.match(/\d{4}/g) ?? []).map(Number)) ? styles.projectYear : ''}`} aria-current={current ? 'date' : undefined} onClick={() => { if (index >= 0) to(index + 1); }}>{year}</button>;
+          return <button key={year} type="button" className={`type-caption ${current ? styles.activeYear : ''} ${year === Math.max(...(selected?.year.match(/\d{4}/g) ?? []).map(Number)) ? styles.projectYear : ''}`} aria-current={current ? 'date' : undefined} onClick={() => { if (index >= 0) to(index + 1); }}>{year}</button>;
         })}
         </div>
         <button type="button" className={styles.yearChevron} aria-label="Next project" disabled={active === count - 1} onClick={() => select(1)}><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="m7 10 5 5 5-5" fill="none" stroke="currentColor" strokeWidth="1.5" /></svg></button>

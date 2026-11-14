@@ -1,16 +1,17 @@
+import { LandingSections } from '@/components/LandingSections';
+import { CoverflowCarousel } from '@/components/ui/coverflow-carousel';
+import { workGallery } from '@/content/work-gallery';
 import { pageMetadata } from '@/lib/metadata';
 import { Action } from '@/components/Action';
 import { LinkedInLogo, InstagramLogo } from '@/components/Icons';
 import { BookTimeAction } from '@/components/BookTimeAction';
 import { HeroHeadline } from '@/components/HeroHeadline';
-import { HeroPhoto } from '@/components/HeroPhoto';
 import { FeaturedApp } from '@/components/FeaturedApp';
 import { CopyEmailButton } from '@/components/CopyEmailButton';
 import { DesignPrinciples } from '@/components/DesignPrinciples';
 import { SkillsSection } from '@/components/SkillsSection';
 import { StaggerReveal } from '@/components/StaggerReveal';
 import { TextAnimate } from '@/components/TextAnimate';
-import { siteData } from '@/content/projects';
 import { site, experience, education, clients, featured, social } from '@/content/site';
 import { apps } from '@/content/apps';
 
@@ -26,27 +27,19 @@ export const metadata = {
 export default function Home() {
   return (
     <>
-      <div className="mx-auto max-w-app px-page">
-        {/* Two columns: the identity statement + actions on the left, the
-            personal greeting + bio on the right — replacing the earlier
-            single-column typing headline entirely, at Alex's direction.
-            Stacks to one column below `medium` (600px). pt-20 (was pt-12),
-            at Alex's direction — more air between the header bar and the
-            headline than the chrome's own internal spacing implies. */}
-        {/* gap-14 stacked (was gap-8), at Alex's direction — more room
-            between the button row and the "Hi, I'm Alex" column once they
-            stack on mobile. medium:gap-16 (side-by-side layout) is
-            unaffected — that gap is horizontal, not the one Alex meant. */}
-        <section className="grid grid-cols-1 gap-14 pt-20 pb-9 medium:grid-cols-2 medium:gap-16">
-          <div className="hero-col">
+      <div className="mx-auto max-w-app px-[16px] large:px-page">
+        <section className="grid grid-cols-1 pt-20 large:grid-cols-4">
+          <div className="hero-col mx-auto w-full max-w-[560px] large:max-w-none large:col-start-2 large:col-span-2">
             {/* Reveal the complete headline after its display font is ready. */}
             <HeroHeadline>{site.headline}</HeroHeadline>
 
-            {/* These are the same actions that used to sit under the old
-                headline. Email copies to clipboard rather than opening a
-                mailto: link (CopyEmailButton), so it isn't a plain href
-                like the other two. */}
-            <StaggerReveal className="mt-8 flex flex-wrap items-center gap-4">
+            <StaggerReveal className="mt-8" durationMs={450}>
+              <p className="max-w-content type-subtitle">
+                {site.greeting} {site.greetingEmphasis} {site.bio}
+              </p>
+            </StaggerReveal>
+
+            <StaggerReveal className="hero-actions mt-8 flex flex-wrap items-center gap-4" delayMs={450} durationMs={450}>
               {/* SpecularButton's WebGL shine effect (React Bits) — moved
                   here from Share at Alex's direction, since this is the
                   site's actual one primary action (Principle 3/CLAUDE.md
@@ -103,195 +96,146 @@ export default function Home() {
               ))}
             </StaggerReveal>
           </div>
-
-          {/* mt-3 optically aligns this with the headline opposite it — the
-              italic serif's cap-height sits differently than the sans-serif
-              body type at a much smaller size, so a shared grid-row top
-              edge alone reads as slightly too high; nudging this column
-              down a few pixels is what actually lines the two up by eye,
-              at Alex's direction. */}
-          <div className="mt-3">
-            {/* Regular weight throughout except the emphasis clause, which
-                steps up to medium (500) — weight only, same size and family,
-                at Alex's direction.
-                A round ago this used TextAnimate's per-word "blurInUp"
-                cascade (same effect as the headline). Alex: "make [the
-                bio] appear faster by applying the animation effect for
-                how text appears for 'Netflix, Product Design Lead...'"
-                — i.e. the SAME StaggerReveal fade-and-rise the Experience
-                list below uses, not the headline's word-by-word blur,
-                which was the slower of the two (a ~40-word paragraph at
-                the word cascade's own pace took nearly 2 seconds just for
-                its own stagger, on top of waiting for the headline+
-                buttons to clear first). Greeting and bio are each one
-                StaggerReveal "row" (two short paragraphs, not a list), so
-                each fades/rises as ONE line instead of many, and finishes
-                well under a second. Reuses the exact same first-visit
-                entrance timing (`[data-entrance="run"] .stagger-grid`'s
-                own 500ms base) the button row beside it already runs on.
-                `delayMs={1000}`, at Alex's direction ("make [the bio]
-                appear after the four buttons appear first") — the button
-                row's own animation is 1000ms (see .stagger-grid.is-visible
-                in globals.css), so this starts exactly when that finishes,
-                composing correctly with the shared base via CSS
-                `--stagger-extra` whether or not the session-wide entrance
-                sequence is active (see StaggerReveal.tsx's `delayMs` prop
-                doc) — no need to know or duplicate whichever base applies.
-                `durationMs={450}` (was the shared 1000ms default), a
-                second round: even starting in the right place, waiting a
-                full extra second on TOP of that for the bio's own reveal
-                to finish still read as "appearing too slow" — a faster
-                reveal for this one short block reads as prompt without
-                losing the fade/rise motion itself. */}
-            <StaggerReveal className="flex flex-col gap-4" delayMs={1000} durationMs={450}>
-              <p className="text-body-lg text-fg">
-                {site.greeting} {site.greetingEmphasis}
-              </p>
-              <p className="max-w-content text-body-lg text-fg-secondary">{site.bio}{' '}
-                <a href="/work/" className="underline underline-offset-4 text-fg-secondary transition-colors duration-fast can-hover:hover:text-fg" data-cursor-label="See work">See work →</a>
-              </p>
-            </StaggerReveal>
-          </div>
         </section>
       </div>
 
-      {/* Full-bleed portrait, matching the width it runs at on ajwoo.com today.
-          No overlay any more — the typing line and the social row both moved
-          up into the header block above. Theme-aware: a separate dark-mode
-          photo swaps in via CSS (see HeroPhoto.tsx) rather than a filter. */}
-      {siteData.hero && (
-        <section>
-          <HeroPhoto light={siteData.hero} dark={siteData.heroDark} />
+      <LandingSections>
+        <section className="py-[160px] text-center" id="home-work-title">
+          <CoverflowCarousel slides={['netflix-creative-tools', 'premiere-generative-ai', 'pr-ae-frame', 'product-visualize', 'seeing-ai'].flatMap(slug => {
+            const project = workGallery.find(item => item.href === `/work/${slug}/`);
+            if (!project) return [];
+            const { image, title, href, video } = project;
+            return [{ src: `/img/${image.base}.webp`, title, href, video }];
+          })} />
         </section>
-      )}
+        <div className="mx-auto max-w-app px-page">
+          <SkillsSection />
+          <DesignPrinciples />
 
-      <div className="mx-auto max-w-app px-page">
-        <SkillsSection />
-        <DesignPrinciples />
+          {/* Independent products support the professional story after principles. */}
+          <FeaturedApp apps={['convert', 'capture', 'dictate', 'narrate', 'letter'].flatMap(
+            (slug) => apps.filter((app) => app.slug === slug)
+          )} />
 
-        {/* Independent products support the professional story after principles. */}
-        <FeaturedApp apps={['convert', 'capture', 'dictate', 'narrate', 'letter'].flatMap(
-          (slug) => apps.filter((app) => app.slug === slug)
-        )} />
+          {/* Four stacked sections now, not two 2-column rows — Experience,
+              Education, Featured, and "Worked with" each on their own
+              4-column grid, at Alex's direction. `large:col-start-2
+              large:col-span-2` centers each section's content inside
+              columns 2-3 with 1 and 4 left empty at `large` (1200px) and
+              up; below that the grid collapses to one column and content
+              sits full-width, left-aligned — "if the window size is large,
+              you can see the four grid system... if it becomes small, then
+              columns two [and] three... becom[e] column one, left aligned".
+              Same grid shape DesignPrinciples.tsx uses above, so every list
+              section on the page shares one grid language now instead of
+              each having its own bespoke layout.
 
-        {/* Four stacked sections now, not two 2-column rows — Experience,
-            Education, Featured, and "Worked with" each on their own
-            4-column grid, at Alex's direction. `large:col-start-2
-            large:col-span-2` centers each section's content inside
-            columns 2-3 with 1 and 4 left empty at `large` (1200px) and
-            up; below that the grid collapses to one column and content
-            sits full-width, left-aligned — "if the window size is large,
-            you can see the four grid system... if it becomes small, then
-            columns two [and] three... becom[e] column one, left aligned".
-            Same grid shape DesignPrinciples.tsx uses above, so every list
-            section on the page shares one grid language now instead of
-            each having its own bespoke layout.
-
-            Each entry is one row, comma-joined, rather than separate
-            stacked lines — "Netflix, Product Design Lead, 2025 – Present"
-            all on one line, all the same text-body size (company gets
-            font-medium + --text-fg for emphasis, at Alex's direction —
-            "highlighting the company title is okay" — but title/years
-            stay --text-fg-secondary at the SAME size, not a smaller one). */}
-        {/* Experience/Education/Featured/Worked-with render as plain static
-            text, at Alex's direction ("remove the animations of text effects
-            in the landing page") — the scroll-triggered TextAnimate headings
-            and StaggerReveal lists they used to have are gone. */}
-        <section className="mt-[245px]">
-          <div className="grid grid-cols-1 large:grid-cols-4">
-            <div className="large:col-start-2 large:col-span-2">
-              <h2 className="text-h3 text-fg">
-                Experience
-              </h2>
-              {/* "Experience" = 10 chars: 500 + 9*22 + 600 = 1298ms. */}
-              <div className="mt-6 flex flex-col gap-6">
-                {experience.map((x) => (
-                  <p key={x.company} className="text-body">
-                    <span className="font-medium text-fg">{x.company}</span>
-                    <span className="text-fg-secondary">, {x.title}, {x.years}</span>
-                  </p>
-                ))}
+              Each entry is one row, comma-joined, rather than separate
+              stacked lines — "Netflix, Product Design Lead, 2025 – Present"
+              all on one line, all the same text-body size (company gets
+              font-medium + --text-fg for emphasis, at Alex's direction —
+              "highlighting the company title is okay" — but title/years
+              stay --text-fg-secondary at the SAME size, not a smaller one). */}
+          {/* Experience/Education/Featured/Worked-with render as plain static
+              text, at Alex's direction ("remove the animations of text effects
+              in the landing page") — the scroll-triggered TextAnimate headings
+              and StaggerReveal lists they used to have are gone. */}
+          <section className="mt-[160px]">
+            <div className="grid grid-cols-1 large:grid-cols-4">
+              <div className="large:col-start-2 large:col-span-2">
+                <h2 className="type-section-heading">
+                  Experience
+                </h2>
+                {/* "Experience" = 10 chars: 500 + 9*22 + 600 = 1298ms. */}
+                <div className="mt-6 flex flex-col gap-6">
+                  {experience.map((x) => (
+                    <p key={x.company} className="type-body">
+                      <span className="font-medium text-fg">{x.company}</span>
+                      <span className="text-fg-secondary">, {x.title}, {x.years}</span>
+                    </p>
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
 
-        {/* mt-[245px] between each of these, matching the same gap above
-            Experience — at Alex's direction ("increase spacing between
-            Experience, Education, Featured, and Worked with to match the
-            other spacing... make the spacing consistent overall"). An
-            earlier pass used a smaller mt-16 here deliberately, reading
-            these four as one cluster rather than four separate topic
-            changes; reversed since a single consistent rhythm throughout
-            the page was the actual ask. */}
-        <section className="mt-[245px]">
-          <div className="grid grid-cols-1 large:grid-cols-4">
-            <div className="large:col-start-2 large:col-span-2">
-              <h2 className="text-h3 text-fg">
-                Education
-              </h2>
-              {/* "Education" = 9 chars: 500 + 8*22 + 600 = 1276ms. */}
-              <div className="mt-6 flex flex-col gap-6">
-                {education.map((e) => (
-                  <p key={e.school} className="text-body">
-                    <span className="font-medium text-fg">{e.school}</span>
-                    <span className="text-fg-secondary">, {e.detail}</span>
-                  </p>
-                ))}
+          {/* mt-[160px] between each of these, matching the same gap above
+              Experience — at Alex's direction ("increase spacing between
+              Experience, Education, Featured, and Worked with to match the
+              other spacing... make the spacing consistent overall"). An
+              earlier pass used a smaller mt-16 here deliberately, reading
+              these four as one cluster rather than four separate topic
+              changes; reversed since a single consistent rhythm throughout
+              the page was the actual ask. */}
+          <section className="mt-[160px]">
+            <div className="grid grid-cols-1 large:grid-cols-4">
+              <div className="large:col-start-2 large:col-span-2">
+                <h2 className="type-section-heading">
+                  Education
+                </h2>
+                {/* "Education" = 9 chars: 500 + 8*22 + 600 = 1276ms. */}
+                <div className="mt-6 flex flex-col gap-6">
+                  {education.map((e) => (
+                    <p key={e.school} className="type-body">
+                      <span className="font-medium text-fg">{e.school}</span>
+                      <span className="text-fg-secondary">, {e.detail}</span>
+                    </p>
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
 
-        <section className="mt-[245px]">
-          <div className="grid grid-cols-1 large:grid-cols-4">
-            <div className="large:col-start-2 large:col-span-2">
-              <h2 className="text-h3 text-fg">
-                Featured
-              </h2>
-              {/* "Featured" = 8 chars: 500 + 7*22 + 600 = 1254ms. */}
-              <div className="mt-6 flex flex-col gap-6">
-                {featured.map((f) => (
-                  <p key={`${f.year}-${f.what}`} className="text-body">
-                    <span className="text-fg-tertiary">{f.year}</span>
-                    <span className="text-fg-secondary">, {f.what}</span>
-                  </p>
-                ))}
+          <section className="mt-[160px]">
+            <div className="grid grid-cols-1 large:grid-cols-4">
+              <div className="large:col-start-2 large:col-span-2">
+                <h2 className="type-section-heading">
+                  Featured
+                </h2>
+                {/* "Featured" = 8 chars: 500 + 7*22 + 600 = 1254ms. */}
+                <div className="mt-6 flex flex-col gap-6">
+                  {featured.map((f) => (
+                    <p key={`${f.year}-${f.what}`} className="type-body">
+                      <span className="text-fg-tertiary">{f.year}</span>
+                      <span className="text-fg-secondary">, {f.what}</span>
+                    </p>
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
 
-        <section className="mt-[245px] pb-12">
-          <div className="grid grid-cols-1 large:grid-cols-4">
-            <div className="large:col-start-2 large:col-span-2">
-              {/* Label changed from "Clients" to "Worked with", at Alex's
-                  direction — the underlying data (content/site.ts's
-                  `clients` export) is unchanged, only what the heading
-                  calls it. Already one name per row, nothing to
-                  comma-join. */}
-              <h2 className="text-h3 text-fg">
-                Worked with
-              </h2>
-              {/* "Worked with" = 11 chars: 500 + 10*22 + 600 = 1320ms.
-                  Worked-with now gets the exact same delayMs={500}/
-                  sequenced-delay/durationMs treatment the other three
-                  sections already had — at
-                  Alex's direction ("make sure Worked with Kikkerland
-                  Design follows the motion patterns and timing of the
-                  other subtitle and body animations... so that we have a
-                  system for all"). Previously the only section left out,
-                  from an earlier round that named just Experience/
-                  Education/Featured. */}
-              <div className="mt-6 flex flex-col gap-6">
-                {clients.map((c) => (
-                  <p key={c} className="text-body text-fg-secondary">{c}</p>
-                ))}
+          <section className="mt-[160px] pb-12">
+            <div className="grid grid-cols-1 large:grid-cols-4">
+              <div className="large:col-start-2 large:col-span-2">
+                {/* Label changed from "Clients" to "Worked with", at Alex's
+                    direction — the underlying data (content/site.ts's
+                    `clients` export) is unchanged, only what the heading
+                    calls it. Already one name per row, nothing to
+                    comma-join. */}
+                <h2 className="type-section-heading">
+                  Worked with
+                </h2>
+                {/* "Worked with" = 11 chars: 500 + 10*22 + 600 = 1320ms.
+                    Worked-with now gets the exact same delayMs={500}/
+                    sequenced-delay/durationMs treatment the other three
+                    sections already had — at
+                    Alex's direction ("make sure Worked with Kikkerland
+                    Design follows the motion patterns and timing of the
+                    other subtitle and body animations... so that we have a
+                    system for all"). Previously the only section left out,
+                    from an earlier round that named just Experience/
+                    Education/Featured. */}
+                <div className="mt-6 flex flex-col gap-6">
+                  {clients.map((c) => (
+                    <p key={c} className="type-body">{c}</p>
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
-        </section>
-      </div>
+          </section>
+        </div>
+      </LandingSections>
     </>
   );
 }

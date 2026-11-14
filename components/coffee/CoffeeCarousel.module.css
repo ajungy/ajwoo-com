@@ -49,13 +49,13 @@
 .rail[data-lens-ready] .card { background: transparent; }
 .rail[data-lens-ready] picture { opacity: 0; }
 .lens { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; opacity: 0; }
-.caption { z-index: 2; position: absolute; bottom: calc(50% + var(--coffee-card) / 2 + 24px); left: 16px; right: 16px; text-align: center; pointer-events: none; }
+.details { position: absolute; top: calc(50% + var(--coffee-card) / 2 + var(--s-4)); inset-inline: var(--page-pad); display: grid; gap: var(--s-4); text-align: center; pointer-events: none; }
 .card:focus-visible { outline: 2px solid var(--text-primary); outline-offset: 4px; border-radius: 0; }
 @media (hover: hover) and (pointer: fine) {
   .arrow:hover { background: var(--action-tertiary-bg-hover); color: var(--text-primary); }
 }
-.controls { position: absolute; top: calc(50% + var(--coffee-card) / 2 + 16px); left: 0; right: 0; display: flex; align-items: center; justify-content: center; gap: 24px; margin-top: 0; }
-.arrow { display: grid; place-items: center; width: 44px; height: 44px; border-radius: var(--r-control); color: var(--text-secondary); }
+.controls { pointer-events: auto; justify-self: center; display: flex; align-items: center; justify-content: center; gap: var(--s-4); margin-top: 0; }
+.arrow { display: grid; place-items: center; width: var(--control-h-md); height: var(--control-h-md); border-radius: var(--r-control); color: var(--text-tertiary); }
 .arrow:focus-visible { outline: 2px solid var(--text-primary); outline-offset: 2px; }
 @media (max-width: 599px) {
   .gallery { --coffee-card: min(72vw, calc((100svh - 240px) * 0.52)); }
@@ -70,6 +70,6 @@
 /* Short landscape screens need the available height, not half of a small remainder. */
 @media (orientation: landscape) and (max-height: 600px) {
   .gallery { --coffee-card: min(420px, 50vw, max(100px, calc(100svh - 190px))); }
-  .caption { bottom: calc(50% + var(--coffee-card) / 2 + 8px); }
-  .controls { top: calc(50% + var(--coffee-card) / 2 + 4px); }
+  .stage { top: -24px; }
+  .details { top: calc(50% + var(--coffee-card) / 2 - 16px); gap: 4px; }
 }

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { actionClassName } from './Action';
 import { Toast } from './Toast';
 import { site } from '@/content/site';
 
@@ -27,12 +28,7 @@ export function CopyEmailButton({ label = 'Email' }: { label?: string }) {
       <button
         onClick={handleCopy}
         data-cursor-label={label}
-        className={
-          'inline-flex items-center justify-center h-control-md rounded-control border ' +
-          'text-label font-medium transition duration-fast ease-standard motion-safe:active:scale-press ' +
-          'bg-secondary text-secondary-fg border-secondary-line px-6 ' +
-          'can-hover:hover:bg-secondary-hover can-hover:hover:border-secondary-line-hover active:bg-secondary-active'
-        }
+        className={actionClassName()}
       >
         {label}
       </button>

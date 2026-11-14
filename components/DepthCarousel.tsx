@@ -1,5 +1,6 @@
 'use client';
 
+import { CarouselControls } from './CarouselControls';
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 
 /**
@@ -123,6 +124,7 @@ export interface DepthCarouselProps {
   autoplay?: boolean;
   loop?: boolean;
   cardWidth?: number;
+  cardScale?: number;
   cardHeight?: number;
   /** Per-card wrapper's corner radius (px). Matches AppCard's own
    *  `rounded-xl` by default so the two don't visibly disagree. */
@@ -144,16 +146,6 @@ export interface DepthCarouselProps {
 // easing curve.
 const POWER3_OUT = 'cubic-bezier(0.215, 0.61, 0.355, 1)';
 
-// Extra room around the front card's clip region, at Alex's direction
-// ("because there's no padding on the top and the bottom, the... zoom
-// gets cropped and cut") — the front card's hover boost (scale(1.02),
-// see `hoverBoost` below) plus its shadow's own blur/spread need real
-// pixels of slack beyond the card's own box, or the clip region's
-// `overflow: hidden` (needed to crop the fanned-out side cards) clips the
-// hover effect too. Vertical only, per Alex's report — horizontal
-// clipping is the intended peek-crop look for the side cards.
-const HOVER_PAD_Y = 48;
-
 export function DepthCarousel({
   items,
   depth = 260,
@@ -167,6 +159,7 @@ export function DepthCarousel({
   autoplay = false,
   loop = true,
   cardWidth = 300,
+  cardScale = 1,
   cardHeight = 380,
   radius = 20,
   tint = '#05060a',
@@ -178,8 +171,7 @@ export function DepthCarousel({
   onActiveChange,
 }: DepthCarouselProps) {
   const [index, setIndex] = useState(0);
-  const [scale, setScale] = useState(1);
-  const [verticalPad, setVerticalPad] = useState(HOVER_PAD_Y);
+  const [layoutWidth, setLayoutWidth] = useState(cardWidth * cardScale);
   // Hover state for the front card's own zoom+shadow boost — see the
   // "CARD CHROME, reversed again" comment above for why this is JS state
   // rather than a CSS :hover rule.
@@ -195,7 +187,7 @@ export function DepthCarousel({
   const count = items.length;
 
   const dirSign = tiltDirection === 'right' ? 1 : -1;
-  const stackWidth = cardWidth + spread * Math.max(visibleCards - 1, 0) * 2;
+  const stackWidth = layoutWidth + spread * Math.max(visibleCards - 1, 0) * 2;
 
   // Fit width normally; on short landscape screens also fit the whole card
   // beneath the sticky header with an 8px margin above and below.
@@ -207,13 +199,12 @@ export function DepthCarousel({
       if (!available) return;
       const viewportHeight = window.visualViewport?.height ?? window.innerHeight;
       const shortLandscape = window.innerWidth > viewportHeight && viewportHeight <= 600;
-      const pad = shortLandscape ? 8 : HOVER_PAD_Y;
       const headerHeight = document.querySelector('header')?.getBoundingClientRect().height ?? 64;
-      const heightScale = shortLandscape
-        ? Math.max(1, viewportHeight - headerHeight - pad * 2) / measuredHeight
-        : 1;
-      setVerticalPad(pad);
-      setScale(Math.min(1, Math.max(1, available - 48) / cardWidth, heightScale));
+      const footerHeight = activeCardRef.current?.querySelector('article > :last-child')?.getBoundingClientRect().height ?? 84;
+      const maxWidth = cardScale * Math.min(cardWidth, Math.max(1, available - 48));
+      // Keep controls at their native size; limit the square artwork on short screens.
+      const mediaHeight = viewportHeight - headerHeight - 16 - footerHeight;
+      setLayoutWidth(shortLandscape ? Math.min(maxWidth, Math.max(220, mediaHeight)) : maxWidth);
     };
     compute();
     const ro = new ResizeObserver(compute);
@@ -227,7 +218,7 @@ export function DepthCarousel({
       window.removeEventListener('resize', compute);
       window.visualViewport?.removeEventListener('resize', compute);
     };
-  }, [cardWidth, measuredHeight, showControls, showIndicators]);
+  }, [cardScale, cardWidth, measuredHeight, showControls, showIndicators]);
 
   // Measures the active card's own natural (unscaled) height — see the
   // "cardHeight IS MEASURED" comment above for why this exists at all.
@@ -283,7 +274,7 @@ export function DepthCarousel({
           would ride up over the cards). */}
       <div
         className="relative"
-        style={{ width: '100vw', marginLeft: 'calc(50% - 50vw)', overflowX: 'clip', overflowY: 'visible', height: measuredHeight * scale + verticalPad * 2, touchAction: 'pan-y pinch-zoom' }}
+        style={{ width: '100vw', marginLeft: 'calc(50% - 50vw)', overflowX: 'clip', overflowY: 'visible', height: measuredHeight, touchAction: 'pan-y pinch-zoom' }}
         onPointerDown={(event) => {
           if (!event.isPrimary || event.button !== 0) return;
           setInteracting(true);
@@ -329,19 +320,15 @@ export function DepthCarousel({
             STACK, not of the wrapper/viewport, visibly off-center on every
             phone width. `left/translateX` centers correctly either way,
             and this clip region's `overflow-hidden` then crops the
-            fanned-out side cards symmetrically off both edges. `top:
-            HOVER_PAD_Y`, not 0 — the clip region above is now taller than
-            this box by `HOVER_PAD_Y` on each side, so this offset keeps
-            the stack itself centered within that extra room rather than
-            pinned to the top of it. */}
+            fanned-out side cards symmetrically off both edges. */}
         <div
           className="absolute"
           style={{
             left: '50%',
-            top: verticalPad,
+            top: 0,
             transform: 'translateX(-50%)',
-            width: stackWidth * scale,
-            height: measuredHeight * scale,
+            width: stackWidth,
+            height: measuredHeight,
           }}
         >
           <div
@@ -350,7 +337,6 @@ export function DepthCarousel({
               width: stackWidth,
               height: measuredHeight,
               perspective: `${perspective}px`,
-              transform: `scale(${scale})`,
               transformOrigin: 'top left',
             }}
           >
@@ -382,7 +368,7 @@ export function DepthCarousel({
                   right: 0,
                   top: 0,
                   margin: '0 auto',
-                  width: cardWidth,
+                  width: layoutWidth,
                   height: 'auto',
                   transform:
                     `translateX(${offset * spread * dirSign}px) ` +
@@ -426,63 +412,7 @@ export function DepthCarousel({
           rather than the filled/bordered circular buttons this used to
           have floating over the stack's edges. */}
       {(count > 1 && (showControls || showIndicators)) && (
-        <div className="mt-6 flex items-center justify-center gap-4">
-          {showControls && (
-            <button
-              type="button"
-              onClick={() => go(-1)}
-              aria-label="Previous"
-              data-cursor-label="Previous"
-              className={
-                'inline-flex h-control-md w-control-md shrink-0 items-center justify-center ' +
-                'rounded-control border border-transparent text-fg-tertiary transition ' +
-                'duration-fast ease-standard can-hover:hover:bg-tertiary-hover ' +
-                'can-hover:hover:text-fg motion-safe:active:scale-press'
-              }
-            >
-              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className="h-8 w-8">
-                <path d="M15 6l-6 6 6 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </button>
-          )}
-
-          {showIndicators && (
-            <div className="flex items-center gap-2">
-              {items.map((_, i) => (
-                <button
-                  key={i}
-                  type="button"
-                  onClick={() => setIndex(i)}
-                  aria-label={`Show slide ${i + 1}`}
-                  data-cursor-label={`Slide ${i + 1}`}
-                  className={
-                    'h-2 rounded-full transition-all duration-base ease-standard ' +
-                    (i === index ? 'w-6 bg-fg' : 'w-2 bg-fg-tertiary')
-                  }
-                />
-              ))}
-            </div>
-          )}
-
-          {showControls && (
-            <button
-              type="button"
-              onClick={() => go(1)}
-              aria-label="Next"
-              data-cursor-label="Next"
-              className={
-                'inline-flex h-control-md w-control-md shrink-0 items-center justify-center ' +
-                'rounded-control border border-transparent text-fg-tertiary transition ' +
-                'duration-fast ease-standard can-hover:hover:bg-tertiary-hover ' +
-                'can-hover:hover:text-fg motion-safe:active:scale-press'
-              }
-            >
-              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className="h-8 w-8">
-                <path d="M9 6l6 6-6 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </button>
-          )}
-        </div>
+        <CarouselControls {...{ count, index, go, setIndex, showControls, showIndicators }} />
       )}
     </div>
   );

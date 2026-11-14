@@ -21,18 +21,10 @@ import { principles } from '@/content/site';
  */
 export function DesignPrinciples() {
   return (
-    // 245px (mt-36's 144px, increased ~70% at Alex's direction — "more
-    // space gives luxury") — bigger than the 48px between "Alex's choice"
-    // and the Capture card above it: this is a bigger jump in topic (from
-    // one featured app to the philosophy behind the whole site) and the gap
-    // should read as a bigger jump too. Every major section gap on this
-    // page shares this same 245px value (SkillsSection, Education grid
-    // below) — spacing is a consistent language, not a per-section guess
-    // (see Principle 10).
-    <section className="mt-[245px]">
+    <section className="mt-[160px]">
       <div className="grid grid-cols-1 large:grid-cols-4">
         <div className="large:col-start-2 large:col-span-2">
-          <h2 className="text-h3 text-fg">
+          <h2 className="type-section-heading">
             Favorite design principles
           </h2>
           <div className="mt-8 flex flex-col gap-6">
@@ -62,8 +54,8 @@ function PrincipleRow({ n, title, body }: { n: number; title: string; body: stri
         {n}
       </span>
       <div>
-        <p className="text-body font-semibold text-fg">{title}</p>
-        <p className="mt-1 text-body text-fg-secondary">{body}</p>
+        <p className="type-decision">{title}</p>
+        <p className="mt-4 type-body">{body}</p>
       </div>
     </div>
   );

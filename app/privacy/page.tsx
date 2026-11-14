@@ -4,8 +4,8 @@ import { AnalyticsSettingsLink } from '@/lib/analytics/AnalyticsConsent';
 export const metadata = pageMetadata('/privacy/', 'Analytics privacy');
 
 export default function PrivacyPage() {
-  return <article className="mx-auto max-w-content px-page py-12 text-body text-fg-secondary">
-    <h1 className="text-h2 text-fg">Analytics privacy</h1>
+  return <article className="mx-auto max-w-content px-page py-12 type-body">
+    <h1 className="type-project-title">Analytics privacy</h1>
     <p className="mt-8">If you choose Allow, ajwoo.com uses PostHog to measure visits, clicks, app launches, and downloads, and to replay interactions on this website. Replay reconstructs the webpage and pointer movements; it does not record your camera, microphone, desktop, or other browser tabs.</p>
     <p className="mt-6">Form inputs are masked. The Netflix case study, embedded pages, and canvases are excluded. Network request bodies, headers, and console logs are not recorded. Analytics page URLs omit query strings and fragments.</p>
     <p className="mt-6">PostHog receives a pseudonymous browser identifier, browser and device information, and usage data in its US cloud service. Requests also reach PostHog’s servers with your network IP address. The website does not create identified person profiles. Session recordings are retained for 30 days. Analytics event retention is governed separately by PostHog’s project settings.</p>

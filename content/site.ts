@@ -84,41 +84,15 @@ export const social = [
   { label: 'Instagram', href: 'https://www.instagram.com/alexwoodesign/', external: true },
 ] as const;
 
-// Ten of the 25 principles in the "minimal" design system (the house style
-// this whole site is built from — see public/minimal-design-system.md, the
-// same file the Skills section below lets a visitor copy). Picked for being
-// the most load-bearing and broadly applicable, not the first ten in the
-// file. Full numbering preserved so a reader who wants the rest knows
-// exactly what section to go find.
-// Five bodies reworded at Alex's direction, in place — see each entry's
-// own note. Word counts kept close to the originals throughout.
 export const principles = [
-  { n: 1, title: 'Solve the job to be done', body: 'Know what the user needs, and the shortest honest path there. If it doesn\'t serve that, it\'s decoration.' },
-  { n: 2, title: 'Achieve the goal', body: 'Name every goal in play and rank them. The user\'s goal leads; nothing else competes with it for attention.' },
-  { n: 3, title: 'One hierarchy, one emphasis', body: 'Exactly one thing is the most important thing on a screen, and nothing else fights it for attention.' },
-  { n: 4, title: 'Clear start, clear end', body: 'Every experience has one unmistakable starting point and an unambiguous finish. Home is always reachable.' },
-  // Was "Show what's actually happening, accurately. Never softened into
-  // neutral, never dressed up as a triumph." — simplified: "never lie to
-  // the user" said plainly, "help them understand" instead of "softened/
-  // dressed up", at Alex's direction ("say something like never lie to
-  // the users... hoping users understand what's actually happening, with
-  // honesty").
-  { n: 5, title: 'Be honest', body: 'Never lie to the user. Help them understand what\'s actually happening, with honesty.' },
-  // Was "Identity top-left, global actions top-right. The eye never has to
-  // backtrack to find the next step." — at Alex's direction: state the
-  // actual reading-direction assumption behind the layout rule, note the
-  // exception, and keep "elements follow the user's natural gaze" as the
-  // throughline.
-  { n: 6, title: 'Respect the gaze', body: 'Most people read left to right, top to bottom (some don\'t, so adjust for them). Place elements along that natural gaze, so the eye finds the next step fast.' },
-  // Was "...No jargon the user didn't bring." — at Alex's direction, made
-  // the standard concrete: picture someone trying this for the first time.
-  { n: 7, title: 'Everything comprehensible', body: 'Plain words over clever ones. A label describes the outcome, not the mechanism. No jargon: picture the user trying this for the first time.' },
-  { n: 8, title: 'Nothing invisible', body: 'Every interactive thing has a visible affordance at rest, not just a hint that appears on hover.' },
-  // "amber" -> "yellow", at Alex's direction.
-  { n: 9, title: 'Color carries meaning', body: 'Green succeeded, yellow needs attention, red failed. Colors carry intentional meaning, never just decoration.' },
-  // Was "Group with distance, not lines. Use the same spacing scale for
-  // the same relationship everywhere." — "not lines" dropped, "spacing is
-  // a language" added, at Alex's direction ("remove not lines... include
-  // spacing is a language... group with distance and clear spacing").
-  { n: 10, title: 'Space is your friend', body: 'Spacing is a language: group with distance and clear spacing. Use the same spacing scale for the same relationship everywhere.' },
+  { n: 1, title: 'Solve the real job', body: 'Understand what people need to accomplish. Find the simplest path to get them there.' },
+  { n: 2, title: 'Know what matters', body: 'Make user needs, business goals, and constraints explicit. Decide what takes priority and why.' },
+  { n: 3, title: 'Lead with hierarchy', body: 'Make the most important information and action clear at a glance.' },
+  { n: 4, title: 'Make the path clear', body: 'Show where to start, what comes next, and how to finish or go back.' },
+  { n: 5, title: 'Tell the truth', body: "Be clear about what the system is doing, what it knows, and what it doesn't." },
+  { n: 6, title: 'Design beyond the screen', body: 'Connect decisions across the whole experience. Make patterns consistent and flexible.' },
+  { n: 7, title: 'Speak plainly', body: 'Choose familiar words over clever ones. Make labels describe what will happen.' },
+  { n: 8, title: 'Make actions discoverable', body: 'Help people see what they can do and how to do it.' },
+  { n: 9, title: 'Give color purpose', body: 'Use color consistently to communicate meaning. Reinforce it with words, shapes, or icons.' },
+  { n: 10, title: 'Use space deliberately', body: 'Use spacing to create focus, relationships, and some room to breathe.' },
 ] as const;

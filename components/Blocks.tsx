@@ -47,7 +47,7 @@ function Text({ value }: { value: string }) {
   if (link) {
     const [, label, href] = link;
     return (
-      <p className="max-w-content text-body text-fg-secondary leading-relaxed">
+      <p className="max-w-content type-body">
         <a
           href={href}
           target="_blank"
@@ -68,7 +68,7 @@ function Text({ value }: { value: string }) {
       // text — no mono, no tighter tracking) so Price reads as one more row
       // in the same list, not a differently-styled outlier next to it.
       <p className="flex items-baseline gap-6">
-        <span className="w-13 shrink-0 text-label text-fg-secondary">Price</span>
+        <span className="w-13 shrink-0 type-body">Price</span>
         <span className="text-body text-fg tabular-nums" aria-label={`Price: ${filled} of 5`}>
           {Array.from({ length: 5 }, (_, i) => (
             <span key={i} className={i < filled ? 'text-fg' : 'text-fg-tertiary'}>$</span>
@@ -86,7 +86,7 @@ function Text({ value }: { value: string }) {
             line up under each other. Plain text, same size as body — no mono,
             matching every other line on this page rather than standing out
             as a different typeface. */}
-        <span className="w-13 shrink-0 text-label text-fg-secondary">{label}</span>
+        <span className="w-13 shrink-0 type-body">{label}</span>
         <span className="text-body text-fg tabular-nums">
           {got}
           <span className="text-fg-tertiary">/{outOf}</span>
@@ -95,18 +95,9 @@ function Text({ value }: { value: string }) {
     );
   }
   if (isHeading(value)) {
-    // Same size and family as every other line on the page, at Alex's
-    // direction — only weight sets it apart as a label ("Process",
-    // "Alarm Switch"), not a different type scale. Used to render as a
-    // real `<h2 className="text-h3">`, which was a visibly different font
-    // size from the surrounding paragraphs; the outer Blocks() wrapper now
-    // owns this element's spacing, so no margin here either.
-    return <p className="max-w-content text-body font-semibold text-fg leading-relaxed">{value.replace(LEADING_NUMBER, '')}</p>;
+    return <h2 className="max-w-content type-decision">{value.replace(LEADING_NUMBER, '')}</h2>;
   }
-  // Smaller (body, 15px, not body-lg's 17px) and more air between paragraphs
-  // than the surrounding space-y-11 grid alone gives them — the combination
-  // is what reads as restrained/premium rather than as a dense text wall.
-  return <p className="max-w-content text-body text-fg-secondary leading-relaxed">{value}</p>;
+  return <p className="max-w-content type-body">{value}</p>;
 }
 
 /** A converted GIF. Never autoplays — it carries a poster and controls, so
@@ -166,38 +157,27 @@ export function Blocks({ blocks, alt, compactMedia = false }: { blocks: Block[];
   }
   const seen = new Map<string, number>();
 
-  // Three spacing tiers, replacing a single flat `space-y-11` that gave
-  // every pair of blocks the same 48px gap regardless of what they were —
-  // which read as cramped around photos/videos and as oddly loose between
-  // a shop's own Experience/Taste/Environment/Price rows, at Alex's
-  // direction: those four score-style rows are one cluster and should sit
-  // close together, while text-to-media transitions need real "reading
-  // room" so a photo or embed reads as a break, not a line in the same
-  // paragraph flow. Margins are applied per-block below instead of a
-  // uniform container gap, so each pair can pick its own tier.
   const isRatingRow = (v: string) => PRICE.test(v) || SCORE.test(v);
-  const TIGHT = 'mt-2';   // 4px — consecutive rating rows in one cluster
-  // TEXT was mt-14 (96px); Alex asked for run-on paragraphs (e.g. the
-  // "Generative Extend" / "Object Addition" / "Featured: ..." run on the
-  // GenAI page) to sit a third as far apart, once the increased MEDIA gap
-  // below made plain text-to-text pairs feel disproportionately loose by
-  // comparison.
-  const TEXT = 'mt-9';    // 32px — paragraph to paragraph, heading to paragraph
-  // Work projects match the 64px gap after their introductory text.
+  const TIGHT = 'mt-2';
+  const TEXT = 'mt-6';
   const MEDIA = compactMedia ? 'mt-12' : 'mt-15';
 
-  let prevKind: 'text' | 'rating' | 'media' | null = null;
+  type Kind = 'heading' | 'text' | 'rating' | 'media';
+  let prevKind: Kind | null = null;
 
   return (
     <div>
       {blocks.map((b, i) => {
         const isMedia = b.kind !== 'text';
         const isRating = b.kind === 'text' && isRatingRow(b.value);
-        const kind: 'text' | 'rating' | 'media' = isMedia ? 'media' : isRating ? 'rating' : 'text';
+        const heading = b.kind === 'text' && !isRating && !LINK.test(b.value) && isHeading(b.value);
+        const kind: Kind = isMedia ? 'media' : isRating ? 'rating' : heading ? 'heading' : 'text';
 
         let mt = '';
         if (prevKind !== null) {
           mt = kind === 'media' || prevKind === 'media' ? MEDIA
+            : kind === 'heading' ? 'mt-9'
+            : prevKind === 'heading' ? 'mt-4'
             : kind === 'rating' && prevKind === 'rating' ? TIGHT
             : TEXT;
         }

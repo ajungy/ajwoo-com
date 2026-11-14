@@ -20,20 +20,20 @@ export type Block =
 export const projects: Project[] = [
   {
     slug: 'netflix-creative-tools',
-    title: 'Netflix: Creative Tools',
+    title: 'Netflix Creative Tools',
     category: 'Video / Artwork / Copy / Analytics / AI',
     kind: 'design',
     thumbnail: { base: 'tile-netflix-creative-tools', width: 1024, height: 1024 },
   },
-  { slug: 'premiere-generative-ai', title: 'Adobe: Premiere Generative AI', category: 'Video / AI', kind: 'design' },
-  { slug: 'pr-ae-frame', title: 'Adobe: Frame.io for Premiere & After Effects', category: 'Video / Cloud', kind: 'design' },
-  { slug: 'layout', title: 'Microsoft: Layout', category: 'AR / MR / HoloLens', kind: 'design' },
-  { slug: 'product-visualize', title: 'Microsoft: Product Visualize', category: 'AR / CRM', kind: 'design' },
-  { slug: 'dynamics-365-customer-voice', title: 'Microsoft: Dynamics Customer Voice', category: 'Forms / CRM', kind: 'design' },
-  { slug: 'seeing-ai', title: 'Microsoft: Seeing AI', category: 'Accessibility / AI', kind: 'design' },
-  { slug: 'netmarble', title: 'Netmarble: Games', category: 'Brand / UX', kind: 'design' },
+  { slug: 'premiere-generative-ai', title: 'Premiere Generative AI', category: 'Video / AI', kind: 'design' },
+  { slug: 'pr-ae-frame', title: 'Frame.io for Premiere & After Effects', category: 'Video / Cloud', kind: 'design' },
+  { slug: 'layout', title: 'Microsoft Layout', category: 'AR / MR / HoloLens', kind: 'design' },
+  { slug: 'product-visualize', title: 'Microsoft Product Visualize', category: 'AR / CRM', kind: 'design' },
+  { slug: 'dynamics-365-customer-voice', title: 'Microsoft Customer Voice', category: 'Forms / CRM', kind: 'design' },
+  { slug: 'seeing-ai', title: 'Microsoft Seeing AI', category: 'Accessibility / AI', kind: 'design' },
+  { slug: 'netmarble', title: 'Netmarble Games', category: 'Brand / UX', kind: 'design' },
   { slug: 'starbucks-technology', title: 'Starbucks Technology', category: 'User Research / iPad', kind: 'design' },
-  { slug: 'wrap-and-charge', title: 'Kikkerland: Warp and Charge', category: 'Industrial Design', kind: 'design' },
+  { slug: 'wrap-and-charge', title: 'Kikkerland Warp and Charge', category: 'Industrial Design', kind: 'design' },
   { slug: 'coin-lock', title: 'Coin Lock', category: 'Industrial Design', kind: 'design' },
   { slug: '10-borders', title: '10 Borders', category: 'Graphic Design', kind: 'design' },
   { slug: 'paintsound', title: 'Paint Sound', category: 'Hololens', kind: 'design' },
@@ -98,9 +98,11 @@ export const blocksFor = (slug: string): Block[] => siteData.blocks[slug === 'pr
  */
 type MotionTile = { base: string; width: number; height: number; hasWebm: boolean };
 const motionTiles: Record<string, MotionTile> = {
+  'pr-ae-frame': { base: 'mov-frameio-premiere-after-effects', width: 720, height: 720, hasWebm: true },
+  netmarble: { base: 'mov-netmarble-friends', width: 720, height: 720, hasWebm: true },
   // Alex supplied this 5-second loop for the local Netflix portfolio draft.
   'netflix-creative-tools': { base: 'mov-netflix-animals', width: 1080, height: 1080, hasWebm: true },
-  'premiere-generative-ai': { base: 'mov-704-genai', width: 570, height: 570, hasWebm: true },
+  'premiere-generative-ai': { base: 'mov-premiere-generative-ai', width: 720, height: 720, hasWebm: true },
   layout: { base: 'mov-layout-33333d', width: 864, height: 864, hasWebm: true },
 };
 export const motionTileFor = (slug: string): MotionTile | undefined => motionTiles[slug];

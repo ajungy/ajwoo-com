@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { SHARE_IMAGE } from '@/lib/metadata';
 import { WorksWheel, type WorksWheelItem } from '@/components/ui/works-wheel';
-import { blocksFor, designProjects, motionTileFor, tileFor } from '@/content/projects';
+import { workGallery } from '@/content/work-gallery';
 
 export const metadata: Metadata = {
   title: 'Work',
@@ -19,14 +19,7 @@ export const metadata: Metadata = {
 };
 
 export default function WorkPage() {
-  const items: WorksWheelItem[] = designProjects.filter((project) => !['starbucks-technology', 'paintsound', 'coin-lock'].includes(project.slug)).flatMap((project) => {
-    const image = tileFor(project.slug === 'layout' ? 'paintsound' : project.slug);
-    if (!image) return [];
-    const first = blocksFor(project.slug).find((block) => block.kind === 'text');
-    const year = project.slug === 'netflix-creative-tools' ? '2025, 2026'
-      : first?.kind === 'text' ? first.value.match(/\b(?:19|20)\d{2}\b/)?.[0] ?? '' : '';
-    return [{ title: project.title, subtitle: project.category, year, href: `/work/${project.slug}/`, image, video: project.slug === 'layout' ? undefined : motionTileFor(project.slug) }];
-  }).sort((a, b) => Math.max(...(b.year.match(/\d{4}/g) ?? ['0']).map(Number)) - Math.max(...(a.year.match(/\d{4}/g) ?? ['0']).map(Number)));
+  const items: WorksWheelItem[] = [...workGallery];
   items.push({
     title: 'Background',
     subtitle: 'More about Alex',

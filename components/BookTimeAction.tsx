@@ -11,11 +11,6 @@ import { site } from '@/content/site';
  * trimmed to just its edge-light glow ring) — at Alex's direction,
  * replacing the SpecularBorder shine that used to wrap this button.
  *
- * The button itself is the very original plain secondary <Action>,
- * unmodified — no `!border-transparent` override, no second animated
- * border competing with it, just a glow riding outside the button's own
- * existing border.
- *
  * Light mode gets a BLACK glow instead of the warm gold, at Alex's direct
  * follow-up request. This can't be done by just swapping `glowColor`: the
  * ring's default blend mode is `plus-lighter`, which is purely additive —
@@ -33,6 +28,7 @@ import { site } from '@/content/site';
  * color/blend mode is theme-dependent.
  */
 export function BookTimeAction() {
+  const [revealed, setRevealed] = useState(false);
   const [theme, setTheme] = useState<'light' | 'dark'>('dark');
 
   useEffect(() => {
@@ -49,6 +45,9 @@ export function BookTimeAction() {
   const blendMode = theme === 'light' ? 'multiply' : 'plus-lighter';
 
   return (
+    <span className="inline-flex" onAnimationEnd={event => {
+      if (event.target === event.currentTarget && event.animationName === 'stagger-in') setRevealed(true);
+    }}>
     <BorderGlow
       edgeSensitivity={1}
       glowColor={glowColor}
@@ -57,11 +56,12 @@ export function BookTimeAction() {
       glowRadius={80}
       glowIntensity={2}
       coneSpread={8}
-      animated
+      animated={revealed}
     >
-      <Action href={site.calendlyUrl} external variant="secondary" cursorLabel="Book time">
+      <Action href={site.calendlyUrl} external variant="primary" cursorLabel="Book time">
         {site.ctaLabel}
       </Action>
     </BorderGlow>
+    </span>
   );
 }

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { actionClassName } from './Action';
 import { AppCard } from '@/components/AppCard';
 import { StaggerReveal } from '@/components/StaggerReveal';
 import type { App } from '@/content/apps';
@@ -27,7 +28,7 @@ export function AppsCatalog({ apps }: { apps: App[] }) {
               aria-controls="more-apps"
               onClick={() => setExpanded((value) => !value)}
               data-cursor-label={expanded ? 'Less' : 'More'}
-              className="inline-flex h-control-md items-center justify-center gap-4 rounded-control border border-secondary-line bg-secondary px-6 text-label font-medium text-secondary-fg transition duration-fast ease-standard can-hover:hover:border-secondary-line-hover can-hover:hover:bg-secondary-hover active:bg-secondary-active motion-safe:active:scale-press"
+              className={`${actionClassName()} gap-4`}
             >
               {expanded ? 'Less' : 'More'}
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true" className="h-5 w-5">

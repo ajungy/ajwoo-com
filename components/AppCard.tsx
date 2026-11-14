@@ -3,7 +3,7 @@
 import { CaptureInstallButton } from '@/components/CaptureInstallButton';
 import { useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { Action } from './Action';
+import { Action, actionClassName } from './Action';
 import { AppIcon } from './AppIcon';
 import { WAITLIST_FORM_URL, type App } from '@/content/apps';
 
@@ -45,13 +45,6 @@ import { WAITLIST_FORM_URL, type App } from '@/content/apps';
  * same pattern as the Design grid's motion tiles); Dictate and Narrate use a
  * static thumbnail (`app.thumbnail`). `object-cover` crops either to fill the
  * square exactly like the Design/Coffee tiles.
- *
- * Card radius, icon radius, and footer typography match the Figma reference
- * (node 358:941, "Apps cards") exactly: 20px card corners (`rounded-xl`, not
- * `rounded-lg`), a `text-label`-sized name (14px/500) rather than
- * `text-title`'s 17px — the Figma comp treats the app name at the same
- * weight class as a button label, not a heading — and a 10px icon radius
- * (`rounded-control`) instead of the 14px tile radius used elsewhere.
  *
  * Icons render with `object-contain`, not `object-cover` or the browser's
  * `fill` default (what plain `<img>` uses when no `object-fit` is set) — the
@@ -242,7 +235,7 @@ export function AppCard({
         {/* Title above description, one column, sharing the row with the icon
             and Waitlist rather than spanning the full card width. */}
         <div className="min-w-0 flex-1">
-          <h3 className="truncate text-label font-medium text-fg">
+          <h3 className="type-decision break-words">
             {/* The stretched link: the whole card is clickable and the app
                 name (plus "Beta" when set) is its accessible label.
                 `cardHref` (Request Alex only) sends this straight to the
@@ -256,7 +249,7 @@ export function AppCard({
               {app.name}{app.beta ? ' Beta' : ''}
             </Link>
           </h3>
-          <p className="truncate text-caption text-fg-secondary">{app.description}</p>
+          <p className="truncate type-caption">{app.description}</p>
         </div>
 
         {/* Above the stretched link so it is its own target. `openUrl`
@@ -275,20 +268,9 @@ export function AppCard({
             </Action>
           ) : app.downloadZip ? (
             app.slug === 'capture' ? <CaptureInstallButton href={app.downloadZip} /> : (
-            <a
-              href={app.downloadZip}
-              download
-              data-cursor-label="Install"
-              className={
-                'inline-flex items-center justify-center h-control-md rounded-control border ' +
-                'text-label font-medium transition duration-fast ease-standard motion-safe:active:scale-press ' +
-                'bg-secondary text-secondary-fg border-secondary-line px-6 ' +
-                'can-hover:hover:bg-secondary-hover can-hover:hover:border-secondary-line-hover ' +
-                'active:bg-secondary-active'
-              }
-            >
-              Install
-            </a>
+              <a href={app.downloadZip} download data-cursor-label="Install" className={actionClassName()}>
+                Install
+              </a>
             )
           ) : (
             <Action

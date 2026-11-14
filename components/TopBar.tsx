@@ -57,7 +57,7 @@ export function TopBar() {
         aria-current={isActive(n.href) ? 'page' : undefined}
         data-cursor-label={n.label}
         className={
-          'text-label inline-flex items-center rounded-control px-2 -mx-2 py-1.5 -my-1.5 ' +
+          'text-label inline-flex h-control-md items-center justify-center rounded-control px-4 ' +
           'transition duration-fast ease-standard can-hover:hover:bg-tertiary-hover ' +
           (isActive(n.href) ? 'font-semibold text-fg' : 'text-fg-tertiary can-hover:hover:text-fg') +
           ' ' + extraClassName
@@ -78,7 +78,7 @@ export function TopBar() {
             aria-current={home ? 'page' : undefined}
             data-cursor-label="Home"
             className={
-              'flex items-center rounded-control px-2 -mx-2 py-1.5 -my-1.5 shrink-0 transition ' +
+              'inline-flex h-control-md w-control-md items-center justify-center rounded-control shrink-0 transition ' +
               'duration-fast ease-standard can-hover:hover:bg-tertiary-hover ' +
               (home ? 'text-fg' : 'text-fg-tertiary can-hover:hover:text-fg')
             }
@@ -89,7 +89,7 @@ export function TopBar() {
           {/* Centered nav — hidden on compact, visible on medium+ */}
           <nav
             aria-label="Sections"
-            className="hidden medium:flex items-center gap-9 absolute left-1/2 -translate-x-1/2"
+            className="hidden medium:flex items-center gap-4 absolute left-1/2 -translate-x-1/2"
           >
             {navLinks('')}
           </nav>
@@ -142,7 +142,7 @@ export function TopBar() {
           ref={(element) => { if (element) element.inert = !menuOpen; }}>
           <div className="mobile-header-clip">
           <div className="mobile-header-content flex items-center justify-between pb-4">
-            <nav aria-label="Sections" className="flex items-center gap-6">
+            <nav aria-label="Sections" className="flex items-center gap-4">
               {navLinks('')}
             </nav>
             <ShareButton />

@@ -9,21 +9,9 @@ export const metadata = pageMetadata('/apps/', 'Apps');
 export default function AppsPage() {
   return (
     <div className="apps-entrance mx-auto max-w-app px-page">
-      {/* h1 is sr-only, matching /design and /coffee: the nav already marks
-          "Apps" as current. The subtitle stays visible here, unlike the
-          other two: it's not restating the page's name, it's the one claim
-          that actually earns a visitor's trust before they install anything,
-          local-only, on-device, no cloud round-trip. */}
-      <h1 className="sr-only">Apps</h1>
-      {/* pt-12 header-to-title is the same visual weight the other pages'
-          old header-to-title gap had, but pb-16 (paragraph-to-cards) is
-          deliberately bigger than that — the header is the same color as
-          the page here, so it doesn't read as a boundary the way the cards'
-          edge does; the gap that actually needs to feel generous is the one
-          before real content starts. */}
-      <section className="route-intro pt-12 pb-16">
-        <p className="text-title font-bold text-fg">Useful. Personal. Minimal.</p>
-        <p className="mt-4 max-w-content text-body-lg text-fg-secondary">
+      <section className="route-intro py-12">
+        <h1 className="type-project-title"><span className="sr-only">Apps. </span>Useful. Personal. Minimal.</h1>
+        <p className="mt-4 max-w-content type-subtitle">
           Thoughtful tools for everyday things, from creating and converting
           to sending someone a beautiful letter. Explore each app to see how
           it works and where your data stays.
@@ -33,8 +21,8 @@ export default function AppsPage() {
       {apps.length === 0 ? (
         <section className="pb-12">
           <div className="mx-auto w-full max-w-app-empty rounded-lg border border-line-subtle bg-raised p-9 text-center shadow-e1">
-            <h2 className="text-title text-fg">No apps published yet</h2>
-            <p className="mt-4 text-body text-fg-secondary">
+            <h2 className="type-section-heading">No apps published yet</h2>
+            <p className="mt-4 type-body">
               Tools I ship will appear here, with the price shown up front.
             </p>
             <div className="mt-8">
