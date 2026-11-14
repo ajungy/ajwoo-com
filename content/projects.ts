@@ -98,6 +98,8 @@ export const blocksFor = (slug: string): Block[] => siteData.blocks[slug === 'pr
  */
 type MotionTile = { base: string; width: number; height: number; hasWebm: boolean };
 const motionTiles: Record<string, MotionTile> = {
+  'seeing-ai': { base: 'mov-seeing-ai-chair', width: 720, height: 720, hasWebm: true },
+  'product-visualize': { base: 'mov-product-visualize', width: 720, height: 720, hasWebm: true },
   'pr-ae-frame': { base: 'mov-frameio-premiere-after-effects', width: 720, height: 720, hasWebm: true },
   netmarble: { base: 'mov-netmarble-friends', width: 720, height: 720, hasWebm: true },
   // Alex supplied this 5-second loop for the local Netflix portfolio draft.

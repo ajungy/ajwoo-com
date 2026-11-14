@@ -3,6 +3,15 @@
 import { useEffect, useRef } from 'react';
 import type { Ref } from 'react';
 
+// The four padded exports have a baked-in matte. Clip at the footage edges
+// (measured in the 720px asset) so the radius stays 4 CSS pixels at any size.
+const footageInsets: Record<string, readonly [number, number, number, number]> = {
+  'mov-premiere-generative-ai': [118, 36, 118, 34],
+  'mov-frameio-premiere-after-effects': [176, 36, 176, 34],
+  'mov-product-visualize': [34, 82, 36, 82],
+  'mov-seeing-ai-chair': [86, 36, 88, 34],
+};
+
 /** Keep the last decoded frame on the card across pauses, seeks and loop boundaries. */
 export function WorkVideoThumbnail({ base, hasWebm, videoRef }: {
   base: string;
@@ -11,6 +20,16 @@ export function WorkVideoThumbnail({ base, hasWebm, videoRef }: {
 }) {
   const surface = useRef<HTMLSpanElement>(null);
   const poster = `/img/${base}-poster.webp`;
+
+  const inset = footageInsets[base];
+  const footageBounds = inset?.map((px, edge) => {
+    const offset = `${px / 720 * 100}%`;
+    // Trim the light strip embedded along the Frame.io footage's bottom edge.
+    return base === 'mov-frameio-premiere-after-effects' && edge === 2
+      ? `calc(${offset} + 4px)`
+      : offset;
+  }).join(' ');
+  const clipPath = `inset(${footageBounds ?? '0'} round 4px)`;
 
   useEffect(() => {
     const video = surface.current?.querySelector('video');
@@ -56,13 +75,14 @@ export function WorkVideoThumbnail({ base, hasWebm, videoRef }: {
     };
   }, [base]);
 
-  return <span ref={surface} className="relative block h-full w-full">
-    <img src={poster} alt="" draggable={false} className="block h-full w-full object-cover" />
+  return <span ref={surface} className="relative block h-full w-full" style={inset ? { backgroundColor: 'var(--work-video-matte)', containerType: 'inline-size' } : undefined}>
+    {footageBounds && <span aria-hidden="true" className="pointer-events-none absolute rounded-[4px]" style={{ inset: footageBounds, boxShadow: 'var(--work-video-shadow)' }} />}
+    <img style={{ clipPath }} src={poster} alt="" draggable={false} className="block h-full w-full object-cover" />
     <video ref={videoRef} muted loop playsInline preload="metadata" aria-hidden="true"
       className="pointer-events-none absolute inset-0 h-full w-full opacity-0">
       <source src={`/img/${base}.mp4`} type="video/mp4" />
       {hasWebm && <source src={`/img/${base}.webm`} type="video/webm" />}
     </video>
-    <canvas aria-hidden="true" className="pointer-events-none absolute inset-0 h-full w-full object-cover" />
+    <canvas style={{ clipPath }} aria-hidden="true" className="pointer-events-none absolute inset-0 h-full w-full object-cover" />
   </span>;
 }

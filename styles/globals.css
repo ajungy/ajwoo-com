@@ -4,6 +4,12 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --work-video-matte: #f6f6f6; /* Matches the matte encoded into work thumbnails. */
+  /* At the landing carousel’s 300px card width: 2px offset and 6px blur. */
+  --work-video-shadow: 0 max(2px, calc(2cqw / 3)) max(6px, 2cqw) rgb(0 0 0 / 30%);
+}
+
 @layer components {
   .landing-reading-column { @apply mx-auto w-full max-w-[560px] large:col-start-2 large:col-span-2 large:max-w-none; }
   .work-reading-column { @apply mx-auto w-full max-w-[560px]; width: calc(100% - 32px); }
