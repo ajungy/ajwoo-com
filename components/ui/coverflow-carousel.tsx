@@ -1,4 +1,5 @@
 "use client";
+import { WorkVideoThumbnail } from '../WorkVideoThumbnail';
 import * as React from "react";
 import { CarouselControls } from "../CarouselControls";
 import Link from "next/link";
@@ -229,10 +230,7 @@ export function CoverflowCarousel({ slides }: { slides: Slide[] }) {
               style={{ width: 'var(--card)', transform: 'translateX(-50%)', opacity: i === 0 ? 1 : 0 }}>
               <Link href={slide.href} draggable={false} aria-label={slide.title} tabIndex={i === selected ? 0 : -1}>
                 {slide.video ? (
-                  <video muted loop playsInline preload="metadata" poster={`/img/${slide.video.base}-poster.webp`} className="block h-full w-full object-cover">
-                    <source src={`/img/${slide.video.base}.mp4`} type="video/mp4" />
-                    {slide.video.hasWebm && <source src={`/img/${slide.video.base}.webm`} type="video/webm" />}
-                  </video>
+                  <WorkVideoThumbnail {...slide.video} />
                 ) : (
                   <img src={slide.src} alt={slide.title} draggable={false} className="block h-full w-full object-cover" />
                 )}

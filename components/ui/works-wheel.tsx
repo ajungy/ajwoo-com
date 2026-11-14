@@ -2,6 +2,7 @@
 
 // Geometry adapted from CrafterUI Works Wheel, MIT / Copyright (c) 2026 CrafterUI.
 // Full notice: public/licenses/crafterui-MIT.txt. No demo artwork is included.
+import { WorkVideoThumbnail } from '../WorkVideoThumbnail';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { Picture } from '@/components/Picture';
@@ -228,12 +229,7 @@ export function WorksWheel({ items }: { items: WorksWheelItem[] }) {
             <span ref={(el) => { faces.current[i] = el; }} className={styles.face}>
               {item.paragraphs ? <span data-background-copy className={styles.backgroundCopy} style={{ fontSize: clamp(geometry.side / 25, 8, 13) }}>
                 {item.paragraphs.map((paragraph) => <span key={paragraph}>{paragraph}</span>)}
-              </span> : item.video ? <video ref={(el) => { videos.current[i] = el; }} muted loop playsInline
-                preload="metadata" poster={`/img/${item.video.base}-poster.webp`}
-                width={item.video.width} height={item.video.height} className={`${styles.media} route-media`}>
-                <source src={`/img/${item.video.base}.mp4`} type="video/mp4" />
-                {item.video.hasWebm && <source src={`/img/${item.video.base}.webm`} type="video/webm" />}
-              </video> : item.image ? <Picture img={item.image} alt={item.title} priority={i === 0} sizes="(max-width: 699px) 68vw, 32vw" className={`${styles.media} route-media`} /> : null}
+              </span> : item.video ? <WorkVideoThumbnail {...item.video} videoRef={(el) => { videos.current[i] = el; }} /> : item.image ? <Picture img={item.image} alt={item.title} priority={i === 0} sizes="(max-width: 699px) 68vw, 32vw" className={`${styles.media} route-media`} /> : null}
             </span>
           </Card>;
         })}
