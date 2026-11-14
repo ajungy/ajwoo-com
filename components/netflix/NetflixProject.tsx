@@ -25,15 +25,15 @@ export function NetflixProject({ project, work: netflixWork, examples }: { proje
             </video>
           </div>
           <section className="max-w-content" aria-labelledby="netflix-overview">
-            <h2 id="netflix-overview" className="type-section-heading">{netflixWork.introduction}</h2>
+            <h2 id="netflix-overview" className="type-decision">{netflixWork.introduction}</h2>
             <p className="mt-4 type-body">{netflixWork.overview}</p>
           </section>
 
-          <section className="mt-12 max-w-content" aria-labelledby="netflix-contribution">
-            <h2 id="netflix-contribution" className="type-section-heading">My scope</h2>
+          <section className="mt-9 max-w-content" aria-labelledby="netflix-contribution">
+            <h2 id="netflix-contribution" className="type-decision">My scope</h2>
             <p className="mt-4 type-body">{netflixWork.contribution}</p>
             <p className="mt-6 type-body">{netflixWork.distribution}</p>
-            <dl className="mt-9 space-y-12">
+            <dl className="mt-9 space-y-9">
               {netflixWork.areas.map((area) => (
                 <div key={area.title}>
                   <dt className="type-decision">{area.title}</dt>
@@ -85,16 +85,16 @@ export function NetflixProject({ project, work: netflixWork, examples }: { proje
             </dl>
           </section>
 
-          <section className="mt-12 max-w-content" aria-labelledby="netflix-challenge">
-            <h2 id="netflix-challenge" className="type-section-heading">The challenge / Creative complexity at scale</h2>
+          <section className="mt-9 max-w-content" aria-labelledby="netflix-challenge">
+            <h2 id="netflix-challenge" className="type-decision">The challenge / Creative complexity at scale</h2>
             <p className="mt-4 type-body">{netflixWork.challenge}</p>
             <p className="mt-6 type-body">{netflixWork.impactContext}</p>
           </section>
 
           <NetflixPublicExamples examples={examples} />
 
-          <section className="mt-12 max-w-content" aria-labelledby="netflix-links">
-            <h2 id="netflix-links" className="type-section-heading">Links related to this project</h2>
+          <section className="mt-9 max-w-content" aria-labelledby="netflix-links">
+            <h2 id="netflix-links" className="type-decision">Links related to this project</h2>
             <p className="mt-4 type-body">
               Public writing and resources about Netflix’s creative tools and technology.
               These span several teams and years and provide context for the work described above.

@@ -24,8 +24,8 @@ export function NetflixMuseExample({ examples: netflixPublicExamples }: Pick<Net
 
 export function NetflixPublicExamples({ examples: netflixPublicExamples }: Pick<NetflixPayload, 'examples'>) {
   return (
-    <section className="mt-12 scroll-mt-[88px]" aria-label="Public creative tools examples">
-      <div className="space-y-12">
+    <section className="mt-9 scroll-mt-[88px]" aria-label="Public creative tools examples">
+      <div className="space-y-9">
         {netflixPublicExamples.slice(1).map((example) => (
           <figure key={example.title} className="max-w-content">
             <div className="mb-6 max-w-content">

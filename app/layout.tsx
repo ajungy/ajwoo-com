@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import '@/styles/globals.css';
 import { TopBar } from '@/components/TopBar';
-import { AnalyticsSettingsLink } from '@/lib/analytics/AnalyticsConsent';
+import { SiteFooter } from '@/components/SiteFooter';
 import { site } from '@/content/site';
 import { SiteAnalytics } from '@/components/SiteAnalytics';
 import { SHARE_IMAGE, SITE_URL } from '@/lib/metadata';
@@ -85,17 +85,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </a>
         <TopBar />
         <main id="main">{children}</main>
-        {/* The only copyright notice on the site now, at Alex's direction —
-            every project page used to repeat "© 2015 ALEX J. WOO" as its own
-            trailing text block; consolidated to this one line, present on
-            every page via the root layout, instead of eleven copies of the
-            same fact scattered through the content. */}
-        <footer className="mt-15">
-          <div className="mx-auto max-w-app px-page py-9 type-caption">
-            &copy; {site.fullName}
-            <span className="ml-6"><AnalyticsSettingsLink /></span>
-          </div>
-        </footer>
+        <SiteFooter />
       </body>
     </html>
   );
