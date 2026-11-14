@@ -29,7 +29,7 @@ export default function Home() {
     <>
       <div className="mx-auto max-w-app px-[16px] large:px-page">
         <section className="grid grid-cols-1 pt-20 large:grid-cols-4">
-          <div className="hero-col mx-auto w-full max-w-[560px] large:max-w-none large:col-start-2 large:col-span-2">
+          <div className="hero-col landing-reading-column">
             {/* Reveal the complete headline after its display font is ready. */}
             <HeroHeadline>{site.headline}</HeroHeadline>
 
@@ -142,7 +142,7 @@ export default function Home() {
               and StaggerReveal lists they used to have are gone. */}
           <section className="mt-[140px]">
             <div className="grid grid-cols-1 large:grid-cols-4">
-              <div className="large:col-start-2 large:col-span-2">
+              <div className="landing-reading-column">
                 <h2 className="type-section-heading">
                   Experience
                 </h2>
@@ -169,7 +169,7 @@ export default function Home() {
               the page was the actual ask. */}
           <section className="mt-[140px]">
             <div className="grid grid-cols-1 large:grid-cols-4">
-              <div className="large:col-start-2 large:col-span-2">
+              <div className="landing-reading-column">
                 <h2 className="type-section-heading">
                   Education
                 </h2>
@@ -188,7 +188,7 @@ export default function Home() {
 
           <section className="mt-[140px]">
             <div className="grid grid-cols-1 large:grid-cols-4">
-              <div className="large:col-start-2 large:col-span-2">
+              <div className="landing-reading-column">
                 <h2 className="type-section-heading">
                   Featured
                 </h2>
@@ -207,7 +207,7 @@ export default function Home() {
 
           <section className="mt-[140px] pb-12">
             <div className="grid grid-cols-1 large:grid-cols-4">
-              <div className="large:col-start-2 large:col-span-2">
+              <div className="landing-reading-column">
                 {/* Label changed from "Clients" to "Worked with", at Alex's
                     direction — the underlying data (content/site.ts's
                     `clients` export) is unchanged, only what the heading

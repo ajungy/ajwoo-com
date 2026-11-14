@@ -5,6 +5,7 @@
 @tailwind utilities;
 
 @layer components {
+  .landing-reading-column { @apply mx-auto w-full max-w-[560px] large:col-start-2 large:col-span-2 large:max-w-none; }
   .work-reading-column { @apply mx-auto w-full max-w-[560px]; width: calc(100% - 32px); }
   @screen large {
     .work-reading-column { width: calc((min(100%, 1200px) - 2 * var(--page-pad)) / 2); max-width: none; }

@@ -30,7 +30,7 @@ export function SkillPrompt() {
 
   return (
     <div className="relative flex w-full max-w-content flex-col items-center gap-4">
-          <p id="minimal-prompt-help" className="max-w-content type-body">
+          <p id="minimal-prompt-help" className="w-full text-left type-body">
             <a href="/minimal-design-system.md" download="SKILL.md"
               aria-label="Download SKILL.md"
               className="underline underline-offset-4 can-hover:hover:text-fg">

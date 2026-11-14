@@ -23,7 +23,7 @@ export function DesignPrinciples() {
   return (
     <section className="mt-[140px]">
       <div className="grid grid-cols-1 large:grid-cols-4">
-        <div className="large:col-start-2 large:col-span-2">
+        <div className="landing-reading-column">
           <h2 className="type-section-heading">
             Favorite design principles
           </h2>
