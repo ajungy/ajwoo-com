@@ -25,7 +25,7 @@ export function DesignPrinciples() {
       <div className="grid grid-cols-1 large:grid-cols-4">
         <div className="landing-reading-column">
           <h2 className="type-section-heading">
-            Favorite design principles
+            My design principles
           </h2>
           <div className="mt-8 flex flex-col gap-6">
             {principles.map((p) => (

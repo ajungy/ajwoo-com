@@ -110,12 +110,11 @@ export default function Home() {
         </section>
         <div className="mx-auto max-w-app px-page">
           <SkillsSection />
-          <DesignPrinciples />
-
-          {/* Independent products support the professional story after principles. */}
           <FeaturedApp apps={['convert', 'capture', 'dictate', 'narrate', 'letter'].flatMap(
             (slug) => apps.filter((app) => app.slug === slug)
           )} />
+
+          <DesignPrinciples />
 
           {/* Four stacked sections now, not two 2-column rows — Experience,
               Education, Featured, and "Worked with" each on their own
