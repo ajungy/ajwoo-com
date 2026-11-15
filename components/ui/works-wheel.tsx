@@ -12,6 +12,7 @@ export type WorksWheelItem = {
   title: string;
   subtitle: string;
   year: string;
+  companyYears?: string[];
   href: string;
   paragraphs?: string[];
   image?: { base: string; width: number; height: number };
@@ -166,11 +167,9 @@ export function WorksWheel({ items }: { items: WorksWheelItem[] }) {
 
   const select = (direction: number) => to(Math.round(target.current) + direction);
   const selected = items[active];
-  const highlightedYears = selected?.title.startsWith('Adobe:')
-    ? ['2021', '2022', '2023', '2024']
-    : selected?.title.startsWith('Microsoft:')
-      ? ['2016', '2017', '2018', '2019', '2020']
-    : selected?.year.match(/\d{4}/g) ?? [];
+  const projectYears = selected?.year.match(/\d{4}/g) ?? [];
+  const highlightedYears = selected?.companyYears ?? projectYears;
+  const projectYear = Math.max(...projectYears.map(Number));
   useEffect(() => {
     const rail = yearRef.current;
     const current = rail?.querySelector<HTMLElement>('[aria-current="date"]');
@@ -246,7 +245,7 @@ export function WorksWheel({ items }: { items: WorksWheelItem[] }) {
           const availableYears = items.flatMap((item) => (item.year.match(/\d{4}/g) ?? []).map(Number));
           const destinationYear = Math.min(...availableYears.filter((available) => available >= year));
           const index = items.findIndex((item) => item.year.includes(String(destinationYear)));
-          return <button key={year} type="button" className={`type-caption ${current ? styles.activeYear : ''} ${year === Math.max(...(selected?.year.match(/\d{4}/g) ?? []).map(Number)) ? styles.projectYear : ''}`} aria-current={current ? 'date' : undefined} onClick={() => { if (index >= 0) to(index + 1); }}>{year}</button>;
+          return <button key={year} type="button" className={`type-caption ${current ? styles.activeYear : ''} ${year === projectYear ? styles.projectYear : ''}`} aria-current={year === projectYear ? 'date' : undefined} onClick={() => { if (index >= 0) to(index + 1); }}>{year}</button>;
         })}
         </div>
         <button type="button" className={styles.yearChevron} aria-label="Next project" disabled={active === count - 1} onClick={() => select(1)}><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="m7 10 5 5 5-5" fill="none" stroke="currentColor" strokeWidth="1.5" /></svg></button>
