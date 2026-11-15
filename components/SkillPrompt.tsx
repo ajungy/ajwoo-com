@@ -30,13 +30,18 @@ export function SkillPrompt() {
 
   return (
     <div className="relative flex w-full max-w-content flex-col items-center gap-4">
-          <p id="minimal-prompt-help" className="w-full text-left type-body">
+          <p id="minimal-prompt-help" className="w-full text-center type-body">
             <a href="/minimal-design-system.md" download="SKILL.md"
               aria-label="Download SKILL.md"
               className="underline underline-offset-4 can-hover:hover:text-fg">
               SKILL.md
             </a>{' '}behind my apps. Paste in your coding tool. Follow safeguards and review before publishing.
           </p>
+        <button type="button" onClick={copyPrompt}
+          aria-describedby="minimal-prompt-help"
+          className={actionClassName()}>
+          Copy prompt + skill link
+        </button>
       <button type="button" aria-expanded={showPrompt} aria-controls="minimal-prompt-preview"
         onClick={() => setShowPrompt((visible) => !visible)}
         className={`gap-3 border-0 ${actionClassName('tertiary')}`}>
@@ -58,11 +63,7 @@ export function SkillPrompt() {
         spellCheck={false}
         className={`${showPrompt ? 'block' : 'hidden'} w-full rounded-control border border-line bg-sunken p-6 text-left text-body text-fg`}
       />
-        <button type="button" onClick={copyPrompt}
-          aria-describedby="minimal-prompt-help"
-          className={actionClassName()}>
-          Copy prompt + skill link
-        </button>
+
         <p role="status" aria-live="polite" className="absolute top-full mt-4 flex items-center gap-4 type-body">
           {status === 'Copied' && (
             <svg key={copyCount} className="h-[20px] w-[20px] shrink-0 text-success" viewBox="0 0 24 24" fill="none" aria-hidden="true">

@@ -278,7 +278,7 @@
      toward mid-gray (black lightens, white dims) — it reads as lifting toward
      you. Press returns the fill and applies scale(0.98) — pushing down. */
   --action-primary-bg:          light-dark(var(--n-950), var(--n-0));
-  --action-primary-bg-hover:    light-dark(var(--n-800), var(--d-700));
+  --action-primary-bg-hover:    light-dark(var(--n-800), var(--n-200));
   --action-primary-bg-active:   light-dark(var(--n-950), var(--n-0));
   --action-primary-fg:          light-dark(var(--n-0),   var(--n-950));
   --action-primary-bg-disabled: light-dark(var(--n-100), var(--d-100));

@@ -41,7 +41,7 @@ export function BookTimeAction() {
     return () => observer.disconnect();
   }, []);
 
-  const glowColor = theme === 'light' ? '0 0 0' : '40 80 80';
+  const glowColor = theme === 'light' ? '0 0 0' : '48 75 90';
   const blendMode = theme === 'light' ? 'multiply' : 'plus-lighter';
 
   return (
@@ -54,11 +54,11 @@ export function BookTimeAction() {
       blendMode={blendMode}
       borderRadius={8}
       glowRadius={80}
-      glowIntensity={2}
+      glowIntensity={theme === 'light' ? 2 : 3}
       coneSpread={8}
       animated={revealed}
     >
-      <Action href={site.calendlyUrl} external variant="primary" cursorLabel="Book time">
+      <Action href={site.calendlyUrl} external variant="primary" className="relative z-[2] opacity-100" cursorLabel="Book time">
         {site.ctaLabel}
       </Action>
     </BorderGlow>

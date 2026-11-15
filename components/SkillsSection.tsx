@@ -4,7 +4,7 @@ import { SkillPrompt } from './SkillPrompt';
 export function SkillsSection() {
   return (
     <section className="grid grid-cols-1 large:grid-cols-4">
-      <div className="landing-reading-column flex flex-col items-start text-left">
+      <div className="landing-reading-column flex flex-col items-center text-center">
         <div className="flex items-center gap-3 text-fg-tertiary">
           <span aria-hidden="true" className="font-mono text-h1 font-bold text-fg">
             {'<'}

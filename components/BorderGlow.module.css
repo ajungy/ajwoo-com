@@ -68,3 +68,18 @@
     0 0 25px 2px var(--glow-color-20, hsl(40deg 80% 80% / 20%)),
     0 0 50px 2px var(--glow-color-10, hsl(40deg 80% 80% / 10%));
 }
+
+
+:global(html[data-theme="dark"]) .edgeLight {
+  mask-image: conic-gradient(
+    from var(--cursor-angle) at center,
+    black, black 6%, transparent 24%, transparent 76%, black 94%, black
+  );
+}
+
+@media (hover: hover) and (pointer: fine) {
+  :global(html[data-theme="dark"]) .glowRoot:hover .edgeLight {
+    opacity: 0.8;
+    filter: drop-shadow(0 0 12px var(--glow-color-30));
+  }
+}

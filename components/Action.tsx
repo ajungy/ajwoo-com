@@ -13,7 +13,7 @@ const variants: Record<Variant, string> = {
   // Solid. Hover moves the fill one step toward mid-gray; press returns it.
   primary:
     'bg-primary text-primary-fg border-transparent px-6 ' +
-    'can-hover:hover:bg-primary-hover active:bg-primary-active',
+    'can-hover:hover:bg-primary-hover active:bg-primary-active can-hover:hover:active:text-primary-fg',
   // Real alternatives. 1px border so outer dimensions match primary exactly.
   secondary:
     'bg-secondary text-secondary-fg border-secondary-line px-6 ' +
