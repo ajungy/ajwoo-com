@@ -100,7 +100,7 @@ export default function Home() {
       </div>
 
       <LandingSections>
-        <section className="py-[140px] text-center" id="home-work-title">
+        <section className="pt-[140px] pb-[160px] text-center" id="home-work-title">
           <CoverflowCarousel slides={['netflix-creative-tools', 'premiere-generative-ai', 'pr-ae-frame', 'product-visualize', 'seeing-ai'].flatMap(slug => {
             const project = workGallery.find(item => item.href === `/work/${slug}/`);
             if (!project) return [];
@@ -140,7 +140,7 @@ export default function Home() {
               text, at Alex's direction ("remove the animations of text effects
               in the landing page") — the scroll-triggered TextAnimate headings
               and StaggerReveal lists they used to have are gone. */}
-          <section className="mt-[140px]">
+          <section className="mt-[160px]">
             <div className="grid grid-cols-1 large:grid-cols-4">
               <div className="landing-reading-column">
                 <h2 className="type-section-heading">
@@ -159,7 +159,7 @@ export default function Home() {
             </div>
           </section>
 
-          {/* mt-[140px] between each of these, matching the same gap above
+          {/* mt-[160px] between each of these, matching the same gap above
               Experience — at Alex's direction ("increase spacing between
               Experience, Education, Featured, and Worked with to match the
               other spacing... make the spacing consistent overall"). An
@@ -167,7 +167,7 @@ export default function Home() {
               these four as one cluster rather than four separate topic
               changes; reversed since a single consistent rhythm throughout
               the page was the actual ask. */}
-          <section className="mt-[140px]">
+          <section className="mt-[160px]">
             <div className="grid grid-cols-1 large:grid-cols-4">
               <div className="landing-reading-column">
                 <h2 className="type-section-heading">
@@ -186,7 +186,7 @@ export default function Home() {
             </div>
           </section>
 
-          <section className="mt-[140px]">
+          <section className="mt-[160px]">
             <div className="grid grid-cols-1 large:grid-cols-4">
               <div className="landing-reading-column">
                 <h2 className="type-section-heading">
@@ -205,7 +205,7 @@ export default function Home() {
             </div>
           </section>
 
-          <section className="mt-[140px] pb-12">
+          <section className="mt-[160px] pb-12">
             <div className="grid grid-cols-1 large:grid-cols-4">
               <div className="landing-reading-column">
                 {/* Label changed from "Clients" to "Worked with", at Alex's

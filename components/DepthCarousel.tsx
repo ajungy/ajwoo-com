@@ -113,6 +113,7 @@ import { useEffect, useRef, useState, type ReactNode } from 'react';
  */
 export interface DepthCarouselProps {
   items: ReactNode[];
+  circularArc?: boolean;
   depth?: number;
   spread?: number;
   tilt?: number;
@@ -148,6 +149,7 @@ const POWER3_OUT = 'cubic-bezier(0.215, 0.61, 0.355, 1)';
 
 export function DepthCarousel({
   items,
+  circularArc = false,
   depth = 260,
   spread = 150,
   tilt = 26,
@@ -187,7 +189,15 @@ export function DepthCarousel({
   const count = items.length;
 
   const dirSign = tiltDirection === 'right' ? 1 : -1;
-  const stackWidth = layoutWidth + spread * Math.max(visibleCards - 1, 0) * 2;
+  const [workWidth, setWorkWidth] = useState(300);
+  // Phone app cards fill the grid and can be wider than the work thumbnails.
+  // Size the arc to the wider card so perspective leaves daylight at both edges.
+  const arcWidth = Math.max(layoutWidth, workWidth);
+  const pitch = circularArc ? Math.max(arcWidth * 1.065, arcWidth + 12) : spread;
+  // Adjacent centers are one pitch apart along the circumference.
+  const arcStep = 28;
+  const arcRadius = pitch / (arcStep * Math.PI / 180);
+  const stackWidth = layoutWidth + pitch * Math.max(visibleCards - 1, 0) * 2;
 
   // Fit width normally; on short landscape screens also fit the whole card
   // beneath the sticky header with an 8px margin above and below.
@@ -196,6 +206,7 @@ export function DepthCarousel({
     if (!el) return;
     const compute = () => {
       const available = el.clientWidth;
+      if (circularArc) setWorkWidth(Math.min(window.innerWidth * 0.76, 300));
       if (!available) return;
       const viewportHeight = window.visualViewport?.height ?? window.innerHeight;
       const shortLandscape = window.innerWidth > viewportHeight && viewportHeight <= 600;
@@ -223,7 +234,7 @@ export function DepthCarousel({
       window.removeEventListener('resize', compute);
       window.visualViewport?.removeEventListener('resize', compute);
     };
-  }, [cardScale, cardWidth, measuredHeight, showControls, showIndicators]);
+  }, [cardScale, cardWidth, measuredHeight, showControls, showIndicators, circularArc]);
 
   // Measures the active card's own natural (unscaled) height — see the
   // "cardHeight IS MEASURED" comment above for why this exists at all.
@@ -341,7 +352,7 @@ export function DepthCarousel({
             style={{
               width: stackWidth,
               height: measuredHeight,
-              perspective: `${perspective}px`,
+              perspective: circularArc ? arcWidth * 3 : perspective,
               transformOrigin: 'top left',
             }}
           >
@@ -357,7 +368,12 @@ export function DepthCarousel({
             const isVisible = abs < visibleCards;
             const isFront = offset === 0;
             const hoverBoost = isFront && frontHovered;
-            const cardScale = Math.max(1 - falloff * abs, 0.4) * (hoverBoost ? 1.02 : 1);
+            const angle = offset * (circularArc ? arcStep : tilt);
+            const radians = angle * Math.PI / 180;
+            const horizontal = circularArc ? arcRadius * Math.sin(radians) : offset * pitch;
+            const recession = circularArc ? arcRadius * (1 - Math.cos(radians)) : depth * abs;
+            const sideScale = circularArc ? 1 : Math.max(1 - falloff * abs, 0.4);
+            const cardScale = isFront ? (hoverBoost ? 1.02 : 1) : sideScale;
             const cardBlur = isFront ? 0 : Math.min(blur * abs, blur * visibleCards);
 
             return (
@@ -371,19 +387,19 @@ export function DepthCarousel({
                   position: 'absolute',
                   left: 0,
                   right: 0,
-                  top: 0,
+                  top: circularArc ? '50%' : 0,
                   margin: '0 auto',
                   width: layoutWidth,
                   height: 'auto',
                   transform:
-                    `translateX(${offset * spread * dirSign}px) ` +
-                    `translateZ(${-abs * depth}px) ` +
-                    `rotateY(${offset * -tilt * dirSign}deg) ` +
+                    `translate(${horizontal * dirSign}px, ${circularArc ? '-50%' : '0'}) ` +
+                    `translateZ(${-recession}px) ` +
+                    `rotateY(${angle * dirSign}deg) ` +
                     `scale(${cardScale})`,
                   transition:
                     `transform ${duration}ms ${ease}, opacity ${duration}ms ${ease}, ` +
                     `filter ${duration}ms ${ease}, box-shadow 500ms ${ease}`,
-                  opacity: isVisible ? Math.max(1 - abs * 0.18, 0) : 0,
+                  opacity: isVisible ? Math.max(1 - abs * (circularArc ? 0.4 : 0.18), 0) : 0,
                   filter: cardBlur ? `blur(${cardBlur}px)` : undefined,
                   zIndex: count - abs,
                   pointerEvents: isFront ? 'auto' : 'none',
