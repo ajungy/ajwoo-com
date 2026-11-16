@@ -2,10 +2,12 @@
 // video embeds are all the real ones from ajwoo.com — nothing is invented.
 
 import data from './images.json';
+import editedArticles from './edited-articles.json';
 
 export type Project = {
   slug: string;
   title: string;
+  lead: string;
   category: string;
   kind: 'design' | 'coffee';
   thumbnail?: { base: string; width: number; height: number };
@@ -20,33 +22,33 @@ export type Block =
 export const projects: Project[] = [
   {
     slug: 'netflix-creative-tools',
-    title: 'Netflix Creative Tools',
+    title: 'Netflix Creative Tools', lead: "Designing the systems and tools for video, artwork, copy, and analytics.",
     category: 'Video / Artwork / Copy / Analytics / AI',
     kind: 'design',
     thumbnail: { base: 'tile-netflix-creative-tools', width: 1024, height: 1024 },
   },
-  { slug: 'premiere-generative-ai', title: 'Premiere Generative AI', category: 'Video / AI', kind: 'design' },
-  { slug: 'pr-ae-frame', title: 'Frame.io for Premiere & After Effects', category: 'Video / Cloud', kind: 'design' },
-  { slug: 'layout', title: 'Microsoft Layout', category: 'AR / MR / HoloLens', kind: 'design' },
-  { slug: 'product-visualize', title: 'Microsoft Product Visualize', category: 'AR / CRM', kind: 'design' },
-  { slug: 'dynamics-365-customer-voice', title: 'Microsoft Customer Voice', category: 'Forms / CRM', kind: 'design' },
-  { slug: 'seeing-ai', title: 'Microsoft Seeing AI', category: 'Accessibility / AI', kind: 'design' },
-  { slug: 'netmarble', title: 'Netmarble Games', category: 'Brand / UX', kind: 'design' },
-  { slug: 'starbucks-technology', title: 'Starbucks Technology', category: 'User Research / iPad', kind: 'design' },
-  { slug: 'wrap-and-charge', title: 'Kikkerland Warp and Charge', category: 'Industrial Design', kind: 'design' },
-  { slug: 'coin-lock', title: 'Coin Lock', category: 'Industrial Design', kind: 'design' },
-  { slug: '10-borders', title: '10 Borders', category: 'Graphic Design', kind: 'design' },
-  { slug: 'paintsound', title: 'Paint Sound', category: 'Hololens', kind: 'design' },
-  { slug: '3-coffee-shops-in-tokyo', title: '3 Coffee Shops in Tokyo', category: 'Japan', kind: 'coffee' },
-  { slug: '5-coffee-shops-in-seattle', title: '5 Coffee Shops in Seattle', category: 'USA', kind: 'coffee' },
-  { slug: '3-coffee-shops-amsterdam', title: '3 coffee shops in Amsterdam', category: 'Netherlands', kind: 'coffee' },
-  { slug: 'best-coffee-shops-new-york-city', title: '5 Coffee Shops in NYC', category: 'USA', kind: 'coffee' },
-  { slug: '5-in-milan', title: '5 cafes in Milan', category: 'Italy', kind: 'coffee' },
-  { slug: 'top-3-fancy-cafes-paris', title: 'Top 3 Fancy Cafes in Paris', category: 'France', kind: 'coffee' },
-  { slug: 'top-5-coffee-shop-paris', title: 'Top 5 Coffee Shop in Paris', category: 'France', kind: 'coffee' },
-  { slug: 'top-5-coffee-shops-in-london', title: 'Top 5 Coffee Shops in London', category: 'UK', kind: 'coffee' },
-  { slug: 'blue-olive', title: 'Blue Olive', category: 'Paris', kind: 'coffee' },
-  { slug: 'telescope', title: 'Télescope', category: 'Paris', kind: 'coffee' },
+  { slug: 'premiere-generative-ai', title: 'Premiere Generative AI', lead: "I led three designers in exploring how editors could select part of a shot and change just that area.", category: 'Video / AI', kind: 'design' },
+  { slug: 'pr-ae-frame', title: 'Frame.io for Premiere & After Effects', lead: "Editors can share a cut and see feedback exactly where they do the editing.", category: 'Video / Cloud', kind: 'design' },
+  { slug: 'layout', title: 'Microsoft Layout', lead: "Teams could arrange 3D models in a room before moving any equipment.", category: 'AR / MR / HoloLens', kind: 'design' },
+  { slug: 'product-visualize', title: 'Microsoft Product Visualize', lead: "Sales teams could show customers how a product would fit in their own space.", category: 'AR / CRM', kind: 'design' },
+  { slug: 'dynamics-365-customer-voice', title: 'Microsoft Customer Voice', lead: "Customer Voice brings survey responses into Dynamics 365 so teams can follow up on feedback.", category: 'Forms / CRM', kind: 'design' },
+  { slug: 'seeing-ai', title: 'Microsoft Seeing AI', lead: "Sound and vibration helped people with visual impairments locate a chair.", category: 'Accessibility / AI', kind: 'design' },
+  { slug: 'netmarble', title: 'Netmarble Games', lead: "My work at Netmarble spanned the company’s visual identity and the interfaces players used on their phones.", category: 'Brand / UX', kind: 'design' },
+  { slug: 'starbucks-technology', title: 'Starbucks Technology', lead: "I worked with the Starbucks Innovation Lab on an iPad tool for planning batches of coffee.", category: 'User Research / iPad', kind: 'design' },
+  { slug: 'wrap-and-charge', title: 'Kikkerland Wrap and Charge', lead: "A charger with a place to wind the cable makes both easier to carry.", category: 'Industrial Design', kind: 'design' },
+  { slug: 'coin-lock', title: 'Coin Lock', lead: "A portable lock designed for the things people leave outside, from bikes to strollers.", category: 'Industrial Design', kind: 'design' },
+  { slug: '10-borders', title: '10 Borders', lead: "A poster traces one refugee’s escape from Syria.", category: 'Graphic Design', kind: 'design' },
+  { slug: 'paintsound', title: 'Paint Sound', lead: "Paint Sound turns nearby sounds into holograms that people with hearing loss can see.", category: 'Hololens', kind: 'design' },
+  { slug: '3-coffee-shops-in-tokyo', title: '3 Coffee Shops in Tokyo', lead: "Three stops in Tokyo took me from a latte art bar to a coffee counter at Uniqlo.", category: 'Japan', kind: 'coffee' },
+  { slug: '5-coffee-shops-in-seattle', title: '5 Coffee Shops in Seattle', lead: "From Capitol Hill to a café inside a radio station, these are five places I return to for coffee in Seattle.", category: 'USA', kind: 'coffee' },
+  { slug: '3-coffee-shops-amsterdam', title: '3 coffee shops in Amsterdam', lead: "Bocca, Back to Black, and King Kong were my favorite stops for coffee in Amsterdam.", category: 'Netherlands', kind: 'coffee' },
+  { slug: 'best-coffee-shops-new-york-city', title: '5 Coffee Shops in NYC', lead: "Five places to pick up a cup on a walk through New York, from Abraço to Birch.", category: 'USA', kind: 'coffee' },
+  { slug: '5-in-milan', title: '5 cafes in Milan', lead: "The espresso I remember best in Milan cost one euro at Giacomo Tabaccheria.", category: 'Italy', kind: 'coffee' },
+  { slug: 'top-3-fancy-cafes-paris', title: 'Top 3 Fancy Cafes in Paris', lead: "For a special occasion in Paris, I’d start with these three cafés in a museum, a hotel, and a department store.", category: 'France', kind: 'coffee' },
+  { slug: 'top-5-coffee-shop-paris', title: 'Top 5 Coffee Shops in Paris', lead: "Revisiting the city where I grew up led me to five favorite coffee stops in Paris.", category: 'France', kind: 'coffee' },
+  { slug: 'top-5-coffee-shops-in-london', title: 'Top 5 Coffee Shops in London', lead: "These five cafés stood out on my trips to London, from Attendant to Seven Dials.", category: 'UK', kind: 'coffee' },
+  { slug: 'blue-olive', title: 'Blue Olive', lead: "Near the Eiffel Tower, Blue Olive drew me in with its small, welcoming space.", category: 'Paris', kind: 'coffee' },
+  { slug: 'telescope', title: 'Télescope', lead: "My first café review started at Télescope, a small coffee shop near the Louvre.", category: 'Paris', kind: 'coffee' },
 ];
 
 export const designProjects = projects.filter((p) => p.kind === 'design');
@@ -66,7 +68,7 @@ export const siteData = data as {
 };
 
 export const tileFor = (slug: string): Tile | undefined => getProject(slug)?.thumbnail ?? siteData.tiles[slug === 'premiere-generative-ai' ? '704' : slug];
-export const blocksFor = (slug: string): Block[] => siteData.blocks[slug === 'premiere-generative-ai' ? '704' : slug] ?? [];
+export const blocksFor = (slug: string): Block[] => (editedArticles as Record<string, Block[]>)[slug] ?? siteData.blocks[slug === 'premiere-generative-ai' ? '704' : slug] ?? [];
 
 /**
  * Grid-tile motion — a deliberate, curated exception to the rest of the site.

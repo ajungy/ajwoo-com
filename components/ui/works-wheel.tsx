@@ -52,6 +52,7 @@ export function WorksWheel({ items }: { items: WorksWheelItem[] }) {
       turn.current = index + 1;
       setActive(index);
       animate.current();
+      if (history.state?.galleryReturn) cards.current[index]?.focus({ preventScroll: true });
     };
     selectLinkedProject();
     window.addEventListener('hashchange', selectLinkedProject);
@@ -188,10 +189,21 @@ export function WorksWheel({ items }: { items: WorksWheelItem[] }) {
       style={{ perspective: `${geometry.depth || 1000}px` }}
       onKeyDown={(event) => {
         if (event.target !== event.currentTarget && (event.target as Element).closest('button')) return;
-        if (['ArrowDown', 'ArrowRight', 'ArrowUp', 'ArrowLeft'].includes(event.key)) {
-          event.preventDefault(); select(event.key === 'ArrowDown' || event.key === 'ArrowRight' ? 1 : -1);
-        } else if (event.key === 'Home') { event.preventDefault(); to(1); }
-        else if (event.key === 'End') { event.preventDefault(); to(count); }
+        const next = ({
+          ArrowDown: Math.round(target.current) + 1, ArrowRight: Math.round(target.current) + 1,
+          ArrowUp: Math.round(target.current) - 1, ArrowLeft: Math.round(target.current) - 1,
+          Home: 1, End: count,
+        } as Record<string, number>)[event.key];
+        if (next === undefined) return;
+        event.preventDefault();
+        turn.current = clamp(next, 1, count);
+        to(turn.current);
+        setActive(turn.current - 1);
+        const card = cards.current[turn.current - 1];
+        if (card) {
+          card.style.visibility = 'visible';
+          card.focus({ preventScroll: true });
+        }
       }}
       onPointerDown={(event) => {
         if (!event.isPrimary || event.button !== 0 || (event.target as Element).closest('button')) return;
@@ -213,7 +225,12 @@ export function WorksWheel({ items }: { items: WorksWheelItem[] }) {
         if (suppressClick.current) to(Math.round(target.current));
       }}
       onPointerCancel={() => { dragging.current = null; to(Math.round(target.current)); }}
-      onClickCapture={(event) => { if (suppressClick.current) { event.preventDefault(); event.stopPropagation(); suppressClick.current = false; } }}>
+      onClickCapture={(event) => { if (suppressClick.current && event.detail) { event.preventDefault(); event.stopPropagation(); suppressClick.current = false; return; }
+        const link = (event.target as Element).closest('a');
+        if (link?.getAttribute('href') === selected?.href && selected) {
+          history.replaceState({ ...history.state, galleryReturn: true }, '', '#' + selected.href.split('/')[2]);
+        }
+      }}>
       <div ref={wheelRef} className={`${styles.wheel} work-wheel-arrival`}>
         {items.map((item, i) => {
           const Card = item.paragraphs ? 'div' : Link;

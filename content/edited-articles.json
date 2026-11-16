@@ -1,0 +1,773 @@
+{
+  "3-coffee-shops-in-tokyo": [
+    {
+      "kind": "text",
+      "value": "3 coffee shops in Tokyo"
+    },
+    {
+      "kind": "text",
+      "value": "I have visited Tokyo multiple times and am always impressed with the coffee quality and experience. I want to highlight the fantastic service I have experienced in every unique coffee shop I visited in Tokyo. Here are my top 3 favorite coffee shops in Tokyo!"
+    },
+    {
+      "kind": "text",
+      "value": "1. Supreme Coffee"
+    },
+    {
+      "kind": "text",
+      "value": "2. Latte Art Mania"
+    },
+    {
+      "kind": "text",
+      "value": "3. Uniqlo Coffee"
+    },
+    {
+      "kind": "text",
+      "value": "The photo below is another cafe I visited in Tokyo from one of my favorite animated movies 'Your Name'."
+    },
+    {
+      "kind": "image",
+      "base": "img-3-coffee-shops-in-tokyo-your-name",
+      "widths": [
+        770,
+        1540
+      ],
+      "fallbackWidth": 1540,
+      "width": 1540,
+      "height": 432
+    },
+    {
+      "kind": "text",
+      "value": "1. Supreme Coffee"
+    },
+    {
+      "kind": "text",
+      "value": "Fun fact: I was a big fan of the Supreme clothing brand and discovered this coffee shop because of that. The funny thing is that Supreme Coffee was founded in 1993 before the Supreme clothing brand, which was founded in 1994. Anyways, the coffee shop is cute, cozy, and tasty!"
+    },
+    {
+      "kind": "text",
+      "value": "Experience 4/5"
+    },
+    {
+      "kind": "text",
+      "value": "Taste 4/5"
+    },
+    {
+      "kind": "text",
+      "value": "Environment 4/5"
+    },
+    {
+      "kind": "text",
+      "value": "PRICE:2"
+    },
+    {
+      "kind": "image",
+      "base": "img-3-coffee-shops-in-tokyo-img-5191",
+      "widths": [
+        770,
+        1540
+      ],
+      "fallbackWidth": 1540,
+      "width": 1540,
+      "height": 1155
+    },
+    {
+      "kind": "text",
+      "value": "2. Latte Art Mania"
+    },
+    {
+      "kind": "text",
+      "value": "The special thing about this coffee shop is that a latte art championship winner owns it. The latte art is truly memorable, and they have unique coffee options from espresso, matcha, and kuromitsu hojicha. The coffee shop focuses on black interior design; even some drinks and desserts are black."
+    },
+    {
+      "kind": "text",
+      "value": "*Also, this coffee shop is well known for having distractedly handsome baristas and handsome service. 😉"
+    },
+    {
+      "kind": "text",
+      "value": "Experience 5/5"
+    },
+    {
+      "kind": "text",
+      "value": "Taste 4.5/5"
+    },
+    {
+      "kind": "text",
+      "value": "Environment 4/5"
+    },
+    {
+      "kind": "text",
+      "value": "PRICE:3"
+    },
+    {
+      "kind": "image",
+      "base": "img-3-coffee-shops-in-tokyo-img-5024",
+      "widths": [
+        770
+      ],
+      "fallbackWidth": 770,
+      "width": 770,
+      "height": 629
+    },
+    {
+      "kind": "text",
+      "value": "3. Uniqlo Coffee"
+    },
+    {
+      "kind": "text",
+      "value": "Uniqlo is one of my favorite clothing brands, thanks to its affordability, comfort, and simplicity. I visited the signature store in Ginza, Tokyo, and, by surprise, found a coffee shop on the top floor of the 12-floor Uniqlo building (all 12 floors are for Uniqlo). Its coffee is very affordable, and the coffee shop design well illustrates the simplicity of the clothing brand."
+    },
+    {
+      "kind": "text",
+      "value": "Experience 4/5"
+    },
+    {
+      "kind": "text",
+      "value": "Taste 2/5"
+    },
+    {
+      "kind": "text",
+      "value": "Environment 4/5"
+    },
+    {
+      "kind": "text",
+      "value": "PRICE:1"
+    },
+    {
+      "kind": "image",
+      "base": "img-3-coffee-shops-in-tokyo-img-3666",
+      "widths": [
+        770,
+        1540
+      ],
+      "fallbackWidth": 1540,
+      "width": 1540,
+      "height": 1155
+    }
+  ],
+  "5-coffee-shops-in-seattle": [
+    {
+      "kind": "text",
+      "value": "5 coffee shops in Seattle"
+    },
+    {
+      "kind": "text",
+      "value": "I have been living in Seattle since 2017. Seattle is known as one of the coffee capitals of the world and yes, the coffee here is amazing. Seattle has the highest coffee consumption in the US. Here are my top 5 favorite coffee shops in Seattle!"
+    },
+    {
+      "kind": "image",
+      "base": "img-5-coffee-shops-in-seattle-20160731-140045-2",
+      "widths": [
+        770,
+        1540
+      ],
+      "fallbackWidth": 1540,
+      "width": 1540,
+      "height": 453
+    },
+    {
+      "kind": "text",
+      "value": "1. Union Coffee"
+    },
+    {
+      "kind": "text",
+      "value": "A lot of my friends and followers ask, “what is your favorite coffee shop in Seattle.” To this, my answer is always ‘Union Coffee’ in East of Capitol Hill, Seattle. This coffee shop is minimal and simple vibe which fits my personal taste perfectly. The barista here is professional and super friendly!"
+    },
+    {
+      "kind": "text",
+      "value": "Experience 5/5"
+    },
+    {
+      "kind": "text",
+      "value": "Taste 4.5/5"
+    },
+    {
+      "kind": "text",
+      "value": "Environment 5/5"
+    },
+    {
+      "kind": "text",
+      "value": "PRICE:2"
+    },
+    {
+      "kind": "image",
+      "base": "img-5-coffee-shops-in-seattle-20171120-120129",
+      "widths": [
+        770,
+        1540
+      ],
+      "fallbackWidth": 1540,
+      "width": 1540,
+      "height": 1155
+    },
+    {
+      "kind": "text",
+      "value": "2. La Marzocco Cafe"
+    },
+    {
+      "kind": "text",
+      "value": "La Marzocco is originally known as one of the top espresso machines historically based in Italy. This Café was a demo space to look at the espresso machine. In addition, this café is located in the KEXP radio station (90.3 FM), renown so hosting multiple music artists in Seattle radio. Sometimes you can see live performances in the coffee shop."
+    },
+    {
+      "kind": "text",
+      "value": "Experience 5/5"
+    },
+    {
+      "kind": "text",
+      "value": "Taste 4/5"
+    },
+    {
+      "kind": "text",
+      "value": "Environment 4/5"
+    },
+    {
+      "kind": "text",
+      "value": "PRICE:3"
+    },
+    {
+      "kind": "image",
+      "base": "img-5-coffee-shops-in-seattle-20170825-165625-1",
+      "widths": [
+        770,
+        1540
+      ],
+      "fallbackWidth": 1540,
+      "width": 1540,
+      "height": 1155
+    },
+    {
+      "kind": "text",
+      "value": "3. Elm Coffee"
+    },
+    {
+      "kind": "text",
+      "value": "This coffee shop combines the Historic vibe of Pioneer Square and modern design. Try ‘One of Every Thing’ (photo below), I can comfortably say that you can try multiple types of good coffee with a low budget. Also, in the back of the café, you can see the coffee roaster machine in action emitting the coffee aroma."
+    },
+    {
+      "kind": "text",
+      "value": "Experience 4/5"
+    },
+    {
+      "kind": "text",
+      "value": "Taste 4/5"
+    },
+    {
+      "kind": "text",
+      "value": "Environment 4/5"
+    },
+    {
+      "kind": "text",
+      "value": "PRICE:1"
+    },
+    {
+      "kind": "image",
+      "base": "img-5-coffee-shops-in-seattle-a",
+      "widths": [
+        770,
+        1540
+      ],
+      "fallbackWidth": 1540,
+      "width": 1540,
+      "height": 864
+    },
+    {
+      "kind": "image",
+      "base": "img-5-coffee-shops-in-seattle-img-0027",
+      "widths": [
+        770
+      ],
+      "fallbackWidth": 770,
+      "width": 770,
+      "height": 399
+    },
+    {
+      "kind": "text",
+      "value": "4. Capitol Coffee Works"
+    },
+    {
+      "kind": "text",
+      "value": "Capitol Coffee Works is located in the center of Capitol Hill. When you enter the shop, you can experience a friendly and inclusive environment. It is a perfect location to relax and meet friends. Also, their coffee is amazing."
+    },
+    {
+      "kind": "text",
+      "value": "Experience 4/5"
+    },
+    {
+      "kind": "text",
+      "value": "Taste 4/5"
+    },
+    {
+      "kind": "text",
+      "value": "Environment 4/5"
+    },
+    {
+      "kind": "text",
+      "value": "PRICE:2"
+    },
+    {
+      "kind": "image",
+      "base": "img-5-coffee-shops-in-seattle-20180617-140458",
+      "widths": [
+        770,
+        1540
+      ],
+      "fallbackWidth": 1540,
+      "width": 1540,
+      "height": 1155
+    },
+    {
+      "kind": "text",
+      "value": "5. Espresso Vivace"
+    },
+    {
+      "kind": "text",
+      "value": "If you ask, “What coffee shop best fits Seattle?” I say, “Espresso Vivace Sidewalk Bar.” Espresso Vivace is also known for starting the latte art culture in the US. This coffee shop is just a sidewalk bar without any seats but has some of the most amazing espresso-based drinks and blends in the Capitol Hill vibe perfectly. Hope you try out their latte!"
+    },
+    {
+      "kind": "text",
+      "value": "Experience 4/5"
+    },
+    {
+      "kind": "text",
+      "value": "Taste 4/5"
+    },
+    {
+      "kind": "text",
+      "value": "Environment 4/5"
+    },
+    {
+      "kind": "text",
+      "value": "PRICE:1"
+    },
+    {
+      "kind": "image",
+      "base": "img-5-coffee-shops-in-seattle-img-0019",
+      "widths": [
+        770
+      ],
+      "fallbackWidth": 770,
+      "width": 770,
+      "height": 592
+    }
+  ],
+  "5-in-milan": [
+    {
+      "kind": "text",
+      "value": "5 in Milan"
+    },
+    {
+      "kind": "text",
+      "value": "Milan is such an amazing city for coffee. It is delicate, tasty, cheap, fast, and amazing. 😉 I personally had the best experience for coffee in Europe so far. These are the 5 places I enjoyed the most in Milan so give it a visit!"
+    },
+    {
+      "kind": "image",
+      "base": "img-5-in-milan-55",
+      "widths": [
+        770,
+        1540
+      ],
+      "fallbackWidth": 1540,
+      "width": 1540,
+      "height": 378
+    },
+    {
+      "kind": "text",
+      "value": "1) Giacomo Tabaccheria"
+    },
+    {
+      "kind": "text",
+      "value": "Honestly, I personally think I had the best tasting cup of espresso of my life here in Giacomo Tabaccheria. Couple friends from Milan recommended this place and yes it was amazing. Also, a cup of espresso here was 1 Euro which is pretty crazy. If you get to visit this place, please let me know what kind of coffee bean they use."
+    },
+    {
+      "kind": "text",
+      "value": "Experience 4/5"
+    },
+    {
+      "kind": "text",
+      "value": "Taste 5/5"
+    },
+    {
+      "kind": "text",
+      "value": "Environment 3.5/5"
+    },
+    {
+      "kind": "text",
+      "value": "PRICE:1"
+    },
+    {
+      "kind": "image",
+      "base": "img-5-in-milan-20170703-135524",
+      "widths": [
+        770
+      ],
+      "fallbackWidth": 770,
+      "width": 770,
+      "height": 770
+    },
+    {
+      "kind": "text",
+      "value": "2) Pasticceria Marchesi"
+    },
+    {
+      "kind": "text",
+      "value": "Pasticceria Marchesi is located in Galleria Vittorio Emanuele II which is one of the most touristic locations of Milan. They have beautiful pastries in their store and great coffee as well. One huge tip is to not seat on the dining tables for coffee. Their espresso bar prices and seat table prices are very different."
+    },
+    {
+      "kind": "text",
+      "value": "Experience 4/5"
+    },
+    {
+      "kind": "text",
+      "value": "Taste 4/5"
+    },
+    {
+      "kind": "text",
+      "value": "Environment 4/5"
+    },
+    {
+      "kind": "text",
+      "value": "PRICE:1"
+    },
+    {
+      "kind": "image",
+      "base": "img-5-in-milan-20170701-142047",
+      "widths": [
+        770,
+        1540
+      ],
+      "fallbackWidth": 1540,
+      "width": 1540,
+      "height": 1155
+    },
+    {
+      "kind": "image",
+      "base": "img-5-in-milan-20170701-143009",
+      "widths": [
+        770,
+        1540
+      ],
+      "fallbackWidth": 1540,
+      "width": 1540,
+      "height": 1155
+    },
+    {
+      "kind": "text",
+      "value": "3) LùBar"
+    },
+    {
+      "kind": "text",
+      "value": "I got to visit this place for dinner with my friends and it was amazing! This restaurant started as a food truck in Italy but look at what they have become today! This place is a restaurant/café/bar. Even though the environment might feel fancy and expensive it is pretty affordable. Try their coffee, food, drinks and let me know how it is."
+    },
+    {
+      "kind": "text",
+      "value": "Experience 3.5/5"
+    },
+    {
+      "kind": "text",
+      "value": "Taste 4/5"
+    },
+    {
+      "kind": "text",
+      "value": "Environment 4.5/5"
+    },
+    {
+      "kind": "text",
+      "value": "PRICE:1"
+    },
+    {
+      "kind": "image",
+      "base": "img-5-in-milan-20170702-201101",
+      "widths": [
+        770,
+        1540
+      ],
+      "fallbackWidth": 1540,
+      "width": 1540,
+      "height": 1155
+    },
+    {
+      "kind": "text",
+      "value": "4) Chocolat"
+    },
+    {
+      "kind": "text",
+      "value": "I was in this store for the best ice cream in Milan found out that they have great coffee too. Another tip for drinking coffee is coffee goes well with ice cream. They have amazing ice cream and desserts. I think 2 ice cream flavors are around 3 Euros."
+    },
+    {
+      "kind": "text",
+      "value": "Experience 3.5/5"
+    },
+    {
+      "kind": "text",
+      "value": "Taste 4.5/5"
+    },
+    {
+      "kind": "text",
+      "value": "Environment 2.5/5"
+    },
+    {
+      "kind": "text",
+      "value": "PRICE:1"
+    },
+    {
+      "kind": "image",
+      "base": "img-5-in-milan-20170703-195615",
+      "widths": [
+        770,
+        1540
+      ],
+      "fallbackWidth": 1540,
+      "width": 1540,
+      "height": 1155
+    },
+    {
+      "kind": "text",
+      "value": "5) Mugs and co."
+    },
+    {
+      "kind": "text",
+      "value": "This place was reviewed as one the best coffee shops in Milan so I gave it a visit. I think this is a perfect place to grab some coffee and relax with your friends. Next to this café, there is a beautiful park (cover photo) so check it out."
+    },
+    {
+      "kind": "text",
+      "value": "Experience 3.5/5"
+    },
+    {
+      "kind": "text",
+      "value": "Taste 3.5/5"
+    },
+    {
+      "kind": "text",
+      "value": "Environment 4/5"
+    },
+    {
+      "kind": "text",
+      "value": "PRICE:2"
+    },
+    {
+      "kind": "image",
+      "base": "img-5-in-milan-20170703-142816",
+      "widths": [
+        770,
+        1540
+      ],
+      "fallbackWidth": 1540,
+      "width": 1540,
+      "height": 1233
+    }
+  ],
+  "product-visualize": [
+    {
+      "kind": "text",
+      "value": "Product Visualize, 2019"
+    },
+    {
+      "kind": "text",
+      "value": "In the 2019 iOS preview of Dynamics 365 Product Visualize, sales representatives could place a 3D model of a product in a customer’s space and take notes on their requirements."
+    },
+    {
+      "kind": "text",
+      "value": "Responsibility: Product Design, UX, UI, User Research, Customer Engagement, Accessibility"
+    },
+    {
+      "kind": "text",
+      "value": "Credits: Product Visualize Development Team, Mixed Reality at Work Design Team, Dynamics 365 Design Team"
+    },
+    {
+      "kind": "embed",
+      "src": "https://www.youtube.com/embed/lk2HzxZfkW4",
+      "title": "Introducing Microsoft Dynamics 365 Product Visualize"
+    },
+    {
+      "kind": "embed",
+      "src": "https://www.youtube.com/embed/NIgog6rYO00",
+      "title": "Ecolab delivers a compelling vision using mixed reality from Dynamics 365"
+    },
+    {
+      "kind": "image",
+      "base": "img-product-visualize-salesassistheroimage",
+      "widths": [
+        770,
+        1540
+      ],
+      "fallbackWidth": 1540,
+      "width": 1540,
+      "height": 665
+    }
+  ],
+  "seeing-ai": [
+    {
+      "kind": "text",
+      "value": "Seeing AI, 2017"
+    },
+    {
+      "kind": "text",
+      "value": "Seeing AI is a mobile application that narrates the world around you. The app is designed for the low vision community by Machine Learning and AI to describe people, text, and objects."
+    },
+    {
+      "kind": "text",
+      "value": "Responsibility: UX, UI, User Research, Accessibility, Prototyping"
+    },
+    {
+      "kind": "text",
+      "value": "Credits: Seeing AI Development Team, Foundry Incubation Lab, Microsoft Garage Team"
+    },
+    {
+      "kind": "text",
+      "value": "[Seeing AI App (iOS download)](https://apps.apple.com/us/app/seeing-ai/id999062298)"
+    },
+    {
+      "kind": "embed",
+      "src": "https://www.youtube.com/embed/R2mC-NUAmMk",
+      "title": "Seeing AI 2016 Prototype - A Microsoft research project"
+    },
+    {
+      "kind": "embed",
+      "src": "https://www.youtube.com/embed/bqeQByqf_f8",
+      "title": "Seeing AI app from Microsoft"
+    },
+    {
+      "kind": "text",
+      "value": "Process"
+    },
+    {
+      "kind": "text",
+      "value": "We interviewed more than 20 people with visual impairments about challenges they faced each day. Many wanted help finding a chair or a door. Saqib Shaikh, the project owner, agreed this was worth exploring."
+    },
+    {
+      "kind": "motion",
+      "base": "mov-seeing-ai-chairloopicon",
+      "hasWebm": true,
+      "width": 960,
+      "height": 540
+    },
+    {
+      "kind": "text",
+      "value": "Audio and haptics"
+    },
+    {
+      "kind": "text",
+      "value": "The prototype used sound and vibration to guide people toward a chair. Feedback came from the direction of the chair, and the audio pulses grew faster as the person approached. The pulsing dot in the demo represents this feedback."
+    }
+  ],
+  "wrap-and-charge": [
+    {
+      "kind": "text",
+      "value": "Wrap and Charge, 2016"
+    },
+    {
+      "kind": "text",
+      "value": "Wrap and Charge is a wall adapter with room to wrap the charging cable around it for travel. Kikkerland featured it in its spring 2016 catalog, Design Milk included it in its Best of ICFF coverage, and it won The Container Store’s 2016 challenge."
+    },
+    {
+      "kind": "text",
+      "value": "Responsibility: Product Design, CAD, User Research, Industrial Design, Prototyping"
+    },
+    {
+      "kind": "text",
+      "value": "Credits: Kikkerland Design Team, The Container Store, RISD ID"
+    },
+    {
+      "kind": "text",
+      "value": "Results: +10,000 units sold, +100 stores"
+    },
+    {
+      "kind": "text",
+      "value": "[View Wrap and Charge on Amazon](https://www.amazon.com/gp/product/B06XBGPWQ7)"
+    },
+    {
+      "kind": "image",
+      "base": "img-wrap-and-charge-bbb",
+      "widths": [
+        770,
+        1540
+      ],
+      "fallbackWidth": 1540,
+      "width": 1540,
+      "height": 858
+    },
+    {
+      "kind": "image",
+      "base": "img-wrap-and-charge-screen-shot-2019-02-08-at-9-08-25-pm",
+      "widths": [
+        770,
+        1540
+      ],
+      "fallbackWidth": 1540,
+      "width": 1540,
+      "height": 858
+    },
+    {
+      "kind": "text",
+      "value": "Question"
+    },
+    {
+      "kind": "text",
+      "value": "\"Why can't I wrap my cable on the charger?\""
+    },
+    {
+      "kind": "text",
+      "value": "Process"
+    },
+    {
+      "kind": "text",
+      "value": "I started with sketches, then used SolidWorks to refine the design. The photo on the right shows the working prototype I presented to our partners, built with 3D-printed parts and electronics."
+    },
+    {
+      "kind": "image",
+      "base": "img-wrap-and-charge-screen-shot-2019-02-08-at-9-13-43-pm",
+      "widths": [
+        770,
+        1540
+      ],
+      "fallbackWidth": 1540,
+      "width": 1540,
+      "height": 688
+    },
+    {
+      "kind": "text",
+      "value": "Sales Pitch"
+    },
+    {
+      "kind": "text",
+      "value": "In order to sell the idea to manufacturing and retail companies, I had to formulate a story that clearly explained the need and how the design addressed it."
+    },
+    {
+      "kind": "image",
+      "base": "img-wrap-and-charge-screen-shot-2019-02-08-at-9-12-54-pm",
+      "widths": [
+        770,
+        1540
+      ],
+      "fallbackWidth": 1540,
+      "width": 1540,
+      "height": 697
+    },
+    {
+      "kind": "text",
+      "value": "Results"
+    },
+    {
+      "kind": "text",
+      "value": "+10,000 units sold"
+    },
+    {
+      "kind": "text",
+      "value": "Sold in +100 stores"
+    },
+    {
+      "kind": "text",
+      "value": "3 publications"
+    },
+    {
+      "kind": "image",
+      "base": "img-wrap-and-charge-screen-shot-2019-02-08-at-9-33-33-pm",
+      "widths": [
+        770,
+        1540
+      ],
+      "fallbackWidth": 1540,
+      "width": 1540,
+      "height": 860
+    }
+  ]
+}

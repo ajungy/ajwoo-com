@@ -72,7 +72,15 @@ export function CoffeeCarousel({ slides }: { slides: CoffeeSlide[] }) {
       const card = track.children[requestedIndex.current] as HTMLElement;
       if (card) track.scrollTo({ left: card.offsetLeft - (track.clientWidth - card.clientWidth) / 2, behavior: 'instant' });
     };
+    const restored = slides.findIndex(slide => '#' + slide.slug === location.hash);
+    if (restored >= 0) {
+      requestedIndex.current = slides.length + restored;
+      setActive(restored);
+    }
     center();
+    if (restored >= 0 && history.state?.galleryReturn) {
+      (track.children[requestedIndex.current] as HTMLElement)?.focus({ preventScroll: true });
+    }
     const resize = new ResizeObserver(center);
     resize.observe(track);
     return () => resize.disconnect();
@@ -120,7 +128,13 @@ export function CoffeeCarousel({ slides }: { slides: CoffeeSlide[] }) {
       onKeyDown={(event) => {
         if (['ArrowDown', 'ArrowRight', 'ArrowUp', 'ArrowLeft'].includes(event.key)) {
           event.preventDefault();
-          move(event.key === 'ArrowDown' || event.key === 'ArrowRight' ? 1 : -1);
+          const direction = event.key === 'ArrowDown' || event.key === 'ArrowRight' ? 1 : -1;
+          if (rail.current?.contains(event.target as Element)) {
+            const index = (active + direction + slides.length) % slides.length;
+            const card = rail.current.children[slides.length + index] as HTMLElement;
+            card.focus({ preventScroll: true });
+            setActive(index);
+          } else move(direction);
         }
       }}>
       <div className={`${styles.stage} route-media`}>
@@ -187,7 +201,7 @@ export function CoffeeCarousel({ slides }: { slides: CoffeeSlide[] }) {
             key={`${i}-${slide.slug}`}
             href={`/work/${slide.slug}/`}
             className={styles.card}
-            tabIndex={i >= slides.length && i < slides.length * 2 ? 0 : -1}
+            tabIndex={i === slides.length + active ? 0 : -1}
             aria-hidden={i < slides.length || i >= slides.length * 2 ? true : undefined}
             onFocus={(event) => {
               if (!event.currentTarget.matches(':focus-visible')) return;
@@ -197,6 +211,7 @@ export function CoffeeCarousel({ slides }: { slides: CoffeeSlide[] }) {
               const card = event.currentTarget;
               rail.current?.scrollTo({ left: card.offsetLeft - (rail.current.clientWidth - card.clientWidth) / 2, behavior: 'instant' });
             }}
+            onClick={() => history.replaceState({ ...history.state, galleryReturn: true }, '', '#' + slide.slug)}
             aria-label={`Read ${slide.title}`}
             data-cursor-label="Read review"
           >

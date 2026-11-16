@@ -4,9 +4,9 @@ import { WorkProjectActions } from '@/components/WorkProjectActions';
 export const metadata: Metadata = { title: 'Convert — Independent product design', description: 'A focused browser-based file conversion workflow, designed and built by Alex Woo.' };
 export default function ConvertStory() {
   return <article className="work-reading-column py-12">
-    <p className="type-caption">Independent product · Design and build</p>
-    <h1 className="mt-4 type-project-title">From file to format, with fewer steps.</h1>
-    <p className="mt-4 type-subtitle">Convert brings file conversion into a single browser workflow: drop files, choose a format, and download the result.</p>
+    <h1 className="type-project-title">Convert</h1>
+    <p className="mt-4 type-caption">Independent product · Design and build</p>
+    <p className="mt-4 type-section-heading">Drop files into your browser, choose a format, and download the result.</p>
     <h2 className="mt-12 type-section-heading">The job</h2>
     <p className="mt-4 type-body">Get a file into the format needed for the next task. Convert supports images, video, audio, documents, spreadsheets, and archives through one entry point.</p>
     <h2 className="mt-12 type-section-heading">The product approach</h2>

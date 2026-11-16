@@ -1,5 +1,5 @@
 import { WorkProjectActions } from '@/components/WorkProjectActions';
-import { ExternalLink } from '@/components/Icons';
+import { ProjectLinks } from '@/components/ProjectLinks';
 import type { NetflixPayload } from '@/lib/netflix/types';
 import { type Project } from '@/content/projects';
 import { NetflixMuseExample, NetflixPublicExamples } from './NetflixPublicExamples';
@@ -11,11 +11,11 @@ export function NetflixProject({ project, work: netflixWork, examples }: { proje
       <div className="work-reading-column">
         <header className="pt-12 pb-12">
           <h1 className="type-project-title">{project.title}</h1>
-          <p className="mt-4 type-subtitle">{project.category} - {netflixWork.years}</p>
+          <p className="mt-4 type-caption">{project.category} - {netflixWork.years}</p>
         </header>
 
         <article className="pb-12">
-          <div className="mb-12 max-w-content">
+          <div className="mb-9 max-w-content">
             <video autoPlay loop muted playsInline preload="auto"
               poster="/img/netflix-creative-tools-intro-poster.webp?v=43e413deb0"
               width={1918} height={1080}
@@ -25,7 +25,7 @@ export function NetflixProject({ project, work: netflixWork, examples }: { proje
             </video>
           </div>
           <section className="max-w-content" aria-labelledby="netflix-overview">
-            <h2 id="netflix-overview" className="type-decision">{netflixWork.introduction}</h2>
+            <h2 id="netflix-overview" className="type-section-heading">{project.lead}</h2>
             <p className="mt-4 type-body">{netflixWork.overview}</p>
           </section>
 
@@ -93,31 +93,9 @@ export function NetflixProject({ project, work: netflixWork, examples }: { proje
 
           <NetflixPublicExamples examples={examples} />
 
-          <section className="mt-9 max-w-content" aria-labelledby="netflix-links">
-            <h2 id="netflix-links" className="type-decision">Links related to this project</h2>
-            <p className="mt-4 type-body">
-              Public writing and resources about Netflix’s creative tools and technology.
-              These span several teams and years and provide context for the work described above.
-            </p>
-            <ul className="mt-6">
-              {netflixWork.links.map((link) => (
-                <li key={link.href}>
-                  <a href={link.href} target="_blank" rel="noopener noreferrer"
-                    data-cursor-label="Read public resource"
-                    className="-mx-6 block rounded-lg px-6 py-7 transition-colors duration-fast ease-standard can-hover:hover:bg-hover">
-                    <p className="type-caption">{link.source}</p>
-                    <h3 className="mt-3 flex items-start justify-between gap-6 type-decision">
-                      <span className="underline decoration-line underline-offset-4">{link.title}</span>
-                      <ExternalLink className="mt-1 h-7 w-7 shrink-0" />
-                    </h3>
-                    <p className="mt-4 type-body">{link.description}</p>
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </section>
+          <ProjectLinks links={netflixWork.links} intro="Public writing and resources about Netflix’s creative tools and technology. These span several teams and years and provide context for the work described above." />
 
-          <WorkProjectActions />
+          <WorkProjectActions slug={project.slug} />
         </article>
 
 
