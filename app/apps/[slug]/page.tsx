@@ -19,6 +19,8 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
 export default function AppPage({ params }: { params: { slug: string } }) {
   const app = apps.find((a) => a.slug === params.slug);
   if (!app) notFound();
+  const firstFeature = app.detail.findIndex(item => typeof item !== 'string' && 'label' in item);
+  const highlightsStart = firstFeature >= 0 ? firstFeature : 1;
 
   // Capped at 3, at Alex's direction — full cards (not the old plain-link
   // list) take real space, and three is the /apps grid's own row width
@@ -126,20 +128,24 @@ export default function AppPage({ params }: { params: { slug: string } }) {
       ) : null}
 
       <article className="max-w-content space-y-8">
-        {app.detail.map((para, i) => {
-          if (typeof para === 'string') {
-            return <p key={i} className="type-body">{para}</p>;
-          }
-          if ('lead' in para) {
-            return <p key={i} className="type-section-heading">{para.lead}</p>;
-          }
-          return (
-            <div key={i} className={i ? '!mt-[var(--section-gap)]' : undefined}>
-              <p className="type-decision">{para.label}</p>
-              <p className="mt-4 type-body">{para.body}</p>
-            </div>
-          );
-        })}
+        {app.detail.slice(0, highlightsStart).map((item, i) =>
+          typeof item === 'string' ? <p key={i} className="type-body">{item}</p>
+            : 'lead' in item && <p key={i} className="type-section-heading">{item.lead}</p>
+        )}
+        <section aria-labelledby="app-highlights" className="!mt-[var(--section-gap)]">
+          <h2 id="app-highlights" className="type-section-heading">Highlights</h2>
+          <div className="mt-8 space-y-8">
+            {app.detail.slice(highlightsStart).map((item, i) =>
+              typeof item === 'string' ? <p key={i} className="type-body">{item}</p>
+                : 'label' in item && (
+                  <div key={item.label}>
+                    <h3 className="type-decision">{item.label}</h3>
+                    <p className="mt-4 type-body">{item.body}</p>
+                  </div>
+                )
+            )}
+          </div>
+        </section>
         {/* bg-raised + a border, not bg-sunken — at Alex's direction
             ("the tags... are more visible... the dark gray is not
             visible against the black background"): bg-sunken is a
