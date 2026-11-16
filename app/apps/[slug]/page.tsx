@@ -26,7 +26,7 @@ export default function AppPage({ params }: { params: { slug: string } }) {
   // rather than an open-ended list.
 
   return (
-    <div className="mx-auto max-w-app px-page">
+    <div className="work-reading-column">
       {/* No "← Apps" back link, at Alex's direction — the top bar's own
           wordmark and nav already reach Apps in one click, and the "More
           apps" list at the bottom of this same page already offers the

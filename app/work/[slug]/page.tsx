@@ -44,7 +44,15 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
 // instead and the subtitle block is dropped entirely.
 const YEAR_SUBTITLE = /^.{0,60}?[\s,-]+((?:19|20)\d{2})\s*$/;
 
+const introVideos: Record<string, { src: string; label: string }> = {
+  'pr-ae-frame': { src: '/img/frameio-review-workflow.mp4', label: 'Frame.io review workflow in Premiere Pro' },
+  'seeing-ai': { src: '/img/seeing-ai-horizontal.mp4', label: 'Microsoft Seeing AI demonstration' },
+  'product-visualize': { src: '/img/product-visualize-horizontal.mp4', label: 'Microsoft Product Visualize demonstration' },
+};
+
+const filmRiotId = 'T72C17jVx44';
 const relatedVideoIds: Record<string, string> = {
+  'premiere-generative-ai': filmRiotId,
   'dynamics-365-customer-voice': 'Qn9hGppCitw',
   'product-visualize': 'NIgog6rYO00',
   layout: '1nnIX75Vpn0',
@@ -64,7 +72,10 @@ export default function WorkPage({ params }: { params: { slug: string } }) {
   const source = blocksFor(project.slug);
   const videoId = relatedVideoIds[project.slug];
   const relatedVideo = source.find(block => block.kind === 'embed' && block.src === `https://www.youtube.com/embed/${videoId}`);
-  const all = source.filter(block => block !== relatedVideo);
+  const all = source.filter(block =>
+    block !== relatedVideo &&
+    !(project.slug === 'wrap-and-charge' && block.kind === 'image' && block.base === 'img-wrap-and-charge-bbb')
+  );
   const firstBlock = all[0];
   // The first line of several posts is the title again. The <h1> already says
   // it, so repeating it is a second hierarchy for the same thing.
@@ -75,18 +86,19 @@ export default function WorkPage({ params }: { params: { slug: string } }) {
   const withoutTitle = isExactTitle || yearMatch ? all.slice(1) : all;
 
   // Keep an opening image between the project metadata and the editorial lead.
-  const hero = withoutTitle[0]?.kind === 'image' ? withoutTitle[0] : null;
-  const blocks = hero ? withoutTitle.slice(1) : withoutTitle;
+  const openingMedia = ['layout', 'netmarble', '10-borders'].includes(project.slug)
+    ? withoutTitle.find(block => block.kind === 'image')
+    : withoutTitle[0];
+  const hero = openingMedia?.kind === 'image' ? openingMedia : null;
+  const blocks = hero ? withoutTitle.filter(block => block !== hero) : withoutTitle;
 
+  const introVideo = introVideos[project.slug];
   const study = caseStudies[project.slug];
   const isCoffee = project.kind === 'coffee';
 
 
   return (
-    <div className={isCoffee ? undefined : "work-reading-column"}>
-
-
-      <div className={isCoffee ? "mx-auto max-w-app px-page" : undefined}>
+    <div className="work-reading-column">
         <header className="pt-12 pb-12">
           <h1 className="type-project-title">{project.title}{project.kind === 'coffee' && year ? `, ${year}` : ''}</h1>
           <p className="mt-4 type-caption">{project.category}{project.kind === 'design' && year ? ` - ${year}` : ''}</p>
@@ -97,21 +109,34 @@ export default function WorkPage({ params }: { params: { slug: string } }) {
           img={hero}
           alt={project.title}
           priority
-          sizes={isCoffee ? "100vw" : "(max-width: 592px) calc(100vw - 32px), 560px"}
+          sizes="(max-width: 592px) calc(100vw - 32px), 560px"
           className="mb-9 block h-auto w-full"
         />
       )}
 
         <article className="pb-12">
-          <p className="mb-9 max-w-content type-section-heading">{project.lead}</p>
-          {project.slug === 'premiere-generative-ai' && (
+          {introVideo && (
+            <video
+              className="mb-9 block h-auto w-full"
+              width={1280}
+              height={720}
+              src={introVideo.src}
+              aria-label={introVideo.label}
+              autoPlay
+              loop
+              muted
+              playsInline
+            />
+          )}
+          {project.slug === 'premiere-generative-ai' ? (
             <figure className="mb-9">
-              <blockquote className="type-subtitle text-fg">
+              <video className="mb-9 block h-auto w-full" width={1920} height={1080} autoPlay loop muted playsInline aria-label="Generative removal in Premiere Pro" src="/img/premiere-generative-remove.mp4" />
+              <blockquote className="type-section-heading">
                 “Adobe had been absolutely crushing it with new tools that leverage AI to give creators more freedom”
               </blockquote>
               <figcaption className="mt-4 type-caption">Ryan Connolly from @FilmRiot</figcaption>
             </figure>
-          )}
+          ) : <p className="mb-9 max-w-content type-section-heading">{project.lead}</p>}
           {study && <section className="max-w-content mb-12">
             <h2 className="type-decision">The challenge</h2>
             <p className="mt-4 type-body">{study.problem}</p>
@@ -123,10 +148,12 @@ export default function WorkPage({ params }: { params: { slug: string } }) {
             <p className="mt-4 type-body">{study.outcome}</p>
           </section>}
           <Blocks blocks={study ? [...blocks.filter((b) => b.kind !== 'text'), ...(study.additionalBlocks ?? [])] : blocks} alt={project.title} compactMedia={!isCoffee} />
-          {relatedVideo?.kind === 'embed' && (
+          {videoId && (
             <ProjectLinks links={[{
               href: `https://www.youtube.com/watch?v=${videoId}`,
-              title: relatedVideo.title || project.title,
+              title: relatedVideo?.kind === 'embed' && relatedVideo.title
+                ? relatedVideo.title
+                : videoId === filmRiotId ? 'Breaking Down Generative AI in Premiere Pro | Adobe Video x @filmriot' : project.title,
               source: 'YouTube',
             }]} />
           )}
@@ -134,7 +161,6 @@ export default function WorkPage({ params }: { params: { slug: string } }) {
         </article>
 
 
-      </div>
     </div>
   );
 }
