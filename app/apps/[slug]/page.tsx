@@ -50,9 +50,9 @@ export default function AppPage({ params }: { params: { slug: string } }) {
             <AppIcon name={app.icon} className="h-14 w-14" />
           </span>
         )}
-        <div className="min-w-0 flex-1">
+        <div className="min-w-0 flex-1 medium:flex medium:min-h-[112px] medium:flex-col medium:justify-between">
           <h1 className="type-project-title">{app.name}{app.beta ? ' Beta' : ''}</h1>
-          <p className="mt-4 max-w-content type-subtitle">{app.description}</p>
+          <p className="mt-4 max-w-content type-subtitle medium:mt-0">{app.description}</p>
 
           {/* The platform/trigger caption line that used to sit here is
               gone, at Alex's direction — the smallest, least load-bearing
@@ -67,7 +67,7 @@ export default function AppPage({ params }: { params: { slug: string } }) {
               confident, one-primary-per-view action a real download/
               purchase would be (Principle 9: real separation, never
               default-focused, a plain navigation so it can't double-fire). */}
-          <div className="mt-6">
+          <div className="mt-6 medium:mt-1">
             {app.openUrl ? (
               <Action href={app.openUrl} external variant="secondary" cursorLabel="Open">
                 Open
@@ -131,10 +131,7 @@ export default function AppPage({ params }: { params: { slug: string } }) {
             return <p key={i} className="type-body">{para}</p>;
           }
           if ('lead' in para) {
-            // The opening statement — bolded and set apart from the plain
-            // paragraphs that follow, at Alex's direction. Same size/family
-            // as everything else, only the weight changes.
-            return <p key={i} className="type-decision">{para.lead}</p>;
+            return <p key={i} className="type-section-heading">{para.lead}</p>;
           }
           return (
             <div key={i}>
