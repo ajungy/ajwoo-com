@@ -26,17 +26,17 @@ export default function AppPage({ params }: { params: { slug: string } }) {
   // rather than an open-ended list.
 
   return (
-    <div className="work-reading-column">
+    <div className="portfolio-media work-reading-column">
       {/* No "← Apps" back link, at Alex's direction — the top bar's own
           wordmark and nav already reach Apps in one click, and the "More
           apps" list at the bottom of this same page already offers the
           other two, so a second back affordance sitting alone above the
           fold wasn't earning its space (same reasoning as the /work pages). */}
-      <header className="flex flex-col gap-8 pt-12 pb-12 medium:flex-row medium:items-start">
+      <header className={`flex flex-col gap-8 pt-12 medium:flex-row medium:items-start ${app.demoVideoYoutube || app.demoVideo || app.demoImage ? 'pb-12' : 'pb-[var(--section-gap)]'}`}>
         {/* h-28/w-28 (112px), up from 96px — bigger again at Alex's
             direction ("make the logo a little bit larger"). */}
         {app.iconImage ? (
-          <span className={`relative block h-28 w-28 shrink-0 overflow-hidden rounded-xl ${['capture', 'narrate'].includes(app.slug) ? '' : 'border border-line-subtle'}`}>
+          <span data-app-logo className={`relative block h-28 w-28 shrink-0 overflow-hidden rounded-xl ${['capture', 'narrate'].includes(app.slug) ? '' : 'border border-line-subtle'}`}>
           <img
             src={['capture', 'narrate'].includes(app.slug) ? `/img/appicon-${app.slug}-square.svg` : `/img/${app.iconImage}-${app.slug === 'mbti-test' ? 128 : 256}.webp`}
             alt=""
@@ -96,7 +96,7 @@ export default function AppPage({ params }: { params: { slug: string } }) {
           YouTube cookies until playback actually starts. demoVideoYoutube
           takes priority over the self-hosted demoVideo when both are set. */}
       {app.demoVideoYoutube ? (
-        <div className="mb-12 aspect-video overflow-hidden rounded-lg border border-line-subtle bg-sunken">
+        <div className="detail-hero-media mb-12 aspect-video overflow-hidden rounded-lg border border-line-subtle bg-sunken">
           <iframe
             src={`https://www.youtube-nocookie.com/embed/${app.demoVideoYoutube}`}
             title={`${app.name} demo`}
@@ -106,7 +106,7 @@ export default function AppPage({ params }: { params: { slug: string } }) {
           />
         </div>
       ) : app.demoVideo ? (
-        <div className={`mb-12${['letter', 'mbti-test'].includes(app.slug) ? ' max-w-md' : ''}`}>
+        <div className="detail-hero-media mb-12">
           <video
             controls
             playsInline
@@ -120,7 +120,7 @@ export default function AppPage({ params }: { params: { slug: string } }) {
           </video>
         </div>
       ) : app.demoImage ? (
-        <figure className={`mb-12 overflow-hidden rounded-lg border border-line-subtle bg-sunken${app.slug === 'letter' ? ' max-w-md' : ''}`}>
+        <figure className="detail-hero-media mb-12 overflow-hidden rounded-lg border border-line-subtle bg-sunken">
           <img src={app.demoImage.src} alt={app.demoImage.alt} width={app.demoImage.width} height={app.demoImage.height} className="block h-auto w-full" />
         </figure>
       ) : null}
@@ -134,7 +134,7 @@ export default function AppPage({ params }: { params: { slug: string } }) {
             return <p key={i} className="type-section-heading">{para.lead}</p>;
           }
           return (
-            <div key={i}>
+            <div key={i} className={i ? '!mt-[var(--section-gap)]' : undefined}>
               <p className="type-decision">{para.label}</p>
               <p className="mt-4 type-body">{para.body}</p>
             </div>

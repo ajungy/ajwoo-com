@@ -8,20 +8,20 @@ export function NetflixProject({ project, work: netflixWork, examples }: { proje
 
   return (
     <>
-      <div className="work-reading-column">
+      <div className="portfolio-media work-reading-column">
         <header className="pt-12 pb-12">
           <h1 className="type-project-title">{project.title}</h1>
           <p className="mt-4 type-caption">{project.category} - {netflixWork.years}</p>
         </header>
 
-        <article className="pb-12">
-          <div className="mb-9 max-w-content">
+        <article>
+          <div className="detail-hero-media mb-12">
             <video autoPlay loop muted playsInline preload="auto"
-              poster="/img/netflix-creative-tools-intro-poster.webp?v=43e413deb0"
-              width={1918} height={1080}
+              poster="/img/netflix-creative-tools-cropped-poster.webp"
+              width={1682} height={964}
               aria-label="Netflix creative tools video example"
               className="block h-auto w-full">
-              <source src="/img/netflix-creative-tools-intro.mp4?v=43e413deb0" type="video/mp4" />
+              <source src="/img/netflix-creative-tools-cropped.mp4" type="video/mp4" />
             </video>
           </div>
           <section className="max-w-content" aria-labelledby="netflix-overview">
@@ -29,11 +29,11 @@ export function NetflixProject({ project, work: netflixWork, examples }: { proje
             <p className="mt-4 type-body">{netflixWork.overview}</p>
           </section>
 
-          <section className="mt-9 max-w-content" aria-labelledby="netflix-contribution">
+          <section className="mt-[var(--section-gap)] max-w-content" aria-labelledby="netflix-contribution">
             <h2 id="netflix-contribution" className="type-decision">My scope</h2>
             <p className="mt-4 type-body">{netflixWork.contribution}</p>
             <p className="mt-6 type-body">{netflixWork.distribution}</p>
-            <dl className="mt-9 space-y-9">
+            <dl className="mt-[var(--section-gap)] space-y-[var(--section-gap)]">
               {netflixWork.areas.map((area) => (
                 <div key={area.title}>
                   <dt className="type-decision">{area.title}</dt>
@@ -85,7 +85,7 @@ export function NetflixProject({ project, work: netflixWork, examples }: { proje
             </dl>
           </section>
 
-          <section className="mt-9 max-w-content" aria-labelledby="netflix-challenge">
+          <section className="mt-[var(--section-gap)] max-w-content" aria-labelledby="netflix-challenge">
             <h2 id="netflix-challenge" className="type-decision">The challenge / Creative complexity at scale</h2>
             <p className="mt-4 type-body">{netflixWork.challenge}</p>
             <p className="mt-6 type-body">{netflixWork.impactContext}</p>

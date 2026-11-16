@@ -4,8 +4,8 @@ type Resource = { href: string; title: string; source: string; description?: str
 
 export function ProjectLinks({ links, intro }: { links: readonly Resource[]; intro?: string }) {
   return (
-    <section className="mt-9 max-w-content" aria-labelledby="project-links">
-      <h2 id="project-links" className="type-decision">Links related to this project</h2>
+    <section className="mt-[var(--section-gap)] max-w-content" aria-labelledby="project-links">
+      <h2 id="project-links" className="type-decision">Related links</h2>
       {intro && <p className="mt-4 type-body">{intro}</p>}
       <ul className="mt-6">
         {links.map((link) => (

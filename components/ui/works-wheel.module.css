@@ -3,7 +3,7 @@
 .stage:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: -4px; }
 .wheel { position: absolute; left: 50%; top: 50%; transform-style: preserve-3d; }
 .card { position: absolute; display: block; backface-visibility: hidden; transform-style: preserve-3d; }
-.face { position: relative; display: block; width: 100%; height: 100%; overflow: hidden; border-radius: var(--r-control); background: var(--surface-raised); }
+.face { position: relative; display: block; width: 100%; height: 100%; overflow: hidden; border-radius: 8px; background: var(--surface-raised); }
 .face picture { display: block; width: 100%; height: 100%; }
 .media { display: block; width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
 .ringLabel { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; pointer-events: none; font-size: 24px; }

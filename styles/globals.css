@@ -5,6 +5,7 @@
 @tailwind utilities;
 
 :root {
+  --section-gap: 160px;
   --work-video-matte: #f6f6f6; /* Matches the matte encoded into work thumbnails. */
   /* At the landing carousel’s 300px card width: 2px offset and 6px blur. */
   --work-video-shadow: 0 max(2px, calc(2cqw / 3)) max(6px, 2cqw) rgb(0 0 0 / 30%);
@@ -16,6 +17,16 @@
   @screen large {
     .work-reading-column { width: calc((min(100%, 1200px) - 2 * var(--page-pad)) / 2); max-width: none; }
   }
+
+  .detail-hero-media {
+    --hero-width: min(150%, calc(100vw - 2 * var(--page-pad)));
+    width: var(--hero-width);
+    max-width: none;
+    margin-inline: calc((100% - var(--hero-width)) / 2);
+  }
+
+  :is(img, video).detail-hero-media,
+  .detail-hero-media :is(img, video) { height: auto; object-fit: contain; }
 
   /* Reading hierarchy shared by the landing page, galleries and case studies. */
   .type-project-title { @apply text-h1 text-fg; }
@@ -786,9 +797,6 @@ html[data-theme-transition] *::after {
 }
 
 /* Keep project actions close to the shared copyright footer. */
-body:has([data-work-actions]) main article:has([data-work-actions]) {
-  padding-bottom: 0;
-}
 body:has([data-work-actions]) > footer {
   margin-top: 0;
 }
@@ -815,4 +823,10 @@ body:has([data-work-actions]) > footer > div {
 @media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
   .work-coverflow-card { transition: scale 220ms var(--e-standard); }
   .work-coverflow-card[data-focused]:hover { scale: 1.02; }
+}
+
+/* Match the clipping frame to the uploaded media on portfolio routes. */
+.portfolio-media :is(img, video):not([data-app-logo] > img),
+.portfolio-media .overflow-hidden:not([data-app-logo]):has(> :is(img, video, picture, .card-thumb-media)) {
+  border-radius: 4px;
 }

@@ -162,12 +162,39 @@ export function Blocks({ blocks, alt, compactMedia = false }: { blocks: Block[];
   const TEXT = 'mt-6';
   const MEDIA = compactMedia ? 'mt-12' : 'mt-15';
 
+  const resultsIndex = alt === 'Kikkerland Wrap and Charge'
+    ? blocks.findIndex(block => block.kind === 'text' && block.value === 'Results')
+    : -1;
+  const metrics: string[] = [];
+  if (resultsIndex >= 0) {
+    for (const block of blocks.slice(resultsIndex + 1)) {
+      if (block.kind !== 'text') break;
+      metrics.push(block.value);
+    }
+  }
+
   type Kind = 'heading' | 'text' | 'rating' | 'media';
   let prevKind: Kind | null = null;
 
   return (
     <div>
       {blocks.map((b, i) => {
+        if (metrics.length && i > resultsIndex && i <= resultsIndex + metrics.length) return null;
+        if (metrics.length && i === resultsIndex) {
+          prevKind = 'text';
+          return (
+            <section key="results" className="mt-[var(--section-gap)]">
+              <h2 className="type-decision">Results</h2>
+              <ul className="mt-4 type-body">
+                {metrics.map(metric => <li key={metric}>{metric}</li>)}
+              </ul>
+            </section>
+          );
+        }
+        if (b.kind === 'text' && b.value === '- The New Yorker -') {
+          prevKind = 'text';
+          return <p key={i} className="mt-4 type-caption">{b.value}</p>;
+        }
         const isMedia = b.kind !== 'text';
         const isRating = b.kind === 'text' && isRatingRow(b.value);
         const heading = b.kind === 'text' && !isRating && !LINK.test(b.value) && isHeading(b.value);
@@ -175,8 +202,8 @@ export function Blocks({ blocks, alt, compactMedia = false }: { blocks: Block[];
 
         let mt = '';
         if (prevKind !== null) {
-          mt = kind === 'media' || prevKind === 'media' ? MEDIA
-            : kind === 'heading' ? 'mt-9'
+          mt = kind === 'heading' ? 'mt-[var(--section-gap)]'
+            : kind === 'media' || prevKind === 'media' ? MEDIA
             : prevKind === 'heading' ? 'mt-4'
             : kind === 'rating' && prevKind === 'rating' ? TIGHT
             : TEXT;
