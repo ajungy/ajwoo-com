@@ -2,7 +2,7 @@ import type { Block } from './projects';
 
 // Scope and collaborators are taken from Alex's public case studies and account of his work.
 // Product descriptions are context, not evidence of individual measured impact.
-export const caseStudies: Record<string, { problem: string; scope: string; collaboration?: string; outcome: string; outcomeHeading?: string; additionalBlocks?: Block[] }> = {
+export const caseStudies: Record<string, { intro?: string; problem: string; scope: string; collaboration?: string; outcome: string; outcomeHeading?: string; additionalBlocks?: Block[] }> = {
   'premiere-generative-ai': {
     problem: 'Professional editors need ways to adjust the contents of a shot, extend it, or add and remove details without losing the flow of an edit. This 2024 work explored generative AI within Premiere.',
     scope: 'I led three designers to introduce selection and masking workflows in Premiere, enabling editors to target an area of a video for generative AI, color grading, and effects. My work spanned design vision, discovery, rapid exploration, UX, UI, and production. I collaborated with Premiere design, engineering, product, marketing, and brand teams, alongside other contributors.',
@@ -16,8 +16,9 @@ export const caseStudies: Record<string, { problem: string; scope: string; colla
     ],
   },
   'pr-ae-frame': {
-    problem: 'Creative teams need to share assets, discuss revisions, and review work while editing. The Frame.io extension brings that collaboration into Premiere Pro and After Effects.',
-    scope: 'My work spanned product design, UX, UI, content, discovery, user research, and marketing. I collaborated with Video Leadership and the Premiere Pro, After Effects, Frame.io, Creative Cloud Desktop, Adobe.com, Legal, and Marketing teams.',
-    outcome: 'The public integration connects asset sharing, comments, and revision tracking with editing workflows. The demonstration below shows the experience. Product reach is not presented as a measure of my individual impact.',
+    intro: 'Frame.io connects Premiere Pro and After Effects to a shared workspace in the cloud. An editor can upload a cut from Premiere Pro and send a review link. A fellow editor or a client can open the cut in a browser, pause on a frame, and leave a comment. The editor sees that feedback back in Premiere Pro while making the next edit.',
+    problem: 'Editing happens in a timeline. Reviewing a cut involves a wider team, including producers, clients, and other collaborators who may never open an editing tool. The design challenge was to give everyone a shared cut to discuss while letting each person work where they were comfortable. Editors needed to bring assets into the cloud from their creative tools, and reviewers needed to be able to point to a specific moment simply by opening a link.',
+    scope: 'I used storytelling and design vision to show Adobe’s video leadership what collaborative editing could look like across Premiere Pro, After Effects, and Frame.io. That work helped inform Adobe’s decision to acquire Frame.io, a deal announced at approximately $1.3 billion. My discovery work focused on the handoff between the person making the edit and the people reviewing it. My growth work focused on how Creative Cloud customers would discover Frame.io and start using it. I collaborated with the product teams, Creative Cloud Desktop, Adobe.com, Legal, and Marketing.',
+    outcome: 'The demo below shows how an editor shares a Premiere Pro cut through Frame.io and brings reviewer comments back to the timeline.',
   },
 };

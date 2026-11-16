@@ -145,7 +145,8 @@ export default function WorkPage({ params }: { params: { slug: string } }) {
               </blockquote>
               <figcaption className="mt-4 type-caption">Ryan Connolly from @FilmRiot</figcaption>
             </figure>
-          ) : <p className={`max-w-content type-section-heading ${isCoffee || ['dynamics-365-customer-voice', 'product-visualize', 'layout', 'seeing-ai', 'wrap-and-charge', 'netmarble', '10-borders'].includes(project.slug) ? 'mb-6' : 'mb-[var(--section-gap)]'}`}>{project.lead}</p>}
+          ) : <p className={`max-w-content type-section-heading ${study?.intro || isCoffee || ['dynamics-365-customer-voice', 'product-visualize', 'layout', 'seeing-ai', 'wrap-and-charge', 'netmarble', '10-borders'].includes(project.slug) ? 'mb-6' : 'mb-[var(--section-gap)]'}`}>{project.lead}</p>}
+          {study?.intro && <p className="mb-[var(--section-gap)] max-w-content type-body">{study.intro}</p>}
           {study && <section className="max-w-content mb-12">
             <h2 className="type-decision">The challenge</h2>
             <p className="mt-4 type-body">{study.problem}</p>

@@ -155,7 +155,8 @@ export function WorksWheel({ items }: { items: WorksWheelItem[] }) {
     if (!el) return;
     const wheel = (event: WheelEvent) => {
       if (event.ctrlKey || (event.target as Element).closest('button, [role="dialog"], [role="menu"]')) return;
-      const delta = (Math.abs(event.deltaY) >= Math.abs(event.deltaX) ? event.deltaY : event.deltaX) * (event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? el.clientHeight : 1);
+      if (event.shiftKey || Math.abs(event.deltaX) >= Math.abs(event.deltaY)) return;
+      const delta = event.deltaY * (event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? el.clientHeight : 1);
       if (!delta) return;
       event.preventDefault();
       to(target.current + delta / (el.clientWidth < 700 ? 1000 : 700));
