@@ -98,7 +98,7 @@ export default function AppPage({ params }: { params: { slug: string } }) {
           YouTube cookies until playback actually starts. demoVideoYoutube
           takes priority over the self-hosted demoVideo when both are set. */}
       {app.demoVideoYoutube ? (
-        <div className="detail-hero-media mb-12 aspect-video overflow-hidden rounded-lg border border-line-subtle bg-sunken">
+        <div className="detail-hero-media mb-[var(--section-gap)] aspect-video overflow-hidden rounded-lg border border-line-subtle bg-sunken">
           <iframe
             src={`https://www.youtube-nocookie.com/embed/${app.demoVideoYoutube}`}
             title={`${app.name} demo`}
@@ -108,7 +108,7 @@ export default function AppPage({ params }: { params: { slug: string } }) {
           />
         </div>
       ) : app.demoVideo ? (
-        <div className="detail-hero-media mb-12">
+        <div className="detail-hero-media mb-[var(--section-gap)]">
           <video
             controls
             playsInline
@@ -122,7 +122,7 @@ export default function AppPage({ params }: { params: { slug: string } }) {
           </video>
         </div>
       ) : app.demoImage ? (
-        <figure className="detail-hero-media mb-12 overflow-hidden rounded-lg border border-line-subtle bg-sunken">
+        <figure className="detail-hero-media mb-[var(--section-gap)] overflow-hidden rounded-lg border border-line-subtle bg-sunken">
           <img src={app.demoImage.src} alt={app.demoImage.alt} width={app.demoImage.width} height={app.demoImage.height} className="block h-auto w-full" />
         </figure>
       ) : null}

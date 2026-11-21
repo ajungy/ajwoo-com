@@ -105,7 +105,7 @@ const motionTiles: Record<string, MotionTile> = {
   'pr-ae-frame': { base: 'mov-frameio-premiere-after-effects', width: 720, height: 720, hasWebm: true },
   netmarble: { base: 'mov-netmarble-friends', width: 720, height: 720, hasWebm: true },
   // Alex supplied this 5-second loop for the local Netflix portfolio draft.
-  'netflix-creative-tools': { base: 'mov-netflix-animals', width: 1080, height: 1080, hasWebm: true },
+  'netflix-creative-tools': { base: 'mov-netflix-creative-tools', width: 720, height: 720, hasWebm: false },
   'premiere-generative-ai': { base: 'mov-premiere-generative-ai', width: 720, height: 720, hasWebm: true },
   layout: { base: 'mov-layout-33333d', width: 864, height: 864, hasWebm: true },
 };

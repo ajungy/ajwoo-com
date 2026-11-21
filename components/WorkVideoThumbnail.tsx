@@ -3,9 +3,10 @@
 import { useEffect, useRef } from 'react';
 import type { Ref } from 'react';
 
-// The four padded exports have a baked-in matte. Clip at the footage edges
+// The padded exports have a baked-in matte. Clip at the footage edges
 // (measured in the 720px asset) so the radius stays 4 CSS pixels at any size.
 const footageInsets: Record<string, readonly [number, number, number, number]> = {
+  'mov-netflix-creative-tools': [174, 36, 176, 36],
   'mov-premiere-generative-ai': [118, 36, 118, 34],
   'mov-frameio-premiere-after-effects': [176, 36, 176, 34],
   'mov-product-visualize': [34, 82, 36, 82],

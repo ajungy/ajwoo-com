@@ -15,13 +15,13 @@ export function NetflixProject({ project, work: netflixWork, examples }: { proje
         </header>
 
         <article>
-          <div className="detail-hero-media mb-12">
+          <div className="detail-hero-media mb-[var(--section-gap)]">
             <video autoPlay loop muted playsInline preload="auto"
-              poster="/img/netflix-creative-tools-cropped-poster.webp"
-              width={1682} height={964}
+              poster="/img/netflix-creative-tools-demo-poster.webp"
+              width={1900} height={1086}
               aria-label="Netflix creative tools video example"
               className="block h-auto w-full">
-              <source src="/img/netflix-creative-tools-cropped.mp4" type="video/mp4" />
+              <source src="/img/netflix-creative-tools-demo.mp4" type="video/mp4" />
             </video>
           </div>
           <section className="max-w-content" aria-labelledby="netflix-overview">
@@ -40,12 +40,20 @@ export function NetflixProject({ project, work: netflixWork, examples }: { proje
                   <dd className="mt-4 type-body">
                     <p>{area.description}</p>
                     {area.title === 'Analytics' && <NetflixMuseExample examples={examples} />}
-                    {area.image && (
+                    {area.title === 'Video' ? (
                       <figure className="mt-8">
-                        <img src={area.image.src} alt={area.image.alt} width={1465} height={833}
+                        <video autoPlay loop muted playsInline preload="metadata"
+                          src="/img/netflix-video-workflow.mp4" poster="/img/netflix-video-workflow-poster.webp"
+                          width={1792} height={822} aria-label="Stranger Things featured video on Netflix, 2026"
+                          className="block h-auto w-full" />
+                        <figcaption className="mt-4 type-caption">Stranger Things featured video on Netflix, 2026</figcaption>
+                      </figure>
+                    ) : area.image && (
+                      <figure className="mt-8">
+                        <img src={area.image.src} alt={area.image.alt} width={area.title === 'Artwork' ? 2746 : 1172} height={area.title === 'Artwork' ? 1260 : 731}
                           loading="lazy" decoding="async" className="block h-auto w-full" />
                         <figcaption className="mt-4 type-caption">
-                          Public Netflix member experience / Annotated example of where {area.title.split(' / ')[0].toLowerCase()} appears / October 14, 2026
+                          {area.title === 'Artwork' ? 'Stranger Things featured artwork on Netflix, 2026' : 'Stranger Things featured synopsis on Netflix, 2026'}
                         </figcaption>
                       </figure>
                     )}

@@ -119,14 +119,14 @@ export default function WorkPage({ params }: { params: { slug: string } }) {
           alt={project.title}
           priority
           sizes="(min-width: 1600px) 828px, (min-width: 904px) 840px, (min-width: 840px) calc(100vw - 64px), (min-width: 600px) calc(100vw - 48px), calc(100vw - 32px)"
-          className="detail-hero-media mb-12 block h-auto"
+          className="detail-hero-media mb-[var(--section-gap)] block h-auto"
         />
       )}
 
         <article>
           {introVideo && (
             <video
-              className="detail-hero-media mb-12 block h-auto"
+              className="detail-hero-media mb-[var(--section-gap)] block h-auto"
               width={1280}
               height={720}
               src={introVideo.src}
@@ -139,7 +139,7 @@ export default function WorkPage({ params }: { params: { slug: string } }) {
           )}
           {project.slug === 'premiere-generative-ai' ? (
             <figure className="mb-[var(--section-gap)]">
-              <video className="detail-hero-media mb-12 block h-auto" width={1920} height={1080} autoPlay loop muted playsInline aria-label="Generative removal in Premiere Pro" src="/img/premiere-generative-remove.mp4" />
+              <video className="detail-hero-media mb-[var(--section-gap)] block h-auto" width={1920} height={1080} autoPlay loop muted playsInline aria-label="Generative removal in Premiere Pro" src="/img/premiere-generative-remove.mp4" />
               <blockquote className="type-section-heading">
                 “Adobe had been absolutely crushing it with new tools that leverage AI to give creators more freedom”
               </blockquote>

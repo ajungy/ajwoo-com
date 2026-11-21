@@ -826,7 +826,8 @@ body:has([data-work-actions]) > footer > div {
 }
 
 /* Match the clipping frame to the uploaded media on portfolio routes. */
+.portfolio-media .overflow-hidden:has(> iframe),
 .portfolio-media :is(img, video):not([data-app-logo] > img),
 .portfolio-media .overflow-hidden:not([data-app-logo]):has(> :is(img, video, picture, .card-thumb-media)) {
-  border-radius: 4px;
+  border-radius: 8px;
 }
