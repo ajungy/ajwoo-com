@@ -515,35 +515,31 @@ html[data-theme-transition] *::after {
   container-type: inline-size;
 }
 .hero-headline { min-height: 1.05em; }
+:root:not([data-hero-motion]) .hero-col .stagger-grid > * {
+  animation: none;
+  opacity: 1;
+  transform: none;
+}
 
+[data-hero-motion] .hero-headline[data-ready="false"] { opacity: 0; }
+[data-hero-motion] .hero-headline[data-ready="true"] {
+  animation: hero-headline-in 800ms var(--e-standard) both;
+}
 @media (prefers-reduced-motion: no-preference) {
-  [data-hero-motion] :is(.hero-headline, .hero-bio, .hero-actions > *, .landing-sections) {
-    opacity: 0;
-  }
-  [data-hero-motion] .hero-headline[data-ready="true"] {
-    animation: hero-headline-in 300ms var(--e-standard) both;
-  }
-  [data-hero-motion] .hero-headline[data-ready="true"] ~ .hero-bio {
-    animation: stagger-in 200ms var(--e-standard) 300ms both;
-  }
-  [data-hero-motion] .hero-headline[data-ready="true"] ~ .hero-actions > * {
-    animation: stagger-in 160ms var(--e-standard) 340ms both;
-  }
-  [data-hero-motion] main:has(.hero-headline[data-ready="true"]) .landing-sections {
-    animation: stagger-in 120ms var(--e-standard) 380ms both;
-  }
-  [data-hero-motion] main:has(.hero-headline) .landing-sections:focus-within {
+  [data-hero-motion] .hero-headline[data-finished="false"] ~ .stagger-grid > * {
     animation: none;
-    opacity: 1;
+    visibility: hidden;
   }
-  [data-hero-motion] .hero-actions > :focus-within {
-    animation: none;
-    opacity: 1;
+  [data-hero-motion] .hero-headline[data-finished="true"] ~ .stagger-grid > * {
+    animation: stagger-in var(--stagger-duration, 300ms) var(--e-standard) both;
   }
 }
 @keyframes hero-headline-in {
   from { opacity: 0; filter: blur(10px); transform: translateY(12px); }
   to { opacity: 1; filter: blur(0); transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-hero-motion] .hero-headline[data-ready="true"] { animation: none; }
 }
 .hero-serif {
   font-family: "EB Garamond", Georgia, "Times New Roman", serif;
@@ -831,6 +827,22 @@ body:has([data-work-actions]) > footer > div {
 
 /* Connected logo paths animate their endpoints without scaling stroke edges. */
 .logo-morph { display: block; }
+
+@media (prefers-reduced-motion: no-preference) {
+  [data-hero-motion] .landing-sections section {
+    opacity: 0;
+  }
+  [data-hero-motion] .landing-sections section[data-revealed] {
+    animation: stagger-in 450ms var(--e-standard) var(--section-delay, 0ms) both;
+  }
+  [data-hero-motion] .landing-sections #home-work-title[data-revealed] {
+    animation-duration: 300ms;
+  }
+  [data-hero-motion] .landing-sections section:focus-within {
+    animation: none;
+    opacity: 1;
+  }
+}
 
 /* Match the clipping frame to the uploaded media on portfolio routes. */
 .portfolio-media .overflow-hidden:has(> iframe),
