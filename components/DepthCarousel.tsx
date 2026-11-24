@@ -173,6 +173,13 @@ export function DepthCarousel({
   onActiveChange,
 }: DepthCarouselProps) {
   const [index, setIndex] = useState(0);
+  useEffect(() => {
+    const saved = history.state?.previewReturn?.path;
+    if (!saved || !wrapperRef.current) return;
+    const links = Array.from(wrapperRef.current.querySelectorAll<HTMLAnchorElement>('a.card-link'));
+    const restored = links.findIndex(link => link.pathname === saved);
+    if (restored >= 0) setIndex(restored);
+  }, []);
   const [layoutWidth, setLayoutWidth] = useState(cardWidth * cardScale);
   // Hover state for the front card's own zoom+shadow boost — see the
   // "CARD CHROME, reversed again" comment above for why this is JS state

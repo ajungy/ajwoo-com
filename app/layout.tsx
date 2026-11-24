@@ -1,3 +1,4 @@
+import { PreviewNavigation } from '@/components/PreviewNavigation';
 import type { Metadata } from 'next';
 import '@/styles/globals.css';
 import { TopBar } from '@/components/TopBar';
@@ -76,6 +77,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </noscript>
       </head>
       <body>
+        <PreviewNavigation />
         <SiteAnalytics />
         <a
           href="#main"

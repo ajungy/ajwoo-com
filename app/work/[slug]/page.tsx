@@ -1,3 +1,4 @@
+import { PreviewVideo } from '@/components/PreviewVideo';
 import { workOpeningMedia } from '@/content/work-opening-media';
 import { WorkMediaTransition } from '@/components/WorkMediaTransition';
 import { ProjectLinks } from '@/components/ProjectLinks';
@@ -129,24 +130,11 @@ export default function WorkPage({ params }: { params: { slug: string } }) {
 
         <article>
           {introVideo && project.slug !== 'premiere-generative-ai' && (
-            <video
-              className="detail-hero-media mb-[var(--section-gap)] block h-auto"
-              width={introVideo.width}
-              height={introVideo.height}
-              poster={`/img/${introVideo.base}-poster.webp`}
-              style={{ viewTransitionName: 'work-project-media' }}
-              src={`/img/${introVideo.base}.mp4`}
-              aria-label={introVideo.label}
-              data-work-project-video
-              preload="auto"
-              loop
-              muted
-              playsInline
-            />
+            <PreviewVideo {...introVideo} href={`/work/${project.slug}/`} detail className="detail-hero-media mb-[var(--section-gap)]" />
           )}
           {project.slug === 'premiere-generative-ai' && introVideo ? (
             <figure className="mb-[var(--section-gap)]">
-              <video className="detail-hero-media mb-[var(--section-gap)] block h-auto" width={introVideo.width} height={introVideo.height} style={{ viewTransitionName: 'work-project-media' }} poster={`/img/${introVideo.base}-poster.webp`} data-work-project-video preload="auto" loop muted playsInline aria-label="Generative removal in Premiere Pro" src={`/img/${introVideo.base}.mp4`} />
+              <PreviewVideo {...introVideo} href={`/work/${project.slug}/`} detail className="detail-hero-media mb-[var(--section-gap)]" />
               <blockquote className="type-section-heading">
                 “Adobe had been absolutely crushing it with new tools that leverage AI to give creators more freedom”
               </blockquote>

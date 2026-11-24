@@ -1,5 +1,5 @@
 "use client";
-import { WorkVideoThumbnail, fullWidthFootage } from '../WorkVideoThumbnail';
+import { PreviewVideo } from '../PreviewVideo';
 import * as React from "react";
 import { CarouselControls } from "../CarouselControls";
 
@@ -48,6 +48,7 @@ export function CoverflowCarousel({ slides }: { slides: Slide[] }) {
     [count],
   );
 
+  const inView = React.useRef(false);
   const playingVideo = React.useRef<HTMLVideoElement | null>(null);
 
   // Paint straight to the DOM. Sixty state updates a second would re-render
@@ -59,11 +60,11 @@ export function CoverflowCarousel({ slides }: { slides: Slide[] }) {
     const pos = posRef.current;
 
     const centered = Math.round(pos);
-    const video = Math.abs(pos - centered) < 0.001
+    const video = inView.current && !document.hidden && Math.abs(pos - centered) < 0.001
       ? cardRefs.current[indexAt(centered)]?.querySelector('video') ?? null
       : null;
     if (video !== playingVideo.current) {
-      playingVideo.current?.pause();
+      if (!playingVideo.current?.closest('.preview-flight')) playingVideo.current?.pause();
       playingVideo.current = video;
     }
     if (video?.paused && !document.hidden) void video.play().catch(() => {});
@@ -212,9 +213,15 @@ export function CoverflowCarousel({ slides }: { slides: Slide[] }) {
   }, [indexAt, slides]);
 
   React.useEffect(() => {
+    const observer = new IntersectionObserver(([entry]) => {
+      inView.current = entry.isIntersecting;
+      paint();
+    });
+    if (frameRef.current) observer.observe(frameRef.current);
     window.addEventListener('pageshow', paint);
     document.addEventListener('visibilitychange', paint);
     return () => {
+      observer.disconnect();
       window.removeEventListener('pageshow', paint);
       document.removeEventListener('visibilitychange', paint);
     };
@@ -250,10 +257,7 @@ export function CoverflowCarousel({ slides }: { slides: Slide[] }) {
     [],
   );
 
-  const heightRatios = slides.map(({ video }) => {
-    const footage = video && (fullWidthFootage(video.base) ?? video);
-    return footage ? footage.height / footage.width : 1;
-  });
+  const heightRatios = slides.map(({ video }) => video ? video.height / video.width : 1);
   const stageRatio = Math.max(...heightRatios);
 
   const active = slides[selected];
@@ -274,9 +278,9 @@ export function CoverflowCarousel({ slides }: { slides: Slide[] }) {
               data-focused={i === selected || undefined}
               className="work-coverflow-card absolute left-1/2 top-1/2 overflow-hidden rounded-control"
               style={{ viewTransitionName: i === selected ? 'work-project-media' : undefined, width: 'var(--card)', height: `calc(var(--card) * ${heightRatios[i]})`, marginTop: `calc(var(--card) * ${-heightRatios[i] / 2})`, transform: i === 0 ? `translateX(-50%) scale(${INITIAL_CENTER_SCALE})` : 'translateX(-50%)', opacity: i === 0 ? 1 : 0 }}>
-              <a className="block h-full" href={slide.href} draggable={false} aria-label={slide.title} tabIndex={i === selected ? 0 : -1}>
+              <a data-work-preview-link={slide.video ? true : undefined} className="block h-full" href={slide.href} draggable={false} aria-label={slide.title} tabIndex={i === selected ? 0 : -1}>
                 {slide.video ? (
-                  <WorkVideoThumbnail {...slide.video} fullWidth />
+                  <PreviewVideo base={slide.video.base} href={slide.href} className="h-full w-full" />
                 ) : (
                   <img src={slide.src} alt={slide.title} draggable={false} className="block h-full w-full object-cover" />
                 )}
@@ -286,7 +290,7 @@ export function CoverflowCarousel({ slides }: { slides: Slide[] }) {
         </div>
       </div>
       <div aria-live="polite" className="mx-auto max-w-content px-page text-center">
-        <h3 className="type-decision"><a href={active.href}>{active.title}</a></h3>
+        <h3 className="type-decision"><a data-work-preview-link={active.video ? true : undefined} href={active.href}>{active.title}</a></h3>
       </div>
       <CarouselControls count={count} index={selected} go={nudge}
         setIndex={i => settle(i + Math.round((targetRef.current - i) / count) * count)} />

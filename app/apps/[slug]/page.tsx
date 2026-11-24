@@ -1,3 +1,4 @@
+import { AppPreviewDemo } from '@/components/AppPreviewDemo';
 import { pageMetadata } from '@/lib/metadata';
 import { CaptureInstallButton } from '@/components/CaptureInstallButton';
 import type { Metadata } from 'next';
@@ -21,10 +22,35 @@ export default function AppPage({ params }: { params: { slug: string } }) {
   const firstFeature = app.detail.findIndex(item => typeof item !== 'string' && 'label' in item);
   const highlightsStart = firstFeature >= 0 ? firstFeature : 1;
 
-  // Capped at 3, at Alex's direction — full cards (not the old plain-link
-  // list) take real space, and three is the /apps grid's own row width
-  // (expanded:grid-cols-3), so this reads as "the rest of that same grid"
-  // rather than an open-ended list.
+  const demo = app.demoVideoYoutube ? (
+    <div className="detail-hero-media mb-[var(--section-gap)] aspect-video overflow-hidden rounded-lg border border-line-subtle bg-sunken">
+      <iframe
+        src={`https://www.youtube-nocookie.com/embed/${app.demoVideoYoutube}`}
+        title={`${app.name} demo`}
+        className="h-full w-full"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowFullScreen
+      />
+    </div>
+  ) : app.demoVideo ? (
+    <div className="detail-hero-media mb-[var(--section-gap)]">
+      <video
+        controls
+        playsInline
+        aria-label={`${app.name} demo`}
+        preload="none"
+        poster={`/img/${app.demoVideo}-poster.webp`}
+        className="block h-auto w-full rounded-lg border border-line-subtle bg-sunken"
+      >
+        <source src={`/img/${app.demoVideo}.webm`} type="video/webm" />
+        <source src={`/img/${app.demoVideo}.mp4`} type="video/mp4" />
+      </video>
+    </div>
+  ) : app.demoImage ? (
+    <figure className="detail-hero-media mb-[var(--section-gap)] overflow-hidden rounded-lg border border-line-subtle bg-sunken">
+      <img src={app.demoImage.src} alt={app.demoImage.alt} width={app.demoImage.width} height={app.demoImage.height} className="block h-auto w-full" />
+    </figure>
+  ) : null;
 
   return (
     <div className="portfolio-media work-reading-column">
@@ -77,35 +103,11 @@ export default function AppPage({ params }: { params: { slug: string } }) {
           `preload="none"` does; youtube-nocookie.com avoids setting any
           YouTube cookies until playback actually starts. demoVideoYoutube
           takes priority over the self-hosted demoVideo when both are set. */}
-      {app.demoVideoYoutube ? (
-        <div className="detail-hero-media mb-[var(--section-gap)] aspect-video overflow-hidden rounded-lg border border-line-subtle bg-sunken">
-          <iframe
-            src={`https://www.youtube-nocookie.com/embed/${app.demoVideoYoutube}`}
-            title={`${app.name} demo`}
-            className="h-full w-full"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          />
-        </div>
-      ) : app.demoVideo ? (
-        <div className="detail-hero-media mb-[var(--section-gap)]">
-          <video
-            controls
-            playsInline
-            aria-label={`${app.name} demo`}
-            preload="none"
-            poster={`/img/${app.demoVideo}-poster.webp`}
-            className="block h-auto w-full rounded-lg border border-line-subtle bg-sunken"
-          >
-            <source src={`/img/${app.demoVideo}.webm`} type="video/webm" />
-            <source src={`/img/${app.demoVideo}.mp4`} type="video/mp4" />
-          </video>
-        </div>
-      ) : app.demoImage ? (
-        <figure className="detail-hero-media mb-[var(--section-gap)] overflow-hidden rounded-lg border border-line-subtle bg-sunken">
-          <img src={app.demoImage.src} alt={app.demoImage.alt} width={app.demoImage.width} height={app.demoImage.height} className="block h-auto w-full" />
-        </figure>
-      ) : null}
+      {app.thumbnailVideo ? (
+        <AppPreviewDemo base={app.thumbnailVideo} href={`/apps/${app.slug}/`} name={app.name} separateDemo={Boolean(app.demoVideoYoutube || app.demoVideo !== app.thumbnailVideo)}>
+          {demo}
+        </AppPreviewDemo>
+      ) : demo}
 
       <article className="max-w-content space-y-8">
         {app.detail.slice(0, highlightsStart).map((item, i) =>

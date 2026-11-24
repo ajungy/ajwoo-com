@@ -2,7 +2,7 @@
 
 // Geometry adapted from CrafterUI Works Wheel, MIT / Copyright (c) 2026 CrafterUI.
 // Full notice: public/licenses/crafterui-MIT.txt. No demo artwork is included.
-import { WorkVideoThumbnail, fullWidthFootage } from '../WorkVideoThumbnail';
+import { PreviewVideo } from '../PreviewVideo';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Picture } from '@/components/Picture';
 import styles from './works-wheel.module.css';
@@ -238,11 +238,11 @@ export function WorksWheel({ items }: { items: WorksWheelItem[] }) {
       <div ref={wheelRef} className={`${styles.wheel} work-wheel-arrival`}>
         {items.map((item, i) => {
           const Card = item.paragraphs ? 'div' : 'a';
-          const media = item.video ? fullWidthFootage(item.video.base) ?? item.video : item.image;
+          const media = item.video ?? item.image;
           const aspectRatio = media ? media.width / media.height : 1;
           const cardWidth = Math.min(geometry.side, stage.h * 0.81 * aspectRatio);
           const cardHeight = cardWidth / aspectRatio;
-          return <Card key={item.href} href={item.href} ref={(el: HTMLElement | null) => { cards.current[i] = el; }}
+          return <Card data-work-preview-link={item.video ? true : undefined} key={item.href} href={item.href} ref={(el: HTMLElement | null) => { cards.current[i] = el; }}
             className={`${styles.card} ${active === i ? styles.selectedCard : ''}`} aria-label={item.paragraphs ? item.title : `View ${item.title}`} tabIndex={opened && active === i ? 0 : -1}
             aria-hidden={opened && Math.abs(active - i) > 1 ? true : undefined}
             style={{ width: cardWidth, height: cardHeight, marginLeft: -cardWidth / 2, marginTop: -cardHeight / 2 }}
@@ -251,13 +251,13 @@ export function WorksWheel({ items }: { items: WorksWheelItem[] }) {
             <span ref={(el) => { faces.current[i] = el; }} className={styles.face} style={opened && active === i && !item.paragraphs ? { viewTransitionName: 'work-project-media' } : undefined}>
               {item.paragraphs ? <span data-background-copy className={styles.backgroundCopy} style={{ fontSize: clamp(geometry.side / 25, 8, 13) }}>
                 {item.paragraphs.map((paragraph) => <span key={paragraph}>{paragraph}</span>)}
-              </span> : item.video ? <WorkVideoThumbnail {...item.video} fullWidth videoRef={(el) => { videos.current[i] = el; }} /> : item.image ? <Picture img={item.image} alt={item.title} priority={i === 0} sizes="(max-width: 699px) 94vw, 54vw" className={`${styles.media} route-media`} /> : null}
+              </span> : item.video ? <PreviewVideo base={item.video.base} href={item.href} className="h-full w-full" videoRef={(el) => { videos.current[i] = el; }} /> : item.image ? <Picture img={item.image} alt={item.title} priority={i === 0} sizes="(max-width: 699px) 94vw, 54vw" className={`${styles.media} route-media`} /> : null}
             </span>
           </Card>;
         })}
       </div>
       <div ref={titleRef} className={`${styles.title} route-intro`} aria-live="polite" aria-atomic="true">
-        {selected?.paragraphs ? <span className={`type-decision ${styles.projectTitle}`}>{selected.title}</span> : <a href={selected?.href ?? '/work/'} tabIndex={opened ? 0 : -1} className={`type-decision ${styles.projectTitle}`}>{selected?.title}</a>}
+        {selected?.paragraphs ? <span className={`type-decision ${styles.projectTitle}`}>{selected.title}</span> : <a data-work-preview-link={selected?.video ? true : undefined} href={selected?.href ?? '/work/'} tabIndex={opened ? 0 : -1} className={`type-decision ${styles.projectTitle}`}>{selected?.title}</a>}
         <p className="mt-4 type-subtitle">{selected?.subtitle}</p>
       </div>
       <nav className={`${styles.yearShell} route-navigation`} aria-label="Project navigation">

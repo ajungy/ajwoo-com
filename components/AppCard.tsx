@@ -1,5 +1,7 @@
 'use client';
 
+import { PreviewVideo } from './PreviewVideo';
+import { isPlainClick, openPreview } from '@/lib/preview-flight';
 import { CaptureInstallButton } from '@/components/CaptureInstallButton';
 import { useEffect, useRef } from 'react';
 import Link from 'next/link';
@@ -108,36 +110,37 @@ export function AppCard({
   hoverZoom?: boolean;
   hoverShadow?: boolean;
 }) {
-  const videoRef = useRef<HTMLVideoElement>(null);
+  const cardRef = useRef<HTMLElement>(null);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
 
   useEffect(() => {
-    if (playing === undefined) return;
-    if (playing) videoRef.current?.play().catch(() => {});
-    else videoRef.current?.pause();
+    const video = videoRef.current;
+    const card = cardRef.current;
+    if (playing === undefined || !video || !card) return;
+    if (!playing) {
+      if (!video.closest('.preview-flight')) video.pause();
+      return;
+    }
+    let visible = false;
+    function sync() {
+      if (!video || video.closest('.preview-flight')) return;
+      if (visible && !document.hidden) void video.play().catch(() => {});
+      else video.pause();
+    }
+    const observer = new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
+      sync();
+    });
+    observer.observe(card);
+    document.addEventListener('visibilitychange', sync);
+    return () => {
+      observer.disconnect();
+      document.removeEventListener('visibilitychange', sync);
+    };
   }, [playing]);
 
-  // `thumbnailStartAtEnd` (Dictate only): seek to just before the clip's
-  // own last frame the moment its metadata is available, so whichever
-  // trigger starts playback (hoverPlay's onMouseEnter, or the `playing`
-  // prop's effect above) begins there — the loop plays that final sliver,
-  // then wraps back to 0 and runs normally from then on. `loadedmetadata`
-  // is when `duration` first becomes a real number; if it's already
-  // loaded by the time this effect runs (readyState >= 1), seek right
-  // away instead of waiting for an event that already fired.
-  useEffect(() => {
-    if (!app.thumbnailStartAtEnd) return;
-    const v = videoRef.current;
-    if (!v) return;
-    const seekToEnd = () => {
-      if (v.duration && Number.isFinite(v.duration)) v.currentTime = Math.max(v.duration - 0.05, 0);
-    };
-    if (v.readyState >= 1) seekToEnd();
-    else v.addEventListener('loadedmetadata', seekToEnd, { once: true });
-    return () => v.removeEventListener('loadedmetadata', seekToEnd);
-  }, [app.thumbnailStartAtEnd]);
-
   return (
-    <article
+    <article ref={cardRef}
       data-cursor-label={app.name}
       onMouseEnter={playing === undefined && hoverPlay ? () => {
         const video = videoRef.current;
@@ -145,7 +148,10 @@ export function AppCard({
         if (app.thumbnailRestartOnHover) video.currentTime = 0;
         video.play().catch(() => {});
       } : undefined}
-      onMouseLeave={playing === undefined && hoverPlay ? () => videoRef.current?.pause() : undefined}
+      onMouseLeave={playing === undefined && hoverPlay ? () => {
+        const video = videoRef.current;
+        if (video && !video.closest('.preview-flight')) video.pause();
+      } : undefined}
       className={
         'group relative flex flex-col overflow-hidden rounded-xl border border-line-subtle ' +
         'bg-raised card-press' +
@@ -177,19 +183,17 @@ export function AppCard({
             </svg>
           </div>
         ) : app.thumbnailVideo ? (
-          <video
-            ref={videoRef}
-            autoPlay={playing === undefined && !hoverPlay}
-            muted
-            loop
-            playsInline
-            preload={playing !== undefined || hoverPlay ? 'metadata' : 'auto'}
-            poster={`/img/${app.thumbnailVideo}-poster.webp`}
-            className={`card-thumb-media block h-full w-full ${app.thumbnailVideoFit === 'contain' ? 'object-contain bg-sunken' : 'object-cover'}`}
-          >
-            <source src={`/img/${app.thumbnailVideo}.webm`} type="video/webm" />
-            <source src={`/img/${app.thumbnailVideo}.mp4`} type="video/mp4" />
-          </video>
+          <PreviewVideo base={app.thumbnailVideo} href={`/apps/${app.slug}/`} webm
+            className={`card-thumb-media h-full w-full ${app.thumbnailVideoFit === 'contain' ? 'preview-contain bg-sunken' : ''}`}
+            videoRef={(video, continued) => {
+              videoRef.current = video;
+              if (!video || continued) return;
+              if (app.thumbnailStartAtEnd) video.addEventListener('loadedmetadata', () => {
+                if (Number.isFinite(video.duration)) video.currentTime = Math.max(0, video.duration - 0.05);
+              }, { once: true });
+              if (playing === undefined && !hoverPlay) void video.play().catch(() => {});
+            }}
+          />
         ) : app.thumbnail ? (
           <picture>
             <source srcSet={`/img/${app.thumbnail}.webp`} type="image/webp" />
@@ -244,6 +248,11 @@ export function AppCard({
             <Link
               href={app.cardHref ?? `/apps/${app.slug}/`}
               {...(app.cardHref ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+              onClick={event => {
+                if (!isPlainClick(event) || app.cardHref) return;
+                const slot = event.currentTarget.closest('article')?.querySelector<HTMLElement>('[data-preview]');
+                if (slot) openPreview(slot, event.currentTarget.pathname);
+              }}
               className="card-link"
             >
               {app.name}{app.beta ? ' Beta' : ''}

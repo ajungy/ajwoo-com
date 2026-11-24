@@ -1,3 +1,4 @@
+import { PreviewVideo } from '@/components/PreviewVideo';
 import { WorkMediaTransition } from '@/components/WorkMediaTransition';
 import { workOpeningMedia } from '@/content/work-opening-media';
 import { WorkProjectActions } from '@/components/WorkProjectActions';
@@ -19,15 +20,8 @@ export function NetflixProject({ project, work: netflixWork, examples }: { proje
         </header>
 
         <article>
-          <div className="detail-hero-media mb-[var(--section-gap)]" style={{ viewTransitionName: 'work-project-media' }}>
-            <video data-work-project-video loop muted playsInline preload="auto"
-              poster={`/img/${hero.base}-poster.webp`}
-              width={hero.width} height={hero.height}
-              aria-label={hero.label}
-              className="block h-auto w-full">
-              <source src={`/img/${hero.base}.mp4`} type="video/mp4" />
-            </video>
-          </div>
+          <PreviewVideo {...hero} href={`/work/${project.slug}/`} detail className="detail-hero-media mb-[var(--section-gap)]" />
+
           <section className="max-w-content" aria-labelledby="netflix-overview">
             <h2 id="netflix-overview" className="type-section-heading">{project.lead}</h2>
             <p className="mt-4 type-body">{netflixWork.overview}</p>
