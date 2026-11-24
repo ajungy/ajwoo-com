@@ -172,7 +172,9 @@ export function Blocks({ blocks, alt, compactMedia = false, coffee = false, proj
       const firstReviewPhoto = ordered.findIndex(block => block.kind === 'image');
       if (firstReviewPhoto >= 0) ordered.splice(firstReviewPhoto, 1);
     }
-    blocks = ordered;
+    blocks = projectSlug === 'blue-olive'
+      ? ordered.filter(block => block.kind !== 'image' || block.base !== 'img-blue-olive-aaa-copy')
+      : ordered;
   }
   // Multi-shop posts (e.g. "3 Coffee Shops in Tokyo") list each shop's name
   // once as a plain intro line ("1. Supreme Coffee"), then repeat the exact
@@ -235,7 +237,7 @@ export function Blocks({ blocks, alt, compactMedia = false, coffee = false, proj
 
         let mt = '';
         if (prevKind !== null) {
-          mt = coffee && prevKind === 'media' && kind !== 'media' ? 'mt-[30px]'
+          mt = coffee && prevKind === 'media' ? 'mt-[30px]'
             : kind === 'heading' ? 'mt-[var(--section-gap)]'
             : kind === 'media' || prevKind === 'media' ? MEDIA
             : prevKind === 'heading' ? 'mt-4'

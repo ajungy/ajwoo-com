@@ -1,6 +1,5 @@
 import { workOpeningMedia } from '@/content/work-opening-media';
 import { WorkMediaTransition } from '@/components/WorkMediaTransition';
-import { LandingSections } from '@/components/LandingSections';
 import { CoverflowCarousel } from '@/components/ui/coverflow-carousel';
 import { workGallery } from '@/content/work-gallery';
 import { pageMetadata } from '@/lib/metadata';
@@ -12,7 +11,6 @@ import { FeaturedApp } from '@/components/FeaturedApp';
 import { CopyEmailButton } from '@/components/CopyEmailButton';
 import { DesignPrinciples } from '@/components/DesignPrinciples';
 import { SkillsSection } from '@/components/SkillsSection';
-import { StaggerReveal } from '@/components/StaggerReveal';
 import { TextAnimate } from '@/components/TextAnimate';
 import { site, experience, education, clients, featured, social } from '@/content/site';
 import { apps } from '@/content/apps';
@@ -35,13 +33,13 @@ export default function Home() {
             {/* Reveal the complete headline after its display font is ready. */}
             <HeroHeadline>{site.headline}</HeroHeadline>
 
-            <StaggerReveal className="mt-8" durationMs={450}>
+            <div className="hero-bio mt-8">
               <p className="max-w-content type-subtitle">
                 {site.greeting} {site.greetingEmphasis} {site.bio}
               </p>
-            </StaggerReveal>
+            </div>
 
-            <StaggerReveal className="hero-actions mt-8 flex flex-wrap items-center gap-4" delayMs={450} durationMs={450}>
+            <div className="hero-actions mt-8 flex flex-wrap items-center gap-4">
               {/* SpecularButton's WebGL shine effect (React Bits) — moved
                   here from Share at Alex's direction, since this is the
                   site's actual one primary action (Principle 3/CLAUDE.md
@@ -96,12 +94,12 @@ export default function Home() {
                   <span className="sr-only">{s.label}</span>
                 </Action>
               ))}
-            </StaggerReveal>
+            </div>
           </div>
         </section>
       </div>
 
-      <LandingSections>
+      <div className="landing-sections">
         <section className="pt-[80px] pb-[160px] text-center" id="home-work-title">
           <WorkMediaTransition />
           <CoverflowCarousel slides={['netflix-creative-tools', 'premiere-generative-ai', 'pr-ae-frame', 'product-visualize', 'seeing-ai'].flatMap(slug => {
@@ -238,7 +236,7 @@ export default function Home() {
             </div>
           </section>
         </div>
-      </LandingSections>
+      </div>
     </>
   );
 }

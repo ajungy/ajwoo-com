@@ -156,7 +156,7 @@ export default function WorkPage({ params }: { params: { slug: string } }) {
               source: 'YouTube',
             }]} />
           )}
-          <WorkProjectActions slug={project.slug} section={isCoffee ? 'Coffee' : 'Work'} />
+          <WorkProjectActions section={isCoffee ? 'Coffee' : 'Work'} />
         </article>
 
 

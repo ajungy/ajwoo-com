@@ -68,7 +68,29 @@ export const siteData = data as {
 };
 
 export const tileFor = (slug: string): Tile | undefined => getProject(slug)?.thumbnail ?? siteData.tiles[slug === 'premiere-generative-ai' ? '704' : slug];
-export const blocksFor = (slug: string): Block[] => (editedArticles as Record<string, Block[]>)[slug] ?? siteData.blocks[slug === 'premiere-generative-ai' ? '704' : slug] ?? [];
+// Move the review with its trailing photos. Blocks renders each review's photos first.
+function moveCoffeeReviewToEnd(blocks: Block[], heading: string, nextHeading: string): Block[] {
+  const labels = blocks.map(block => block.kind === 'text' ? block.value : '');
+  const start = labels.lastIndexOf(heading);
+  const end = labels.indexOf(nextHeading, start + 1);
+  if (start < 0 || end < 0) return blocks;
+  return [...blocks.slice(0, start), ...blocks.slice(end), ...blocks.slice(start, end)];
+}
+
+export function blocksFor(slug: string): Block[] {
+  const blocks = (editedArticles as Record<string, Block[]>)[slug]
+    ?? siteData.blocks[slug === 'premiere-generative-ai' ? '704' : slug]
+    ?? [];
+  if (slug === 'top-3-fancy-cafes-paris') {
+    return moveCoffeeReviewToEnd(blocks, "1. Musée d'Orsay Café", '2. Le Meurice');
+  }
+  if (slug !== 'best-coffee-shops-new-york-city') return blocks;
+
+  // The source repeats these two names before the reviews, with different casing.
+  const reviews = blocks.filter(block => block.kind !== 'text' ||
+    (block.value !== '2. Stumptown coffee roasters' && block.value !== '3. Birch coffee'));
+  return moveCoffeeReviewToEnd(reviews, '1. Abraço', '2. Stumptown Coffee Roasters');
+}
 
 /**
  * Grid-tile motion — a deliberate, curated exception to the rest of the site.

@@ -23,6 +23,7 @@ export function CoffeeCarousel({ slides }: { slides: CoffeeSlide[] }) {
   const motion = useRef(0);
   const idle = useRef<ReturnType<typeof setTimeout>>();
   function interrupt() {
+    rail.current?.removeAttribute('data-card-entrance');
     cancelAnimationFrame(motion.current);
     clearTimeout(idle.current);
   }
@@ -77,12 +78,39 @@ export function CoffeeCarousel({ slides }: { slides: CoffeeSlide[] }) {
       setActive(restored);
     }
     center();
+    let fallbackTimer: ReturnType<typeof setTimeout> | undefined;
+    let entranceTimer: ReturnType<typeof setTimeout> | undefined;
+    if (restored < 0 && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      const left = track.scrollLeft;
+      const right = left + track.clientWidth;
+      const visible = Array.from(track.children).filter((child): child is HTMLElement =>
+        child instanceof HTMLElement && child.offsetLeft + child.offsetWidth > left && child.offsetLeft < right
+      );
+      visible.forEach((card, index) => {
+        card.dataset.entranceIndex = String(index);
+        card.style.setProperty('--coffee-entrance-delay', `${index * 65}ms`);
+        const photo = card.querySelector('img');
+        if (photo) photo.loading = 'eager';
+      });
+      if (visible.length) {
+        track.setAttribute('data-card-entrance', '');
+        fallbackTimer = setTimeout(() => {
+          if (track.hasAttribute('data-lens-ready') || !track.hasAttribute('data-card-entrance')) return;
+          track.setAttribute('data-lens-fallback', '');
+          entranceTimer = setTimeout(() => track.removeAttribute('data-card-entrance'), 300 + (visible.length - 1) * 65);
+        }, 150);
+      }
+    }
     if (restored >= 0 && history.state?.galleryReturn) {
       (track.children[requestedIndex.current] as HTMLElement)?.focus({ preventScroll: true });
     }
     const resize = new ResizeObserver(center);
     resize.observe(track);
-    return () => resize.disconnect();
+    return () => {
+      clearTimeout(fallbackTimer);
+      clearTimeout(entranceTimer);
+      resize.disconnect();
+    };
   }, [slides.length]);
 
   useEffect(() => {
@@ -136,7 +164,7 @@ export function CoffeeCarousel({ slides }: { slides: CoffeeSlide[] }) {
           } else move(direction);
         }
       }}>
-      <div className={`${styles.stage} route-media`}>
+      <div className={styles.stage}>
       <div
         ref={rail}
         className={styles.rail}
@@ -172,6 +200,7 @@ export function CoffeeCarousel({ slides }: { slides: CoffeeSlide[] }) {
         onPointerCancel={() => { if (drag.current && rail.current?.style.scrollSnapType) settle(rail.current); drag.current = null; }}
         onLostPointerCapture={() => { if (drag.current && rail.current?.style.scrollSnapType) settle(rail.current); drag.current = null; }}
         onClickCapture={(event) => {
+          event.currentTarget.removeAttribute('data-card-entrance');
           if (!suppressClick.current) return;
           event.preventDefault();
           event.stopPropagation();

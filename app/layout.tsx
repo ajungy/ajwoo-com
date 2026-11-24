@@ -80,6 +80,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <noscript>
           <style>{
             '.stagger-grid > * { opacity: 1 !important; transform: none !important; } ' +
+            '.hero-headline, .hero-bio, .hero-actions > *, .landing-sections { opacity: 1 !important; } ' +
             '.text-animate-scroll-scope .text-animate-char { opacity: 1 !important; filter: none !important; transform: none !important; }'
           }</style>
         </noscript>

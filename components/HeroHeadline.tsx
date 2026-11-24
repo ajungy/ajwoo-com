@@ -6,7 +6,6 @@ import { useEffect, useRef, useState } from 'react';
 export function HeroHeadline({ children }: { children: string }) {
   const headline = useRef<HTMLHeadingElement>(null);
   const [ready, setReady] = useState(false);
-  const [finished, setFinished] = useState(false);
   const [fallback, setFallback] = useState(false);
 
   useEffect(() => {
@@ -44,19 +43,12 @@ export function HeroHeadline({ children }: { children: string }) {
       }
       if (!cancelled) frame = requestAnimationFrame(() => setReady(true));
     }
-    const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const skipAnimation = () => { if (motion.matches) setFinished(true); };
-    skipAnimation();
-    motion.addEventListener('change', skipAnimation);
     void prepare();
-    return () => { cancelled = true; cancelAnimationFrame(frame); motion.removeEventListener('change', skipAnimation); };
+    return () => { cancelled = true; cancelAnimationFrame(frame); };
   }, [children]);
 
   return (
-    <h1 ref={headline} className="hero-serif hero-headline text-fg" data-ready={ready} data-finished={finished}
-      onAnimationEnd={event => {
-        if (event.animationName === 'hero-headline-in') setFinished(true);
-      }}
+    <h1 ref={headline} className="hero-serif hero-headline text-fg" data-ready={ready}
       style={fallback ? { fontFamily: 'Georgia, "Times New Roman", serif' } : undefined}>
       {children}
     </h1>

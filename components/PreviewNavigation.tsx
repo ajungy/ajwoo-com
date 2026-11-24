@@ -6,6 +6,7 @@ import { isPlainClick, onPreviewHistory, openPreview } from '@/lib/preview-fligh
 
 export function PreviewNavigation() {
   const router = useRouter();
+
   useEffect(() => {
     // Warm only a route the visitor points to or focuses. MP4s themselves
     // remain unloaded until their card is active.

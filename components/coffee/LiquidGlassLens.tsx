@@ -5,7 +5,7 @@ import { liquidGlassFragment } from './liquidGlassShader';
 import styles from './CoffeeCarousel.module.css';
 
 /** Refracts a photo-only texture, leaving semantic links and text in the DOM.
- * One WebGL context; redraws only on scroll, resize, image load and theme change.
+ * One WebGL context for the entrance and for scroll, resize, and theme updates.
  * If WebGL is unavailable/lost, the native gallery remains fully usable. */
 export function LiquidGlassLens({ rail }: { rail: RefObject<HTMLDivElement> }) {
   const canvas = useRef<HTMLCanvasElement>(null);
@@ -80,7 +80,10 @@ export function LiquidGlassLens({ rail }: { rail: RefObject<HTMLDivElement> }) {
     const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
     let disposed = false;
     const images = Array.from(track.querySelectorAll('img'));
-    function draw() {
+    const openingPhotos = images.filter(image => image.closest('[data-entrance-index]'));
+    let firstFrame: number | undefined;
+    let revealStart: number | undefined;
+    function draw(now: number) {
       frame = 0;
       if (disposed || !ctx || !gl || !track || !output) return;
       const bounds = track.getBoundingClientRect();
@@ -108,15 +111,30 @@ export function LiquidGlassLens({ rail }: { rail: RefObject<HTMLDivElement> }) {
       const channels = background.match(/[\d.]+/g)?.slice(0, 3).map(Number) ?? [0, 0, 0];
       gl.uniform3f(uniform('uBackground'), channels[0] / 255, channels[1] / 255, channels[2] / 255);
       ctx.fillRect(0, 0, bounds.width, bounds.height);
+      const entering = track.hasAttribute('data-card-entrance') && !track.hasAttribute('data-lens-fallback') && !reducedMotion.matches;
+      if (entering) {
+        firstFrame ??= now;
+        if (openingPhotos.every(photo => photo.complete) || now - firstFrame >= 500) revealStart ??= now;
+      }
+      let entranceActive = false;
       for (const image of images) {
+        const order = image.closest<HTMLElement>('[data-entrance-index]')?.dataset.entranceIndex;
+        const progress = entering && order !== undefined
+          ? Math.max(0, Math.min(1, revealStart === undefined ? 0 : (now - revealStart - Number(order) * 65) / 300))
+          : 1;
+        if (progress < 1) entranceActive = true;
+        if (progress === 0) continue;
         const box = image.getBoundingClientRect();
         if (!image.complete || !image.naturalWidth || box.right < bounds.left || box.left > bounds.right) continue;
         const scale = Math.max(box.width / image.naturalWidth, box.height / image.naturalHeight);
         const sw = box.width / scale;
         const sh = box.height / scale;
+        const eased = 1 - (1 - progress) ** 3;
+        ctx.globalAlpha = eased;
         ctx.drawImage(image, (image.naturalWidth - sw) / 2, (image.naturalHeight - sh) / 2,
-          sw, sh, box.left - bounds.left, box.top - bounds.top, box.width, box.height);
+          sw, sh, box.left - bounds.left - 12 * (1 - eased), box.top - bounds.top, box.width, box.height);
       }
+      ctx.globalAlpha = 1;
       gl.bindTexture(gl.TEXTURE_2D, texture);
       gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, source);
       gl.uniform2f(uniform('uRes'), width, height);
@@ -139,10 +157,16 @@ export function LiquidGlassLens({ rail }: { rail: RefObject<HTMLDivElement> }) {
       gl.drawArrays(gl.TRIANGLES, 0, 6);
       output.style.opacity = '1';
       track.dataset.lensReady = 'true';
-      if (motion > 0 || document.documentElement.hasAttribute('data-theme-transition')) schedule();
+      if (entering && !entranceActive) track.removeAttribute('data-card-entrance');
+      if (entranceActive || motion > 0 || document.documentElement.hasAttribute('data-theme-transition')) schedule();
     }
     function schedule() { if (!disposed && !frame) frame = requestAnimationFrame(draw); }
-    function lost(event: Event) { event.preventDefault(); output!.style.opacity = '0'; delete track!.dataset.lensReady; }
+    function lost(event: Event) {
+      event.preventDefault();
+      output!.style.opacity = '0';
+      delete track!.dataset.lensReady;
+      track!.removeAttribute('data-card-entrance');
+    }
     track.addEventListener('scroll', schedule, { passive: true });
     output.addEventListener('webglcontextlost', lost);
     document.body.addEventListener('transitionend', schedule);

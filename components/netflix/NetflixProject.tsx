@@ -101,7 +101,7 @@ export function NetflixProject({ project, work: netflixWork, examples }: { proje
 
           <ProjectLinks links={netflixWork.links} intro="Public writing and resources about Netflix’s creative tools and technology. These span several teams and years and provide context for the work described above." />
 
-          <WorkProjectActions slug={project.slug} />
+          <WorkProjectActions />
         </article>
 
 

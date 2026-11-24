@@ -51,6 +51,22 @@
 /* The WebGL preview hides the DOM photo until it becomes the shared image. */
 .rail[data-lens-ready] picture:has(img[style*="coffee-review-media"]) { opacity: 1; }
 
+/* The shader draws the entrance. The DOM animates only if WebGL is unavailable. */
+@media (prefers-reduced-motion: no-preference) {
+  .rail[data-card-entrance] .card { background: transparent; }
+  .rail[data-card-entrance] picture { opacity: 0; }
+  .rail[data-card-entrance][data-lens-fallback] + .lens { visibility: hidden; }
+  .rail[data-card-entrance][data-lens-fallback] picture { opacity: 1; }
+  .rail[data-card-entrance][data-lens-fallback] .card[data-entrance-index] {
+    animation: coffee-card-in 300ms var(--e-standard) var(--coffee-entrance-delay) both;
+  }
+}
+
+@keyframes coffee-card-in {
+  from { opacity: 0; transform: translateX(-12px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
 .lens { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; opacity: 0; }
 .details { position: absolute; top: calc(50% + var(--coffee-card) / 2 + var(--s-4)); inset-inline: var(--page-pad); display: grid; gap: var(--s-4); text-align: center; pointer-events: none; }
 .card:focus-visible { outline: 2px solid var(--text-primary); outline-offset: 4px; border-radius: 0; }

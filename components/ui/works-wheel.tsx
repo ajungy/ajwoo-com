@@ -46,7 +46,6 @@ export function WorksWheel({ items }: { items: WorksWheelItem[] }) {
       try { slug = decodeURIComponent(window.location.hash.slice(1)); } catch { return; }
       const index = items.findIndex((item) => item.href === `/work/${slug}/` || item.href === `/work/#${slug}`);
       if (index < 0) return;
-      // A linked project already determines the resting position on entry.
       stageRef.current?.setAttribute('data-restored-project', '');
       target.current = index + 1;
       turn.current = index + 1;
