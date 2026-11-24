@@ -844,4 +844,4 @@ body:has([data-work-actions]) > footer > div {
 }
 
 /* Wait for the restored frame before displaying a project video. */
-[data-work-project-video]:not([data-frame-ready]) { opacity: 0; }
+[data-work-project-video][data-restoring-frame] { opacity: 0; }

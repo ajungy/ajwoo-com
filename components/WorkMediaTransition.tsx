@@ -22,43 +22,79 @@ export function WorkMediaTransition() {
       }
     }
 
+    const projectVideo = activeVideo();
+    const hero = projectVideo?.hasAttribute('data-work-project-video') ? projectVideo : null;
+    let fallbackTimer: number | undefined;
+
+    function sourceKey(video: HTMLVideoElement) {
+      const src = video.currentSrc || video.src || video.querySelector('source')?.src;
+      return src ? `${playbackKey}:${src}` : null;
+    }
+
+    function savedPosition(video: HTMLVideoElement) {
+      try {
+        const key = sourceKey(video);
+        return key ? Number(sessionStorage.getItem(key)) : 0;
+      } catch {
+        return 0;
+      }
+    }
+
+    function showFallback() {
+      if (!hero) return;
+      hero.removeAttribute('data-restoring-frame');
+      hero.controls = true;
+    }
+
+    function startHero() {
+      if (hero?.paused) void hero.play().catch(error => {
+        if (error.name !== 'AbortError') showFallback();
+      });
+    }
+
     function restore(event?: Event) {
       const video = event?.target instanceof HTMLVideoElement ? event.target : activeVideo();
-      if (!video?.currentSrc || video.readyState < 1) return;
-      const isProjectVideo = video.hasAttribute('data-work-project-video');
-      if (event?.type === 'loadedmetadata' && !isProjectVideo) return;
-      const key = `${playbackKey}:${video.currentSrc}`;
-      try {
-        const time = Number(sessionStorage.getItem(key));
-        if (Number.isFinite(time) && time > 0 && Number.isFinite(video.duration)) {
+      if (!video || (event?.type === 'loadedmetadata' && video !== hero)) return;
+      const time = savedPosition(video);
+      if (Number.isFinite(time) && time > 0 && video.readyState >= 1 && Number.isFinite(video.duration)) {
+        try {
           const position = Math.min(time, Math.max(0, video.duration - 0.05));
           if (Math.abs(video.currentTime - position) > 0.05) video.currentTime = position;
-          sessionStorage.removeItem(key);
+          const key = sourceKey(video);
+          if (key) sessionStorage.removeItem(key);
+        } catch {
+          if (video === hero) showFallback();
         }
-      } catch {
-        // Play normally when storage or seeking is unavailable.
       }
-      if (isProjectVideo) reveal(video);
+      if (video === hero) {
+        revealHero();
+        if (event?.type !== 'play') startHero();
+      }
     }
 
-    function reveal(event: Event | HTMLVideoElement) {
-      const video = event instanceof HTMLVideoElement ? event : event.target;
-      if (!(video instanceof HTMLVideoElement) || !video.hasAttribute('data-work-project-video')
-          || video.seeking || video.readyState < 2) return;
-      video.setAttribute('data-frame-ready', '');
-      if (video.paused) void video.play().catch(() => {});
+    function revealHero() {
+      if (!hero || hero.seeking || hero.readyState < 2 || savedPosition(hero) > 0) return;
+      hero.removeAttribute('data-restoring-frame');
+      window.clearTimeout(fallbackTimer);
     }
 
+    if (hero && savedPosition(hero) > 0) {
+      hero.setAttribute('data-restoring-frame', '');
+      fallbackTimer = window.setTimeout(showFallback, 5000);
+    }
+    hero?.addEventListener('loadeddata', revealHero);
+    hero?.addEventListener('seeked', revealHero);
+    hero?.addEventListener('playing', revealHero);
     restore();
-    document.addEventListener('loadeddata', reveal, true);
-    document.addEventListener('seeked', reveal, true);
     window.addEventListener('pagehide', save);
     window.addEventListener('pageshow', restore);
     document.addEventListener('loadedmetadata', restore, true);
     document.addEventListener('play', restore, true);
     return () => {
-      document.removeEventListener('loadeddata', reveal, true);
-      document.removeEventListener('seeked', reveal, true);
+      window.clearTimeout(fallbackTimer);
+      hero?.removeEventListener('loadeddata', revealHero);
+      hero?.removeEventListener('seeked', revealHero);
+      hero?.removeEventListener('playing', revealHero);
       window.removeEventListener('pagehide', save);
       window.removeEventListener('pageshow', restore);
       document.removeEventListener('loadedmetadata', restore, true);
