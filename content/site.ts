@@ -91,7 +91,7 @@ export const principles = [
   { n: 4, title: 'Make the path clear', body: 'Show where to start, what comes next, and how to finish or go back.' },
   { n: 5, title: 'Tell the truth', body: "Be clear about what the system is doing, what it knows, and what it doesn't." },
   { n: 6, title: 'Design beyond the screen', body: 'Connect decisions across the whole experience. Make patterns consistent and flexible.' },
-  { n: 7, title: 'Speak plainly', body: 'Choose familiar words over clever ones. Make labels describe what will happen.' },
+  { n: 7, title: 'Speak plainly', body: 'Choose familiar words. Make labels describe what will happen.' },
   { n: 8, title: 'Make actions discoverable', body: 'Help people see what they can do and how to do it.' },
   { n: 9, title: 'Give color purpose', body: 'Use color consistently to communicate meaning. Reinforce it with words, shapes, or icons.' },
   { n: 10, title: 'Use space deliberately', body: 'Use spacing to create focus, relationships, and some room to breathe.' },
