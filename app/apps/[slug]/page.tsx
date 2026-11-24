@@ -34,7 +34,7 @@ export default function AppPage({ params }: { params: { slug: string } }) {
           apps" list at the bottom of this same page already offers the
           other two, so a second back affordance sitting alone above the
           fold wasn't earning its space (same reasoning as the /work pages). */}
-      <header className={`flex flex-col gap-8 pt-12 medium:flex-row medium:items-start ${app.demoVideoYoutube || app.demoVideo || app.demoImage ? 'pb-12' : 'pb-[var(--section-gap)]'}`}>
+      <header className={`flex flex-col gap-8 pt-[30px] medium:flex-row medium:items-start ${app.demoVideoYoutube || app.demoVideo || app.demoImage ? 'pb-[55px]' : 'pb-[var(--section-gap)]'}`}>
         {/* h-28/w-28 (112px), up from 96px — bigger again at Alex's
             direction ("make the logo a little bit larger"). */}
         {app.iconImage ? (

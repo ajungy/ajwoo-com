@@ -13,14 +13,14 @@ export function NetflixProject({ project, work: netflixWork, examples }: { proje
     <>
       <WorkMediaTransition />
       <div className="portfolio-media work-reading-column">
-        <header className="pt-12 pb-12">
+        <header className="pt-[30px] pb-[55px]">
           <h1 className="type-project-title">{project.title}</h1>
           <p className="mt-4 type-caption">{project.category} - {netflixWork.years}</p>
         </header>
 
         <article>
           <div className="detail-hero-media mb-[var(--section-gap)]" style={{ viewTransitionName: 'work-project-media' }}>
-            <video autoPlay loop muted playsInline preload="auto"
+            <video data-work-project-video loop muted playsInline preload="auto"
               poster={`/img/${hero.base}-poster.webp`}
               width={hero.width} height={hero.height}
               aria-label={hero.label}

@@ -9,7 +9,7 @@ export const metadata = pageMetadata('/apps/', 'Apps');
 export default function AppsPage() {
   return (
     <div className="apps-entrance mx-auto max-w-app px-page">
-      <section className="route-intro py-12">
+      <section className="route-intro pt-[30px] pb-[55px]">
         <h1 className="type-project-title"><span className="sr-only">Apps. </span>Useful. Personal. Minimal.</h1>
         <p className="mt-4 max-w-content type-subtitle">
           Thoughtful tools for everyday things, from creating and converting

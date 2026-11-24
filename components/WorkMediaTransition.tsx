@@ -25,25 +25,40 @@ export function WorkMediaTransition() {
     function restore(event?: Event) {
       const video = event?.target instanceof HTMLVideoElement ? event.target : activeVideo();
       if (!video?.currentSrc || video.readyState < 1) return;
-      // Carousel videos preload together. Restore a thumbnail when it plays.
-      if (event?.type === 'loadedmetadata' && !video.autoplay) return;
+      const isProjectVideo = video.hasAttribute('data-work-project-video');
+      if (event?.type === 'loadedmetadata' && !isProjectVideo) return;
+      const key = `${playbackKey}:${video.currentSrc}`;
       try {
-        const key = `${playbackKey}:${video.currentSrc}`;
         const time = Number(sessionStorage.getItem(key));
-        if (!Number.isFinite(time) || time <= 0) return;
-        video.currentTime = Math.min(time, video.duration);
-        sessionStorage.removeItem(key);
+        if (Number.isFinite(time) && time > 0 && Number.isFinite(video.duration)) {
+          const position = Math.min(time, Math.max(0, video.duration - 0.05));
+          if (Math.abs(video.currentTime - position) > 0.05) video.currentTime = position;
+          sessionStorage.removeItem(key);
+        }
       } catch {
-        // Let the video start normally if the saved position is unavailable.
+        // Play normally when storage or seeking is unavailable.
       }
+      if (isProjectVideo) reveal(video);
+    }
+
+    function reveal(event: Event | HTMLVideoElement) {
+      const video = event instanceof HTMLVideoElement ? event : event.target;
+      if (!(video instanceof HTMLVideoElement) || !video.hasAttribute('data-work-project-video')
+          || video.seeking || video.readyState < 2) return;
+      video.setAttribute('data-frame-ready', '');
+      if (video.paused) void video.play().catch(() => {});
     }
 
     restore();
+    document.addEventListener('loadeddata', reveal, true);
+    document.addEventListener('seeked', reveal, true);
     window.addEventListener('pagehide', save);
     window.addEventListener('pageshow', restore);
     document.addEventListener('loadedmetadata', restore, true);
     document.addEventListener('play', restore, true);
     return () => {
+      document.removeEventListener('loadeddata', reveal, true);
+      document.removeEventListener('seeked', reveal, true);
       window.removeEventListener('pagehide', save);
       window.removeEventListener('pageshow', restore);
       document.removeEventListener('loadedmetadata', restore, true);

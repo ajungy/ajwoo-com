@@ -30,7 +30,7 @@ export default function Home() {
   return (
     <>
       <div className="mx-auto max-w-app px-[16px] large:px-page">
-        <section className="grid grid-cols-1 pt-20 large:grid-cols-4">
+        <section className="grid grid-cols-1 pt-[50px] large:grid-cols-4">
           <div className="hero-col landing-reading-column">
             {/* Reveal the complete headline after its display font is ready. */}
             <HeroHeadline>{site.headline}</HeroHeadline>
@@ -102,7 +102,7 @@ export default function Home() {
       </div>
 
       <LandingSections>
-        <section className="pt-[140px] pb-[160px] text-center" id="home-work-title">
+        <section className="pt-[75px] pb-[160px] text-center" id="home-work-title">
           <WorkMediaTransition />
           <CoverflowCarousel slides={['netflix-creative-tools', 'premiere-generative-ai', 'pr-ae-frame', 'product-visualize', 'seeing-ai'].flatMap(slug => {
             const project = workGallery.find(item => item.href === `/work/${slug}/`);

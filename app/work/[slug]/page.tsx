@@ -111,7 +111,7 @@ export default function WorkPage({ params }: { params: { slug: string } }) {
   return (
     <div className="portfolio-media work-reading-column">
       {openingWork && <WorkMediaTransition />}
-        <header className={`pt-12 ${hero || introVideo || project.slug === 'premiere-generative-ai' ? 'pb-12' : 'pb-[var(--section-gap)]'}`}>
+        <header className={`pt-[30px] ${hero || introVideo || project.slug === 'premiere-generative-ai' ? 'pb-[55px]' : 'pb-[var(--section-gap)]'}`}>
           <h1 className="type-project-title">{project.title}{project.kind === 'coffee' && year ? `, ${year}` : ''}</h1>
           <p className="mt-4 type-caption">{project.category}{project.kind === 'design' && year ? ` - ${year}` : ''}</p>
         </header>
@@ -137,7 +137,8 @@ export default function WorkPage({ params }: { params: { slug: string } }) {
               style={{ viewTransitionName: 'work-project-media' }}
               src={`/img/${introVideo.base}.mp4`}
               aria-label={introVideo.label}
-              autoPlay
+              data-work-project-video
+              preload="auto"
               loop
               muted
               playsInline
@@ -145,7 +146,7 @@ export default function WorkPage({ params }: { params: { slug: string } }) {
           )}
           {project.slug === 'premiere-generative-ai' && introVideo ? (
             <figure className="mb-[var(--section-gap)]">
-              <video className="detail-hero-media mb-[var(--section-gap)] block h-auto" width={introVideo.width} height={introVideo.height} style={{ viewTransitionName: 'work-project-media' }} poster={`/img/${introVideo.base}-poster.webp`} autoPlay loop muted playsInline aria-label="Generative removal in Premiere Pro" src={`/img/${introVideo.base}.mp4`} />
+              <video className="detail-hero-media mb-[var(--section-gap)] block h-auto" width={introVideo.width} height={introVideo.height} style={{ viewTransitionName: 'work-project-media' }} poster={`/img/${introVideo.base}-poster.webp`} data-work-project-video preload="auto" loop muted playsInline aria-label="Generative removal in Premiere Pro" src={`/img/${introVideo.base}.mp4`} />
               <blockquote className="type-section-heading">
                 “Adobe had been absolutely crushing it with new tools that leverage AI to give creators more freedom”
               </blockquote>
