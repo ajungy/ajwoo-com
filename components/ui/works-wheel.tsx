@@ -245,8 +245,9 @@ export function WorksWheel({ items }: { items: WorksWheelItem[] }) {
           const Card = item.paragraphs ? 'div' : 'a';
           const media = item.video ?? item.image;
           const aspectRatio = media ? media.width / media.height : 1;
-          const cardWidth = Math.min(geometry.side, stage.h * 0.81 * aspectRatio);
-          const cardHeight = cardWidth / aspectRatio;
+          const thumbnailWidth = Math.min(geometry.side, stage.h * 0.81 * aspectRatio);
+          const cardHeight = thumbnailWidth / aspectRatio;
+          const cardWidth = item.paragraphs && stage.w < 700 ? stage.w : thumbnailWidth;
           return <Card data-work-preview-link={item.video ? true : undefined} key={item.href} href={item.href} ref={(el: HTMLElement | null) => { cards.current[i] = el; }}
             className={`${styles.card} ${active === i ? styles.selectedCard : ''}`} aria-label={item.paragraphs ? item.title : `View ${item.title}`} tabIndex={opened && active === i ? 0 : -1}
             aria-hidden={opened && Math.abs(active - i) > 1 ? true : undefined}
