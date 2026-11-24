@@ -34,7 +34,7 @@ export function NetflixProject({ project, work: netflixWork, examples }: { proje
           </section>
 
           <section className="mt-[var(--section-gap)] max-w-content" aria-labelledby="netflix-contribution">
-            <h2 id="netflix-contribution" className="type-decision">My scope</h2>
+            <h2 id="netflix-contribution" className="type-decision">My contribution</h2>
             <p className="mt-4 type-body">{netflixWork.contribution}</p>
             <p className="mt-6 type-body">{netflixWork.distribution}</p>
             <dl className="mt-[var(--section-gap)] space-y-[var(--section-gap)]">
