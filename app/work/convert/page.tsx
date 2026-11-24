@@ -3,7 +3,7 @@ import { Action } from '@/components/Action';
 import { WorkProjectActions } from '@/components/WorkProjectActions';
 export const metadata: Metadata = { title: 'Convert — Independent product design', description: 'A focused browser-based file conversion workflow, designed and built by Alex Woo.' };
 export default function ConvertStory() {
-  return <article className="work-reading-column py-12">
+  return <article className="detail-entrance work-reading-column py-12">
     <h1 className="type-project-title">Convert</h1>
     <p className="mt-4 type-caption">Independent product · Design and build</p>
     <p className="mt-4 type-section-heading">Drop files into your browser, choose a format, and download the result.</p>

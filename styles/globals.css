@@ -788,6 +788,26 @@ html[data-theme-transition] *::after {
   .work-entrance[data-ready="true"] .route-navigation {
     animation: route-media-in 400ms var(--e-entrance, cubic-bezier(0.16, 1, 0.3, 1)) 150ms both;
   }
+  /* Shared project media has its own thumbnail transition. Animate the
+     surrounding content independently so the playing element stays visible. */
+  .detail-entrance > header > *,
+  .detail-entrance > .detail-hero-media,
+  article.detail-entrance > *,
+  .detail-entrance > article > :not([data-preview-detail], :has([data-preview-detail])),
+  .detail-entrance > article > figure:has([data-preview-detail]) > :is(blockquote, figcaption),
+  .detail-entrance > [data-work-actions] {
+    animation: route-content-in 400ms var(--e-entrance, cubic-bezier(0.16, 1, 0.3, 1)) backwards;
+    animation-delay: var(--detail-delay, 0ms);
+  }
+  article.detail-entrance > :nth-child(2),
+  .detail-entrance > header > :nth-child(2) { --detail-delay: 45ms; }
+  article.detail-entrance > :nth-child(n+3),
+  .detail-entrance > header > :nth-child(3) { --detail-delay: 90ms; }
+  .detail-entrance > .detail-hero-media { --detail-delay: 135ms; }
+  .detail-entrance > article { --detail-delay: 180ms; }
+  .detail-entrance > article > :nth-child(n+2) { --detail-delay: 225ms; }
+  .detail-entrance > article > :nth-child(n+3) { --detail-delay: 270ms; }
+  .detail-entrance > [data-work-actions] { --detail-delay: 315ms; }
   .apps-entrance .stagger-grid { --stagger-base: 0ms; --stagger-step: 45ms; }
 }
 

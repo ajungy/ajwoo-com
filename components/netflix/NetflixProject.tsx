@@ -13,7 +13,7 @@ export function NetflixProject({ project, work: netflixWork, examples }: { proje
   return (
     <>
       <WorkMediaTransition />
-      <div className="portfolio-media work-reading-column">
+      <div className="detail-entrance portfolio-media work-reading-column">
         <header className="pt-[30px] pb-[60px]">
           <h1 className="type-project-title">{project.title}</h1>
           <p className="mt-4 type-caption">{project.category} - {netflixWork.years}</p>

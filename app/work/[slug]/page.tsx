@@ -100,7 +100,7 @@ export default function WorkPage({ params }: { params: { slug: string } }) {
   const introVideo = openingWork?.video;
   const study = caseStudies[project.slug];
   return (
-    <div className="portfolio-media work-reading-column">
+    <div className="detail-entrance portfolio-media work-reading-column">
       {(openingWork || isCoffee) && <WorkMediaTransition />}
         <header className={`pt-[30px] ${hero || introVideo || project.slug === 'premiere-generative-ai' ? 'pb-[60px]' : 'pb-[var(--section-gap)]'}`}>
           <h1 className="type-project-title">{project.title}{project.kind === 'coffee' && year ? `, ${year}` : ''}</h1>
