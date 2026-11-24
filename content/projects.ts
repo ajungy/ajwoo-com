@@ -35,7 +35,7 @@ export const projects: Project[] = [
   { slug: 'seeing-ai', title: 'Microsoft Seeing AI', lead: "Sound and vibration helped people with visual impairments locate a chair.", category: 'Accessibility / AI', kind: 'design' },
   { slug: 'netmarble', title: 'Netmarble Games', lead: "My work at Netmarble spanned the company’s visual identity and the interfaces players used on their phones.", category: 'Brand / UX', kind: 'design' },
   { slug: 'starbucks-technology', title: 'Starbucks Technology', lead: "I worked with the Starbucks Innovation Lab on an iPad tool for planning batches of coffee.", category: 'User Research / iPad', kind: 'design' },
-  { slug: 'wrap-and-charge', title: 'Kikkerland Wrap and Charge', lead: "A charger with a place to wind the cable makes both easier to carry.", category: 'Industrial Design', kind: 'design' },
+  { slug: 'wrap-and-charge', title: 'Wrap and Charge', lead: "A charger with a place to wind the cable makes both easier to carry.", category: 'Industrial Design', kind: 'design' },
   { slug: 'coin-lock', title: 'Coin Lock', lead: "A portable lock designed for the things people leave outside, from bikes to strollers.", category: 'Industrial Design', kind: 'design' },
   { slug: '10-borders', title: '10 Borders', lead: "A poster traces one refugee’s escape from Syria.", category: 'Graphic Design', kind: 'design' },
   { slug: 'paintsound', title: 'Paint Sound', lead: "Paint Sound turns nearby sounds into holograms that people with hearing loss can see.", category: 'Hololens', kind: 'design' },

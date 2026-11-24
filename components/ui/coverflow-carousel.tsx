@@ -94,6 +94,10 @@ export function CoverflowCarousel({ slides }: { slides: Slide[] }) {
       // Tuck each outer thumbnail behind its nearer neighbor.
       const travel = 0.88 * Math.min(distance, 1) + 0.70 * Math.min(Math.max(distance - 1, 0), 1);
       const horizontalOffset = Math.sign(offset) * travel * pitch;
+
+      // Compensate for scale and perspective at the center of each card.
+      const projectedScale = scale / (1 + depth * ramp / 3);
+      card.style.borderRadius = `${8 / projectedScale}px`;
       card.style.transform =
         `translateX(calc(-50% + ${horizontalOffset}px)) ` +
         `translateZ(${-depth * width * ramp}px) rotateY(${-tilt}deg) scale(${scale})`;
@@ -276,8 +280,8 @@ export function CoverflowCarousel({ slides }: { slides: Slide[] }) {
           {slides.map((slide, i) => (
             <div key={slide.href} ref={node => { cardRefs.current[i] = node; }}
               data-focused={i === selected || undefined}
-              className="work-coverflow-card absolute left-1/2 top-1/2 overflow-hidden rounded-control"
-              style={{ viewTransitionName: i === selected ? 'work-project-media' : undefined, width: 'var(--card)', height: `calc(var(--card) * ${heightRatios[i]})`, marginTop: `calc(var(--card) * ${-heightRatios[i] / 2})`, transform: i === 0 ? `translateX(-50%) scale(${INITIAL_CENTER_SCALE})` : 'translateX(-50%)', opacity: i === 0 ? 1 : 0 }}>
+              className="work-coverflow-card absolute left-1/2 top-1/2 overflow-hidden rounded-[8px]"
+              style={{ viewTransitionName: i === selected ? 'work-project-media' : undefined, width: 'var(--card)', height: `calc(var(--card) * ${heightRatios[i]})`, marginTop: `calc(var(--card) * ${-heightRatios[i] / 2})`, transform: i === 0 ? `translateX(-50%) scale(${INITIAL_CENTER_SCALE})` : 'translateX(-50%)', opacity: i === 0 ? 1 : 0, borderRadius: i === 0 ? 8 / INITIAL_CENTER_SCALE : 8 }}>
               <a data-work-preview-link={slide.video ? true : undefined} className="block h-full" href={slide.href} draggable={false} aria-label={slide.title} tabIndex={i === selected ? 0 : -1}>
                 {slide.video ? (
                   <PreviewVideo base={slide.video.base} href={slide.href} className="h-full w-full" />

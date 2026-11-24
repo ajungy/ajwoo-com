@@ -140,7 +140,40 @@ function Embed({ block }: { block: Extract<Block, { kind: 'embed' }> }) {
   );
 }
 
-export function Blocks({ blocks, alt, compactMedia = false }: { blocks: Block[]; alt: string; compactMedia?: boolean }) {
+const coffeeReviewsWithoutSecondPhoto = new Set([
+  '5-coffee-shops-in-seattle',
+  '3-coffee-shops-amsterdam',
+  'best-coffee-shops-new-york-city',
+  '5-in-milan',
+  'top-3-fancy-cafes-paris',
+  'top-5-coffee-shop-paris',
+  'top-5-coffee-shops-in-london',
+  'blue-olive',
+  'telescope',
+]);
+
+export function Blocks({ blocks, alt, compactMedia = false, coffee = false, projectSlug }: { coffee?: boolean; projectSlug?: string; blocks: Block[]; alt: string; compactMedia?: boolean }) {
+  if (coffee) {
+    // Each imported review consists of a run of copy followed by its photos.
+    const ordered: Block[] = [];
+    let start = 0;
+    while (start < blocks.length) {
+      let photos = start;
+      while (photos < blocks.length && blocks[photos].kind === 'text') photos++;
+      let end = photos;
+      while (end < blocks.length && blocks[end].kind !== 'text') end++;
+      ordered.push(...blocks.slice(photos, end), ...blocks.slice(start, photos).filter(block =>
+        block.kind !== 'text' || !/^location\s*:?$/i.test(block.value.trim())
+      ));
+      start = end;
+    }
+    if (projectSlug && coffeeReviewsWithoutSecondPhoto.has(projectSlug)) {
+      // The opening photo renders separately, before the review blocks.
+      const firstReviewPhoto = ordered.findIndex(block => block.kind === 'image');
+      if (firstReviewPhoto >= 0) ordered.splice(firstReviewPhoto, 1);
+    }
+    blocks = ordered;
+  }
   // Multi-shop posts (e.g. "3 Coffee Shops in Tokyo") list each shop's name
   // once as a plain intro line ("1. Supreme Coffee"), then repeat the exact
   // same numbered name as that shop's own section heading further down —
@@ -162,7 +195,7 @@ export function Blocks({ blocks, alt, compactMedia = false }: { blocks: Block[];
   const TEXT = 'mt-6';
   const MEDIA = compactMedia ? 'mt-12' : 'mt-15';
 
-  const resultsIndex = alt === 'Kikkerland Wrap and Charge'
+  const resultsIndex = projectSlug === 'wrap-and-charge'
     ? blocks.findIndex(block => block.kind === 'text' && block.value === 'Results')
     : -1;
   const metrics: string[] = [];
@@ -202,7 +235,8 @@ export function Blocks({ blocks, alt, compactMedia = false }: { blocks: Block[];
 
         let mt = '';
         if (prevKind !== null) {
-          mt = kind === 'heading' ? 'mt-[var(--section-gap)]'
+          mt = coffee && prevKind === 'media' && kind !== 'media' ? 'mt-[30px]'
+            : kind === 'heading' ? 'mt-[var(--section-gap)]'
             : kind === 'media' || prevKind === 'media' ? MEDIA
             : prevKind === 'heading' ? 'mt-4'
             : kind === 'rating' && prevKind === 'rating' ? TIGHT

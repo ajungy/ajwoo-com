@@ -7,7 +7,7 @@ export function CopySkillButton() {
       data-cursor-label="Download SKILL.md"
       className={
         'inline-flex items-center justify-center h-control-md rounded-control border ' +
-        'text-label font-medium transition duration-fast ease-standard motion-safe:active:scale-press ' +
+        'type-button-label font-medium transition duration-fast ease-standard motion-safe:active:scale-press ' +
         'bg-secondary text-secondary-fg border-secondary-line px-6 ' +
         'can-hover:hover:bg-secondary-hover can-hover:hover:border-secondary-line-hover ' +
         'active:bg-secondary-active'

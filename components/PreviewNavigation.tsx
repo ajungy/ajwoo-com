@@ -27,11 +27,25 @@ export function PreviewNavigation() {
       if (location.pathname === '/') history.replaceState({ ...history.state, homeWorkProject: link.pathname }, '');
       router.push(link.pathname);
     }
+    // Native transitions are used for still-image projects. Cancel the
+    // outgoing snapshot when returning from a project to a gallery.
+    function skipGalleryReturn(event: Event) {
+      const swap = event as Event & {
+        activation?: { entry?: { url?: string | null } | null } | null;
+        viewTransition?: { skipTransition(): void } | null;
+      };
+      const destination = swap.activation?.entry?.url;
+      if (!destination || !/^\/work\/[^/]+\/$/.test(location.pathname)) return;
+      const path = new URL(destination).pathname;
+      if (path === '/' || path === '/work/' || path === '/coffee/') swap.viewTransition?.skipTransition();
+    }
+    window.addEventListener('pageswap', skipGalleryReturn);
     document.addEventListener('pointerover', prefetch);
     document.addEventListener('focusin', prefetch);
     document.addEventListener('click', open);
     window.addEventListener('popstate', onPreviewHistory, true);
     return () => {
+      window.removeEventListener('pageswap', skipGalleryReturn);
       document.removeEventListener('pointerover', prefetch);
       document.removeEventListener('focusin', prefetch);
       document.removeEventListener('click', open);

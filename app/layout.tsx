@@ -29,7 +29,15 @@ export const metadata: Metadata = {
 // for `/` specifically. Other pages keep the browser's normal restore
 // behavior; only the landing page has this requirement.
 const bootScript = `
-document.documentElement.setAttribute('data-hero-motion', 'ready');
+try {
+  var navigation = performance.getEntriesByType('navigation')[0];
+  if (!sessionStorage.getItem('home-intro-seen') ||
+      (location.pathname === '/' && navigation && navigation.type === 'reload')) {
+    document.documentElement.setAttribute('data-hero-motion', 'ready');
+  }
+} catch (e) {
+  if (location.pathname === '/') document.documentElement.setAttribute('data-hero-motion', 'ready');
+}
 try {
   var t = localStorage.getItem('theme');
   if (t === 'light' || t === 'dark') {

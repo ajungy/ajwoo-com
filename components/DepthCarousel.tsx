@@ -174,7 +174,7 @@ export function DepthCarousel({
 }: DepthCarouselProps) {
   const [index, setIndex] = useState(0);
   useEffect(() => {
-    const saved = history.state?.previewReturn?.path;
+    const saved = history.state?.appReturnPath;
     if (!saved || !wrapperRef.current) return;
     const links = Array.from(wrapperRef.current.querySelectorAll<HTMLAnchorElement>('a.card-link'));
     const restored = links.findIndex(link => link.pathname === saved);

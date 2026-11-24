@@ -1,6 +1,5 @@
 'use client';
 
-import Link from 'next/link';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Picture } from '@/components/Picture';
 import styles from './CoffeeCarousel.module.css';
@@ -197,7 +196,7 @@ export function CoffeeCarousel({ slides }: { slides: CoffeeSlide[] }) {
         }}
       >
         {loopSlides.map((slide, i) => (
-          <Link
+          <a
             key={`${i}-${slide.slug}`}
             href={`/work/${slide.slug}/`}
             className={styles.card}
@@ -211,14 +210,20 @@ export function CoffeeCarousel({ slides }: { slides: CoffeeSlide[] }) {
               const card = event.currentTarget;
               rail.current?.scrollTo({ left: card.offsetLeft - (rail.current.clientWidth - card.clientWidth) / 2, behavior: 'instant' });
             }}
-            onClick={() => history.replaceState({ ...history.state, galleryReturn: true }, '', '#' + slide.slug)}
+            onClick={event => {
+              if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+              const image = event.currentTarget.querySelector('img');
+              rail.current?.querySelector<HTMLImageElement>('img[style*="coffee-review-media"]')?.style.removeProperty('view-transition-name');
+              image?.style.setProperty('view-transition-name', 'coffee-review-media');
+              history.replaceState({ ...history.state, galleryReturn: true }, '', '#' + slide.slug);
+            }}
             aria-label={`Read ${slide.title}`}
             data-cursor-label="Read review"
           >
             <Picture img={slide.image} alt={slide.title} priority={Math.abs(i - slides.length) <= 2}
               sizes="(max-width: 599px) 82vw, (max-width: 900px) 65vw, 520px"
               className={styles.image} />
-          </Link>
+          </a>
         ))}
       </div>
       <LiquidGlassLens rail={rail} />

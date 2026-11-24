@@ -16,8 +16,8 @@ export const site = {
   // italic (see .hero-serif in globals.css) instead of a typing loop.
   headline: 'Enable creativity.',
   greeting: "Hi, I'm Alex.",
-  greetingEmphasis: "I make complex tools simple.",
-  bio: "I design tools for creative work. At Netflix, I led design for promotional video workflows. At Adobe, I worked on AI video editing, and at Microsoft, I designed for mixed reality and accessibility. I’m always happy to meet people building creative tools.",
+  greetingEmphasis: "I make bold ideas real.",
+  bio: "At Netflix, I led design for promotional video, artwork, copy, and analytics workflows. At Adobe, I worked on AI video editing. At Microsoft, I designed for mixed reality and accessibility. I’m always happy to meet people building creative tools.",
   // Switched from Calendly to a Google Calendar booking page, and the event
   // itself from 30 to 15 minutes, at Alex's direction.
   calendlyUrl: process.env.NEXT_PUBLIC_CALENDLY_URL ?? 'https://calendar.app.google/NCKhKCPKq9SffYAZ7',

@@ -12,7 +12,7 @@ import { notFound } from 'next/navigation';
 import { Picture } from '@/components/Picture';
 import { Blocks } from '@/components/Blocks';
 import {
-  projects, getProject, blocksFor,
+  projects, getProject, blocksFor, tileFor,
 } from '@/content/projects';
 
 export function generateStaticParams() {
@@ -88,16 +88,9 @@ export default function WorkPage({ params }: { params: { slug: string } }) {
   const withoutTitle = isExactTitle || yearMatch ? all.slice(1) : all;
 
   // Keep an opening image between the project metadata and the editorial lead.
-  const promoteFirstImage = [
-    '3-coffee-shops-in-tokyo', '5-coffee-shops-in-seattle', '3-coffee-shops-amsterdam',
-    'best-coffee-shops-new-york-city', 'top-3-fancy-cafes-paris', 'top-5-coffee-shop-paris',
-    'top-5-coffee-shops-in-london', 'blue-olive', 'telescope',
-  ].includes(project.slug);
+  const isCoffee = project.kind === 'coffee';
   const openingWork = project.kind === 'design' ? workOpeningMedia(project.slug) : undefined;
-  const openingMedia = promoteFirstImage
-    ? withoutTitle.find(block => block.kind === 'image')
-    : withoutTitle[0];
-  const hero = openingWork ? openingWork.image : openingMedia?.kind === 'image' ? openingMedia : null;
+  const hero = isCoffee ? tileFor(project.slug) : openingWork?.image;
   const closingImage = project.slug === 'netmarble'
     ? withoutTitle.find(block => block.kind === 'image')
     : undefined;
@@ -106,35 +99,32 @@ export default function WorkPage({ params }: { params: { slug: string } }) {
 
   const introVideo = openingWork?.video;
   const study = caseStudies[project.slug];
-  const isCoffee = project.kind === 'coffee';
-
-
   return (
     <div className="portfolio-media work-reading-column">
-      {openingWork && <WorkMediaTransition />}
-        <header className={`pt-[30px] ${hero || introVideo || project.slug === 'premiere-generative-ai' ? 'pb-[55px]' : 'pb-[var(--section-gap)]'}`}>
+      {(openingWork || isCoffee) && <WorkMediaTransition />}
+        <header className={`pt-[30px] ${hero || introVideo || project.slug === 'premiere-generative-ai' ? 'pb-[60px]' : 'pb-[var(--section-gap)]'}`}>
           <h1 className="type-project-title">{project.title}{project.kind === 'coffee' && year ? `, ${year}` : ''}</h1>
-          <p className="mt-4 type-caption">{project.category}{project.kind === 'design' && year ? ` - ${year}` : ''}</p>
+          {!isCoffee && <p className="mt-4 type-caption">{project.category}{year ? ` - ${year}` : ''}</p>}
         </header>
 
       {hero && (
         <Picture
           img={hero}
-          style={openingWork ? { viewTransitionName: 'work-project-media' } : undefined}
+          style={{ viewTransitionName: isCoffee ? 'coffee-review-media' : 'work-project-media' }}
           alt={project.title}
           priority
           sizes="(min-width: 1600px) 828px, (min-width: 904px) 840px, (min-width: 840px) calc(100vw - 64px), (min-width: 600px) calc(100vw - 48px), calc(100vw - 32px)"
-          className="detail-hero-media mb-[var(--section-gap)] block h-auto"
+          className={`mb-[var(--detail-media-gap)] block h-auto ${isCoffee ? 'w-full' : 'detail-hero-media'}`}
         />
       )}
 
         <article>
           {introVideo && project.slug !== 'premiere-generative-ai' && (
-            <PreviewVideo {...introVideo} href={`/work/${project.slug}/`} detail className="detail-hero-media mb-[var(--section-gap)]" />
+            <PreviewVideo {...introVideo} href={`/work/${project.slug}/`} detail className="detail-hero-media mb-[var(--detail-media-gap)]" />
           )}
           {project.slug === 'premiere-generative-ai' && introVideo ? (
             <figure className="mb-[var(--section-gap)]">
-              <PreviewVideo {...introVideo} href={`/work/${project.slug}/`} detail className="detail-hero-media mb-[var(--section-gap)]" />
+              <PreviewVideo {...introVideo} href={`/work/${project.slug}/`} detail className="detail-hero-media mb-[var(--detail-media-gap)]" />
               <blockquote className="type-section-heading">
                 “Adobe had been absolutely crushing it with new tools that leverage AI to give creators more freedom”
               </blockquote>
@@ -156,7 +146,7 @@ export default function WorkPage({ params }: { params: { slug: string } }) {
             <h2 className="mt-[var(--section-gap)] type-decision">{study.outcomeHeading ?? 'Public work'}</h2>
             <p className="mt-4 type-body">{study.outcome}</p>
           </section>}
-          <Blocks blocks={study ? [...blocks.filter((b) => b.kind !== 'text'), ...(study.additionalBlocks ?? [])] : blocks} alt={project.title} compactMedia={!isCoffee} />
+          <Blocks projectSlug={project.slug} coffee={isCoffee} blocks={study ? [...blocks.filter((b) => b.kind !== 'text'), ...(study.additionalBlocks ?? [])] : blocks} alt={project.title} compactMedia={!isCoffee} />
           {videoId && (
             <ProjectLinks links={[{
               href: `https://www.youtube.com/watch?v=${videoId}`,

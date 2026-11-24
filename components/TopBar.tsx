@@ -48,6 +48,17 @@ export function TopBar() {
 
   useEffect(() => { setMenuOpen(false); }, [pathname]);
 
+  useEffect(() => {
+    if (home) return;
+    try {
+      if (sessionStorage.getItem('home-intro-seen')) {
+        document.documentElement.removeAttribute('data-hero-motion');
+      }
+    } catch {
+      document.documentElement.removeAttribute('data-hero-motion');
+    }
+  }, [home]);
+
   const navLinks = (extraClassName: string) =>
     nav.map((n) => (
       <Link
@@ -57,7 +68,7 @@ export function TopBar() {
         aria-current={isActive(n.href) ? 'page' : undefined}
         data-cursor-label={n.label}
         className={
-          'text-label inline-flex h-control-md items-center justify-center rounded-control px-4 ' +
+          'type-button-label inline-flex h-control-md items-center justify-center rounded-control px-4 ' +
           'transition duration-fast ease-standard can-hover:hover:bg-tertiary-hover ' +
           (isActive(n.href) ? 'font-semibold text-fg' : 'text-fg-tertiary can-hover:hover:text-fg') +
           ' ' + extraClassName

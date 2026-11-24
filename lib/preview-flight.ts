@@ -33,7 +33,7 @@ function finish(current: Flight) {
   current.layer.remove();
 }
 
-function lift(slot: HTMLElement, path: string) {
+function lift(slot: HTMLElement, path: string, returning = false) {
   if (flight) finish(flight);
   const video = slot.querySelector('video');
   if (!video || !slot.dataset.preview) return false;
@@ -43,6 +43,7 @@ function lift(slot: HTMLElement, path: string) {
   const layer = document.createElement('div');
   layer.className = 'preview-flight';
   Object.assign(layer.style, { left: rect.left + 'px', top: rect.top + 'px', width: rect.width + 'px', height: rect.height + 'px' });
+  if (returning) layer.style.visibility = 'hidden';
   document.body.appendChild(layer);
   slot.setAttribute('data-in-flight', '');
   move(video, layer);
@@ -70,28 +71,31 @@ export function dockPreview(slot: HTMLElement) {
   const current = flight;
   if (!current || !arrivingVideo(current.base) || current.base !== slot.dataset.preview) return;
   current.destination = slot;
-  slot.setAttribute('data-in-flight', '');
-  const isReturn = !slot.hasAttribute('data-preview-detail');
-  const section = slot.closest('section');
-  if (isReturn) section?.setAttribute('data-preview-return', '');
-
-  // Next restores scroll and the gallery measures its responsive geometry at
-  // commit. Measure the endpoint after those updates, outside the animation.
-  requestAnimationFrame(() => requestAnimationFrame(() => {
-    if (flight !== current || !slot.isConnected) return;
-    if (isReturn && Number.isFinite(history.state?.previewReturn?.y)) {
+  if (!slot.hasAttribute('data-preview-detail')) {
+    // Restore the playing video directly in its card on Back. No floating
+    // video should be visible when leaving a scrolled project page.
+    if (Number.isFinite(history.state?.previewReturn?.y)) {
       window.scrollTo({ top: history.state.previewReturn.y, behavior: 'instant' });
     }
+    finish(current);
+    return;
+  }
+
+  slot.setAttribute('data-in-flight', '');
+  // Measure after the new page has laid out and restored its scroll position.
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    if (flight !== current || !slot.isConnected) return;
     const to = slot.getBoundingClientRect();
     const from = current.layer.getBoundingClientRect();
     if (!to.width || !to.height || matchMedia('(prefers-reduced-motion: reduce)').matches) {
       finish(current);
       return;
     }
+    const easing = getComputedStyle(current.layer).getPropertyValue('--e-media-transition').trim();
     current.animation = current.layer.animate([
       { transform: 'none' },
       { transform: 'translate(' + (to.left - from.left) + 'px,' + (to.top - from.top) + 'px) scale(' + to.width / from.width + ',' + to.height / from.height + ')' },
-    ], { duration: 500, easing: 'ease-in-out', fill: 'forwards' });
+    ], { duration: 300, easing: easing || 'ease-in-out', fill: 'forwards' });
     current.animation.onfinish = () => finish(current);
   }));
 }
@@ -103,6 +107,6 @@ export function onPreviewHistory() {
   const slots = Array.from(document.querySelectorAll<HTMLElement>('[data-preview]'));
   const back = history.state?.previewReturn;
   const hero = slots.find(slot => slot.dataset.previewDetail === back?.path && slot.hasAttribute('data-preview-detail') && slot.dataset.preview === back?.base);
-  const slot = hero ?? slots.find(slot => slot.dataset.previewLink === location.pathname);
-  if (slot) lift(slot, location.pathname);
+  const slot = hero ?? slots.find(slot => location.pathname.startsWith('/work/') && slot.dataset.previewLink === location.pathname);
+  if (slot) lift(slot, location.pathname, Boolean(hero));
 }

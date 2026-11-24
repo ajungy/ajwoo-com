@@ -1,3 +1,4 @@
+import { WorkMediaTransition } from '@/components/WorkMediaTransition';
 import type { Metadata } from 'next';
 import { CoffeeCarousel } from '@/components/coffee/CoffeeCarousel';
 import { coffeeProjects, tileFor } from '@/content/projects';
@@ -17,6 +18,7 @@ export default function CoffeePage() {
 
   return (
     <div>
+      <WorkMediaTransition />
       <h1 className="sr-only">Coffee</h1>
       <CoffeeCarousel slides={slides} />
     </div>

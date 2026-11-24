@@ -1,7 +1,7 @@
 'use client';
 
 import { PreviewVideo } from './PreviewVideo';
-import { isPlainClick, openPreview } from '@/lib/preview-flight';
+import { isPlainClick } from '@/lib/preview-flight';
 import { CaptureInstallButton } from '@/components/CaptureInstallButton';
 import { useEffect, useRef } from 'react';
 import Link from 'next/link';
@@ -250,8 +250,7 @@ export function AppCard({
               {...(app.cardHref ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
               onClick={event => {
                 if (!isPlainClick(event) || app.cardHref) return;
-                const slot = event.currentTarget.closest('article')?.querySelector<HTMLElement>('[data-preview]');
-                if (slot) openPreview(slot, event.currentTarget.pathname);
+                history.replaceState({ ...history.state, appReturnPath: event.currentTarget.pathname }, '');
               }}
               className="card-link"
             >

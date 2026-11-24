@@ -3,7 +3,7 @@
 // Geometry adapted from CrafterUI Works Wheel, MIT / Copyright (c) 2026 CrafterUI.
 // Full notice: public/licenses/crafterui-MIT.txt. No demo artwork is included.
 import { PreviewVideo } from '../PreviewVideo';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { Picture } from '@/components/Picture';
 import styles from './works-wheel.module.css';
 
@@ -40,12 +40,14 @@ export function WorksWheel({ items }: { items: WorksWheelItem[] }) {
   const [stage, setStage] = useState({ w: 0, h: 0 });
   const count = items.length;
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const selectLinkedProject = () => {
       let slug: string;
       try { slug = decodeURIComponent(window.location.hash.slice(1)); } catch { return; }
       const index = items.findIndex((item) => item.href === `/work/${slug}/` || item.href === `/work/#${slug}`);
       if (index < 0) return;
+      // A linked project already determines the resting position on entry.
+      stageRef.current?.setAttribute('data-restored-project', '');
       target.current = index + 1;
       turn.current = index + 1;
       setActive(index);
@@ -65,10 +67,12 @@ export function WorksWheel({ items }: { items: WorksWheelItem[] }) {
     return () => q.removeEventListener('change', read);
   }, []);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const el = stageRef.current;
     if (!el) return;
-    const resize = new ResizeObserver(() => setStage({ w: el.clientWidth, h: el.clientHeight }));
+    const measure = () => setStage({ w: el.clientWidth, h: el.clientHeight });
+    const resize = new ResizeObserver(measure);
+    measure();
     resize.observe(el);
     return () => resize.disconnect();
   }, []);
@@ -97,7 +101,7 @@ export function WorksWheel({ items }: { items: WorksWheelItem[] }) {
     return { side, ringR, ringScale: clamp(2 * Math.PI * ringR / Math.max(count, 1) * 0.82 / (side || 1), 0.16, 1), drumR: side * 2.22, bow: side * 1.82, depth: side * 2.7 };
   }, [stage, count]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!stage.h) return;
     let frame = 0;
     const draw = () => {
@@ -141,7 +145,7 @@ export function WorksWheel({ items }: { items: WorksWheelItem[] }) {
     const visibility = () => { if (document.hidden) videos.current.forEach((v) => v?.pause()); else request(); };
     window.addEventListener('pageshow', visibility);
     document.addEventListener('visibilitychange', visibility);
-    request();
+    draw();
     return () => {
       cancelAnimationFrame(frame);
       animate.current = () => {};
@@ -179,13 +183,15 @@ export function WorksWheel({ items }: { items: WorksWheelItem[] }) {
     const rail = yearRef.current;
     const current = rail?.querySelector<HTMLElement>('[aria-current="date"]');
     if (!rail || !current) return;
-    const behavior = reduced ? 'instant' : 'smooth';
+    const restoringSelection = stageRef.current?.hasAttribute('data-restored-project') &&
+      window.location.hash === '#' + selected?.href.split('/')[2];
+    const behavior = reduced || restoringSelection ? 'instant' : 'smooth';
     if (rail.scrollWidth > rail.clientWidth) {
       rail.scrollTo({ left: current.offsetLeft - (rail.clientWidth - current.offsetWidth) / 2, behavior });
     } else if (rail.scrollHeight > rail.clientHeight) {
       rail.scrollTo({ top: current.offsetTop - rail.offsetTop - (rail.clientHeight - current.offsetHeight) / 2, behavior });
     }
-  }, [active, reduced, stage.w, stage.h]);
+  }, [active, reduced, selected, stage.w, stage.h]);
 
 
   return (
@@ -265,7 +271,7 @@ export function WorksWheel({ items }: { items: WorksWheelItem[] }) {
         <div ref={yearRef} className={styles.year} aria-label="Project years">
         {Array.from({ length: 13 }, (_, i) => 2026 - i).map((year) => {
           const index = items.findIndex(item => Number(item.year) === year);
-          if (index < 0) return <span key={year} className="type-caption">{year}</span>;
+          if (index < 0) return <span key={year} className="type-caption opacity-50">{year}</span>;
           return <button key={year} type="button" className={`type-caption ${year === projectYear ? styles.projectYear : ''}`} aria-current={year === projectYear ? 'date' : undefined} onClick={() => to(index + 1)}>{year}</button>;
         })}
         </div>
