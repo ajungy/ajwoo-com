@@ -4,7 +4,6 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { Action, actionClassName } from '@/components/Action';
 import { WorkProjectActions } from '@/components/WorkProjectActions';
-import { AppIcon } from '@/components/AppIcon';
 import { apps, WAITLIST_FORM_URL } from '@/content/apps';
 
 export function generateStaticParams() {
@@ -34,58 +33,39 @@ export default function AppPage({ params }: { params: { slug: string } }) {
           apps" list at the bottom of this same page already offers the
           other two, so a second back affordance sitting alone above the
           fold wasn't earning its space (same reasoning as the /work pages). */}
-      <header className={`flex flex-col gap-8 pt-[30px] medium:flex-row medium:items-start ${app.demoVideoYoutube || app.demoVideo || app.demoImage ? 'pb-[55px]' : 'pb-[var(--section-gap)]'}`}>
-        {/* h-28/w-28 (112px), up from 96px — bigger again at Alex's
-            direction ("make the logo a little bit larger"). */}
-        {app.iconImage ? (
-          <span data-app-logo className={`relative block h-28 w-28 shrink-0 overflow-hidden rounded-xl ${['capture', 'narrate'].includes(app.slug) ? '' : 'border border-line-subtle'}`}>
-          <img
-            src={['capture', 'narrate'].includes(app.slug) ? `/img/appicon-${app.slug}-square.svg` : `/img/${app.iconImage}-${app.slug === 'mbti-test' ? 128 : 256}.webp`}
-            alt=""
-            width={112}
-            height={112}
-            className="h-full w-full object-contain"
-          />
-          </span>
-        ) : (
-          <span className="flex h-28 w-28 shrink-0 items-center justify-center rounded-xl border border-line-subtle bg-sunken text-fg">
-            <AppIcon name={app.icon} className="h-14 w-14" />
-          </span>
-        )}
-        <div className="min-w-0 flex-1 medium:flex medium:min-h-[112px] medium:flex-col medium:justify-between">
-          <h1 className="type-project-title">{app.name}{app.beta ? ' Beta' : ''}</h1>
-          <p className="mt-4 max-w-content type-subtitle medium:mt-0">{app.description}</p>
+      <header className={`pt-[30px] ${app.demoVideoYoutube || app.demoVideo || app.demoImage ? 'pb-[55px]' : 'pb-[var(--section-gap)]'}`}>
+        <h1 className="type-project-title">{app.name}{app.beta ? ' Beta' : ''}</h1>
+        <p className="mt-4 max-w-content type-subtitle">{app.description}</p>
 
-          {/* The platform/trigger caption line that used to sit here is
-              gone, at Alex's direction — the smallest, least load-bearing
-              text on the page, replaced by the one thing worth doing this
-              high up: the actual next step. Capture/Dictate/Narrate are
-              pre-release, so their detail pages point at the same waitlist
-              form rather than a real purchase flow. Convert (app.openUrl
-              set) is different — it already exists — so its action reads
-              "Open" and links straight to convert.ajwoo.com instead.
-              Secondary, not primary either way — at Alex's direction, since
-              neither "Waitlist" nor a plain external "Open" is the
-              confident, one-primary-per-view action a real download/
-              purchase would be (Principle 9: real separation, never
-              default-focused, a plain navigation so it can't double-fire). */}
-          <div className="mt-6 medium:mt-1">
-            {app.openUrl ? (
-              <Action href={app.openUrl} external variant="secondary" cursorLabel="Open">
-                Open
-              </Action>
-            ) : app.downloadZip ? (
-              app.slug === 'capture' ? <CaptureInstallButton href={app.downloadZip} /> : (
-                <a href={app.downloadZip} download data-cursor-label="Install" className={actionClassName()}>
-                  Install
-                </a>
-              )
-            ) : (
-              <Action href={WAITLIST_FORM_URL} external variant="secondary" cursorLabel="Join waitlist">
-                Waitlist
-              </Action>
-            )}
-          </div>
+        {/* The platform/trigger caption line that used to sit here is
+            gone, at Alex's direction — the smallest, least load-bearing
+            text on the page, replaced by the one thing worth doing this
+            high up: the actual next step. Capture/Dictate/Narrate are
+            pre-release, so their detail pages point at the same waitlist
+            form rather than a real purchase flow. Convert (app.openUrl
+            set) is different — it already exists — so its action reads
+            "Open" and links straight to convert.ajwoo.com instead.
+            Secondary, not primary either way — at Alex's direction, since
+            neither "Waitlist" nor a plain external "Open" is the
+            confident, one-primary-per-view action a real download/
+            purchase would be (Principle 9: real separation, never
+            default-focused, a plain navigation so it can't double-fire). */}
+        <div className="mt-6">
+          {app.openUrl ? (
+            <Action href={app.openUrl} external variant="secondary" cursorLabel="Open">
+              Open
+            </Action>
+          ) : app.downloadZip ? (
+            app.slug === 'capture' ? <CaptureInstallButton href={app.downloadZip} /> : (
+              <a href={app.downloadZip} download data-cursor-label="Install" className={actionClassName()}>
+                Install
+              </a>
+            )
+          ) : (
+            <Action href={WAITLIST_FORM_URL} external variant="secondary" cursorLabel="Join waitlist">
+              Waitlist
+            </Action>
+          )}
         </div>
       </header>
 
