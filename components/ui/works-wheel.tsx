@@ -2,9 +2,8 @@
 
 // Geometry adapted from CrafterUI Works Wheel, MIT / Copyright (c) 2026 CrafterUI.
 // Full notice: public/licenses/crafterui-MIT.txt. No demo artwork is included.
-import { WorkVideoThumbnail } from '../WorkVideoThumbnail';
+import { WorkVideoThumbnail, fullWidthFootage } from '../WorkVideoThumbnail';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import Link from 'next/link';
 import { Picture } from '@/components/Picture';
 import styles from './works-wheel.module.css';
 
@@ -15,7 +14,7 @@ export type WorksWheelItem = {
   companyYears?: string[];
   href: string;
   paragraphs?: string[];
-  image?: { base: string; width: number; height: number };
+  image?: { base: string; src?: string; width: number; height: number };
   video?: { base: string; width: number; height: number; hasWebm: boolean };
 };
 
@@ -52,7 +51,7 @@ export function WorksWheel({ items }: { items: WorksWheelItem[] }) {
       turn.current = index + 1;
       setActive(index);
       animate.current();
-      if (history.state?.galleryReturn) cards.current[index]?.focus({ preventScroll: true });
+      if (history.state?.galleryReturn === 'keyboard') cards.current[index]?.focus({ preventScroll: true });
     };
     selectLinkedProject();
     window.addEventListener('hashchange', selectLinkedProject);
@@ -93,7 +92,8 @@ export function WorksWheel({ items }: { items: WorksWheelItem[] }) {
 
   const geometry = useMemo(() => {
     const compact = stage.w < 700;
-    const side = Math.min(stage.h * (compact ? 0.42 : 0.54), stage.w * (compact ? 0.76 : 0.36));
+    const baseSide = Math.min(stage.h * (compact ? 0.42 : 0.54), stage.w * (compact ? 0.76 : 0.36));
+    const side = Math.min(baseSide * 1.5, stage.w * 0.94);
     const ringR = side * 0.92;
     return { side, ringR, ringScale: clamp(2 * Math.PI * ringR / Math.max(count, 1) * 0.82 / (side || 1), 0.16, 1), drumR: side * 2.22, bow: side * 1.82, depth: side * 2.7 };
   }, [stage, count]);
@@ -140,9 +140,15 @@ export function WorksWheel({ items }: { items: WorksWheelItem[] }) {
     const request = () => { if (!frame) frame = requestAnimationFrame(draw); };
     animate.current = request;
     const visibility = () => { if (document.hidden) videos.current.forEach((v) => v?.pause()); else request(); };
+    window.addEventListener('pageshow', visibility);
     document.addEventListener('visibilitychange', visibility);
     request();
-    return () => { cancelAnimationFrame(frame); animate.current = () => {}; document.removeEventListener('visibilitychange', visibility); };
+    return () => {
+      cancelAnimationFrame(frame);
+      animate.current = () => {};
+      window.removeEventListener('pageshow', visibility);
+      document.removeEventListener('visibilitychange', visibility);
+    };
   }, [geometry, stage.h, count, items, reduced]);
 
   const to = useCallback((next: number) => {
@@ -229,30 +235,32 @@ export function WorksWheel({ items }: { items: WorksWheelItem[] }) {
       onClickCapture={(event) => { if (suppressClick.current && event.detail) { event.preventDefault(); event.stopPropagation(); suppressClick.current = false; return; }
         const link = (event.target as Element).closest('a');
         if (link?.getAttribute('href') === selected?.href && selected) {
-          history.replaceState({ ...history.state, galleryReturn: true }, '', '#' + selected.href.split('/')[2]);
+          history.replaceState({ ...history.state, galleryReturn: event.detail === 0 ? 'keyboard' : 'pointer' }, '', '#' + selected.href.split('/')[2]);
         }
       }}>
       <div ref={wheelRef} className={`${styles.wheel} work-wheel-arrival`}>
         {items.map((item, i) => {
-          const Card = item.paragraphs ? 'div' : Link;
-          const cardWidth = geometry.side;
-          const cardHeight = item.video ? cardWidth * item.video.height / item.video.width : geometry.side;
+          const Card = item.paragraphs ? 'div' : 'a';
+          const media = item.video ? fullWidthFootage(item.video.base) ?? item.video : item.image;
+          const aspectRatio = media ? media.width / media.height : 1;
+          const cardWidth = Math.min(geometry.side, stage.h * 0.81 * aspectRatio);
+          const cardHeight = cardWidth / aspectRatio;
           return <Card key={item.href} href={item.href} ref={(el: HTMLElement | null) => { cards.current[i] = el; }}
             className={`${styles.card} ${active === i ? styles.selectedCard : ''}`} aria-label={item.paragraphs ? item.title : `View ${item.title}`} tabIndex={opened && active === i ? 0 : -1}
             aria-hidden={opened && Math.abs(active - i) > 1 ? true : undefined}
             style={{ width: cardWidth, height: cardHeight, marginLeft: -cardWidth / 2, marginTop: -cardHeight / 2 }}
             onDragStart={(event: React.DragEvent<HTMLElement>) => event.preventDefault()}
             onClick={(event: React.MouseEvent<HTMLElement>) => { if (!opened || active !== i) { event.preventDefault(); to(i + 1); } }}>
-            <span ref={(el) => { faces.current[i] = el; }} className={styles.face}>
+            <span ref={(el) => { faces.current[i] = el; }} className={styles.face} style={opened && active === i && !item.paragraphs ? { viewTransitionName: 'work-project-media' } : undefined}>
               {item.paragraphs ? <span data-background-copy className={styles.backgroundCopy} style={{ fontSize: clamp(geometry.side / 25, 8, 13) }}>
                 {item.paragraphs.map((paragraph) => <span key={paragraph}>{paragraph}</span>)}
-              </span> : item.video ? <WorkVideoThumbnail {...item.video} videoRef={(el) => { videos.current[i] = el; }} /> : item.image ? <Picture img={item.image} alt={item.title} priority={i === 0} sizes="(max-width: 699px) 68vw, 32vw" className={`${styles.media} route-media`} /> : null}
+              </span> : item.video ? <WorkVideoThumbnail {...item.video} fullWidth videoRef={(el) => { videos.current[i] = el; }} /> : item.image ? <Picture img={item.image} alt={item.title} priority={i === 0} sizes="(max-width: 699px) 94vw, 54vw" className={`${styles.media} route-media`} /> : null}
             </span>
           </Card>;
         })}
       </div>
       <div ref={titleRef} className={`${styles.title} route-intro`} aria-live="polite" aria-atomic="true">
-        {selected?.paragraphs ? <span className={`type-decision ${styles.projectTitle}`}>{selected.title}</span> : <Link href={selected?.href ?? '/work/'} tabIndex={opened ? 0 : -1} className={`type-decision ${styles.projectTitle}`}>{selected?.title}</Link>}
+        {selected?.paragraphs ? <span className={`type-decision ${styles.projectTitle}`}>{selected.title}</span> : <a href={selected?.href ?? '/work/'} tabIndex={opened ? 0 : -1} className={`type-decision ${styles.projectTitle}`}>{selected?.title}</a>}
         <p className="mt-4 type-subtitle">{selected?.subtitle}</p>
       </div>
       <nav className={`${styles.yearShell} route-navigation`} aria-label="Project navigation">

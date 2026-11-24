@@ -1,3 +1,5 @@
+import { WorkMediaTransition } from '@/components/WorkMediaTransition';
+import { workOpeningMedia } from '@/content/work-opening-media';
 import { WorkProjectActions } from '@/components/WorkProjectActions';
 import { ProjectLinks } from '@/components/ProjectLinks';
 import type { NetflixPayload } from '@/lib/netflix/types';
@@ -6,8 +8,10 @@ import { NetflixMuseExample, NetflixPublicExamples } from './NetflixPublicExampl
 
 export function NetflixProject({ project, work: netflixWork, examples }: { project: Project } & NetflixPayload) {
 
+  const hero = workOpeningMedia(project.slug).video!;
   return (
     <>
+      <WorkMediaTransition />
       <div className="portfolio-media work-reading-column">
         <header className="pt-12 pb-12">
           <h1 className="type-project-title">{project.title}</h1>
@@ -15,13 +19,13 @@ export function NetflixProject({ project, work: netflixWork, examples }: { proje
         </header>
 
         <article>
-          <div className="detail-hero-media mb-[var(--section-gap)]">
+          <div className="detail-hero-media mb-[var(--section-gap)]" style={{ viewTransitionName: 'work-project-media' }}>
             <video autoPlay loop muted playsInline preload="auto"
-              poster="/img/netflix-creative-tools-demo-poster.webp"
-              width={1900} height={1086}
-              aria-label="Netflix creative tools video example"
+              poster={`/img/${hero.base}-poster.webp`}
+              width={hero.width} height={hero.height}
+              aria-label={hero.label}
               className="block h-auto w-full">
-              <source src="/img/netflix-creative-tools-demo.mp4" type="video/mp4" />
+              <source src={`/img/${hero.base}.mp4`} type="video/mp4" />
             </video>
           </div>
           <section className="max-w-content" aria-labelledby="netflix-overview">

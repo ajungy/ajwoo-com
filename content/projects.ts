@@ -15,7 +15,7 @@ export type Project = {
 
 export type Block =
   | { kind: 'text'; value: string }
-  | { kind: 'image'; base: string; widths: number[]; fallbackWidth: number; width: number; height: number }
+  | { kind: 'image'; base: string; src?: string; widths?: number[]; fallbackWidth?: number; width: number; height: number }
   | { kind: 'motion'; base: string; hasWebm: boolean; width: number; height: number }
   | { kind: 'embed'; src: string; title: string };
 
@@ -23,12 +23,12 @@ export const projects: Project[] = [
   {
     slug: 'netflix-creative-tools',
     title: 'Netflix Creative Tools', lead: "Designing the systems and tools for video, artwork, copy, and analytics.",
-    category: 'Video / Artwork / Copy / Analytics / AI',
+    category: 'Video / Artwork / Copy / AI',
     kind: 'design',
     thumbnail: { base: 'tile-netflix-creative-tools', width: 1024, height: 1024 },
   },
   { slug: 'premiere-generative-ai', title: 'Premiere Generative AI', lead: "Exploring generative video editing in Premiere Pro.", category: 'Video / AI', kind: 'design' },
-  { slug: 'pr-ae-frame', title: 'Frame.io for Premiere & After Effects', lead: "Editors can share a cut and see feedback exactly where they do the editing.", category: 'Video / Cloud', kind: 'design' },
+  { slug: 'pr-ae-frame', title: 'Frame.io for Pr and Ae', lead: "Editors can share a cut and see feedback exactly where they do the editing.", category: 'Video / Cloud', kind: 'design' },
   { slug: 'layout', title: 'Microsoft Layout', lead: "Space Designers can arrange 3D models in a room before moving any equipment.", category: 'AR / MR / HoloLens', kind: 'design' },
   { slug: 'product-visualize', title: 'Microsoft Product Visualize', lead: "Sales teams could show customers how a product would fit in their own space.", category: 'AR / CRM', kind: 'design' },
   { slug: 'dynamics-365-customer-voice', title: 'Microsoft Customer Voice', lead: "Customer Voice brings survey responses into Dynamics 365 so teams can follow up on feedback.", category: 'Forms / CRM', kind: 'design' },

@@ -831,3 +831,13 @@ body:has([data-work-actions]) > footer > div {
 .portfolio-media .overflow-hidden:not([data-app-logo]):has(> :is(img, video, picture, .card-thumb-media)) {
   border-radius: 8px;
 }
+
+.work-coverflow {
+  container-type: inline-size;
+  --card: min(calc((100cqw - 2 * var(--page-pad)) * 0.32), 300px);
+}
+
+@media (max-width: 699px) {
+  /* The centered card scales to 1.6 times its base width. */
+  .work-coverflow { --card: calc((100cqw - 2 * var(--page-pad)) / 1.6); }
+}

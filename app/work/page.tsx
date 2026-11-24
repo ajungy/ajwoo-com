@@ -1,3 +1,5 @@
+import { workOpeningMedia } from '@/content/work-opening-media';
+import { WorkMediaTransition } from '@/components/WorkMediaTransition';
 import type { Metadata } from 'next';
 import { SHARE_IMAGE } from '@/lib/metadata';
 import { WorksWheel, type WorksWheelItem } from '@/components/ui/works-wheel';
@@ -19,7 +21,7 @@ export const metadata: Metadata = {
 };
 
 export default function WorkPage() {
-  const items: WorksWheelItem[] = [...workGallery];
+  const items: WorksWheelItem[] = workGallery.map(item => ({ ...item, image: undefined, video: undefined, ...workOpeningMedia(item.href.split('/')[2]) }));
   items.push({
     title: 'Background',
     subtitle: 'More about Alex',
@@ -31,5 +33,5 @@ export default function WorkPage() {
       'A graduate of the Rhode Island School of Design, Alex also studied at the University of Washington, Brown University, and Le Cordon Bleu. Born in Connecticut while his father was studying at Yale, he grew up in South Korea, France, Switzerland, and the U.S. These experiences shaped his appreciation for different perspectives.',
     ],
   });
-  return <div><h1 className="sr-only">Work</h1><WorksWheel items={items} /></div>;
+  return <div><WorkMediaTransition /><h1 className="sr-only">Work</h1><WorksWheel items={items} /></div>;
 }

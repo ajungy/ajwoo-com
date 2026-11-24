@@ -5,7 +5,7 @@ const companyTimelines = [
   { years: ['2017', '2018', '2019', '2020'], projects: ['layout', 'product-visualize', 'dynamics-365-customer-voice', 'seeing-ai'] },
 ];
 
-export const workGallery = designProjects.filter((project) => !['starbucks-technology', 'paintsound', 'coin-lock'].includes(project.slug)).flatMap((project) => {
+export const workGallery = designProjects.filter((project) => !['starbucks-technology', 'paintsound', 'coin-lock', 'dynamics-365-customer-voice', '10-borders'].includes(project.slug)).flatMap((project) => {
     const image = tileFor(project.slug === 'layout' ? 'paintsound' : project.slug);
     if (!image) return [];
     const first = blocksFor(project.slug).find((block) => block.kind === 'text');

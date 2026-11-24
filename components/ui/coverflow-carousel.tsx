@@ -1,8 +1,7 @@
 "use client";
-import { WorkVideoThumbnail } from '../WorkVideoThumbnail';
+import { WorkVideoThumbnail, fullWidthFootage } from '../WorkVideoThumbnail';
 import * as React from "react";
 import { CarouselControls } from "../CarouselControls";
-import Link from "next/link";
 
 const useIsoLayoutEffect =
   typeof window !== "undefined" ? React.useLayoutEffect : React.useEffect;
@@ -10,12 +9,12 @@ const useIsoLayoutEffect =
 interface Slide {
   src: string;
   title: string;
-  video?: { base: string; hasWebm: boolean };
+  video?: { base: string; hasWebm: boolean; width: number; height: number };
   href: string;
 }
 
 export function CoverflowCarousel({ slides }: { slides: Slide[] }) {
-  const rotate = 44, depth = 0.6, falloff = 0.56, gap = 0.125, loop = true;
+  const rotate = 44, depth = 0.6, falloff = 0.56, gap = 0.35, loop = true;
   const didDrag = React.useRef(false);
   const count = slides.length;
 
@@ -61,8 +60,8 @@ export function CoverflowCarousel({ slides }: { slides: Slide[] }) {
     if (video !== playingVideo.current) {
       playingVideo.current?.pause();
       playingVideo.current = video;
-      if (video) void video.play().catch(() => {});
     }
+    if (video?.paused && !document.hidden) void video.play().catch(() => {});
 
     cardRefs.current.forEach((card, index) => {
       if (!card) return;
@@ -83,9 +82,14 @@ export function CoverflowCarousel({ slides }: { slides: Slide[] }) {
       // Capped short of edge-on so a far card never turns its back.
       const tilt = Math.min(rotate * ramp, 82) * Math.sign(offset);
 
-      const scale = 1 - 0.2 * Math.min(1, Math.max(0, distance - 1));
+      const centerBoost = 0.6 * Math.max(0, 1 - distance);
+      const sideBoost = 0.2 * Math.max(0, 1 - Math.abs(distance - 1));
+      const scale = 1 + centerBoost + sideBoost - 0.2 * Math.min(1, Math.max(0, distance - 1));
+      // Tuck each outer thumbnail behind its nearer neighbor.
+      const travel = 0.72 * Math.min(distance, 1) + 0.70 * Math.min(Math.max(distance - 1, 0), 1);
+      const horizontalOffset = Math.sign(offset) * travel * pitch;
       card.style.transform =
-        `translateX(calc(-50% + ${offset * pitch}px)) ` +
+        `translateX(calc(-50% + ${horizontalOffset}px)) ` +
         `translateZ(${-depth * width * ramp}px) rotateY(${-tilt}deg) scale(${scale})`;
 
       // A card is teleported across the ring at exactly half a turn out, so it
@@ -185,6 +189,32 @@ export function CoverflowCarousel({ slides }: { slides: Slide[] }) {
     settle(clamp(Math.round(posRef.current + carried)));
   };
 
+  useIsoLayoutEffect(() => {
+    const restored = slides.findIndex(slide => slide.href === history.state?.homeWorkProject);
+    if (restored >= 0) {
+      posRef.current = restored;
+      targetRef.current = restored;
+      setSelected(restored);
+    }
+
+    function rememberProject() {
+      const project = slides[indexAt(targetRef.current)];
+      if (project) history.replaceState({ ...history.state, homeWorkProject: project.href }, '');
+    }
+
+    window.addEventListener('pagehide', rememberProject);
+    return () => window.removeEventListener('pagehide', rememberProject);
+  }, [indexAt, slides]);
+
+  React.useEffect(() => {
+    window.addEventListener('pageshow', paint);
+    document.addEventListener('visibilitychange', paint);
+    return () => {
+      window.removeEventListener('pageshow', paint);
+      document.removeEventListener('visibilitychange', paint);
+    };
+  }, [paint]);
+
   // Card width drives pitch, depth and perspective, so it is the only thing
   // worth measuring — and only when the box actually changes.
   useIsoLayoutEffect(() => {
@@ -211,36 +241,42 @@ export function CoverflowCarousel({ slides }: { slides: Slide[] }) {
     [],
   );
 
+  const heightRatios = slides.map(({ video }) => {
+    const footage = video && (fullWidthFootage(video.base) ?? video);
+    return footage ? footage.height / footage.width : 1;
+  });
+  const stageRatio = Math.max(...heightRatios);
+
   const active = slides[selected];
   if (!active) return null;
   return (
     <div role="region" aria-label="Selected work" aria-roledescription="carousel"
-      style={{ '--card': 'min(76vw, 300px)' } as React.CSSProperties}>
+      className="work-coverflow">
       <div ref={frameRef} tabIndex={0} aria-label="Browse projects with the arrow keys"
         className="relative overflow-hidden py-6 cursor-grab active:cursor-grabbing"
         style={{ perspective: 'calc(var(--card) * 3)', touchAction: 'pan-y' }}
         onPointerDown={onPointerDown} onPointerMove={onPointerMove} onPointerUp={endDrag} onPointerCancel={endDrag}
         onClickCapture={e => { if (didDrag.current && e.detail) { e.preventDefault(); e.stopPropagation(); } }}
         onKeyDown={e => { if (['ArrowLeft','ArrowRight'].includes(e.key)) { e.preventDefault(); nudge(e.key === 'ArrowLeft' ? -1 : 1); } }}>
-        <div className="relative select-none" style={{ height: 'var(--card)', transformStyle: 'preserve-3d' }}>
+        <div className="relative select-none" style={{ height: `calc(var(--card) * ${stageRatio * 1.6})`, transformStyle: 'preserve-3d' }}>
           {slides.map((slide, i) => (
             <div key={slide.href} ref={node => { cardRefs.current[i] = node; }}
               data-focused={i === selected || undefined}
-              className="work-coverflow-card absolute left-1/2 top-0 aspect-square overflow-hidden rounded-control bg-raised"
-              style={{ width: 'var(--card)', transform: 'translateX(-50%)', opacity: i === 0 ? 1 : 0 }}>
-              <Link href={slide.href} draggable={false} aria-label={slide.title} tabIndex={i === selected ? 0 : -1}>
+              className="work-coverflow-card absolute left-1/2 top-1/2 overflow-hidden rounded-control"
+              style={{ viewTransitionName: i === selected ? 'work-project-media' : undefined, width: 'var(--card)', height: `calc(var(--card) * ${heightRatios[i]})`, marginTop: `calc(var(--card) * ${-heightRatios[i] / 2})`, transform: i === 0 ? 'translateX(-50%) scale(1.6)' : 'translateX(-50%)', opacity: i === 0 ? 1 : 0 }}>
+              <a className="block h-full" href={slide.href} draggable={false} aria-label={slide.title} tabIndex={i === selected ? 0 : -1}>
                 {slide.video ? (
-                  <WorkVideoThumbnail {...slide.video} />
+                  <WorkVideoThumbnail {...slide.video} fullWidth />
                 ) : (
                   <img src={slide.src} alt={slide.title} draggable={false} className="block h-full w-full object-cover" />
                 )}
-              </Link>
+              </a>
             </div>
           ))}
         </div>
       </div>
       <div aria-live="polite" className="mx-auto max-w-content px-page text-center">
-        <h3 className="type-decision"><Link href={active.href}>{active.title}</Link></h3>
+        <h3 className="type-decision"><a href={active.href}>{active.title}</a></h3>
       </div>
       <CarouselControls count={count} index={selected} go={nudge}
         setIndex={i => settle(i + Math.round((targetRef.current - i) / count) * count)} />

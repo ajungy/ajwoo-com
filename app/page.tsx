@@ -1,3 +1,5 @@
+import { workOpeningMedia } from '@/content/work-opening-media';
+import { WorkMediaTransition } from '@/components/WorkMediaTransition';
 import { LandingSections } from '@/components/LandingSections';
 import { CoverflowCarousel } from '@/components/ui/coverflow-carousel';
 import { workGallery } from '@/content/work-gallery';
@@ -101,10 +103,12 @@ export default function Home() {
 
       <LandingSections>
         <section className="pt-[140px] pb-[160px] text-center" id="home-work-title">
+          <WorkMediaTransition />
           <CoverflowCarousel slides={['netflix-creative-tools', 'premiere-generative-ai', 'pr-ae-frame', 'product-visualize', 'seeing-ai'].flatMap(slug => {
             const project = workGallery.find(item => item.href === `/work/${slug}/`);
             if (!project) return [];
-            const { image, title, href, video } = project;
+            const { image, title, href } = project;
+            const { video } = workOpeningMedia(slug);
             return [{ src: `/img/${image.base}.webp`, title, href, video }];
           })} />
         </section>

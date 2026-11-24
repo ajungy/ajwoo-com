@@ -1,6 +1,6 @@
 import type { CSSProperties } from 'react';
 
-type Source = { base: string; widths?: number[]; fallbackWidth?: number; width: number; height: number };
+type Source = { base: string; src?: string; widths?: number[]; fallbackWidth?: number; width: number; height: number };
 
 /**
  * Plain <picture> with AVIF -> WebP -> JPEG. `next/image` does not optimize
@@ -19,10 +19,10 @@ export function Picture({
   const fallback = single ? `/img/${img.base}.jpg` : `/img/${img.base}-${img.fallbackWidth ?? widths[widths.length - 1]}.jpg`;
   return (
     <picture>
-      <source type="image/avif" srcSet={single ? `/img/${img.base}.avif` : srcset('avif')} sizes={sizes} />
-      <source type="image/webp" srcSet={single ? `/img/${img.base}.webp` : srcset('webp')} sizes={sizes} />
+      {!img.src && <source type="image/avif" srcSet={single ? `/img/${img.base}.avif` : srcset('avif')} sizes={sizes} />}
+      {!img.src && <source type="image/webp" srcSet={single ? `/img/${img.base}.webp` : srcset('webp')} sizes={sizes} />}
       <img
-        src={fallback}
+        src={img.src ?? fallback}
         alt={alt}
         width={img.width}
         height={img.height}

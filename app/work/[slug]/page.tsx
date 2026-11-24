@@ -1,3 +1,5 @@
+import { workOpeningMedia } from '@/content/work-opening-media';
+import { WorkMediaTransition } from '@/components/WorkMediaTransition';
 import { ProjectLinks } from '@/components/ProjectLinks';
 import { pageMetadata } from '@/lib/metadata';
 import { caseStudies } from '@/content/case-studies';
@@ -44,12 +46,6 @@ export function generateMetadata({ params }: { params: { slug: string } }): Meta
 // instead and the subtitle block is dropped entirely.
 const YEAR_SUBTITLE = /^.{0,60}?[\s,-]+((?:19|20)\d{2})\s*$/;
 
-const introVideos: Record<string, { src: string; label: string }> = {
-  'pr-ae-frame': { src: '/img/frameio-review-workflow.mp4', label: 'Frame.io review workflow in Premiere Pro' },
-  'seeing-ai': { src: '/img/seeing-ai-horizontal.mp4', label: 'Microsoft Seeing AI demonstration' },
-  'product-visualize': { src: '/img/product-visualize-horizontal.mp4', label: 'Microsoft Product Visualize demonstration' },
-};
-
 const filmRiotId = 'T72C17jVx44';
 const relatedVideoIds: Record<string, string> = {
   'premiere-generative-ai': filmRiotId,
@@ -90,24 +86,29 @@ export default function WorkPage({ params }: { params: { slug: string } }) {
 
   // Keep an opening image between the project metadata and the editorial lead.
   const promoteFirstImage = [
-    'layout', 'netmarble', '10-borders',
     '3-coffee-shops-in-tokyo', '5-coffee-shops-in-seattle', '3-coffee-shops-amsterdam',
     'best-coffee-shops-new-york-city', 'top-3-fancy-cafes-paris', 'top-5-coffee-shop-paris',
     'top-5-coffee-shops-in-london', 'blue-olive', 'telescope',
   ].includes(project.slug);
+  const openingWork = project.kind === 'design' ? workOpeningMedia(project.slug) : undefined;
   const openingMedia = promoteFirstImage
     ? withoutTitle.find(block => block.kind === 'image')
     : withoutTitle[0];
-  const hero = openingMedia?.kind === 'image' ? openingMedia : null;
-  const blocks = hero ? withoutTitle.filter(block => block !== hero) : withoutTitle;
+  const hero = openingWork ? openingWork.image : openingMedia?.kind === 'image' ? openingMedia : null;
+  const closingImage = project.slug === 'netmarble'
+    ? withoutTitle.find(block => block.kind === 'image')
+    : undefined;
+  const blocks = withoutTitle.filter(block => block !== hero && block !== closingImage);
+  if (closingImage) blocks.push(closingImage);
 
-  const introVideo = introVideos[project.slug];
+  const introVideo = openingWork?.video;
   const study = caseStudies[project.slug];
   const isCoffee = project.kind === 'coffee';
 
 
   return (
     <div className="portfolio-media work-reading-column">
+      {openingWork && <WorkMediaTransition />}
         <header className={`pt-12 ${hero || introVideo || project.slug === 'premiere-generative-ai' ? 'pb-12' : 'pb-[var(--section-gap)]'}`}>
           <h1 className="type-project-title">{project.title}{project.kind === 'coffee' && year ? `, ${year}` : ''}</h1>
           <p className="mt-4 type-caption">{project.category}{project.kind === 'design' && year ? ` - ${year}` : ''}</p>
@@ -116,6 +117,7 @@ export default function WorkPage({ params }: { params: { slug: string } }) {
       {hero && (
         <Picture
           img={hero}
+          style={openingWork ? { viewTransitionName: 'work-project-media' } : undefined}
           alt={project.title}
           priority
           sizes="(min-width: 1600px) 828px, (min-width: 904px) 840px, (min-width: 840px) calc(100vw - 64px), (min-width: 600px) calc(100vw - 48px), calc(100vw - 32px)"
@@ -124,12 +126,14 @@ export default function WorkPage({ params }: { params: { slug: string } }) {
       )}
 
         <article>
-          {introVideo && (
+          {introVideo && project.slug !== 'premiere-generative-ai' && (
             <video
               className="detail-hero-media mb-[var(--section-gap)] block h-auto"
-              width={1280}
-              height={720}
-              src={introVideo.src}
+              width={introVideo.width}
+              height={introVideo.height}
+              poster={`/img/${introVideo.base}-poster.webp`}
+              style={{ viewTransitionName: 'work-project-media' }}
+              src={`/img/${introVideo.base}.mp4`}
               aria-label={introVideo.label}
               autoPlay
               loop
@@ -137,9 +141,9 @@ export default function WorkPage({ params }: { params: { slug: string } }) {
               playsInline
             />
           )}
-          {project.slug === 'premiere-generative-ai' ? (
+          {project.slug === 'premiere-generative-ai' && introVideo ? (
             <figure className="mb-[var(--section-gap)]">
-              <video className="detail-hero-media mb-[var(--section-gap)] block h-auto" width={1920} height={1080} autoPlay loop muted playsInline aria-label="Generative removal in Premiere Pro" src="/img/premiere-generative-remove.mp4" />
+              <video className="detail-hero-media mb-[var(--section-gap)] block h-auto" width={introVideo.width} height={introVideo.height} style={{ viewTransitionName: 'work-project-media' }} poster={`/img/${introVideo.base}-poster.webp`} autoPlay loop muted playsInline aria-label="Generative removal in Premiere Pro" src={`/img/${introVideo.base}.mp4`} />
               <blockquote className="type-section-heading">
                 “Adobe had been absolutely crushing it with new tools that leverage AI to give creators more freedom”
               </blockquote>

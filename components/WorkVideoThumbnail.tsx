@@ -13,18 +13,33 @@ const footageInsets: Record<string, readonly [number, number, number, number]> =
   'mov-seeing-ai-chair': [86, 36, 88, 34],
 };
 
+export function fullWidthFootage(base: string) {
+  const inset = footageInsets[base];
+  if (!inset) return undefined;
+  const [top, right, bottom, left] = inset.map(px => px + 7);
+  return {
+    top,
+    left,
+    width: 720 - left - right,
+    height: 720 - top - bottom - (base === 'mov-frameio-premiere-after-effects' ? 10 : 0),
+  };
+}
+
 /** Keep the last decoded frame on the card across pauses, seeks and loop boundaries. */
-export function WorkVideoThumbnail({ base, hasWebm, videoRef }: {
+export function WorkVideoThumbnail({ base, hasWebm, videoRef, fullWidth }: {
   base: string;
   hasWebm: boolean;
+  fullWidth?: boolean;
   videoRef?: Ref<HTMLVideoElement>;
 }) {
   const surface = useRef<HTMLSpanElement>(null);
   const poster = `/img/${base}-poster.webp`;
 
-  const inset = footageInsets[base];
+  const crop = fullWidth ? fullWidthFootage(base) : undefined;
+  const inset = crop ? undefined : footageInsets[base];
   const footageBounds = inset?.map((px, edge) => {
-    const offset = `${px / 720 * 100}%`;
+    // Inset past the matte transition, including resampling on smaller cards.
+    const offset = `calc(${(px + 4) / 720 * 100}% + 1px)`;
     // Trim the light strip embedded along the Frame.io footage's bottom edge.
     return base === 'mov-frameio-premiere-after-effects' && edge === 2
       ? `calc(${offset} + 4px)`
@@ -76,14 +91,21 @@ export function WorkVideoThumbnail({ base, hasWebm, videoRef }: {
     };
   }, [base]);
 
-  return <span ref={surface} className="relative block h-full w-full" style={inset ? { backgroundColor: 'var(--work-video-matte)', containerType: 'inline-size' } : undefined}>
+  return <span ref={surface} className="relative block h-full w-full" style={inset ? { containerType: 'inline-size' } : undefined}>
     {footageBounds && <span aria-hidden="true" className="pointer-events-none absolute rounded-[4px]" style={{ inset: footageBounds, boxShadow: 'var(--work-video-shadow)' }} />}
-    <img style={{ clipPath }} src={poster} alt="" draggable={false} className="block h-full w-full object-cover" />
-    <video ref={videoRef} muted loop playsInline preload="metadata" aria-hidden="true"
-      className="pointer-events-none absolute inset-0 h-full w-full opacity-0">
-      <source src={`/img/${base}.mp4`} type="video/mp4" />
-      {hasWebm && <source src={`/img/${base}.webm`} type="video/webm" />}
-    </video>
-    <canvas style={{ clipPath }} aria-hidden="true" className="pointer-events-none absolute inset-0 h-full w-full object-cover" />
+    <span className={crop ? 'absolute block' : 'contents'} style={crop && {
+      width: `${720 / crop.width * 100}%`,
+      height: `${720 / crop.height * 100}%`,
+      left: `${-crop.left / crop.width * 100}%`,
+      top: `${-crop.top / crop.height * 100}%`,
+    }}>
+      <img style={crop ? undefined : { clipPath }} src={poster} alt="" draggable={false} className="block h-full w-full object-cover" />
+      <video ref={videoRef} muted loop playsInline preload="metadata" aria-hidden="true"
+        className="pointer-events-none absolute inset-0 h-full w-full opacity-0">
+        <source src={`/img/${base}.mp4`} type="video/mp4" />
+        {hasWebm && <source src={`/img/${base}.webm`} type="video/webm" />}
+      </video>
+      <canvas style={crop ? undefined : { clipPath }} aria-hidden="true" className="pointer-events-none absolute inset-0 h-full w-full object-cover" />
+    </span>
   </span>;
 }
