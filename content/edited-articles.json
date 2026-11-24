@@ -634,19 +634,19 @@
       "value": "We interviewed more than 20 people with visual impairments about challenges they faced each day. Many wanted help finding a chair or a door. Saqib Shaikh, the project owner, agreed this was worth exploring."
     },
     {
-      "kind": "motion",
-      "base": "mov-seeing-ai-chairloopicon",
-      "hasWebm": true,
-      "width": 960,
-      "height": 540
-    },
-    {
       "kind": "text",
       "value": "Audio and haptics"
     },
     {
       "kind": "text",
       "value": "The prototype used sound and vibration to guide people toward a chair. Feedback came from the direction of the chair, and the audio pulses grew faster as the person approached. The pulsing dot in the demo represents this feedback."
+    },
+    {
+      "kind": "motion",
+      "base": "mov-seeing-ai-chairloopicon",
+      "hasWebm": true,
+      "width": 960,
+      "height": 540
     }
   ],
   "wrap-and-charge": [
@@ -698,7 +698,7 @@
       "base": "wrap-and-charge-process",
       "src": "/img/wrap-and-charge-process.png",
       "width": 1061,
-      "height": 640
+      "height": 638
     },
     {
       "kind": "text",

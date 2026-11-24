@@ -11,7 +11,6 @@ export type WorksWheelItem = {
   title: string;
   subtitle: string;
   year: string;
-  companyYears?: string[];
   href: string;
   paragraphs?: string[];
   image?: { base: string; src?: string; width: number; height: number };
@@ -175,9 +174,7 @@ export function WorksWheel({ items }: { items: WorksWheelItem[] }) {
 
   const select = (direction: number) => to(Math.round(target.current) + direction);
   const selected = items[active];
-  const projectYears = selected?.year.match(/\d{4}/g) ?? [];
-  const highlightedYears = selected?.companyYears ?? projectYears;
-  const projectYear = Math.max(...projectYears.map(Number));
+  const projectYear = Number(selected?.year);
   useEffect(() => {
     const rail = yearRef.current;
     const current = rail?.querySelector<HTMLElement>('[aria-current="date"]');
@@ -267,11 +264,9 @@ export function WorksWheel({ items }: { items: WorksWheelItem[] }) {
         <button type="button" className={styles.yearChevron} aria-label="Previous project" disabled={active === 0} onClick={() => select(-1)}><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="m7 14 5-5 5 5" fill="none" stroke="currentColor" strokeWidth="1.5" /></svg></button>
         <div ref={yearRef} className={styles.year} aria-label="Project years">
         {Array.from({ length: 13 }, (_, i) => 2026 - i).map((year) => {
-          const current = highlightedYears.includes(String(year));
-          const availableYears = items.flatMap((item) => (item.year.match(/\d{4}/g) ?? []).map(Number));
-          const destinationYear = Math.min(...availableYears.filter((available) => available >= year));
-          const index = items.findIndex((item) => item.year.includes(String(destinationYear)));
-          return <button key={year} type="button" className={`type-caption ${current ? styles.activeYear : ''} ${year === projectYear ? styles.projectYear : ''}`} aria-current={year === projectYear ? 'date' : undefined} onClick={() => { if (index >= 0) to(index + 1); }}>{year}</button>;
+          const index = items.findIndex(item => Number(item.year) === year);
+          if (index < 0) return <span key={year} className="type-caption">{year}</span>;
+          return <button key={year} type="button" className={`type-caption ${year === projectYear ? styles.projectYear : ''}`} aria-current={year === projectYear ? 'date' : undefined} onClick={() => to(index + 1)}>{year}</button>;
         })}
         </div>
         <button type="button" className={styles.yearChevron} aria-label="Next project" disabled={active === count - 1} onClick={() => select(1)}><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="m7 10 5 5 5-5" fill="none" stroke="currentColor" strokeWidth="1.5" /></svg></button>

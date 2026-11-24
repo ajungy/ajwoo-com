@@ -70,6 +70,8 @@ export default function WorkPage({ params }: { params: { slug: string } }) {
   const relatedVideo = source.find(block => block.kind === 'embed' && block.src === `https://www.youtube.com/embed/${videoId}`);
   const all = source.filter(block =>
     block !== relatedVideo &&
+    !(project.slug === 'product-visualize' && block.kind === 'image' &&
+      block.base === 'img-product-visualize-salesassistheroimage') &&
     !(project.slug === 'wrap-and-charge' && (
       (block.kind === 'image' && block.base === 'img-wrap-and-charge-bbb') ||
       (block.kind === 'text' && ['Question', '"Why can\'t I wrap my cable on the charger?"'].includes(block.value))

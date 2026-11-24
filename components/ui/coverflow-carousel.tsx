@@ -13,8 +13,10 @@ interface Slide {
   href: string;
 }
 
+const INITIAL_CENTER_SCALE = 1.92;
+
 export function CoverflowCarousel({ slides }: { slides: Slide[] }) {
-  const rotate = 44, depth = 0.6, falloff = 0.56, gap = 0.35, loop = true;
+  const rotate = 44, depth = 0.6, falloff = 0.56, gap = 0.35225, loop = true;
   const didDrag = React.useRef(false);
   const count = slides.length;
 
@@ -26,6 +28,9 @@ export function CoverflowCarousel({ slides }: { slides: Slide[] }) {
       swallow a keypress that lands mid-flight, before the round-off moves. */
   const targetRef = React.useRef(0);
   const widthRef = React.useRef(0);
+  const pitchRef = React.useRef(0);
+  const centerWidthRef = React.useRef<HTMLSpanElement>(null);
+  const centerScaleRef = React.useRef(INITIAL_CENTER_SCALE);
   const rafRef = React.useRef<number | null>(null);
   const dragRef = React.useRef<{
     id: number;
@@ -50,7 +55,7 @@ export function CoverflowCarousel({ slides }: { slides: Slide[] }) {
   const paint = React.useCallback(() => {
     const width = widthRef.current;
     if (!width) return;
-    const pitch = width * (1 + gap);
+    const pitch = pitchRef.current;
     const pos = posRef.current;
 
     const centered = Math.round(pos);
@@ -82,11 +87,11 @@ export function CoverflowCarousel({ slides }: { slides: Slide[] }) {
       // Capped short of edge-on so a far card never turns its back.
       const tilt = Math.min(rotate * ramp, 82) * Math.sign(offset);
 
-      const centerBoost = 0.6 * Math.max(0, 1 - distance);
+      const centerBoost = (centerScaleRef.current - 1) * Math.max(0, 1 - distance);
       const sideBoost = 0.2 * Math.max(0, 1 - Math.abs(distance - 1));
       const scale = 1 + centerBoost + sideBoost - 0.2 * Math.min(1, Math.max(0, distance - 1));
       // Tuck each outer thumbnail behind its nearer neighbor.
-      const travel = 0.72 * Math.min(distance, 1) + 0.70 * Math.min(Math.max(distance - 1, 0), 1);
+      const travel = 0.88 * Math.min(distance, 1) + 0.70 * Math.min(Math.max(distance - 1, 0), 1);
       const horizontalOffset = Math.sign(offset) * travel * pitch;
       card.style.transform =
         `translateX(calc(-50% + ${horizontalOffset}px)) ` +
@@ -165,7 +170,7 @@ export function CoverflowCarousel({ slides }: { slides: Slide[] }) {
     if (!didDrag.current && Math.abs(event.clientX - drag.x) < 6) return;
     didDrag.current = true;
     event.currentTarget.setPointerCapture(event.pointerId);
-    const pitch = widthRef.current * (1 + gap);
+    const pitch = pitchRef.current;
     if (!pitch) return;
 
     const now = performance.now();
@@ -215,24 +220,28 @@ export function CoverflowCarousel({ slides }: { slides: Slide[] }) {
     };
   }, [paint]);
 
-  // Card width drives pitch, depth and perspective, so it is the only thing
-  // worth measuring — and only when the box actually changes.
+  // Measure the base card and the responsive reading column together.
   useIsoLayoutEffect(() => {
     const frame = frameRef.current;
     if (!frame) return;
 
     const measure = () => {
       const card = cardRefs.current[0];
-      if (!card) return;
-      widthRef.current = card.offsetWidth;
+      if (!card?.offsetWidth || !centerWidthRef.current) return;
+      const baseWidth = Number.parseFloat(getComputedStyle(card).width);
+      widthRef.current = baseWidth;
+      // Keep the neighboring cards within reach on narrow screens without resizing them.
+      pitchRef.current = Math.min(baseWidth, frame.clientWidth * 0.45) * (1 + gap);
+      centerScaleRef.current = centerWidthRef.current.getBoundingClientRect().width / baseWidth;
       paint();
     };
 
     measure();
     const observer = new ResizeObserver(measure);
     observer.observe(frame);
+    if (centerWidthRef.current) observer.observe(centerWidthRef.current);
     return () => observer.disconnect();
-  }, [paint]);
+  }, [gap, paint]);
 
   React.useEffect(
     () => () => {
@@ -258,12 +267,13 @@ export function CoverflowCarousel({ slides }: { slides: Slide[] }) {
         onPointerDown={onPointerDown} onPointerMove={onPointerMove} onPointerUp={endDrag} onPointerCancel={endDrag}
         onClickCapture={e => { if (didDrag.current && e.detail) { e.preventDefault(); e.stopPropagation(); } }}
         onKeyDown={e => { if (['ArrowLeft','ArrowRight'].includes(e.key)) { e.preventDefault(); nudge(e.key === 'ArrowLeft' ? -1 : 1); } }}>
-        <div className="relative select-none" style={{ height: `calc(var(--card) * ${stageRatio * 1.6})`, transformStyle: 'preserve-3d' }}>
+        <span ref={centerWidthRef} aria-hidden="true" className="pointer-events-none invisible absolute w-[var(--center-width)]" />
+        <div className="relative select-none" style={{ height: `calc(max(var(--center-width), var(--card) * 1.2) * ${stageRatio})`, transformStyle: 'preserve-3d' }}>
           {slides.map((slide, i) => (
             <div key={slide.href} ref={node => { cardRefs.current[i] = node; }}
               data-focused={i === selected || undefined}
               className="work-coverflow-card absolute left-1/2 top-1/2 overflow-hidden rounded-control"
-              style={{ viewTransitionName: i === selected ? 'work-project-media' : undefined, width: 'var(--card)', height: `calc(var(--card) * ${heightRatios[i]})`, marginTop: `calc(var(--card) * ${-heightRatios[i] / 2})`, transform: i === 0 ? 'translateX(-50%) scale(1.6)' : 'translateX(-50%)', opacity: i === 0 ? 1 : 0 }}>
+              style={{ viewTransitionName: i === selected ? 'work-project-media' : undefined, width: 'var(--card)', height: `calc(var(--card) * ${heightRatios[i]})`, marginTop: `calc(var(--card) * ${-heightRatios[i] / 2})`, transform: i === 0 ? `translateX(-50%) scale(${INITIAL_CENTER_SCALE})` : 'translateX(-50%)', opacity: i === 0 ? 1 : 0 }}>
               <a className="block h-full" href={slide.href} draggable={false} aria-label={slide.title} tabIndex={i === selected ? 0 : -1}>
                 {slide.video ? (
                   <WorkVideoThumbnail {...slide.video} fullWidth />

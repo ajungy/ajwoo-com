@@ -29,8 +29,7 @@
 /* The selected work and its navigation share the left-hand reading column. */
 .controls { position: static; transform: none; margin-bottom: 16px; gap: 12px; justify-content: flex-start; }
 .year { display: flex; flex-direction: column; gap: 8px; font-size: 13px; line-height: 1.4; }
-.year button { color: var(--text-tertiary); min-width: 44px; text-align: right; }
-.year button.activeYear { color: var(--text-primary); font-weight: 600; }
+.year > :is(button, span) { color: var(--text-tertiary); min-width: 44px; text-align: right; }
 .year button:disabled { cursor: default; }
 .media { transition: transform 240ms ease; }
 @media (hover: hover) and (pointer: fine) { .selectedCard:hover .media { transform: scale(1.07); } }
@@ -54,7 +53,7 @@
  .wheel { left: 50%; top: 51%; }
  .year { inset: auto 0 0; transform: none; max-width: none; width: 100%; box-sizing: border-box; flex-direction: row; align-items: center; gap: 20px; overflow-x: auto; overflow-y: hidden; white-space: nowrap; padding: 16px 24px; background: var(--surface-page); scrollbar-width: none; scroll-padding-inline: 24px; }
  .year::-webkit-scrollbar { display: none; }
- .year button { flex: 0 0 auto; text-align: center; min-height: 44px; }
+ .year > :is(button, span) { flex: 0 0 auto; text-align: center; min-height: 44px; }
 }
 
 /* Compact chrome leaves the wheel visible close to both viewport edges. */
@@ -108,11 +107,9 @@
  .stage::before { height: calc(var(--wheel-header-height, 64px) + var(--wheel-title-height, 48px)); }
 }
 
-.year button.activeYear:disabled { color: var(--text-primary); opacity: 1; font-weight: 600; }
 
 /* Fixed-width numerals keep every year and both chevrons on one axis. */
-.year button { font-variant-numeric: lining-nums tabular-nums; text-align: center; transition: color 160ms ease; }
-.year button.activeYear { font-weight: 400; }
+.year > :is(button, span) { font-variant-numeric: lining-nums tabular-nums; text-align: center; transition: color 160ms ease; }
 .yearChevron { transition: color 160ms ease; }
 @media (hover: hover) and (pointer: fine) {
  .year button:hover, .yearChevron:not(:disabled):hover { color: var(--text-primary); }
@@ -120,7 +117,7 @@
 }
 .year button:focus-visible, .yearChevron:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 2px; }
 
-.year button.projectYear { font-weight: 600; }
+.year button.projectYear { color: var(--text-primary); font-weight: 600; }
 
 .backgroundCopy {
  display: flex;
@@ -164,3 +161,5 @@
  .year { overflow-y: auto; min-height: 0; scrollbar-width: none; }
  .yearChevron { flex-shrink: 0; }
 }
+
+.year > span { display: grid; place-items: center; }
